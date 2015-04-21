@@ -1,0 +1,72 @@
+#importing EnergizerCronjobs for csv feeds
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
+$interfaceTypeEnergizerCustomer = $config-interfaceType_EnergizerCustomer
+$interfaceTypeSalesArea=$config-interfaceType_SalesArea
+$interfaceTypeB2BUser =$config-interfaceType_B2BUser
+$interfaceTypeProductMedia =$config-interfaceType_ProductMedia
+$interfaceTypeCustomerAddress =$config-interfaceType_CustomerAddress
+$interfaceTypeProduct =$config-interfaceType_Product
+$interfaceTypeConversion =$config-interfaceType_Conversion
+$interfaceTypeCMIR =$config-interfaceType_CMIR
+$interfaceTypeLeadTime = $config-interfaceType_LeadTime
+$interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrder
+$interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
+$interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
+
+
+INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;technicalEmailAddress;businessEmailAddress
+;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerCMIRCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCMIR;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerLeadTimeCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeLeadTime;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerOfflineOrderCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOfflineOrder;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerOrderUpdateCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOrderUpdate;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductCategoryCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductCategory;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductNameCSVProcessor;energizerCSVFeedCronJob;en;energizerMaterialNameCSVProcessor;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerSAPCategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerMaterialCategoryCSVProcessor;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+
+;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+
+######################################################################################################
+#				This is to send a email notification or registration email to B2BUnit Admin user     #
+######################################################################################################
+INSERT_UPDATE CronJob; code[unique=true];job(code);singleExecutable;sessionLanguage(isocode)
+;userManagementSendEMailCronJob;userManagementSendEMailJob;false;en
+ 
+############################################################################################################
+#				This is to send a email notification or registration email to Admin user  for every 5 mins    #
+############################################################################################################
+INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
+;userManagementSendEMailCronJob; 0 0/5 * * * ?
+
+
+
+# this is the trigger schedule for all the cron jobs
+INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
+;energizerCustomerCSVProcessor;0 00 01 ? * *
+;energizerB2BUserCSVProcessor;0 15 01 ? * *
+;energizerCustomerAddressCSVProcessor;0 30 01 ? * *
+;energizerProductCSVProcessor;0 45 01 ? * *
+;energizerProductNameCSVProcessor;0 30 02 ? * *
+;energizerProductMediaCSVProcessor;0 00 03 ? * *
+;energizerProductHierarchyCSVProcessor;0 45 03 ? * *
+;energizerCategory2CategoryCSVProcessor;0 00 04 ? * *
+;energizerProduct2CategoryCSVProcessor;0 20 04 ? * *
+;energizerProduct2CategoryCSVProcessor;0 00 05 ? * *
+;energizerOrphanedProductsCronJob;0 00 06 ? * *
+;energizerProductConversionCSVProcessor;0 00 07 ? * *
+;energizerSalesUOMCSVProcessor;0 30 07 ? * *
+;energizerCMIRCSVProcessor;0 15 08 ? * *
+;energizerLeadTimeCSVProcessor;0 30 08 ? * *
+;energizerOrderUpdateCSVProcessor;0 00 09 ? * *
+;energizerOfflineOrderCSVProcessor;0 00 10 ? * *

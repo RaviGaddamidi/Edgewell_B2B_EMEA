@@ -1,0 +1,340 @@
+/**
+ * 
+ */
+package com.energizer.facades.quickorder;
+
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.commercefacades.order.CartFacade;
+import de.hybris.platform.commercefacades.order.data.CartData;
+import de.hybris.platform.commercefacades.order.data.OrderEntryData;
+import de.hybris.platform.commercefacades.product.ProductFacade;
+import de.hybris.platform.commercefacades.product.ProductOption;
+import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
+import de.hybris.platform.core.model.order.CartModel;
+import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.order.CartService;
+import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.user.UserService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+
+import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
+import com.energizer.quickorder.QuickOrderData;
+import com.energizer.services.product.EnergizerProductService;
+
+
+/**
+ * @author kaushik.ganguly
+ * 
+ */
+public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFacade
+{
+
+	private static final Logger LOG = Logger.getLogger(DefaultEnergizerQuickOrderFacade.class);
+
+	@Resource(name = "b2bProductFacade")
+	private ProductFacade productFacade;
+
+
+	@Resource(name = "productService")
+	private ProductService productService;
+
+	@Resource(name = "energizerProductService")
+	EnergizerProductService energizerProductService;
+
+
+	@Resource(name = "energizerSolrQueryManipulationService")
+	private EnergizerSolrQueryManipulationService energizerSolrQueryManipulationService;
+
+	@Resource
+	private UserService userService;
+
+	@Resource
+	private B2BCommerceUserService b2bCommerceUserService;
+
+
+	@Resource
+	private CartService cartService;
+
+	@Resource
+	private CartFacade cartFacade;
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.core.quickorder.EnergizerQuickOrderService#getOrderEntryDataFromProductCode(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public OrderEntryData getOrderEntryDataFromProductCode(final String productCode, final String b2bunit)
+	{
+
+		OrderEntryData orderEntry = null;
+
+		if (productCode != null && b2bunit != null)
+		{
+			orderEntry = new OrderEntryData();
+
+			final ProductModel productModel = productService.getProductForCode(productCode);
+			final ProductData productData = productFacade.getProductForOptions(productModel, Arrays.asList(ProductOption.BASIC));
+			orderEntry.setProduct(productData);
+		}
+
+		return orderEntry;
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#getQuickOrderFromSession(javax.servlet.http.HttpSession
+	 * )
+	 */
+	@Override
+	public QuickOrderData getQuickOrderFromSession(QuickOrderData quickOrder)
+	{
+
+		if (quickOrder == null)
+		{
+			quickOrder = new QuickOrderData();
+			quickOrder.setLineItems(new ArrayList<OrderEntryData>());
+		}
+		return quickOrder;
+	}
+
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#addItemToQuickOrder(com.energizer.quickorder.QuickOrder
+	 * , java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void addItemToQuickOrder(final QuickOrderData quickOrder, final String productCode, final String customerProductCode)
+	{
+		if (productExistsInList(productCode, quickOrder))
+		{
+			final OrderEntryData entry = getExistingProductFromList(productCode, quickOrder);
+			Long qty = entry.getQuantity();
+			qty += ((qty % entry.getProduct().getMoq()) + 1) * entry.getProduct().getMoq();
+			entry.setQuantity(qty);
+
+		}
+		else
+		{
+			final EnergizerCMIRModel cmir = getCMIRForProductCodeOrCustomerMaterialID(productCode, customerProductCode);
+			if (cmir != null)
+			{
+				if (validateCMIRforOrderEntry(cmir))
+				{
+					quickOrder.getLineItems().add(getProductData(cmir.getErpMaterialId(), cmir.getCustomerMaterialId(), cmir));
+				}
+				else
+				{
+					LOG.error("Ordering Unit is empty, Item cannot be added to Cart");
+				}
+
+			}
+
+		}
+
+	}
+
+	public OrderEntryData getProductData(final String productCode, final String customerProductCode, final EnergizerCMIRModel cmir)
+	{
+		OrderEntryData orderEntry = null;
+		ProductModel productModel = null;
+		if (!productCode.isEmpty())
+		{
+			productModel = productService.getProductForCode(productCode);
+		}
+		if (!customerProductCode.isEmpty())
+		{
+			if (cmir != null)
+			{
+				productModel = productService.getProductForCode(cmir.getErpMaterialId());
+			}
+		}
+		if (productModel != null)
+		{
+			if (validateCMIRforOrderEntry(cmir))
+			{
+				orderEntry = new OrderEntryData();
+				final ProductData product = new ProductData();
+				product.setCode(productCode);
+				product.setCustomerMaterialId(customerProductCode);
+				product.setName(productModel.getName());
+				product.setUom(cmir.getUom());
+				product.setMoq(cmir.getOrderingUnit());
+				orderEntry.setQuantity(new Long(cmir.getOrderingUnit()));
+				//orderEntry.setQuantity(cmir.getOrderingUnit() != null ? new Long(cmir.getOrderingUnit()) : null);
+				orderEntry.setProduct(product);
+				orderEntry.setShippingPoint(cmir.getShippingPoint());
+				getReferenceShippingPoint(orderEntry);
+			}
+		}
+		return orderEntry;
+	}
+
+
+	public void getReferenceShippingPoint(final OrderEntryData orderEntryData)
+	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
+		if (cartService.hasSessionCart())
+		{
+			final CartModel cartModel = cartService.getSessionCart();
+			if (cartModel.getEntries().size() != 0 && !cartModel.getEntries().isEmpty())
+			{
+				final AbstractOrderEntryModel orderEntry = cartModel.getEntries().get(0);
+
+				final String cartProductCode = orderEntry.getProduct().getCode();
+
+				final EnergizerCMIRModel cartenergizerCMIR = energizerProductService.getEnergizerCMIR(cartProductCode,
+						b2bUnit.getUid());
+
+				final String cartshippingPoint = cartenergizerCMIR.getShippingPoint();
+				//                      LOG.info("The shippingPointNo of product in the cart : " + cartshippingPoint);
+				orderEntryData.setReferenceShippingPoint(cartshippingPoint);
+
+			}
+		}
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.facades.quickorder.EnergizerQuickOrderFacade#removeItemFromQuickOrder(com.energizer.quickorder.
+	 * QuickOrder, java.lang.String)
+	 */
+	@Override
+	public void removeItemFromQuickOrder(final QuickOrderData quickOrder, final String productCode)
+	{
+		for (final OrderEntryData entry : quickOrder.getLineItems())
+		{
+			if (entry.getProduct().getCode().equals(productCode))
+			{
+				quickOrder.getLineItems().remove(entry);
+				break;
+			}
+		}
+
+	}
+
+	public boolean productExistsInList(final String productCode, final QuickOrderData quickOrder)
+	{
+		boolean flag = false;
+		for (final OrderEntryData orderEntry : quickOrder.getLineItems())
+		{
+			if (orderEntry.getProduct() != null && orderEntry.getProduct().getCode().equals(productCode))
+			{
+				flag = true;
+				break;
+			}
+
+		}
+
+		return flag;
+	}
+
+	private OrderEntryData getExistingProductFromList(final String productCode, final QuickOrderData quickOrder)
+	{
+		OrderEntryData entry = null;
+		for (final OrderEntryData orderEntry : quickOrder.getLineItems())
+		{
+			if (orderEntry.getProduct() != null
+					&& (orderEntry.getProduct().getCode().equals(productCode) || orderEntry.getProduct().getCustomerMaterialId()
+							.equals(productCode)))
+			{
+				entry = orderEntry;
+				break;
+			}
+
+		}
+
+		return entry;
+	}
+
+	public EnergizerCMIRModel getCMIRForProductCodeOrCustomerMaterialID(final String productCode, final String customerMaterialId)
+	{
+		EnergizerCMIRModel cmir = null;
+		if ((productCode != null && !productCode.isEmpty()) && (customerMaterialId != null && !customerMaterialId.isEmpty()))
+		{
+			cmir = energizerProductService.getEnergizerCMIR(productCode, energizerSolrQueryManipulationService
+					.getB2BUnitForLoggedInUser().getUid());
+			if (!cmir.getCustomerMaterialId().equals(customerMaterialId))
+			{
+				return null;
+			}
+			else
+			{
+				return cmir;
+			}
+		}
+
+		if (productCode != null && !productCode.isEmpty())
+		{
+			cmir = energizerProductService.getEnergizerCMIR(productCode, energizerSolrQueryManipulationService
+					.getB2BUnitForLoggedInUser().getUid());
+		}
+
+		if (cmir == null && !customerMaterialId.isEmpty())
+		{
+			cmir = energizerProductService.getEnergizerCMIRforCustomerMaterialID(customerMaterialId,
+					energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getUid());
+		}
+		return cmir;
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#updateQtyToExistingProduct(com.energizer.quickorder
+	 * .QuickOrderData, java.lang.String, java.lang.Integer)
+	 */
+	@Override
+	public void updateQtyToExistingProduct(final QuickOrderData quickOrder, final String productCode, final Long qty)
+	{
+		for (final OrderEntryData entry : quickOrder.getLineItems())
+		{
+			if (entry.getProduct().getCode().equals(productCode))
+			{
+				entry.setQuantity(qty);
+			}
+		}
+
+	}
+
+	private boolean validateCMIRforOrderEntry(final EnergizerCMIRModel cmir)
+	{
+		return cmir.getOrderingUnit() != null;
+	}
+
+	public CartData getCurrentSessionCart()
+	{
+		final CartData cartData = cartFacade.getSessionCart();
+		if (cartData != null && cartData.getEntries() != null && cartData.getEntries().size() > 0)
+		{
+			final OrderEntryData cartOrderEntry = cartData.getEntries().get(0);
+			cartData.setShippingPoint(cartOrderEntry.getProduct().getShippingPoint());
+		}
+		return cartData;
+	}
+
+}

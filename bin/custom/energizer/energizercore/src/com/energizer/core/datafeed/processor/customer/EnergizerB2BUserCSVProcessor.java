@@ -1,0 +1,285 @@
+/**
+ * 
+ */
+package com.energizer.core.datafeed.processor.customer;
+
+import de.hybris.platform.b2b.model.B2BCustomerModel;
+import de.hybris.platform.b2b.model.B2BUnitModel;
+import de.hybris.platform.b2b.services.B2BUnitService;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2bacceleratorservices.company.impl.DefaultCompanyB2BCommerceService;
+import de.hybris.platform.core.model.security.PrincipalGroupModel;
+import de.hybris.platform.core.model.user.UserGroupModel;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
+import de.hybris.platform.servicelayer.model.ModelService;
+import de.hybris.platform.servicelayer.search.FlexibleSearchService;
+import de.hybris.platform.servicelayer.user.UserService;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.csv.CSVRecord;
+import org.apache.log4j.Logger;
+
+import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
+import com.energizer.core.datafeed.EnergizerCSVFeedError;
+import com.energizer.core.model.EnergizerB2BCustomerModel;
+import com.energizer.core.model.EnergizerB2BUnitModel;
+
+
+/**
+ * 
+ * This processors imports the b2b users.
+ * 
+ * Sample file will look like
+ * 
+ * userID, userName, contactNumber, active, email,   defaultB2BUnit, groups,           approvers 
+ * omkar,  omkar,    123,           Y,      a@a.com, 1000,           b2bcustomergroup, abc@m.com
+ * 
+ * Total column count : 8
+ */
+public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
+{
+
+	private static final Logger LOG = Logger.getLogger(EnergizerB2BUserCSVProcessor.class);
+	@Resource
+	private ModelService modelService;
+
+	@Resource
+	private DefaultCompanyB2BCommerceService companyB2BCommerceService;
+	@Resource
+	private B2BCommerceUnitService b2bCommerceUnitService;
+
+	@Resource
+	private B2BUnitService<B2BUnitModel, B2BCustomerModel> b2bUnitService;
+	@Resource
+	private FlexibleSearchService flexibleSearchService;
+	@Resource(name = "userService")
+	private UserService userService;
+
+	private static final String EMAIL_ID = "email";
+	private static final String USER_NAME = "userName";
+	private static final String CONTACT_NUMBER = "contactNumber";
+	private static final String DEFAULT_B2B_UNIT = "defaultB2BUnit";
+	private static final String APPROVERS = "approvers";
+	private static final String ACTIVE = "active";
+	private static final String GROUPS = "groups";
+
+	/**
+	 * 
+	 */
+	public EnergizerB2BUserCSVProcessor()
+	{
+		super();
+	}
+
+	@Override
+	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
+	{
+		EnergizerB2BCustomerModel b2bCustomerModel = null;
+		long succeedRecord = getRecordSucceeded();
+		for (final CSVRecord record : records)
+		{
+			final Map<String, String> csvValuesMap = record.toMap();
+			validate(record);
+			if (!getBusinessFeedErrors().isEmpty())
+			{
+				csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+				continue;
+			}
+			try
+			{
+				b2bCustomerModel = b2bCommerceUnitService.getCustomerForUid(csvValuesMap.get(EMAIL_ID).trim());
+				updateB2BCustomer(csvValuesMap, b2bCustomerModel);
+				succeedRecord++;
+				setRecordSucceeded(succeedRecord);
+			}
+			catch (final UnknownIdentifierException exception)
+			{
+				try
+				{
+					createB2BCustomer(csvValuesMap, record, b2bCustomerModel);
+					succeedRecord++;
+					setRecordSucceeded(succeedRecord);
+				}
+				catch (final UnknownIdentifierException forgrougps)
+				{
+					//invalid group supplied
+					final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(GROUPS);
+					error.setColumnName(columnNames);
+					error.setUserType(BUSINESS_USER);
+					error.setMessage("Invalid group");
+					columnNumbers.add(6);
+					error.setColumnNumber(columnNumbers);
+					getBusinessFeedErrors().add(error);
+					setRecordFailed(record.getRecordNumber());
+				}
+			}
+		}
+		return getCsvFeedErrorRecords();
+	}
+
+	private void updateB2BCustomer(final Map<String, String> csvValuesMap, final EnergizerB2BCustomerModel b2bCustomerModel)
+	{
+		b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
+		b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
+		b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
+		b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
+		b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
+		final Set<B2BCustomerModel> approverGroups = new HashSet<B2BCustomerModel>();
+		final EnergizerB2BCustomerModel b2bCustomerModelApprover = b2bCommerceUnitService.getCustomerForUid(csvValuesMap.get(
+				APPROVERS).trim());
+		if (null != b2bCustomerModelApprover)
+		{
+			approverGroups.add(b2bCustomerModelApprover);
+			b2bCustomerModel.setApprovers(approverGroups);
+		}
+		//	Added validation for groups fields
+		final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>(b2bCustomerModel.getGroups());
+		for (final String group : csvValuesMap.get(GROUPS).split(";"))
+		{
+			final UserGroupModel userGroupModel = userService.getUserGroupForUID(group);
+			if (!customerGroups.contains(userGroupModel))
+			{
+				customerGroups.add(userGroupModel);
+			}
+		}
+		b2bCustomerModel.setGroups(customerGroups);
+		modelService.save(b2bCustomerModel);
+		LOG.info("EnergizerB2BUser updated");
+	}
+
+	private void createB2BCustomer(final Map<String, String> csvValuesMap, final CSVRecord record,
+			EnergizerB2BCustomerModel b2bCustomerModel)
+	{
+		b2bCustomerModel = modelService.create(EnergizerB2BCustomerModel.class);
+		final EnergizerB2BUnitModel b2bUnitModel = (EnergizerB2BUnitModel) b2bUnitService.getUnitForUid(csvValuesMap.get(
+				DEFAULT_B2B_UNIT).trim());
+		if (null != b2bUnitModel)
+		{
+			b2bCustomerModel.setUid(csvValuesMap.get(EMAIL_ID).trim());
+			b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
+			b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
+			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
+			b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
+			b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
+			//   Added validation for groups fields
+			final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>();
+			for (final String group : csvValuesMap.get(GROUPS).split(";"))
+			{
+				try
+				{
+					final UserGroupModel userGroupModel = userService.getUserGroupForUID(group);
+					if (!customerGroups.contains(userGroupModel))
+					{
+						customerGroups.add(userGroupModel);
+					}
+				}
+				catch (final UnknownIdentifierException exception)
+				{
+					throw exception;
+				}
+			}
+			b2bCustomerModel.setGroups(customerGroups);
+			final Set<B2BCustomerModel> approverGroups = new HashSet<B2BCustomerModel>();
+			final EnergizerB2BCustomerModel b2bCustomerModelApprover = b2bCommerceUnitService.getCustomerForUid(csvValuesMap.get(
+					APPROVERS).trim());
+			if (null != b2bCustomerModelApprover)
+			{
+				approverGroups.add(b2bCustomerModelApprover);
+				b2bCustomerModel.setApprovers(approverGroups);
+			}
+			b2bCustomerModel.setDefaultB2BUnit(b2bUnitModel);
+			modelService.save(b2bCustomerModel);
+			LOG.info("Created user with userID " + csvValuesMap.get(EMAIL_ID).trim());
+		}
+		else
+		{
+			// unit is null
+			long recordFailed = getRecordFailed();
+			final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
+			final List<String> columnNames = new ArrayList<String>();
+			final List<Integer> columnNumbers = new ArrayList<Integer>();
+			error.setLineNumber(record.getRecordNumber());
+			columnNames.add(DEFAULT_B2B_UNIT);
+			error.setColumnName(columnNames);
+			error.setUserType(BUSINESS_USER);
+			error.setMessage("Invalid B2BUnit");
+			columnNumbers.add(6);
+			error.setColumnNumber(columnNumbers);
+			getBusinessFeedErrors().add(error);
+			setRecordFailed(record.getRecordNumber());
+			setBusRecordError(getBusinessFeedErrors().size());
+			recordFailed++;
+			setRecordFailed(recordFailed);
+		}
+	}
+
+	/**
+	 * @param record
+	 */
+	private void validate(final CSVRecord record)
+	{
+		EnergizerCSVFeedError error = null;
+		Integer columnNumber = 0;
+		for (final String columnHeader : record.toMap().keySet())
+		{
+			columnNumber++;
+			setTotalRecords(record.getRecordNumber());
+			final String value = record.toMap().get(columnHeader).trim();
+			if (!columnHeader.equalsIgnoreCase(ACTIVE))
+			{
+				if (value.isEmpty())
+				{
+					long recordFailed = getRecordFailed();
+					error = new EnergizerCSVFeedError();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					error.setColumnName(columnNames);
+					error.setUserType(BUSINESS_USER);
+					error.setMessage(columnHeader + " column should not be empty");
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getBusinessFeedErrors().add(error);
+					setRecordFailed(record.getRecordNumber());
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+				}
+			}
+			// Added validation for active fields
+			if (columnHeader.equalsIgnoreCase(ACTIVE) && (!value.equalsIgnoreCase("Y") && (!value.equalsIgnoreCase("N"))))
+			{
+				long recordFailed = getRecordFailed();
+				error = new EnergizerCSVFeedError();
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setColumnName(columnNames);
+				error.setUserType(BUSINESS_USER);
+				error.setMessage(columnHeader + " column should be Y or N");
+				columnNumbers.add(columnNumber);
+				error.setColumnNumber(columnNumbers);
+				getBusinessFeedErrors().add(error);
+				setRecordFailed(record.getRecordNumber());
+				setBusRecordError(getBusinessFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
+			}
+		}
+	}
+
+
+}

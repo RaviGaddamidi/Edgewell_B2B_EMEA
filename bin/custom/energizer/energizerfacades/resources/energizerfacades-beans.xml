@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2014 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<!-- Add accelerator facades specific variantOption options -->
+	<enum class="com.energizer.facades.product.ProductVariantOption">
+		<value>URL</value>
+		<value>MEDIA</value>
+        <value>PRICE</value>
+        <value>STOCK</value>
+	</enum>
+	
+		<!-- ************ Start Product Details Page Bean defination ******************* -->
+	<bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+		<property name="obsolete" type="boolean" />
+		<property name="productDescription" type="java.lang.String" />
+		<property name="erpMaterialID" type="java.lang.String" />
+		<property name="customerMaterialId" type="java.lang.String" />
+		<property name="customerProductName" type="java.lang.String" />
+		<property name="customerProductPrice" type="java.math.BigDecimal" />
+		<property name="customerPriceCurrency" type="java.lang.String" />
+		<property name="shippingPoint" type="java.lang.String" />
+		<property name="moq" type="java.lang.Integer" />
+		<property name="uom" type="java.lang.String" />
+		<property name="weight" type="java.lang.Double" />
+		<property name="weightUom" type="java.lang.String" />
+		<property name="volume" type="java.lang.Double" />
+		<property name="volumeUom" type="java.lang.String" />
+	</bean>
+	<!-- ************ End Product Details Page Bean defination ******************* -->	
+	
+		
+	<!-- ************ Start CartData Bean defination ******************* -->
+	<bean class="de.hybris.platform.commercefacades.order.data.CartData">
+		<property name="totalProductWeightInPercent" type="java.lang.Double" />
+		<property name="totalProductVolumeInPercent" type="java.lang.Double" />
+		<property name="shippingPoint" type="java.lang.String"></property>
+		<property name="businesRuleErrors" type="java.util.List&lt;String>"/>
+		<property name="isContainerFull" type="boolean" />
+	</bean>
+	<!-- ************ End CartData Bean defination ******************* -->	
+
+	<bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData">
+		<property name="referenceShippingPoint" type="java.lang.String" />
+		<property name="shippingPoint" type="java.lang.String" />
+		
+	</bean>
+	<bean class="de.hybris.platform.commercefacades.order.data.OrderHistoryData">
+		<property name="referenceNumber" type="String"/>
+		<property name="erpOrderCreator" type="String"/>
+	</bean>
+	
+</beans>

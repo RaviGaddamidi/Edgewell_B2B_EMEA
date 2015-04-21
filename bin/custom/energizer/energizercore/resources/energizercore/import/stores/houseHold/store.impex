@@ -1,0 +1,30 @@
+# 
+# Create the Powertools BaseStore
+#
+
+$productCatalog=houseHoldProductCatalog
+$classificationCatalog=HouseHoldClassification
+$currencies=USD
+$net=true
+$storeUid=houseHold
+$defaultCurrency=USD
+$languages=en,es
+$defaultLanguage=en
+$deliveryCountries=US
+$submitOrderProcessCode=order-process
+$paymentProvider=Mockup
+
+INSERT_UPDATE PromotionGroup;Identifier[unique=true];
+;houseHoldPromoGrp;
+
+# Base Store
+INSERT_UPDATE BaseStore;uid[unique=true];catalogs(id);currencies(isocode);net;taxGroup(code);storelocatorDistanceUnit(code);defaultCurrency(isocode);languages(isocode);defaultLanguage(isocode);deliveryCountries(isocode);submitOrderProcessCode;paymentProvider;
+;$storeUid;$productCatalog,$classificationCatalog;$currencies;$net;;miles;$defaultCurrency;$languages;$defaultLanguage;$deliveryCountries;$submitOrderProcessCode;$paymentProvider;
+
+#INSERT_UPDATE BaseStore2DeliveryModeRel;source(uid)[unique=true];target(code)[unique=true]
+#;houseHold;premium-net
+#;houseHold;standard-net
+#;houseHold;premium-gross
+#;houseHold;standard-gross
+#;houseHold;free-standard-shipping
+
