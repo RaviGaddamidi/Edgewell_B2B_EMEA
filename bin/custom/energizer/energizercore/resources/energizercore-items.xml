@@ -407,8 +407,18 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					<attribute type="java.lang.String" qualifier="salesAreaID">
-						<description>Sales Area ID</description>
+					<attribute qualifier="salesOrganisation" type="java.lang.String">
+						<description>Sales Organisation</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="distributionChannel" type="java.lang.String">
+						<description>Distribution Channel</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="division" type="java.lang.String">
+						<description>Division</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
