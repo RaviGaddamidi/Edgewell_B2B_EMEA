@@ -9,7 +9,8 @@ ACC.quickorder = {
 			{
 				if(qty.match('\\d\\.{1,}')!=null)
 					{
-						$(this).parent().children("span").text(enterWholeNumber).removeClass("display_none");
+						//$(this).parent().children("span").text(enterWholeNumber).removeClass("display_none");
+						ACC.quickorder.addErrorMsg($(this).attr("id"),enterWholeNumber);
 						$(this).addClass("red_border_input");
 						ACC.quickorder.enableOrDisableCheckoutButton();
 						return;
@@ -17,33 +18,38 @@ ACC.quickorder = {
 				qty=parseInt(qty);
 				if(qty<=0)
 					{
-						$(this).parent().children("span").text(enterPositiveNumber).removeClass("display_none");
+						//$(this).parent().children("span").text(enterPositiveNumber).removeClass("display_none");
+						ACC.quickorder.addErrorMsg($(this).attr("id"),enterPositiveNumber);
 						$(this).addClass("red_border_input");
 						ACC.quickorder.enableOrDisableCheckoutButton();
 						return;
 					}
 				else
 					{
-						$(this).parent().children("span").text("").addClass("display_none");
+						//$(this).parent().children("span").text("").addClass("display_none");
+						ACC.quickorder.removeErrorMsg($(this).attr("id"));
 						$(this).removeClass("red_border_input");
 						ACC.quickorder.enableOrDisableCheckoutButton();
 					}
 				if(ACC.quickorder.isValidUOM(qty,parseInt($(this).next("input").val())))
 					{
-						$(this).parent().children("span").text("").addClass("display_none");
+						//$(this).parent().children("span").text("").addClass("display_none");
+						ACC.quickorder.removeErrorMsg($(this).attr("id"));
 						$(this).removeClass("red_border_input");
 						ACC.quickorder.updateOrderedQty($(this).val(),$(this).prev().val())
 					}
 				else
 					{
-						$(this).parent().children("span").text(enterMOQMultiples+" - "+$(this).next("input").val()).removeClass("display_none");
+						//$(this).parent().children("span").text(enterMOQMultiples+" - "+$(this).next("input").val()).removeClass("display_none");
+						ACC.quickorder.addErrorMsg($(this).attr("id"),enterMOQMultiples+" - "+$(this).next("input").val());
 						$(this).addClass("red_border_input");
 						ACC.quickorder.enableOrDisableCheckoutButton();
 					}
 			}
 			catch(err)
 			{
-				$(this).parent().children("span").text(inputValidNumber).removeClass("display_none");
+				//$(this).parent().children("span").text(inputValidNumber).removeClass("display_none");
+				ACC.quickorder.addErrorMsg($(this).attr("id"),inputValidNumber);
 				$(this).addClass("red_border_input");
 				ACC.quickorder.enableOrDisableCheckoutButton();
 			}
@@ -66,7 +72,7 @@ ACC.quickorder = {
 	},
 	enableOrDisableCheckoutButton:function()
 	{
-		if($(".quickorder_errormsg:visible").length==0)
+		if($(".red_border_input").length==0)
 			{
 			$(".quickOrderSubmitButton").attr("disabled",false);
 			}
@@ -89,7 +95,29 @@ ACC.quickorder = {
 			}
 		})
 		
-	}
+	},
+	
+	addErrorMsg:function(productCode,msg)
+	{
+		if($("div.alert[id='"+productCode+"']").length==0)
+			{
+			div=document.createElement("div");
+			$(div).attr("id",productCode).text(msg).addClass("alert").addClass("negative");
+			$("#globalMessages").append(div);
+			}
+		else
+			{
+			$("div.alert[id='"+productCode+"']").text(msg);
+			}
+		
+		
+	},
+	
+	removeErrorMsg:function(productCode)
+	{
+		$("div.alert[id='"+productCode+"']").remove();
+		
+	},
 };
 
 

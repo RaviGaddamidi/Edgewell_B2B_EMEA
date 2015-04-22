@@ -30,3 +30,5 @@ bin/*/jalo/*
 
 *.orig
 /config/local.properties
+config/solr/embedded/solr.xml
+/config/solr/embedded/solr.xml

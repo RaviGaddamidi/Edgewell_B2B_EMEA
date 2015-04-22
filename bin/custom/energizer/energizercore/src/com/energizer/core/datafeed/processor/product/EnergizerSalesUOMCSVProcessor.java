@@ -271,10 +271,11 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			energizerSalesAreaUOMModel = modelService.create(EnergizerSalesAreaUOMModel.class);
 			energizerSalesAreaUOMModel.setFamilyID(familyID);
-			energizerSalesAreaUOMModel.setSalesOrganisation(salesOrganisation);
-			energizerSalesAreaUOMModel.setDistributionChannel(distributionChannel);
-			energizerSalesAreaUOMModel.setDivision(division);
-			energizerSalesAreaUOMModel.setMeasureOfQuantity(moq);
+			/*
+			 * energizerSalesAreaUOMModel.setSalesOrganisation(salesOrganisation);
+			 * energizerSalesAreaUOMModel.setDistributionChannel(distributionChannel);
+			 * energizerSalesAreaUOMModel.setDivision(division);
+			 */energizerSalesAreaUOMModel.setMeasureOfQuantity(moq);
 			energizerSalesAreaUOMModel.setUnitOfMeasure(uom);
 			LOG.info(familyID + "--" + segmentId + "--" + familyID + "--" + uom + "--" + moq);
 

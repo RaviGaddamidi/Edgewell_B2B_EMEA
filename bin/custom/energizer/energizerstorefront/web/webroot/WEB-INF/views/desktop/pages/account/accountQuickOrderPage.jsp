@@ -96,7 +96,7 @@
 							</td>
 							<td headers="header4" class="header4_cls">
 								<input type="hidden" name="productCode" value="${entry.product.code}"/>
-								<input type="text" name="qty" size="4" class="orderEntryQuantity" value="${entry.quantity}"  />
+								<input type="text" name="qty" size="4" class="orderEntryQuantity" id="${entry.product.code}" value="${entry.quantity}"  />
 								<input type="hidden" name="moq" value="${entry.product.moq}"/>
 								<span class="quickorder_errormsg display_none"></span>
 							</td>
