@@ -78,6 +78,7 @@
 		<bean class="com.energizer.storefront.interceptors.beforecontroller.DeviceDetectionBeforeControllerHandler" />
 		<bean class="com.energizer.storefront.interceptors.beforecontroller.SetLanguageBeforeControllerHandler" />
 		<bean class="com.energizer.storefront.interceptors.beforecontroller.SetUiExperienceBeforeControllerHandler" />
+		<bean class="com.energizer.storefront.interceptors.beforecontroller.EnergizerPortalLoginBeforeControllerHandler" />
 	</util:list>
 	
 	<alias name="defaultBeforeViewHandlersList" alias="beforeViewHandlersList" />

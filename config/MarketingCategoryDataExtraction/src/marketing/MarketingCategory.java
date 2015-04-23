@@ -29,8 +29,8 @@ public class MarketingCategory {
 		// TODO Auto-generated method stub
 		energizer.setSuperCategory(null);
 		energizer.setName("null");
-		readCategory();
-		printCategories();
+		//readCategory();
+		//printCategories();
 		
 		createCategories();
 		writeCategories();
@@ -38,8 +38,8 @@ public class MarketingCategory {
 	
 	public static void readCategory()throws Exception
 	{
-		//Reader in = new FileReader(folderPath+"personalcare_extract.csv");
-		Reader in = new FileReader(folderPath+"household_extract.csv");
+		Reader in = new FileReader(folderPath+"personalcare_extract1.csv");
+		//Reader in = new FileReader(folderPath+"household_extract.csv");
 		
 		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
 		for (CSVRecord record : records) {
@@ -53,7 +53,7 @@ public class MarketingCategory {
 			categoryMap.put(cat, new TreeSet<String>());
 		}
 		
-		in = new FileReader(folderPath+"household_extract.csv");
+		in = new FileReader(folderPath+"personalcare_extract1.csv");
 		records = CSVFormat.EXCEL.parse(in);
 		for (CSVRecord record : records) {
 		    String key=record.get(1)+"#"+record.get(2)+"#"+record.get(3)+"#"+record.get(4);
@@ -101,7 +101,169 @@ public class MarketingCategory {
 			String level2=record.get(1);
 			String level3=record.get(2);
 			//String level4=record.get(3);
+			
+			
 			if(!level1.isEmpty())
+			{
+				Category ref=null;
+				for(Category c:energizer.getChildren())
+				{
+					if(c.getName().equals(level1.trim()))
+					{
+						ref=c;
+						
+					}
+				}
+				if(ref==null)
+				{
+					Category level11=new Category();
+					level11.setName(level1.trim());
+					level11.setSuperCategory(energizer);
+					level11.setCategoryType(LEVEL1_NAME);
+					energizer.getChildren().add(level11);
+				}
+			}
+			
+			if(!level2.isEmpty())
+			{
+				Category ref=null;
+				for(Category c:energizer.getChildren())
+				{
+					for(Category cc:c.getChildren())
+					{
+						if(cc.getName().equals(level2.trim()))
+						{
+							ref=cc;
+							
+						}
+					}
+					
+				}
+				if(ref==null)
+				{
+					for(Category c:energizer.getChildren())
+					{
+						if(c.getName().equals(level1.trim()))
+						{
+							ref=c;
+							
+						}
+					}
+					Category level22=new Category();
+					level22.setName(level2.trim());
+					level22.setSuperCategory(ref);
+					level22.setCategoryType(LEVEL2_NAME);
+					ref.getChildren().add(level22);
+		
+				}
+				else if(ref!=null && !ref.getSuperCategory().getName().equals(level1.trim()))
+				{
+					Category level11=new Category();
+					level11.setName(level1.trim());
+					level11.setSuperCategory(energizer);
+					level11.setCategoryType(LEVEL1_NAME);
+					energizer.getChildren().add(level11);
+					
+					Category level22=new Category();
+					level22.setName(level2.trim());
+					level22.setSuperCategory(level11);
+					level22.setCategoryType(LEVEL2_NAME);
+					level11.getChildren().add(level22);
+				}
+				
+			}
+			
+			
+			if(!level3.isEmpty())
+			{
+				Category ref=null;
+				for(Category c:energizer.getChildren())
+				{
+					for(Category cc:c.getChildren())
+					{
+						for(Category ccc:cc.getChildren())
+						{
+							if(ccc.getName().equals(level3.trim()))
+							{
+								ref=ccc;
+								
+							}
+						}
+					}
+					
+				}
+				if(ref==null)
+				{
+					for(Category c:energizer.getChildren())
+					{
+						for(Category cc:c.getChildren())
+						{
+							if(cc.getName().equals(level2.trim()))
+							{
+								ref=cc;
+								
+							}
+						}
+					}
+					
+					Category level33=new Category();
+					level33.setName(level3.trim());
+					level33.setSuperCategory(ref);
+					level33.setCategoryType(LEVEL3_NAME);
+					ref.getChildren().add(level33);
+					
+				}
+				else if(ref!=null && !ref.getSuperCategory().getName().equals(level2.trim()))
+				{
+					Category fLevel=null;
+					for(Category c:energizer.getChildren())
+					{
+						if(c.getName().equals(level1.trim()))
+						{
+							fLevel=c;
+						}
+					}
+					Category sLevel=null;
+					for(Category c:energizer.getChildren())
+					{
+						for(Category cc:c.getChildren())
+						{
+							if(cc.getName().equals(level2.trim()))
+							{
+								sLevel=cc;
+							}
+						}
+					}
+					
+					if(fLevel!=null && sLevel!=null)
+					{
+						
+						Category level33=new Category();
+						level33.setName(level3.trim());
+						level33.setSuperCategory(sLevel);
+						level33.setCategoryType(LEVEL3_NAME);
+						sLevel.getChildren().add(level33);
+					}
+					
+					else if(fLevel!=null && sLevel==null)
+					{
+						Category level22=new Category();
+						level22.setName(level2.trim());
+						level22.setSuperCategory(fLevel);
+						level22.setCategoryType(LEVEL2_NAME);
+						fLevel.getChildren().add(level22);
+						
+						Category level33=new Category();
+						level33.setName(level3.trim());
+						level33.setSuperCategory(level22);
+						level33.setCategoryType(LEVEL3_NAME);
+						level22.getChildren().add(level33);
+					}
+					
+				}
+			}
+			
+			/*if(!level1.isEmpty())
 			{
 				//System.out.println(level1);
 				Category cat=getCategory(energizer,level1);
@@ -151,7 +313,7 @@ public class MarketingCategory {
 					}
 					
 				}
-			}
+			}*/
 			
 		/*	if(!level4.isEmpty())
 			{
@@ -277,9 +439,5 @@ public class MarketingCategory {
 		return retVal;
 	}
 	
-	
-	
-	
-
 }
 	

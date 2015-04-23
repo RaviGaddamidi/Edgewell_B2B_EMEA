@@ -102,12 +102,12 @@ ACC.quickorder = {
 		if($("div.alert[id='"+productCode+"']").length==0)
 			{
 			div=document.createElement("div");
-			$(div).attr("id",productCode).text(msg).addClass("alert").addClass("negative");
+			$(div).attr("id",productCode+"msg").text(msg).addClass("alert").addClass("negative");
 			$("#globalMessages").append(div);
 			}
 		else
 			{
-			$("div.alert[id='"+productCode+"']").text(msg);
+			$("div.alert[id='"+productCode+"msg']").text(msg);
 			}
 		
 		
@@ -115,7 +115,7 @@ ACC.quickorder = {
 	
 	removeErrorMsg:function(productCode)
 	{
-		$("div.alert[id='"+productCode+"']").remove();
+		$("div.alert[id='"+productCode+"msg']").remove();
 		
 	},
 };

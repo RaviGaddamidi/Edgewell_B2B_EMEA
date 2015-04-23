@@ -29,7 +29,6 @@ import de.hybris.platform.commerceservices.enums.SiteChannel;
 import de.hybris.platform.commerceservices.i18n.CommerceCommonI18NService;
 import de.hybris.platform.commerceservices.url.UrlResolver;
 import de.hybris.platform.core.model.c2l.LanguageModel;
-import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.jalo.JaloObjectNoLongerValidException;
 import de.hybris.platform.jalo.c2l.LocalizableItem;
 import de.hybris.platform.servicelayer.model.AbstractItemModel;
@@ -74,6 +73,7 @@ public class CMSSiteFilter extends OncePerRequestFilter implements CMSFilter
 	protected static final int MISSING_CMS_SITE_ERROR_STATUS = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 	protected static final String MISSING_CMS_SITE_ERROR_MESSAGE = "Cannot find CMSSite associated with current URL";
 	protected static final String INCORRECT_CMS_SITE_CHANNEL_ERROR_MESSAGE = "Matched CMSSite for current URL has unsupported channel";
+	private static final String ISINSESSION = "isinsession";
 
 	private CMSSiteService cmsSiteService;
 	private SessionService sessionService;
@@ -100,15 +100,9 @@ public class CMSSiteFilter extends OncePerRequestFilter implements CMSFilter
 			// process normal request (i.e. normal browser non-cmscockpit request)
 			if (processNormalRequest(httpRequest, httpResponse))
 			{
-				//check if the user is logged in and URL is non-login
-				if (isUserAnonymousAndURLIsNonLogin(requestURL))
-				{
-					httpResponse.sendRedirect("/login");
-				}
-				else
-				{
-					filterChain.doFilter(httpRequest, httpResponse);
-				}
+
+				filterChain.doFilter(httpRequest, httpResponse);
+
 			}
 		}
 		else if (StringUtils.contains(requestURL, PREVIEW_TOKEN))
@@ -440,13 +434,5 @@ public class CMSSiteFilter extends OncePerRequestFilter implements CMSFilter
 		{
 			return null;
 		}
-	}
-
-	protected boolean isUserAnonymousAndURLIsNonLogin(final String url)
-	{
-
-		final UserModel user = userService.getCurrentUser();
-		final boolean isUserAnonymous = user == null || userService.isAnonymousUser(userService.getCurrentUser());
-		return isUserAnonymous && (url.indexOf("/login") == -1 && url.indexOf("j_spring_security_check") == -1);
 	}
 }
