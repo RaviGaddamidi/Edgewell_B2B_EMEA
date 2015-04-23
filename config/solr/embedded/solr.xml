@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <solr persistent="true" sharedLib="hybris">
   <cores adminPath="/admin/cores">
-    <core name="master_energizer_EnergizerProduct" instanceDir="D:\hybris5.4-Oracle\hybris\config\solr\embedded" dataDir="D:\hybris5.4-Oracle\hybris\data\solrfacetsearch\MASTER\energizer_EnergizerProduct_1"/>
+    <core name="master_energizer_EnergizerProduct" instanceDir="D:\energizer_git\Distributor-Portal\config/solr/embedded" dataDir="D:\energizer_git\Distributor-Portal\data\solrfacetsearch\MASTER\energizer_EnergizerProduct"/>
 
-    <core name="master_energizer_EnergizerProduct_1" instanceDir="D:\hybris5.4-Oracle\hybris\config\solr\embedded" dataDir="D:\hybris5.4-Oracle\hybris\data\solrfacetsearch\MASTER\energizer_EnergizerProduct"/>
+    <core name="master_energizer_EnergizerProduct_1" instanceDir="D:\energizer_git\Distributor-Portal\config/solr/embedded" dataDir="D:\energizer_git\Distributor-Portal\data\solrfacetsearch\MASTER\energizer_EnergizerProduct_1"/>
 </cores>
 </solr>

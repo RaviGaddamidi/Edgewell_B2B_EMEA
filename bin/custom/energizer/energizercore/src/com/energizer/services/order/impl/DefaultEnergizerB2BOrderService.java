@@ -648,13 +648,17 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 					final String responseProdCode = xmlEntry.getMATERIAL().getValue();
 					if (modelProdCode.equalsIgnoreCase(responseProdCode))
 					{
-						orderEntryModel.setQuantity(xmlEntry.getTARGET_QTY().getValue());
-						orderEntryModel.setTotalPrice(Double.parseDouble(xmlEntry.getNET_VALUE().getValue()));
+
 						for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
 						{
 							if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
 							{
-								orderEntryModel.setBasePrice(Double.parseDouble(conditions.getCONDVALUE().getValue()));
+
+								final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+								final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+								final Double entryTotla = baseUomPrice * baseUomQuantity;
+								orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
+								orderEntryModel.setTotalPrice(entryTotla);
 							}
 						}
 					}

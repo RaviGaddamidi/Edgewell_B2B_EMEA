@@ -34,7 +34,7 @@
 				<th id="header6"><spring:theme code="basket.page.shipFrom"/></th>
 				<th id="header7"><spring:theme code="basket.page.uom"/></th>
 								
-				<th id="header8"><spring:theme code="basket.page.itemPrice"/></th>
+				<th id="header8"><spring:theme code="basket.page.unitPrice"/></th>
 				<th id="header9"><spring:theme code="basket.page.quantity"/></th>
 				<th id="header10"><spring:theme code="basket.page.total"/></th>
 			</tr>
