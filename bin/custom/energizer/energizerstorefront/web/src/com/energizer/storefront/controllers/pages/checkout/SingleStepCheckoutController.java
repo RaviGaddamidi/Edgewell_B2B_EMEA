@@ -42,6 +42,7 @@ import de.hybris.platform.commerceservices.order.CommerceCartModificationStatus;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
+import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
 import java.text.DateFormat;
@@ -110,6 +111,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	private static final String SINGLE_STEP_CHECKOUT_SUMMARY_CMS_PAGE = "singleStepCheckoutSummaryPage";
 
 	private static final String SINGLE_STEP_SIMULATE_CHECKOUT_SUMMARY_CMS_PAGE = "singleStepSimulateCheckoutSummaryPage";
+
+	private static final String PONUMBER_PATTERN = Config.getParameter("ponumber.checking.pattern");
 
 	@Resource(name = "paymentDetailsValidator")
 	private PaymentDetailsValidator paymentDetailsValidator;
@@ -272,6 +275,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		model.addAttribute("nDays", getNumberRange(1, 30));
 		model.addAttribute("nthDayOfMonth", getNumberRange(1, 31));
 		model.addAttribute("nthWeek", getNumberRange(1, 12));
+		model.addAttribute("poNumberPattern", PONUMBER_PATTERN);
 
 		model.addAttribute(new AddressForm());
 		model.addAttribute(new PaymentDetailsForm());

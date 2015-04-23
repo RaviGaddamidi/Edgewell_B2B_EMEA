@@ -19,7 +19,7 @@
 				<th id="header2" colspan="2"><spring:theme code="text.productDetails" text="Product Details"/></th>
 				<th id="header4"><spring:theme code="text.quantity" text="Quantity"/></th>
 
-				<th id="header5"><spring:theme code="text.itemPrice" text="Item Price"/></th>
+				<th id="header5"><spring:theme code="basket.page.unitPrice" text="Item Price"/></th>
 				<th id="header6"><spring:theme code="text.total" text="Total"/></th>
 				<th id="header7"><spring:theme code="text.adjustedquantity" text="Adjusted Quantity"/></th>
 				<th id="header8"><spring:theme code="text.adjustedprice" text="Adjusted Price"/></th>
