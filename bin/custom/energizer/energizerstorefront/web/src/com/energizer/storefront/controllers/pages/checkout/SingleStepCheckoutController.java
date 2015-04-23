@@ -859,6 +859,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			if (!termsChecked)
 			{
 				GlobalMessages.addErrorMessage(model, "checkout.error.terms.not.accepted");
+				return checkoutSummary(model);
 			}
 
 			for (final OrderEntryData entry : cartData.getEntries())
