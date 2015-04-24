@@ -51,6 +51,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 				{
 					energizerFileUploadModel.setShippingPoint(cmirModelforMatIdAndCustId.getShippingPoint());
 					energizerFileUploadModel.setUom(cmirModelforMatIdAndCustId.getUom());
+					energizerFileUploadModel.setOrderingUnit(Long.valueOf(cmirModelforMatIdAndCustId.getOrderingUnit()));
 					if (energizerFileUploadModel.getQuantity() == null || energizerFileUploadModel.getQuantity() == 0L)
 					{
 						//energizerFileUploadModel.setQuantity(Long.valueOf(cmirModelforMatIdAndCustId.getOrderingUnit()));
@@ -78,6 +79,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 					energizerFileUploadModel.setCustomerMaterialId(energizerCMIRModelforMatId.getCustomerMaterialId());
 					energizerFileUploadModel.setShippingPoint(energizerCMIRModelforMatId.getShippingPoint());
 					energizerFileUploadModel.setUom(energizerCMIRModelforMatId.getUom());
+					energizerFileUploadModel.setOrderingUnit(Long.valueOf(energizerCMIRModelforMatId.getOrderingUnit()));
 					if (energizerFileUploadModel.getQuantity() == null || energizerFileUploadModel.getQuantity() == 0L)
 					{
 						//energizerFileUploadModel.setQuantity(Long.valueOf(energizerCMIRModelforMatId.getOrderingUnit()));
@@ -104,6 +106,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 					energizerFileUploadModel.setMaterialId(energizerCMIRModelforCustId.getErpMaterialId());
 					energizerFileUploadModel.setShippingPoint(energizerCMIRModelforCustId.getShippingPoint());
 					energizerFileUploadModel.setUom(energizerCMIRModelforCustId.getUom());
+					energizerFileUploadModel.setOrderingUnit(Long.valueOf(energizerCMIRModelforCustId.getOrderingUnit()));
 					if (energizerFileUploadModel.getQuantity() == null || energizerFileUploadModel.getQuantity() == 0L)
 					{
 						//energizerFileUploadModel.setQuantity(Long.valueOf(energizerCMIRModelforCustId.getOrderingUnit()));
