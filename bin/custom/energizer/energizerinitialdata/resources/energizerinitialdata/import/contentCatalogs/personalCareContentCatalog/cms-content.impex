@@ -32,24 +32,24 @@ INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];nam
 
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
 ;;HomepageNavLink;Home Page Nav Link;/;HomepageNavLink
-;;Feminine_Care_Link;Feminine Care Link;c/SEG1001;Feminine_Care_Link
-;;Infant_Care_Link; Infant Care Link;c/SEG1002;Infant_Care_Link
-;;Shaving_Link;Shaving Link;c/SEG1003;Shaving_Link
-;;Skin_Care_Link;Skin Care Link;c/SEG1004;Skin_Care_Link
-;;Sun_Care_Link;Sun Care Link;c/SEG1004;Sun_Care_Link
-;;Playtex_Link;Playtex Link;c/SEG;Playtex_Link
-;;Carefree_Link;Carefree Link;c/SEG001;Carefree_Link
-;;Stayfree_Link;Stayfree Link;c/SEG001;Stayfree_Link
-;;Ob_Link;Ob Link;c/SEG001;Ob_Link
-;;Infant_Playtex_Link;Playtex Link;c/SEG;Infant_Playtex_Link
-;;Shick_Link;Shick Link;c/SEG001;Shick_Link
-;;Edge_Link;Edge Link;c/SEG001;Edge_Link
-;;Skintimate_Link;Skintimate Link;c/SEG001;Skintimate_Link
-;;SkinCare_Playtex_Link;Playtex Link;c/SEG;SkinCare_Playtex_Link
-;;Personal_Cleansing_Clothes_Link;Personal Cleansing Clothes Link;c/SEG001;Personal_Cleansing_Clothes_Link
-;;Wet_Ones_Link;Wet Ones Link;c/SEG001;Wet_Ones_Link
-;;Banana_Boat_Link;Banana Boat Link;c/SEG001;Banana_Boat_Link
-;;Hawaiian_Tropic_Link;Hawaiian Tropic Link;c/SEG001;Hawaiian_Tropic_Link
+;;Feminine_Care_Link;Feminine Care Link;c/Feminine Care;Feminine_Care_Link
+;;Infant_Care_Link; Infant Care Link;c/Infant Care;Infant_Care_Link
+;;Shaving_Link;Shaving Link;c/Shaving;Shaving_Link
+;;Skin_Care_Link;Skin Care Link;c/Skin Care;Skin_Care_Link
+;;Sun_Care_Link;Sun Care Link;c/Sun Care;Sun_Care_Link
+;;Playtex_Link;Playtex Link;c/Feminine Care-Playtex;Playtex_Link
+;;Carefree_Link;Carefree Link;c/Feminine Care-Carefree;Carefree_Link
+;;Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree;Stayfree_Link
+;;Ob_Link;Ob Link;c/Feminine Care-Ob;Ob_Link
+;;Infant_Playtex_Link;Playtex Link;c/Infant Care-Playtex;Infant_Playtex_Link
+;;Shick_Link;Shick Link;c/Shaving-Schick;Shick_Link
+;;Edge_Link;Edge Link;c/Shaving-Edge;Edge_Link
+;;Skintimate_Link;Skintimate Link;c/Shaving-Skintimate;Skintimate_Link
+;;SkinCare_Playtex_Link;Playtex Link;c/Skin Care-Playtex;SkinCare_Playtex_Link
+;;Personal_Cleansing_Clothes_Link;Personal Cleansing Clothes Link;c/Skin Care-Personal Cleansing Clothes;Personal_Cleansing_Clothes_Link
+;;Wet_Ones_Link;Wet Ones Link;c/Skin Care-Wet Ones;Wet_Ones_Link
+;;Banana_Boat_Link;Banana Boat Link;c/Sun Care-Banana Boat;Banana_Boat_Link
+;;Hawaiian_Tropic_Link;Hawaiian Tropic Link;c/Sun Care-Hawaiian Tropic;Hawaiian_Tropic_Link
 
 
 # CMS Navigation Nodes #
