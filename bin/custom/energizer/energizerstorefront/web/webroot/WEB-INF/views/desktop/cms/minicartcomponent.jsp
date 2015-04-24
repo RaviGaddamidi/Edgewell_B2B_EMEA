@@ -12,7 +12,7 @@
 <c:url value="/cart/miniCart/${totalDisplay}" var="refreshMiniCartUrl"/>
 <c:url value="/cart/rollover/${component.uid}" var="rolloverPopupUrl"/>
 <c:url value="/cart" var="cartUrl"/>
-
+<c:if test="${user.uid ne 'anonymous'}">
 <a href="${cartUrl}" class="minicart">
 	${component.title}
 	<ycommerce:testId code="miniCart_items_label">
@@ -30,5 +30,8 @@
 		</span>
 	</ycommerce:testId>
 </a>
+
 <div id="miniCartLayer" class="miniCartPopup" data-refreshMiniCartUrl="${refreshMiniCartUrl}/?"  data-rolloverPopupUrl="${rolloverPopupUrl}" ></div>
+</c:if>
+
 
