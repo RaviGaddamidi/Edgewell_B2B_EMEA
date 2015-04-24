@@ -48,7 +48,7 @@
 							<input type="text" name="energizerMaterialID" size="20" placeholder="Energizer Product Code"/>
 						</td>
 						<td headers="header1">
-							(or)
+							<div class="quickOrder_text_btw_txt">(or)</div>
 						</td>
 						<td headers="header2">
 							 <input type="text" name="distributorMaterialID" size="20" placeholder="Distributor Product Code"/>
