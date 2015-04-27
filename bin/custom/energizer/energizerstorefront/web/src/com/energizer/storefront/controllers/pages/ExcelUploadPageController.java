@@ -262,10 +262,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 						}
 					}
 				}
-
 				model.addAttribute("shipmentData", shipmentMap);
-				final CartData cartData = quickOrderFacade.getCurrentSessionCart();
-				model.addAttribute("cartData", cartData);
 			}
 			catch (final FileNotFoundException fne)
 			{
@@ -318,13 +315,15 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerFileUploadData.getMaterialId(),
 						energizerFileUploadData.getCustomerMaterialId(), cmir);
 
-				final CartData cartData = quickOrderFacade.getCurrentSessionCart();
-				model.addAttribute("cartData", cartData);
 				model.addAttribute("shipmentData", shipmentMap);
 
 				if (orderEntry != null)
 				{
 					orderEntry.setQuantity(energizerFileUploadData.getQuantity());
+
+					model.addAttribute("cartShippingPoint",
+							orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
+
 					shippingPointBusinessRulesService.validateBusinessRules(orderEntry);
 					cartEntryBusinessRulesService.validateBusinessRules(orderEntry);
 
