@@ -119,6 +119,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.excelFileUpload"));
 		model.addAttribute("metaRobots", "no-index,no-follow");
 
+		List<EnergizerFileUploadData> energizerExcelUploadModels = new ArrayList<EnergizerFileUploadData>();
+
 		if (shipmentMap != null && !shipmentMap.keySet().isEmpty())
 		{
 			shipmentMap.clear();
@@ -162,7 +164,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					GlobalMessages.addErrorMessage(model, "text.account.excelUpload.fileUploadFormat");
 					return ControllerConstants.Views.Pages.Account.AccountExcelUpload;
 				}
-
 				while (rowIterator.hasNext())
 				{
 					final Row row = rowIterator.next();
@@ -237,7 +238,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					GlobalMessages.addErrorMessage(model, "text.account.excelUpload.noRowsFound");
 					return ControllerConstants.Views.Pages.Account.AccountExcelUpload;
 				}
-				List<EnergizerFileUploadData> energizerExcelUploadModels = new ArrayList<EnergizerFileUploadData>();
+
 				energizerExcelUploadModels = energizerExcelRowtoModelFacade.convertExcelRowtoBean(energizerFileUploadDatas);
 				for (final EnergizerFileUploadData energizerCMIRModel : energizerExcelUploadModels)
 				{
@@ -263,7 +264,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					}
 				}
 				model.addAttribute("shipmentData", shipmentMap);
-				model.addAttribute("cartData", quickOrderFacade.getCurrentSessionCart());
 			}
 			catch (final FileNotFoundException fne)
 			{
@@ -281,6 +281,18 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			{
 				LOG.error(e.getMessage());
 				return ControllerConstants.Views.Pages.Account.AccountExcelUpload;
+			}
+		}
+		if (energizerExcelUploadModels != null && energizerExcelUploadModels.size() > 0)
+		{
+			final EnergizerCMIRModel cmir = quickOrderFacade.getCMIRForProductCodeOrCustomerMaterialID(energizerExcelUploadModels
+					.get(0).getMaterialId(), energizerExcelUploadModels.get(0).getCustomerMaterialId());
+			if (cmir != null)
+			{
+				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerExcelUploadModels.get(0).getMaterialId(),
+						energizerExcelUploadModels.get(0).getCustomerMaterialId(), cmir);
+				model.addAttribute("cartShippingPoint",
+						orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
 			}
 		}
 		return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
