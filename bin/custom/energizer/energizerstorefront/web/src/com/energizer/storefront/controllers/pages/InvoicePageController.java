@@ -17,6 +17,7 @@ import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.energizer.core.invoice.EnergizerInvoiceService;
+import com.energizer.facades.order.impl.DefaultEnergizerInvoiceFacade;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 
 
@@ -48,41 +48,54 @@ public class InvoicePageController extends AbstractSearchPageController
 
 	public static final String INVOICE_FILE_EXTENSION = ".pdf";
 
+	public static final String CONTENT_TYPE = "text/html";
+	@Resource(name = "defaultInvoiceFacade")
+	private DefaultEnergizerInvoiceFacade defaultInvoiceFacade;
 
-	@Resource(name = "invoiceService")
-	private EnergizerInvoiceService invoiceService;
 
 
-
-	@RequestMapping(value = "/" + INVOICE_NUMBER_PATTERN, method = RequestMethod.GET)
+	@RequestMapping(value = "/invoicePdfDisplay", method = RequestMethod.GET)
 	@RequireHardLogIn
-	public void account(@PathVariable("invoiceNumber") final String invoiceNumber,
+	public void invoice(@RequestParam("orderCode") final String invoiceNumber,
 			@RequestParam(value = "inline", required = false) final Boolean inline, final Model model,
 			final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException, IOException
 	{
 
-		final byte pdfFile[] = invoiceService.getPDFInvoiceAsBytes(invoiceNumber);
-		response.setContentType(INVOICE_FILE_MIME);
+		final byte pdfFile[] = defaultInvoiceFacade.getPDFInvoiceAsBytes(invoiceNumber.trim());
 
-		if (inline == null)
+		//final byte pdfFile[] = defaultEnergizerInvoiceService.getPDFInvoiceAsBytes(invoiceNumber);
+
+		if (null != pdfFile)
 		{
-			response.addHeader("Content-Disposition", "attachment; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
-		}
+			if (inline == null)
+			{
+				response.addHeader("Content-Disposition", "attachment; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
+			}
 
-		if (inline != null && inline.booleanValue())
+			if (inline != null && inline.booleanValue())
+			{
+				response.addHeader("Content-Disposition", "inline; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
+			}
+			else if (inline != null && !inline.booleanValue())
+			{
+				response.addHeader("Content-Disposition", "attachment; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
+			}
+			final OutputStream responseOutputStream = response.getOutputStream();
+			response.setContentType(INVOICE_FILE_MIME);
+			response.setContentLength(pdfFile.length);
+			responseOutputStream.write(pdfFile);
+		}
+		else
 		{
-			response.addHeader("Content-Disposition", "inline; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
+			response.setContentType(CONTENT_TYPE);
+			final PrintWriter pw = response.getWriter();
+			final String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
+			pw.println(docType + "<html>");
+			pw.println("<head><title>Error</title>");
+			pw.println("<body>");
+			pw.println("<h1>Failed To Load Invoice PDF</h1>");
+			pw.println("</body></html>");
 		}
-		else if (inline != null && !inline.booleanValue())
-		{
-			response.addHeader("Content-Disposition", "attachment; filename=" + invoiceNumber + INVOICE_FILE_EXTENSION);
-		}
-
-		response.setContentLength(pdfFile.length);
-
-
-		final OutputStream responseOutputStream = response.getOutputStream();
-		responseOutputStream.write(pdfFile);
 
 
 	}
