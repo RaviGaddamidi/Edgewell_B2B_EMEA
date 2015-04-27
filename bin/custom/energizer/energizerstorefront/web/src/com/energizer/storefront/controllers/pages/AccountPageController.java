@@ -1211,6 +1211,10 @@ public class AccountPageController extends AbstractSearchPageController
 		//fetch and set the UOM and MOQ for the product for the customer
 		final EnergizerCMIRModel cmir = quickOrderFacade.getCMIRForProductCodeOrCustomerMaterialID(energizerMaterialID,
 				distributorMaterialID);
+		if (orderEntryBusinessRulesService.getErrors() != null && !orderEntryBusinessRulesService.getErrors().isEmpty())
+		{
+			orderEntryBusinessRulesService.getErrors().clear();
+		}
 		if (cmir == null)
 		{
 			//GlobalMessages.addErrorMessage(model, "quickorder.addtocart.nocmir");
