@@ -30,5 +30,7 @@
 		</span>
 	</ycommerce:testId>
 </a>
+
 <div id="miniCartLayer" class="miniCartPopup" data-refreshMiniCartUrl="${refreshMiniCartUrl}/?"  data-rolloverPopupUrl="${rolloverPopupUrl}" ></div>
+
 
