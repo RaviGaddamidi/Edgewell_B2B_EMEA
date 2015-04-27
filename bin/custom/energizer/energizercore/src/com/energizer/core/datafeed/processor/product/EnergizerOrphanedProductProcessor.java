@@ -74,10 +74,20 @@ public class EnergizerOrphanedProductProcessor extends AbstractJobPerformable<En
 
 	private void sendEmail(final String strProducts, final String toEmail)
 	{
-		final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(toEmail, "Hybris Test Mail");
-		final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, toAddress, "",
-				"Orphaned Products", "List of Energizer products orphaned : " + strProducts + "\n", null);
-		emailService.send(message);
+
+		try
+		{
+			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(toEmail, "Hybris Test Mail");
+
+			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, toAddress, "",
+					"Orphaned Products", "List of Energizer products orphaned : " + strProducts + "\n", null);
+			emailService.send(message);
+		}
+		catch (final Exception e)
+		{
+			LOG.info("Printing error in ");
+			e.printStackTrace();
+		}
 
 	}
 }
