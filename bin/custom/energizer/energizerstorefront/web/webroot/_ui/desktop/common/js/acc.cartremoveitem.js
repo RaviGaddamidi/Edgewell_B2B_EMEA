@@ -344,18 +344,23 @@ ACC.cartremoveitem = {
 				var errorSize = cartData.businesRuleErrors.length;				
 				var errors ="";								
 				if(errorSize > 0)
-				{
-					for (var i = 0; i < errorSize; i++)
-					{
-						var error = cartData.businesRuleErrors[i];
-						
-						errors = errors + error + "<br/>";						
-					}
-					errorsDiv.html(errors);	
-					errorsDiv.addClass("alert negative");
-					errorsDiv.fadeOut(3000);
-				}
-				 $('#validationErrors').fadeOut(5000);
+                {
+                      $('#businesRuleErrors').fadeIn("fast");
+                      for (var i = 0; i < errorSize; i++)
+                      {
+                            var error = cartData.businesRuleErrors[i];
+                            
+                            errors = errors + error + "<br/>";                                
+                      }
+                      errorsDiv.html(errors); 
+                      errorsDiv.addClass("alert negative");
+                      //errorsDiv.fadeOut(3000);
+                }else{
+                      businesRuleErrors
+                      $('#businesRuleErrors').fadeOut(1000);
+                }
+                $('#validationErrors').fadeOut(5000);
+
 			}		
 		},
 
@@ -477,6 +482,8 @@ ACC.cartremoveitem = {
 		{
 		var contHeight = $("#volume_cont").height();
 		var isContainerFull = $('#isContainerFull').val();
+		var getVolTxt = $("#volume_txt").val();
+		var getWeightTxt = $("#weight_txt").val();
 		
 		if(isContainerFull == 'true')
 		{
@@ -489,7 +496,19 @@ ACC.cartremoveitem = {
 			 $("#checkoutButton_top").attr("disabled", true);
 			 $("#checkoutButton_bottom").attr("disabled",true);		
 			 
-		}		
+		}	
+		
+		if(isContainerFull == 'false')
+		{ 
+				if(getVolTxt == 100)
+				  {				
+				 	$("#volume_utilization").css('height', contHeight); 		 	
+				  }
+				  if(getWeightTxt == 100)
+				  {
+				  $("#weight_utilization").css('height', contHeight);		
+				  }
+		}
 				
 		},
 		
@@ -501,12 +520,12 @@ ACC.cartremoveitem = {
 			var weightCont = $("#weight_cont").height(); 			
 			var isContainerFull = $('#isContainerFull').val();
 			isContainerfull = isContainerFull;
-						
+
 			if(null !=contHeight && null != volCont  ){
 
 				var getVolTxt = $("#volume_txt").val();
 				var getWeightTxt = $("#weight_txt").val();
-												
+				
 				if(isContainerFull == 'true')
 				{ 
 				 if(getWeightTxt >= 100)
@@ -533,6 +552,15 @@ ACC.cartremoveitem = {
 				 
 				 $("#utl_vol").text(getVolTxt);
 				 $("#utl_wt").text(getWeightTxt);
+				 if(getVolTxt == 100)
+				  {				
+				 	$("#volume_utilization").css('height', contHeight);				 	
+				  }
+				  if(getWeightTxt == 100)
+				  {
+				  $("#weight_utilization").css('height', contHeight);		
+				  }
+				 				
 				}
 				
 				if(getVolTxt <100){
