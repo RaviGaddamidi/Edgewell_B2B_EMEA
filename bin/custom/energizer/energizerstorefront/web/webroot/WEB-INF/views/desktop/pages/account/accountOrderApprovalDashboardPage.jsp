@@ -27,7 +27,7 @@
 		<div class="span-19">
 		<c:choose>
 				<c:when test="${not empty searchPageData.results}">
-				<nav:pagination top="true" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>
+				<!--<nav:pagination top="true" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>-->
 
 				<form>
 					<table id="order_history" class="orderListTable">
@@ -82,7 +82,7 @@
 						</tbody>
 					</table>
 				</form>
-				<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>
+				<!--<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>-->
 			</c:when>
 			<c:when test="${empty searchPageData.results}">
 				<p><spring:theme code="text.account.orderHistory.noOrders" text="You have no orders"/></p>
