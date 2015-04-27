@@ -16,6 +16,7 @@ import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerPriceRowModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.core.model.EnergizerShippingPointModel;
 import com.energizer.services.product.dao.EnergizerProductDAO;
 
 
@@ -218,5 +219,19 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		query.addQueryParameter("sapCatgyCode", sapCatgyCode);
 		return flexibleSearchService.<EnergizerProductModel> search(query).getResult();
 	}
+
+
+
+
+	@Override
+	public List<EnergizerShippingPointModel> getShippingPointName(final String shippingPointId)
+	{
+		final FlexibleSearchQuery retreiveQuery = new FlexibleSearchQuery(
+				"SELECT {pk} FROM {EnergizerShippingPoint} where {shippingPointId}=?shippingPointId");
+		retreiveQuery.addQueryParameter("shippingPointId", shippingPointId);
+		return flexibleSearchService.<EnergizerShippingPointModel> search(retreiveQuery).getResult();
+
+	}
+
 
 }

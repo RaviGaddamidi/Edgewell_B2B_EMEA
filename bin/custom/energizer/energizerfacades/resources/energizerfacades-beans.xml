@@ -36,6 +36,9 @@
 		<property name="weightUom" type="java.lang.String" />
 		<property name="volume" type="java.lang.Double" />
 		<property name="volumeUom" type="java.lang.String" />
+		<property name="segmentName" type="java.lang.String" />
+		<property name="familyName" type="java.lang.String" />
+		<property name="groupName" type="java.lang.String" />
 	</bean>
 	<!-- ************ End Product Details Page Bean defination ******************* -->	
 	

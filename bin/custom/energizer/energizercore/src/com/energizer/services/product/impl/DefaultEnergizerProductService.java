@@ -17,6 +17,7 @@ import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerPriceRowModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.core.model.EnergizerShippingPointModel;
 import com.energizer.services.product.EnergizerProductService;
 import com.energizer.services.product.dao.EnergizerProductDAO;
 
@@ -55,6 +56,16 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 		}
 
 		return energizerCMIRModel;
+	}
+
+	/**
+	 * @param shippingPointId
+	 * 
+	 */
+	public String getShippingPointName(final String shippingPointId)
+	{
+		final List<EnergizerShippingPointModel> result = energizerProductDAO.getShippingPointName(shippingPointId);
+		return (result.isEmpty()) ? null : result.get(0).getShippingPointName();
 	}
 
 

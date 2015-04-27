@@ -546,4 +546,5 @@
 		<property name="energizerGroupsLookUpStrategy" ref="energizerGroupsLookUpStrategy"/>
 		<property name="b2bUnitService" ref="b2bUnitService"/>		
 	</bean>
+	 <bean id="defaultInvoiceFacade" class="com.energizer.facades.order.impl.DefaultEnergizerInvoiceFacade" autowire="byName"></bean>
 </beans>

@@ -146,8 +146,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			cartData.setTotalProductVolumeInPercent(containerData.getPercentVolumeUses());
 			cartData.setTotalProductWeightInPercent(containerData.getPercentWeightUses());
 
-			if ((cartData.getTotalProductVolumeInPercent().doubleValue() >= hundred)
-					|| (cartData.getTotalProductWeightInPercent().doubleValue() >= hundred))
+			if ((cartData.getTotalProductVolumeInPercent().doubleValue() > hundred)
+					|| (cartData.getTotalProductWeightInPercent().doubleValue() > hundred))
 			{
 				cartData.setIsContainerFull(true);
 			}

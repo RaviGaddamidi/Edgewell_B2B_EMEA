@@ -5,13 +5,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<spring:url value="/my-account/invoice/${orderData.invoiceNumber}?inline=true" var="viewinvoiceUrl" />
+<script>
+function openInvoicePDF(orderid){
+window.open('/my-account/invoice/invoicePdfDisplay?orderCode= ${orderData.code} && inline=true','invoicepdf','scrollbars=yes,width=500, height=900')
+}
+</script>
 
-<form:form action="${viewinvoiceUrl}" id="viewinvoiceForm" commandName="reorderForm">
-	<form:input type="hidden" name="orderCode" path="orderCode" value="${orderData.code}" />
-	<button type="submit" class="positive right pad_right re-order" id="viewinvoiceButton">
-		<spring:theme code="text.order.viewInvoice" text="viewInvoice"/>
-	</button>
-</form:form>
+<spring:url value="/my-account/invoice/${orderData.code}?inline=true" var="viewinvoiceUrl" />
+<a class="positive right pad_right re-order invoicePdf"  style=" text-align:center;background-color: #169e08;  border-color: #169e08;color: #fff; font-weight: bold; text-transform: uppercase; border-color: #000;  height: 40px;" href="javascript:openInvoicePDF('${orderData.code}')" ><spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a>
 
 

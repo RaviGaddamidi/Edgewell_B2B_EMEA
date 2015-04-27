@@ -508,5 +508,12 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		this.b2bUnitModel = b2bUnitModel;
 	}
 
+	/**
+	 * 
+	 */
+	public CartModel getSessionCart()
+	{
+		return cartService.getSessionCart();
+	}
 
 }

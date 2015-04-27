@@ -47,10 +47,10 @@
 			</tr>
 		</c:if>
 		
-		<tr>
+		<%-- <tr>
 			<td><spring:theme code="text.account.order.delivery" text="Delivery:"/></td>
 			<td><format:price priceData="${order.deliveryCost}" displayFreeForZero="true"/></td>
-		</tr>
+		</tr> --%>
 		
 		
 		<c:if test="${order.net}" >

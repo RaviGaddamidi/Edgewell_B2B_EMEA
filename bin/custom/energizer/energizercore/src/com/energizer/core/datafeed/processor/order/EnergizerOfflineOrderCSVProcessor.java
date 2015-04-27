@@ -49,8 +49,11 @@ import com.energizer.services.product.EnergizerProductService;
  * 
  * Sample file will look like
  * 
- * SAPOrderNo,CreatedByUser,CreatedDate,ReqDeliveryDate,PONo,TotalValue,TotalShipment,TotalDiscount,TotalTax,B2BAccount,Status, ContainerID,SealNumber,VesselNumber,InvoicePDF,ArchiveID,ERPMaterialID,OrderEntryQty,UOM,UnitPrice,TotalPrice,ItemTotalShipment,ItemTotalDiscount,ItemTax
- * 54321,     Jack,         11-5-2014 , 14-5-2014       ,XYZ,1000,      200,          100,          250,     4321,      PENDING,XYZ,        XYZ,       XYZ,         XYZ,       XYZ,      PRD001,       10,           1A, 100,      1000,      50,               50,               50
+ * SAPOrderNo,CreatedByUser,CreatedDate,ReqDeliveryDate,PONo,TotalValue,TotalShipment,TotalDiscount,TotalTax,B2BAccount,
+ * Status,
+ * ContainerID,SealNumber,VesselNumber,InvoicePDF,ArchiveID,ERPMaterialID,OrderEntryQty,UOM,UnitPrice,TotalPrice,
+ * ItemTotalShipment,ItemTotalDiscount,ItemTax 54321, Jack, 11-5-2014 , 14-5-2014 ,XYZ,1000, 200, 100, 250, 4321,
+ * PENDING,XYZ, XYZ, XYZ, XYZ, XYZ, PRD001, 10, 1A, 100, 1000, 50, 50, 50
  * 
  * Total column count : 24
  */
@@ -177,7 +180,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 				OrderModel existEnergizerOrder = energizerOrderService.getExistingOrder(sapOrderNo);
 
-				final OrderModel currentEnergizerOrder = existEnergizerOrder;
+
 				//If existEnergizerOrder is null then we will create order and if it is not null then we will update the order
 				//If its going to update then at first we need to check for offline order if it is not offline order then don't proceed to update
 
@@ -190,7 +193,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 				existEnergizerOrder = createOrUpdateOfflineOrder(existEnergizerOrder);
 
-
+				final OrderModel currentEnergizerOrder = existEnergizerOrder;
 
 				if (existEnergizerOrder != null)
 				{
@@ -225,6 +228,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 		}//end of try block
 		catch (final Exception e)
 		{
+			
 			LOG.error("EnergizerOfflineOrderCSVProcessor ", e);
 		}
 		return errors;
@@ -263,24 +267,27 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				.getUnitForUid(b2bAccount);
 
 		// adding extra parameter - Start
-		final List<CMSSiteModel> sites = (List<CMSSiteModel>) cmsSiteService.getSites();
-		BaseSiteModel baseSite = null;
-		for (final CMSSiteModel site : sites)
+		if (null != energizerOrderModel)
 		{
-			if (site.getUid().equalsIgnoreCase(ENERGIZER_SITE))
+			final List<CMSSiteModel> sites = (List<CMSSiteModel>) cmsSiteService.getSites();
+			BaseSiteModel baseSite = null;
+			for (final CMSSiteModel site : sites)
 			{
-				baseSite = site;
-				energizerOrderModel.setSite(baseSite);
+				if (site.getUid().equalsIgnoreCase(ENERGIZER_SITE))
+				{
+					baseSite = site;
+					energizerOrderModel.setSite(baseSite);
+				}
 			}
-		}
 
-		if (energizerB2BUnitModel != null)
-		{
-			energizerOrderModel.setUnit(energizerB2BUnitModel);
-		}
-		if (energizerOrderModel.getUser().getSessionLanguage() != null)
-		{
-			energizerOrderModel.setLanguage(energizerOrderModel.getUser().getSessionLanguage());
+			if (energizerB2BUnitModel != null)
+			{
+				energizerOrderModel.setUnit(energizerB2BUnitModel);
+			}
+			if (energizerOrderModel.getUser().getSessionLanguage() != null)
+			{
+				energizerOrderModel.setLanguage(energizerOrderModel.getUser().getSessionLanguage());
+			}
 		}
 		// adding extra parameter - end
 
@@ -326,7 +333,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 					energizerOrderModel.setSealNumber(sealNumber);
 					energizerOrderModel.setVesselNumber(vesselNumber);
 					energizerOrderModel.setInvoicePDF(invoicePDF);
-					energizerOrderModel.setArchiveID(archiveID);
+					
 
 					isOrderCreatedOrUpdated = true;
 				}

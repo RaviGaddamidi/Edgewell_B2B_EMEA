@@ -722,11 +722,11 @@
 						<persistence type="property" />
 					</attribute>
 					
-					<attribute qualifier="archiveID" type="java.lang.String">
+					<!--  <attribute qualifier="archiveID" type="java.lang.String">
 						<description>this is reference to documents in SAP</description>
 						<modifiers />
 						<persistence type="property" />
-					</attribute>
+					</attribute>-->
 					<attribute qualifier="isPendingApprovalEmailSent" type="java.lang.Boolean">
 						<description>to avoind sending email second time</description>
 						<modifiers />
@@ -735,6 +735,21 @@
 					</attribute>
 					<attribute qualifier="orderApprover" type="EnergizerB2BCustomer">
 						<description>required for sending approval failed notification </description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="documentID" type="java.lang.String">
+						<description>this is reference to documents in SAP</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="contrEP" type="java.lang.String">
+						<description>this is reference to documents in SAP</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="documentClass" type="java.lang.String">
+						<description>this is reference to documents in SAP</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>

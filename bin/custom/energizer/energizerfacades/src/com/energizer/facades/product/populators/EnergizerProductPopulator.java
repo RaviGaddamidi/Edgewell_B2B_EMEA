@@ -71,10 +71,14 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 			loggedInUserB2bUnit = b2bCommerceUserService.getParentUnitForCustomer(currentUserId);
 		}
 		productData.setObsolete((energizerProductModel.getObsolete() == null ? false : energizerProductModel.getObsolete()));
-
 		productData.setDescription(energizerProductModel.getDescription() == null ? EMPTY : energizerProductModel.getDescription());
-
 		productData.setErpMaterialID(energizerProductModel.getCode() == null ? EMPTY : energizerProductModel.getCode());
+
+
+		//Setting the segment,family , group
+		productData.setSegmentName(energizerProductModel.getSegmentName() == null ? EMPTY : energizerProductModel.getSegmentName());
+		productData.setFamilyName(energizerProductModel.getFamilyName() == null ? EMPTY : energizerProductModel.getFamilyName());
+		productData.setGroupName(energizerProductModel.getGroupName() == null ? EMPTY : energizerProductModel.getGroupName());
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerCMIRModel energizerCMIRModel;
@@ -91,7 +95,11 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 					: energizerCMIRModel.getCustomerMaterialDescription());
 			productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
 			productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
-			productData.setShippingPoint(energizerCMIRModel.getShippingPoint());
+
+			final String shippingPointId = energizerCMIRModel.getShippingPoint();
+			final String shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
+			productData.setShippingPoint(shippingPointName == null ? EMPTY : shippingPointName);
+
 			if (energizerProductConversionFactorModel != null)
 			{
 				final String alternateUOM = energizerProductConversionFactorModel.getAlternateUOM(); // EACH / CASE/ PALLET / LAYER

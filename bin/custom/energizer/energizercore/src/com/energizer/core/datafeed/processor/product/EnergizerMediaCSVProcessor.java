@@ -26,7 +26,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
@@ -37,16 +36,14 @@ import com.energizer.core.model.EnergizerProductModel;
 
 /**
  * 
-
+ * 
  * This processors imports the media.
  * 
  * Sample file will look like
  * 
- * ERPMaterialID,ThumnailPath,                 DisplayImagePath
- * PRD001,       /medias/Produc101-thumb.jpeg, /medias/Produc201-thumb.jpeg
+ * ERPMaterialID,ThumnailPath, DisplayImagePath PRD001, /medias/Produc101-thumb.jpeg, /medias/Produc201-thumb.jpeg
  * 
  * Total column count : 3
-
  */
 public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 {
@@ -72,8 +69,8 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 	private final String PRD_THUMB_QUALIFIER = "96Wx96H";
 	private static String THUMB = "_thumb";
 	private static String PICS = "_pic";
-	private static final String JPEG = ".JPEG";
-	private static final String JPG = ".JPG";
+	private static final String JPEG = "JPEG";
+	private static final String JPG = "JPG";
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -246,8 +243,9 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 			}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISPLAY_IMAGE_PATH))
 			{
-				if (!StringUtils.endsWith(value, JPEG) || !StringUtils.endsWith(value, JPEG.toLowerCase())
-						|| !StringUtils.endsWith(value, JPG) || !StringUtils.endsWith(value, JPG.toLowerCase()))
+				final String extension = value.substring(value.lastIndexOf(".") + 1, value.length());
+
+				if (!(extension.equalsIgnoreCase(JPEG) || extension.equalsIgnoreCase(JPG)))
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -268,8 +266,9 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.THUMBNAIIL_PATH))
 			{
-				if (!StringUtils.endsWith(value, JPEG) || !StringUtils.endsWith(value, JPEG.toLowerCase())
-						|| !StringUtils.endsWith(value, JPG) || !StringUtils.endsWith(value, JPG.toLowerCase()))
+				final String extension = value.substring(value.lastIndexOf(".") + 1, value.length());
+
+				if (!(extension.equalsIgnoreCase(JPEG) || extension.equalsIgnoreCase(JPG)))
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();

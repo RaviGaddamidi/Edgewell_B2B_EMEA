@@ -43,7 +43,8 @@ public interface EnergizerB2BOrderService
 	/**
 	 * @param orderModel
 	 * @return
+	 * @throws Exception
 	 */
-	int createOrder(OrderModel orderModel);
+	int createOrder(OrderModel orderModel) throws Exception;
 
 }
