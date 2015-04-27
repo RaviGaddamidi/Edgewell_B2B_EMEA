@@ -101,7 +101,8 @@
         <property name="uom" type="java.lang.String"/>
          <property name="shippingPoint" type="java.lang.String"/>
         <property name="hasError" type="boolean"/>
-        <property name="message" type="java.lang.String"/>       
+        <property name="message" type="java.lang.String"/>
+         <property name="orderingUnit" type="java.lang.Long"/>      
     </bean>
     
     <bean class="de.hybris.platform.commercefacades.user.data.AddressData" >

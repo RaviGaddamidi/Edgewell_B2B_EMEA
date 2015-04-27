@@ -22,17 +22,21 @@
 		http://www.springframework.org/schema/aop
 		http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+	
+	
 	<security:http pattern="/_ui/**" security="none"/>
-
-	<!-- Security config for checkout - it has its own login page -->
+	
+	
 	<security:http disable-url-rewriting="true" pattern="/checkout/**">
 
 		<security:session-management session-authentication-strategy-ref="fixation" />
-
+		
 		<!-- SSL / AUTHENTICATED pages -->
 		<security:intercept-url pattern="/checkout/j_spring_security_check" requires-channel="https"/>
 		<security:intercept-url pattern="/checkout*" access="ROLE_CUSTOMERGROUP" requires-channel="https"/>
 		<security:intercept-url pattern="/checkout/**" access="ROLE_CUSTOMERGROUP" requires-channel="https"/>
+		
+		<security:intercept-url pattern="/**" requires-channel="${storefront.security.default.required.channel}"/>
 
 		<security:form-login
 				login-processing-url="/checkout/j_spring_security_check"
@@ -76,11 +80,12 @@
 		<security:session-management session-authentication-strategy-ref="fixation" />
 
 		<!-- RememberMe -->
-		<security:remember-me key="energizerstorefront" services-ref="rememberMeServices"/>
+		<!-- security:remember-me key="energizerstorefront" services-ref="rememberMeServices"/ -->
 
 		<!-- SSL / AUTHENTICATED pages -->
 		<security:intercept-url pattern="/my-account*" access="ROLE_CUSTOMERGROUP" requires-channel="https"/>
 		<security:intercept-url pattern="/my-account/**" access="ROLE_CUSTOMERGROUP" requires-channel="https"/>
+		<security:intercept-url pattern="/my-cart/**" access="ROLE_CUSTOMERGROUP" requires-channel="https"/>
 
 		<!-- SSL / AUTHENTICATED pages Organization management pages-->
 		<security:intercept-url pattern="/my-company*" access="ROLE_B2BADMINGROUP" requires-channel="https"/>
@@ -205,7 +210,7 @@
 	<bean id="defaultLoginAuthenticationSuccessHandler"
 		  class="com.energizer.storefront.security.StorefrontAuthenticationSuccessHandler">
 		<property name="customerFacade" ref="customerFacade"/>
-		<property name="defaultTargetUrl" value="/my-account"/>
+		<property name="defaultTargetUrl" value="/"/>
 		<property name="useReferer" value="false"/>
 		<property name="requestCache" ref="httpSessionRequestCache"/>
 		<property name="uiExperienceService" ref="uiExperienceService"/>
@@ -300,7 +305,7 @@
 		<property name="userDetailsService" ref="originalUidUserDetailsService"/>
 		<property name="key" value="energizerstorefront"/>
 		<property name="cookieName" value="energizerstorefrontRememberMe"/>
-		<property name="alwaysRemember" value="true"/>
+		<property name="alwaysRemember" value="false"/>
 		<property name="userService" ref="userService"/>
 		<property name="useSecureCookie" value="false"/>
 		<property name="customerFacade" ref="customerFacade"/>

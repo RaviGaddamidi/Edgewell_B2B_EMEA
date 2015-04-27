@@ -46,6 +46,7 @@ public class StorefrontFilter extends GenericFilterBean
 	private BrowseHistory browseHistory;
 	private CookieGenerator cookieGenerator;
 
+
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException
@@ -72,7 +73,11 @@ public class StorefrontFilter extends GenericFilterBean
 			getBrowseHistory().addBrowseHistoryEntry(new BrowseHistoryEntry(httpRequest.getRequestURI(), null));
 		}
 
+
 		chain.doFilter(request, response);
+
+
+
 	}
 
 
@@ -153,4 +158,9 @@ public class StorefrontFilter extends GenericFilterBean
 	{
 		this.cookieGenerator = cookieGenerator;
 	}
+
+
+
+
+
 }

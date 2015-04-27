@@ -173,8 +173,8 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 			{
 				orderEntry = new OrderEntryData();
 				final ProductData product = new ProductData();
-				product.setCode(productCode);
-				product.setCustomerMaterialId(customerProductCode);
+				product.setCode(cmir.getErpMaterialId());
+				product.setCustomerMaterialId(cmir.getCustomerMaterialId());
 				product.setName(productModel.getName());
 				product.setUom(cmir.getUom());
 				product.setMoq(cmir.getOrderingUnit());
