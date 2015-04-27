@@ -25,8 +25,8 @@
 	<nav:accountNav selected="fileupload" />
 	
 		<div>
-		<c:if test="${not empty cartData and not empty cartData.shippingPoint}">
-		<p><spring:theme code="text.account.quickorder.currentShippingPointInCart"/>${cartData.shippingPoint}</p>
+		<c:if test="${not empty cartShippingPoint}">
+		<p><spring:theme code="text.account.quickorder.currentShippingPointInCart"/>${cartShippingPoint}</p>
 		
 		</c:if>
 		</div>
