@@ -263,6 +263,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					}
 				}
 				model.addAttribute("shipmentData", shipmentMap);
+				model.addAttribute("cartData", quickOrderFacade.getCurrentSessionCart());
 			}
 			catch (final FileNotFoundException fne)
 			{
@@ -361,11 +362,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				LOG.info("The error message is " + error.getMessage());
 				GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
 			}
-			/*
-			 * for (final BusinessRuleError error : cartEntryBusinessRulesService.getErrors()) {
-			 * LOG.info("The error message is " + error.getMessage()); GlobalMessages.addBusinessRuleMessage(model,
-			 * error.getMessage()); }
-			 */
 			return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
 		}
 		else
