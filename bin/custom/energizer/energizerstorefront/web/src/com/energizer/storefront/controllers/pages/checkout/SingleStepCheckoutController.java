@@ -36,9 +36,9 @@ import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.commercefacades.user.data.CountryData;
 import de.hybris.platform.commercefacades.user.data.TitleData;
-import de.hybris.platform.commerceservices.order.CommerceCartModification;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
-import de.hybris.platform.commerceservices.order.CommerceCartModificationStatus;
+import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
+import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
@@ -948,14 +948,15 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		// create a cart from the order and set it as session cart.
 		getCheckoutFlowFacade().createCartFromOrder(orderCode);
 		// validate for stock and availability
-		final List<? extends CommerceCartModification> cartModifications = getCheckoutFlowFacade().validateSessionCart();
+		//final List<? extends CommerceCartModification> cartModifications = getCheckoutFlowFacade().validateSessionCart();
+		final CartModel cartModel = energizerB2BCheckoutFlowFacade.getSessionCart();
 		List<BusinessRuleError> OrderValidationErros = new ArrayList<BusinessRuleError>();
 		List<BusinessRuleError> ShippingValidationErros = new ArrayList<BusinessRuleError>();
 
-		for (final CommerceCartModification cartModification : cartModifications)
+		for (final AbstractOrderEntryModel entryModel : cartModel.getEntries())
 		{
-			OrderValidationErros = energizerB2BCheckoutFlowFacade.getOrderValidation(cartModification.getEntry());
-			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(cartModification.getEntry());
+			OrderValidationErros = energizerB2BCheckoutFlowFacade.getOrderValidation(entryModel);
+			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
 			if (ShippingValidationErros.size() > 0)
 			{
@@ -975,20 +976,15 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				}
 				break;
 			}
-			else if (CommerceCartModificationStatus.NO_STOCK.equals(cartModification.getStatusCode()))
-			{
-				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
-						"basket.page.message.update.reducedNumberOfItemsAdded.noStock", new Object[]
-						{ cartModification.getEntry().getProduct().getName() });
-				break;
-			}
-			else if (cartModification.getQuantity() != cartModification.getQuantityAdded())
-			{
-				// item has been modified to match available stock levels
-				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
-						"basket.information.quantity.adjusted");
-				break;
-			}
+			/*
+			 * else if (CommerceCartModificationStatus.NO_STOCK.equals(cartModification.getStatusCode())) {
+			 * GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
+			 * "basket.page.message.update.reducedNumberOfItemsAdded.noStock", new Object[] {
+			 * cartModification.getEntry().getProduct().getName() }); break; } else if (cartModification.getQuantity() !=
+			 * cartModification.getQuantityAdded()) { // item has been modified to match available stock levels
+			 * GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
+			 * "basket.information.quantity.adjusted"); break; }
+			 */
 			// TODO: handle more specific messaging, i.e. out of stock, product not available
 		}
 		return REDIRECT_PREFIX + "/checkout/single/summary";//checkoutSummary(model);

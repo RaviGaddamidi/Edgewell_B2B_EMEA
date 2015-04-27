@@ -77,7 +77,7 @@ public class DefaultEnergizerOrderEntryBusinessRuleValidationService implements 
 	public void validateBusinessRules(final OrderEntryData orderEntryData)
 	{
 
-		//errors.clear();
+		errors.clear();
 		if (hasErrors())
 		{
 			tempErrors.clear();
