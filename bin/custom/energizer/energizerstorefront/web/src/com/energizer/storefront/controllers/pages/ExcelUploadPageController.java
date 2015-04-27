@@ -296,6 +296,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		final String shipmentPoint = excelUploadForm.getShippingPoint();
 		final List<EnergizerFileUploadData> orderEntryList = new ArrayList<EnergizerFileUploadData>();
+		final List<BusinessRuleError> orderEntryErrors = new ArrayList<BusinessRuleError>();
 
 		if (shippingPointBusinessRulesService.getErrors() != null && !shippingPointBusinessRulesService.getErrors().isEmpty())
 		{
@@ -333,10 +334,12 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					}
 					if (shippingPointBusinessRulesService.hasErrors())
 					{
+						orderEntryErrors.addAll(shippingPointBusinessRulesService.getErrors());
 						shippingPointBusinessRulesService.getTempErrors().clear();
 					}
 					if (cartEntryBusinessRulesService.hasErrors())
 					{
+						orderEntryErrors.addAll(cartEntryBusinessRulesService.getErrors());
 						cartEntryBusinessRulesService.getTempErrors().clear();
 					}
 				}
@@ -346,24 +349,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				}
 			}
 		}
-		if ((shippingPointBusinessRulesService.getErrors() != null && shippingPointBusinessRulesService.getErrors().size() > 0)
-				|| (cartEntryBusinessRulesService.getErrors() != null && cartEntryBusinessRulesService.getErrors().size() > 0))
+
+		if (orderEntryErrors != null && orderEntryErrors.size() > 0)
 		{
 			storeCmsPageInModel(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
 			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
 			model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.excelFileUpload"));
 			model.addAttribute("metaRobots", "no-index,no-follow");
 
-			for (final BusinessRuleError error : shippingPointBusinessRulesService.getErrors())
+			for (final BusinessRuleError error : orderEntryErrors)
 			{
 				LOG.info("The error message is " + error.getMessage());
 				GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
 			}
-			for (final BusinessRuleError error : cartEntryBusinessRulesService.getErrors())
-			{
-				LOG.info("The error message is " + error.getMessage());
-				GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
-			}
+			/*
+			 * for (final BusinessRuleError error : cartEntryBusinessRulesService.getErrors()) {
+			 * LOG.info("The error message is " + error.getMessage()); GlobalMessages.addBusinessRuleMessage(model,
+			 * error.getMessage()); }
+			 */
 			return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
 		}
 		else
