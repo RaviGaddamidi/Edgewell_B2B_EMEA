@@ -85,6 +85,10 @@
 		<property name="sealNumber" type="String"/>
 		<property name="vesselNumber" type="String"/>
 		<property name="archiveID" type="String"/>
+		<!--  <property name="archiveID" type="String"/>-->
+		<property name="documentID" type="String"/>
+		<property name="contrEP" type="String"/>
+		<property name="documentClass" type="String"/>
 			
     </bean>    
     

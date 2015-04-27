@@ -45,15 +45,20 @@ import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.core.services.email.EnergizerGenericEmailGenerationService;
 import com.energizer.services.order.EnergizerOrderService;
 import com.energizer.services.product.EnergizerProductService;
+
+
 /**
  * 
  * This processors imports the order update .
  * 
  * Sample file will look like
  * 
- * SAPOrderNo,HybrisOrderNo,PONo,ReqDeliveryDate,       TotalValue,TotalTax, TotalShipment,TotalDiscount,Status,ContainerID,SealNumber,VesselNumber,InvoicePDF,ArchiveID,ERPMaterialID,OrderEntryQty,UOM,RejectionReason,ItemTotalPrice,LineItemTotalPrice,ItemTotalShipment,ItemTotalDiscount,ItemTax
- * 54324,     1427454247389,XYZ, 11-5-2014 23:11:51 EEST,    ,          ,    100,          250,                ,XYZ,        XYZ,       XYZ,         ,XYZ,      PRD004,   100,          2A,            XYZ,10,            1000,           50,                50,                 
- * Total column count : 23
+ * SAPOrderNo,HybrisOrderNo,PONo,ReqDeliveryDate, TotalValue,TotalTax,
+ * TotalShipment,TotalDiscount,Status,ContainerID,SealNumber
+ * ,VesselNumber,InvoicePDF,ArchiveID,ERPMaterialID,OrderEntryQty
+ * ,UOM,RejectionReason,ItemTotalPrice,LineItemTotalPrice,ItemTotalShipment,ItemTotalDiscount,ItemTax 54324,
+ * 1427454247389,XYZ, 11-5-2014 23:11:51 EEST, , , 100, 250, ,XYZ, XYZ, XYZ, ,XYZ, PRD004, 100, 2A, XYZ,10, 1000, 50,
+ * 50, Total column count : 23
  */
 
 public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -108,7 +113,9 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private static final String ITEM_TOTAL_SHIPMENT = "ItemTotalShipment";
 	private static final String ITEM_TOTAL_DISCOUNT = "ItemTotalDiscount";
 	private static final String ITEM_TAX = "ItemTax";
-
+	private static final String BDS_DOCID = "BDSDOCID";
+	private static final String BDS_CONTREP = "BDSCONTREP";
+	private static final String BDS_DOCUCLASS = "BDSDOCUCLASS";
 
 	private static final String FROM_EMAIL_ADDRESS = Config.getParameter("fromEmailAddress.orderEmailSender");
 	private static final String FROM_EMAIL_DISPLAY_NAME = Config.getParameter("fromEmailDisplayName.orderEmailSender");
@@ -137,7 +144,11 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private String sealNumber = null;
 	private String vesselNumber = null;
 	private String invoicePDF = null;
-	private String archiveID = null;
+
+	private String bdsDocId = null;
+	private String bdsContrEp = null;
+	private String bdsCocuClass = null;
+	//private String archiveID = null;
 	//For Order Entry
 	private String erpMaterialID = null;
 	private Long orderEntryQty = null;
@@ -298,7 +309,10 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		energizerOrderModel.setSealNumber(sealNumber);
 		energizerOrderModel.setVesselNumber(vesselNumber);
 		energizerOrderModel.setInvoicePDF(invoicePDF);
-		energizerOrderModel.setArchiveID(archiveID);
+		energizerOrderModel.setDocumentID(bdsDocId);
+		energizerOrderModel.setDocumentClass(bdsCocuClass);
+		energizerOrderModel.setContrEP(bdsContrEp);
+
 
 		return energizerOrderModel;
 	}
@@ -514,12 +528,24 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ARCHIVE_ID)))
 		{
-			archiveID = csvValuesMap.get(ARCHIVE_ID);
+			//archiveID = csvValuesMap.get(ARCHIVE_ID);
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ERP_MATERIAL_ID)))
 		{
 			erpMaterialID = csvValuesMap.get(ERP_MATERIAL_ID);
+		}
+		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_DOCID)))
+		{
+			bdsDocId = csvValuesMap.get(BDS_DOCID);
+		}
+		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_CONTREP)))
+		{
+			bdsContrEp = csvValuesMap.get(BDS_CONTREP);
+		}
+		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_DOCUCLASS)))
+		{
+			bdsCocuClass = csvValuesMap.get(BDS_DOCUCLASS);
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ORDER_ENTRY_QTY)))
