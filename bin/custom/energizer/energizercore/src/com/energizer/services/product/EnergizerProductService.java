@@ -36,4 +36,6 @@ public interface EnergizerProductService
 
 	public List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
+	public String getShippingPointName(final String shippingPointId);
+
 }
