@@ -80,6 +80,7 @@ import com.energizer.core.jaxb.xsd.objects.ZSD_TSOITEM_Fa2309;
 import com.energizer.core.jaxb.xsd.objects.ZSD_TSOPART_Fa2309;
 import com.energizer.core.model.EnergizerB2BUnitLeadTimeModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.services.order.EnergizerB2BOrderService;
@@ -159,9 +160,17 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	 * com.energizer.services.order.EnergizerB2BOrderService#createOrder(de.hybris.platform.core.model.order.OrderModel)
 	 */
 	@Override
-	public int createOrder(final OrderModel orderModel)
+	public int createOrder(final OrderModel orderModel) throws Exception
 	{
-		final String OrderCreationXML = createOrderMarshall(orderModel);
+		String OrderCreationXML = "";
+		try
+		{
+			OrderCreationXML = createOrderMarshall(orderModel);
+		}
+		catch (final Exception e)
+		{
+			throw e;
+		}
 		final String restCallResponse = invokeRESTCall(OrderCreationXML, "createOrder");
 
 		try
@@ -175,8 +184,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 	}
 
-
-	private String simulateOrderMarshall(final AbstractOrderData orderData)
+	private String simulateOrderMarshall(final AbstractOrderData orderData) throws Exception
 	{
 		final ObjectFactory objectFactory = new ObjectFactory();
 		StringWriter stringWriter = new StringWriter();
@@ -237,15 +245,20 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 				orderEntry.setITM_NUMBER(objectFactory.createZSD_TSOITEM_Fa2309ITM_NUMBER((entry.getEntryNumber() + 1) * 10));
 				orderEntry.setMATERIAL(objectFactory.createZSD_TSOITEM_Fa2309MATERIAL(prodCode));
 				String uom = productData.getUom();
-				if (!uom.equalsIgnoreCase("CS") || !uom.equalsIgnoreCase("IP"))
+				if (uom.equalsIgnoreCase("EA"))
+				{
+					LOG.error("We can not simulate the Order for UOM in EA");
+					throw new Exception("We can not simulate the Order for UOM in EA");
+				}
+				if (!uom.equalsIgnoreCase("CS") && !uom.equalsIgnoreCase("IP"))
 				{
 					final List<EnergizerProductConversionFactorModel> conversionList = getConversionModelList(prodCode);
 					for (final EnergizerProductConversionFactorModel enrProdConversion : conversionList)
 					{
 						if (uom.equalsIgnoreCase("PAL"))
 						{
-							final Integer conversionMultiplier = enrProdConversion.getConversionMultiplier();
-							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForCase(conversionList);
+							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "PAL");
+							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
 							Integer quantityInInt = 0;
 							if (conversionMultiplierForCase != null)
 							{
@@ -260,8 +273,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						}
 						if (uom.equalsIgnoreCase("LAY"))
 						{
-							final Integer conversionMultiplier = enrProdConversion.getConversionMultiplier();
-							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForCase(conversionList);
+							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
+							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
 							final Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
 							quantity = quantityinInt.longValue() * quantity;
 							uom = "CS";
@@ -277,6 +290,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 
 				itemArray.getZSD_TSOITEM().add(orderEntry);
 			}
+
 			final JAXBElement<ArrayOfZSD_TSOITEM_Fa2309> simulateitems = objectFactory
 					.createZSD_BAPI_SALESORDER_SIMULATET_SOITEM(itemArray);
 
@@ -321,7 +335,6 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		return parsedXML;
 	}
 
-
 	/**
 	 * @param code
 	 * @return
@@ -333,7 +346,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		return conversionList;
 	}
 
-	private String createOrderMarshall(final OrderModel order)
+	private String createOrderMarshall(final OrderModel order) throws Exception
 	{
 		final com.energizer.core.createorder.jaxb.xsd.objects.ObjectFactory objectFactory = new com.energizer.core.createorder.jaxb.xsd.objects.ObjectFactory();
 		StringWriter stringWriter = new StringWriter();
@@ -387,15 +400,60 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 				final String material = productData.getCode();
 				final String code = productData.getCode();
 				final String plant = productData.getProductCMIR().get(0).getShippingPoint();
-				final Long quantity = orderEntry.getQuantity();
+				Long quantity = orderEntry.getQuantity();
 				final ZSD_TSOITEM_D31E8C orderEntries = objectFactory.createZSD_TSOITEM_D31E8C();
 				// SAP need item number to be sent in multiple of 10's
 				orderEntries
 						.setITM_NUMBER(objectFactory.createZSD_TSOCONDITIONS_D31E8CITM_NUMBER((orderEntry.getEntryNumber() + 1) * 10));
 				orderEntries.setMATERIAL(objectFactory.createZSD_TSOCONDITIONS_D31E8CMATERIAL(code));
+
+				final List<EnergizerCMIRModel> CMIRModelList = productData.getProductCMIR();
+				String uom = "";
+				for (final EnergizerCMIRModel CMIRModel : CMIRModelList)
+				{
+					if (CMIRModel.getB2bUnit().getUid().equalsIgnoreCase(b2bUnitData.getUid()))
+					{
+						uom = CMIRModel.getUom();
+					}
+				}
+				if (uom.equalsIgnoreCase("EA"))
+				{
+					LOG.error("We can not simulate the Order for UOM in EA");
+					throw new Exception("We can not simulate the Order for UOM in EA");
+				}
+				if (!uom.equalsIgnoreCase("CS") && !uom.equalsIgnoreCase("IP"))
+				{
+					final List<EnergizerProductConversionFactorModel> conversionList = productData.getProductConversionFactors();
+					for (final EnergizerProductConversionFactorModel enrProdConversion : conversionList)
+					{
+						if (uom.equalsIgnoreCase("PAL"))
+						{
+							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "PAL");
+							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
+							Integer quantityInInt = 0;
+							if (conversionMultiplierForCase != null)
+							{
+								quantityInInt = conversionMultiplier / conversionMultiplierForCase;
+							}
+							else
+							{
+								LOG.info("Could not find the conversion faction in cases");
+							}
+							quantity = quantityInInt.longValue() * quantity;
+							uom = "CS";
+						}
+						if (uom.equalsIgnoreCase("LAY"))
+						{
+							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
+							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
+							final Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							quantity = quantityinInt.longValue() * quantity;
+							uom = "CS";
+						}
+					}
+				}
 				orderEntries.setTARGET_QTY(objectFactory.createZSD_TSOITEM_D31E8CTARGET_QTY(quantity));
-				orderEntries.setTARGET_QU(objectFactory.createZSD_TSOITEM_D31E8CTARGET_QU(productData.getProductCMIR().get(0)
-						.getUom()));
+				orderEntries.setTARGET_QU(objectFactory.createZSD_TSOITEM_D31E8CTARGET_QU(uom));
 				orderEntries.setPLANT(objectFactory.createZSD_TSOITEM_D31E8CPLANT(plant));
 				// SAP dont need net value to be sent
 				orderEntries.setNET_VALUE(objectFactory.createZSD_TSOITEM_D31E8CNET_VALUE(""));
@@ -445,7 +503,6 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 		return parsedXML;
 	}
-
 
 	private String invokeRESTCall(final String requestXML, final String option)
 	{
@@ -591,13 +648,17 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 					final String responseProdCode = xmlEntry.getMATERIAL().getValue();
 					if (modelProdCode.equalsIgnoreCase(responseProdCode))
 					{
-						orderEntryModel.setQuantity(xmlEntry.getTARGET_QTY().getValue());
-						orderEntryModel.setTotalPrice(Double.parseDouble(xmlEntry.getNET_VALUE().getValue()));
+
 						for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
 						{
 							if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
 							{
-								orderEntryModel.setBasePrice(Double.parseDouble(conditions.getCONDVALUE().getValue()));
+
+								final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+								final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+								final Double entryTotla = baseUomPrice * baseUomQuantity;
+								orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
+								orderEntryModel.setTotalPrice(entryTotla);
 							}
 						}
 					}
@@ -751,12 +812,13 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		return response.getBody();
 	}
 
-	private Integer getAlernateConversionMultiplierForCase(final List<EnergizerProductConversionFactorModel> conversionList)
+	private Integer getAlernateConversionMultiplierForUOM(final List<EnergizerProductConversionFactorModel> conversionList,
+			final String uom)
 	{
 		// YTODO Auto-generated method stub
 		for (final EnergizerProductConversionFactorModel enrProdConversion : conversionList)
 		{
-			if (enrProdConversion.getAlternateUOM().equalsIgnoreCase(("CS")))
+			if (enrProdConversion.getAlternateUOM().equalsIgnoreCase(uom))
 			{
 				return enrProdConversion.getConversionMultiplier();
 			}

@@ -109,6 +109,8 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				energizerCSVProcessor.setTotalRecords(0);
 				energizerCSVProcessor.setRecordFailed(0);
 				energizerCSVProcessor.setRecordSucceeded(0);
+				energizerCSVProcessor.setBusRecordError(0);
+				energizerCSVProcessor.setTechRecordError(0);
 				emailAttachmentList.clear();
 				energizerCSVProcessor.cleanup(type, file, cronjob, busfeedErrors);
 

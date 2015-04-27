@@ -271,6 +271,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			energizerSalesAreaUOMModel = modelService.create(EnergizerSalesAreaUOMModel.class);
 			energizerSalesAreaUOMModel.setFamilyID(familyID);
+
 			energizerSalesAreaUOMModel.setSalesOrganisation(salesOrganisation);
 			energizerSalesAreaUOMModel.setDistributionChannel(distributionChannel);
 			energizerSalesAreaUOMModel.setDivision(division);

@@ -17,6 +17,23 @@
 <script src="${commonResourcePath}/js/jquery-1.7.2.min.js"></script>
  <script src="${commonResourcePath}/js/jquery-ui.js"></script>
 
+<script type="text/javascript">
+ function validatePONumber()
+ {
+	  var poNumber = document.getElementById("PurchaseOrderNumber").value;
+	 var poNumberPattern = ${poNumberPattern}
+	 var result;
+	 if (poNumberPattern.test(poNumber)) 
+	 {
+		return true;
+	 }
+	 else 
+	 {
+		alert('Please Enter Valid Purchase Order Number');
+		return false;
+	 }
+ }
+</script>
 
 <template:page pageTitle="${pageTitle}">
 	
@@ -44,7 +61,7 @@
 			<form:input type="hidden" id="securityCode" class="securityCodeCard" path="securityCode" value=""/>
 			
 			
-			<button type="submit" class="positive right" id="checkoutPlaceOrder" disabled="disabled"><spring:theme code="checkout.summary.placeOrder"/></button>
+			<button type="submit" class="positive right" id="checkoutPlaceOrder" disabled="disabled"   onclick="validatePONumber();"><spring:theme code="checkout.summary.placeOrder"  /></button>
 			
 			<%-- <button type="submit" class="positive right placeOrderButton" ><spring:theme code="checkout.summary.placeOrder"/></button> --%>
 			<%-- <button type="button" class="positive right requestQuoteButton"><spring:theme code="checkout.summary.negotiateQuote"/></button>

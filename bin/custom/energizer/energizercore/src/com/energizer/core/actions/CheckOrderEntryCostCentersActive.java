@@ -16,12 +16,15 @@ package com.energizer.core.actions;
 import de.hybris.platform.b2b.model.B2BCostCenterModel;
 import de.hybris.platform.b2b.process.approval.actions.AbstractSimpleB2BApproveOrderDecisionAction;
 import de.hybris.platform.b2b.process.approval.model.B2BApprovalProcessModel;
+import de.hybris.platform.b2b.services.B2BOrderService;
 import de.hybris.platform.core.enums.OrderStatus;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.task.RetryLaterException;
 
 import java.util.Collection;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -31,6 +34,9 @@ import org.apache.log4j.Logger;
 
 public class CheckOrderEntryCostCentersActive extends AbstractSimpleB2BApproveOrderDecisionAction
 {
+
+	@Resource(name = "b2bOrderService")
+	private B2BOrderService b2bOrderService;
 
 	protected static final Logger LOG = Logger.getLogger(CheckOrderEntryCostCentersActive.class);
 
@@ -44,7 +50,10 @@ public class CheckOrderEntryCostCentersActive extends AbstractSimpleB2BApproveOr
 		Transition transition = Transition.NOK;
 		try
 		{
-			processedOrder = process.getOrder();
+			//processedOrder = process.getOrder();
+
+			processedOrder = b2bOrderService.getOrderForCode(process.getOrder().getCode());
+
 
 			if (CollectionUtils.isNotEmpty(getExpiredCostCenterEntries(processedOrder)))
 			{

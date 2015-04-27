@@ -47,8 +47,6 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 
 	private Map<UiExperienceLevel, Boolean> forceDefaultTargetForUiExperienceLevel;
 
-	private static final String ISINSESSION = "isinsession";
-
 	public UiExperienceService getUiExperienceService()
 	{
 		return uiExperienceService;
@@ -79,10 +77,8 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 		}
 
 		getBruteForceAttackCounter().resetUserCounter(getCustomerFacade().getCurrentCustomer().getUid());
-		// ignoring the OOTB flow and redirect to homepage
-		//super.onAuthenticationSuccess(request, response, authentication);
-		sessionService.setAttribute("ISINSESSION", ISINSESSION);
-		response.sendRedirect("/");
+
+		super.onAuthenticationSuccess(request, response, authentication);
 	}
 
 	protected CartFacade getCartFacade()

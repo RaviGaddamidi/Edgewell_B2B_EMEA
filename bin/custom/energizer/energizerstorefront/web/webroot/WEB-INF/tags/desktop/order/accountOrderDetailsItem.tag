@@ -82,7 +82,7 @@
 			<th id="header1"><span class="hidden"><spring:theme code="text.product" text="Product"/></span></th>
 			<th id="header2"><span class="hidden"><spring:theme code="text.productDetails" text="Product Details"/></span></th>
 			<th id="header4"><spring:theme code="text.quantity" text="Quantity"/></th>
-			<th id="header5"><spring:theme code="text.itemPrice" text="Item Price"/></th>
+			<th id="header5"><spring:theme code="basket.page.unitPrice" text="Item Price"/></th>
 			<th id="header6"><spring:theme code="text.total" text="Total"/></th>
 		</tr>
 	</thead>
@@ -151,25 +151,6 @@
 		
 	</tbody>
 </table>		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 
 

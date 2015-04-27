@@ -3,6 +3,7 @@
  */
 package com.energizer.core.invoice.impl;
 
+import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.util.Config;
 
 import java.io.File;
@@ -34,20 +35,20 @@ public class DefaultEnergizerInvoiceService implements EnergizerInvoiceService
 	 * @see com.energizer.core.invoice.EnergizerInvoiceService#getPDFInvoiceAsBytes()
 	 */
 	@Override
-	public byte[] getPDFInvoiceAsBytes(final String invoiceNumber)
+	public byte[] getPDFInvoiceAsBytes(final OrderData orderData)
 	{
 		// YTODO Auto-generated method stub
 
-		return getPDFFromFilePath(invoiceNumber);
+		return getPDFFromFilePath(orderData.getCode());
 	}
 
-	private byte[] getPDFFromFilePath(final String invoiceNumber)
+	private byte[] getPDFFromFilePath(final String orderNumber)
 	{
 		byte retVal[] = null;
 		try
 		{
 			final String filePath = Config.getParameter(INVOICE_FILE_PATH);
-			retVal = IOUtils.toByteArray(new FileInputStream(new File(filePath + invoiceNumber + INVOICE_FILE_EXTENSION)));
+			retVal = IOUtils.toByteArray(new FileInputStream(new File(filePath + orderNumber + INVOICE_FILE_EXTENSION)));
 		}
 		catch (final IOException ex)
 		{

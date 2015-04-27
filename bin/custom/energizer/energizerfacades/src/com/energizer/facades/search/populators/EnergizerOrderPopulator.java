@@ -41,7 +41,11 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		target.setContainerId(source.getContainerId());
 		target.setSealNumber(source.getSealNumber());
 		target.setVesselNumber(source.getVesselNumber());
-		target.setArchiveID(source.getArchiveID());
+		target.setDocumentID(source.getDocumentID());
+		target.setDocumentClass(source.getDocumentClass());
+		target.setContrEP(source.getContrEP());
+		//target.setArchiveID(source.getArchiveID());
+
 
 	}
 

@@ -100,8 +100,12 @@
 								</ycommerce:testId></td>
 								<td headers="header6" cellspacing="10" colspan="1"><ycommerce:testId
 								code="orderHistory_orderDate_label">
-								<c:out value="${uploadDataList.quantity}" default="Not Available"
-									escapeXml="false"></c:out>
+								<%-- <c:out value="${uploadDataList.quantity}" default="Not Available"
+									escapeXml="false"></c:out> --%>
+									
+								<input type="hidden" name="productCode" value="${uploadDataList.materialId}"/>
+								<input type="text" name="qty" size="4" class="excelOrderModifiedQuantity" value="${uploadDataList.quantity}"  />
+								<input type="hidden" name="moq" class="minorderQuantity" value="${uploadDataList.orderingUnit}" />	
 								</ycommerce:testId></td>
 						</tr>
 							</c:forEach>

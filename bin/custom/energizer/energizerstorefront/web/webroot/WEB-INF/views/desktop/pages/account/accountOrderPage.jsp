@@ -27,7 +27,7 @@
 		<div class="headline">Order Details</div>
 		<div class="span-19">
 			<div class="span-7 spacing_cls">
-			
+				
 				<spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
 				<spring:theme code="text.account.orderHistory.orderPlaced" /> : 
 				<c:if test="${not empty orderData.created}">
@@ -35,7 +35,7 @@
 				</c:if>
 				<br />
 				<c:if test="${not empty orderData.statusDisplay}">
-					<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.orderStatus" /> : ${orderData.status}</p>
+					<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.orderStatus" /> : <spring:theme code="text.account.order.status.display.${orderData.status}" /></p>
 					<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.poNumber" /> : ${orderData.purchaseOrderNumber}</p>
 				</c:if>	
 			</div>	

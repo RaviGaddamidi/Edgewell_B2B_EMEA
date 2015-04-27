@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.energizer.business.BusinessRuleError;
@@ -72,6 +74,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	private static final String PRODUCT_ENTRIES_PAGE = "productentries";
 	private static final String CART_CMS_PAGE = "cartPage";
 	private static final String CONTINUE_URL = "continueUrl";
+	private static final String EXCEL_ORDER_AJAX_CALL = "/excelUpload/updateOrderQuantity";
 
 	@Resource(name = "accountBreadcrumbBuilder")
 	private ResourceBreadcrumbBuilder accountBreadcrumbBuilder;
@@ -292,6 +295,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	{
 
 		final String shipmentPoint = excelUploadForm.getShippingPoint();
+		final List<EnergizerFileUploadData> orderEntryList = new ArrayList<EnergizerFileUploadData>();
+		final List<BusinessRuleError> orderEntryErrors = new ArrayList<BusinessRuleError>();
 
 		if (shippingPointBusinessRulesService.getErrors() != null && !shippingPointBusinessRulesService.getErrors().isEmpty())
 		{
@@ -305,7 +310,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		if (shipmentMap.containsKey(shipmentPoint))
 		{
 			final List<EnergizerFileUploadData> productsList = shipmentMap.get(shipmentPoint);
-
 			for (final EnergizerFileUploadData energizerFileUploadData : productsList)
 			{
 				final EnergizerCMIRModel cmir = quickOrderFacade.getCMIRForProductCodeOrCustomerMaterialID(
@@ -313,35 +317,30 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerFileUploadData.getMaterialId(),
 						energizerFileUploadData.getCustomerMaterialId(), cmir);
+
+				final CartData cartData = quickOrderFacade.getCurrentSessionCart();
+				model.addAttribute("cartData", cartData);
+				model.addAttribute("shipmentData", shipmentMap);
+
 				if (orderEntry != null)
 				{
 					orderEntry.setQuantity(energizerFileUploadData.getQuantity());
 					shippingPointBusinessRulesService.validateBusinessRules(orderEntry);
 					cartEntryBusinessRulesService.validateBusinessRules(orderEntry);
 
+					if (!shippingPointBusinessRulesService.hasErrors() && !cartEntryBusinessRulesService.hasErrors())
+					{
+						orderEntryList.add(energizerFileUploadData);
+					}
 					if (shippingPointBusinessRulesService.hasErrors())
 					{
+						orderEntryErrors.addAll(shippingPointBusinessRulesService.getErrors());
 						shippingPointBusinessRulesService.getTempErrors().clear();
 					}
-
-					if (!cartEntryBusinessRulesService.hasErrors() && shippingPointBusinessRulesService.getErrors().size() <= 0)
+					if (cartEntryBusinessRulesService.hasErrors())
 					{
-						try
-						{
-							cartFacade.addToCart(energizerFileUploadData.getMaterialId(), energizerFileUploadData.getQuantity());
-						}
-						catch (final CommerceCartModificationException e)
-						{
-							LOG.error(e.getMessage());
-							LOG.error("Problem in adding products to Cart");
-						}
-					}
-					else
-					{
-						if (cartEntryBusinessRulesService.getTempErrors() != null)
-						{
-							cartEntryBusinessRulesService.getTempErrors().clear();
-						}
+						orderEntryErrors.addAll(cartEntryBusinessRulesService.getErrors());
+						cartEntryBusinessRulesService.getTempErrors().clear();
 					}
 				}
 				else
@@ -349,30 +348,38 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					GlobalMessages.addErrorMessage(model, "quickorder.addtocart.cmir.badData");
 				}
 			}
-			if (shippingPointBusinessRulesService.getErrors() != null && shippingPointBusinessRulesService.getErrors().size() > 0)
+		}
+
+		if (orderEntryErrors != null && orderEntryErrors.size() > 0)
+		{
+			storeCmsPageInModel(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
+			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
+			model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.excelFileUpload"));
+			model.addAttribute("metaRobots", "no-index,no-follow");
+
+			for (final BusinessRuleError error : orderEntryErrors)
 			{
-				storeCmsPageInModel(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
-				setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
-				model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.excelFileUpload"));
-				model.addAttribute("metaRobots", "no-index,no-follow");
-
-				final CartData cartData = quickOrderFacade.getCurrentSessionCart();
-				model.addAttribute("cartData", cartData);
-				model.addAttribute("shipmentData", shipmentMap);
-
-				for (final BusinessRuleError error : shippingPointBusinessRulesService.getErrors())
-				{
-					LOG.info("The error message is " + error.getMessage());
-					GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
-					return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
-				}
+				LOG.info("The error message is " + error.getMessage());
+				GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
 			}
-			else
+			/*
+			 * for (final BusinessRuleError error : cartEntryBusinessRulesService.getErrors()) {
+			 * LOG.info("The error message is " + error.getMessage()); GlobalMessages.addBusinessRuleMessage(model,
+			 * error.getMessage()); }
+			 */
+			return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
+		}
+		else
+		{
+			for (final EnergizerFileUploadData entry : orderEntryList)
 			{
-				for (final BusinessRuleError error : cartEntryBusinessRulesService.getErrors())
+				try
 				{
-					LOG.info("The error message is " + error.getMessage());
-					GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
+					cartFacade.addToCart(entry.getMaterialId(), entry.getQuantity());
+				}
+				catch (final CommerceCartModificationException e)
+				{
+					LOG.error("Problem in adding items to Cart");
 				}
 			}
 		}
@@ -423,5 +430,30 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		{
 			Collections.reverse(entries);
 		}
+	}
+
+	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
+	@RequireHardLogIn
+	public @ResponseBody
+	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
+			throws CMSItemNotFoundException
+	{
+		List<EnergizerFileUploadData> excelDataList = null;
+
+		for (final Entry<String, List<EnergizerFileUploadData>> entry : shipmentMap.entrySet())
+		{
+			excelDataList = new ArrayList<EnergizerFileUploadData>();
+			excelDataList = entry.getValue();
+			for (final EnergizerFileUploadData excelDataRow : excelDataList)
+			{
+				if (excelDataRow.getMaterialId().equals(erpMaterialCode))
+				{
+					excelDataRow.setQuantity(quantity);
+					break;
+				}
+			}
+		}
+		return shipmentMap;
 	}
 }
