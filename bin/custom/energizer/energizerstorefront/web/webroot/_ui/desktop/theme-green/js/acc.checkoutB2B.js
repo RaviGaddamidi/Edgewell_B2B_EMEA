@@ -732,6 +732,7 @@ $(document).ready(function ()
 		$('.checkoutButton').click(function (){
 			var checkoutUrl = $(this).data("checkoutUrl");
 			window.location = checkoutUrl;
+			
 		});
 	}
 	
