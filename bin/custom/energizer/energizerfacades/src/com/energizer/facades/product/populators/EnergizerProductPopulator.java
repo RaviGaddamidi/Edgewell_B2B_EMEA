@@ -98,7 +98,8 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 
 			final String shippingPointId = energizerCMIRModel.getShippingPoint();
 			final String shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
-			productData.setShippingPoint(shippingPointName == null ? EMPTY : shippingPointName);
+			productData.setShippingPoint(shippingPointId);
+			productData.setShippingPointName(shippingPointName == null ? EMPTY : shippingPointName);
 
 			if (energizerProductConversionFactorModel != null)
 			{
