@@ -46,7 +46,7 @@ ACC.forgotpassword = {
 	},
 
 	bindAll: function() {
-		ACC.forgotpassword.bindForgotPasswordLink(ACC.forgotpassword.$forgotPasswordLink);
+		//ACC.forgotpassword.bindForgotPasswordLink(ACC.forgotpassword.$forgotPasswordLink);
 	}
 };
 
