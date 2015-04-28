@@ -318,7 +318,6 @@ ACC.checkoutB2B = {
 					},
 					onClosed: function ()
 					{
-
 						ACC.common.refreshScreenReaderBuffer();
 					}
 				});
@@ -331,16 +330,12 @@ ACC.checkoutB2B = {
 			var addressId = $(this).data('address');
 			$.postJSON($('.summaryDeliveryAddress').data("set"), {addressId: addressId}, function(data){
 				document.leadTime=data.leadTime;
-			
+			    document.getElementById("leadTimeId").innerHTML = document.leadTime;
 				var reqDevdate=new Date(data.requestedDeliveryDate);
 				var curr_date = reqDevdate.getDate();
 				var curr_month = reqDevdate.getMonth();
 				var curr_year = reqDevdate.getFullYear();
 				var reqDeliverDate = curr_month+"/"+curr_date+"/"+curr_year;
-				
-				document.getElementById("leadTimeId").innerHTML = document.leadTime;
-				document.getElementById("deliveryDateId").innerHTML = reqDeliverDate;
-				
 				document.assignLeadTimeToDatePicker();
 				ACC.checkoutB2B.refresh(data);
 				$.colorbox.close();
@@ -730,12 +725,14 @@ ACC.checkoutB2B = {
 $(document).ready(function ()
 {
 	
-	
+	$('#leadTimeId').empty();
+	$('#deliveryDateId').remove();
 	if($("body").hasClass("page-cartPage"))
 	{
 		$('.checkoutButton').click(function (){
 			var checkoutUrl = $(this).data("checkoutUrl");
 			window.location = checkoutUrl;
+			
 		});
 	}
 	
