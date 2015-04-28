@@ -14,6 +14,10 @@ $picture=media(code, $contentCV)
 $lang=en
 
 
+# Content catalog for CMS contents
+INSERT_UPDATE ContentCatalog;id[unique=true];defaultCatalog
+;$contentCatalog;true
+
 # CMS Site Settings
 UPDATE CMSSite;uid[unique=true];defaultPreviewCategory(code, $productCV);defaultPreviewProduct(code, $productCV)
 
