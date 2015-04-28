@@ -30,6 +30,7 @@
 		<property name="customerProductPrice" type="java.math.BigDecimal" />
 		<property name="customerPriceCurrency" type="java.lang.String" />
 		<property name="shippingPoint" type="java.lang.String" />
+		<property name="shippingPointName" type="java.lang.String" />
 		<property name="moq" type="java.lang.Integer" />
 		<property name="uom" type="java.lang.String" />
 		<property name="weight" type="java.lang.Double" />
