@@ -318,7 +318,6 @@ ACC.checkoutB2B = {
 					},
 					onClosed: function ()
 					{
-
 						ACC.common.refreshScreenReaderBuffer();
 					}
 				});
