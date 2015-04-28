@@ -69,6 +69,8 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "energizerSalesUOMService")
 	private EnergizerSalesUOMService energizerSalesUOMService;
 
+	List<String> packgingUnits;
+
 	private static final Logger LOG = Logger.getLogger(EnergizerSalesUOMCSVProcessor.class);
 
 	/**
@@ -98,6 +100,15 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			EnergizerCategoryModel energizerSubCategory = null;
 			EnergizerProductModel energizerProduct = null;
 			List<EnergizerCMIRModel> cmirList;
+
+			packgingUnits = new ArrayList<String>();
+			packgingUnits.add(EnergizerCoreConstants.EA);
+			packgingUnits.add(EnergizerCoreConstants.INTERPACK);
+			packgingUnits.add(EnergizerCoreConstants.CASE);
+			packgingUnits.add(EnergizerCoreConstants.LAYER);
+			packgingUnits.add(EnergizerCoreConstants.PALLET);
+			packgingUnits.add(EnergizerCoreConstants.EA);
+
 			long succeedRecord = getRecordSucceeded();
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
 			for (final CSVRecord uomRecord : uomRecords)
@@ -130,7 +141,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				Collection<CategoryModel> subCategories = null;
 
 				final List<EnergizerSalesAreaUOMModel> salesUOMs = energizerSalesUOMService.getSalesAreaUOM(familyID);
-				addUpdateSalesAreaUOM(salesOrganisation, distributionChannel, division, segmentId, familyID, uom, moq, salesUOMs);
+				//				addUpdateSalesAreaUOM(salesOrganisation, distributionChannel, division, segmentId, familyID, uom, moq, salesUOMs);
 
 				try
 				{
@@ -346,12 +357,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setRecordFailed(recordFailed);
 				}
 			}
+
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.UOM))
 			{
-				if (!value.equalsIgnoreCase(EnergizerCoreConstants.EA) || !value.equalsIgnoreCase(EnergizerCoreConstants.INTERPACK)
-						|| !value.equalsIgnoreCase(EnergizerCoreConstants.CASE)
-						|| !value.equalsIgnoreCase(EnergizerCoreConstants.LAYER)
-						|| !value.equalsIgnoreCase(EnergizerCoreConstants.PALLET))
+				if (!packgingUnits.contains(value))
 				{
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
