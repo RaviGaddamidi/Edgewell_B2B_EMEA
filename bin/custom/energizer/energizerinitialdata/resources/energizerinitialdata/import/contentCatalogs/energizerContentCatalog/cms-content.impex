@@ -8,7 +8,7 @@ $storeName=energizer
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default=Staged])[unique=true,default=$productCatalog:Staged]
 $siteResource=jar:com.energizer.initialdata.setup.InitialDataSystemSetup&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-
+$jarResourceCms=jar:de.hybris.platform.apparelstore.constants.ApparelstoreConstants&/apparelstore/import/sampledata/cockpits/cmscockpit
 
 $picture=media(code, $contentCV)
 $lang=en
@@ -162,3 +162,33 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 # CMS Mini Cart Component
 INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;totalDisplay(code);shownProductCount;lightboxBannerComponent(&componentRef);restrictions(uid,$contentCV)
 ;;MiniCart;Mini Cart;MiniCart;TOTAL;3;;CustomerGroupRestriction
+
+# Footer Component
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;linkname;url;&componentRef;target(code)[default='sameWindow']
+;;AboutUSLink;About US Link;About US;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
+;;CopyRightLink;CopyRight Link;Copyright;/copyright;CopyRightLink;newWindow
+;;TrademarkLink;Trademark Link;Trademark;/trademark;TrademarkLink;newWindow
+;;TermsAndConditionsLink;Terms And Conditions Link;Terms and Conditions;/termsAndConditions;TermsAndConditionsLink;newWindow
+;;PrivacyPolicyLink;Privacy Policy Link;Privacy Policy;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
+;;ContactUSLink;Contact US Link;Contact US;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
+;;LegalLink;Legal Link;Legal;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
+;;FAQLink;FAQ Link;FAQ;/faq;FAQLink;newWindow
+
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
+;;frequentlyAskedQuestionsPage;text/png;FrequentlyAskedQuestionsPage.png;$jarResourceCms/preview-images/apparel_de/FrequentlyAskedQuestionsPage.png;;;
+;;termsAndConditionsPage;text/png;TermsAndConditionsPage.png;$jarResourceCms/preview-images/apparel_uk/TermsAndConditionsPage.png;;;
+
+# Simple Content Pages
+UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV);linkComponents(uid, $contentCV);;;;;
+;;faq;frequentlyAskedQuestionsPage;FAQLink;;;;;
+;;termsAndConditions;termsAndConditionsPage;TermsAndConditionsLink;;;;;
+
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);links(&componentRef);&nodeRef
+;SiteRootNode;;SiteRootNode;root;;SiteRootNode;EnergizerNavNode;;Energizer Site;SiteRootNode;;EnergizerNavNode
+;FooterNavNode;;Footer Nav Node;EnergizerNavNode;AboutUSLink,,CopyRightLink,TrademarkLink,TermsAndConditionsLink,PrivacyPolicyLink,ContactUSLink,LegalLink,FAQLink;FooterNavNode
+
+INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter;navigationNodes(&nodeRef);&componentRef
+;;FooterComponent;2;FooterNavNode;FooterComponent
+
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;FooterSlot;FooterComponent
