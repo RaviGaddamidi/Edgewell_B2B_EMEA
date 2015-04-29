@@ -276,7 +276,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 		{
 			cmir = energizerProductService.getEnergizerCMIR(productCode, energizerSolrQueryManipulationService
 					.getB2BUnitForLoggedInUser().getUid());
-			if (!cmir.getCustomerMaterialId().equals(customerMaterialId))
+			if (cmir != null && !cmir.getCustomerMaterialId().equals(customerMaterialId))
 			{
 				return null;
 			}
