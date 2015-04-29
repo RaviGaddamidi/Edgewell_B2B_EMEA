@@ -1,5 +1,6 @@
 <%@ tag body-content="empty" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/desktop/template" %>
 
 
@@ -53,7 +54,9 @@
 <script type="text/javascript" src="${commonResourcePath}/js/acc.refinements.js"></script>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.storefinder.js"></script>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.carousel.js"></script>
+
 <script type="text/javascript" src="${commonResourcePath}/js/acc.autocomplete.js"></script>
+
 <script type="text/javascript" src="${commonResourcePath}/js/acc.pstrength.js"></script>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.password.js"></script>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.minicart.js"></script>
@@ -106,5 +109,20 @@
 <%-- Fix for Webkit Browsers (Needs to be loaded last)  --%>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.skiplinks.js"></script>
 
-
-
+<script type="text/javascript">
+ function validatePONumber()
+ {
+	  var poNumber = document.getElementById("PurchaseOrderNumber").value;
+	 var poNumberPattern = '${poNumberPattern}';
+	 var result;
+	 if (poNumberPattern.test(poNumber)) 
+	 {
+		return true;
+	 }
+	 else 
+	 {
+		alert('Please Enter Valid Purchase Order Number');
+		return false;
+	 }
+ }
+</script>
