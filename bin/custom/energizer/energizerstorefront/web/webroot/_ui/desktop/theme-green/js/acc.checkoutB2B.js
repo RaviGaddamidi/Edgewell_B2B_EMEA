@@ -726,7 +726,7 @@ $(document).ready(function ()
 {
 	
 	$('#leadTimeId').empty();
-	$('#deliveryDateId').remove();
+	$('#deliveryDateId').empty();
 	if($("body").hasClass("page-cartPage"))
 	{
 		$('.checkoutButton').click(function (){
@@ -770,7 +770,7 @@ document.assignLeadTimeToDatePicker = function() {
 			document.getElementById("checkoutPlaceOrder").disabled = false;
 
 			var deliveryDate = $('#datepicker-2').val();
-
+			document.getElementById("deliveryDateId").innerHTML = deliveryDate;
 			$.ajax({
 				type : "POST",
 				url : "/checkout/single/summary/setDeliveryDate.json",
