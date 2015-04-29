@@ -51,6 +51,7 @@
 		<property name="shippingPoint" type="java.lang.String"></property>
 		<property name="businesRuleErrors" type="java.util.List&lt;String>"/>
 		<property name="isContainerFull" type="boolean" />
+		<property name="isOrderBlocked" type="boolean" />
 	</bean>
 	<!-- ************ End CartData Bean defination ******************* -->	
 

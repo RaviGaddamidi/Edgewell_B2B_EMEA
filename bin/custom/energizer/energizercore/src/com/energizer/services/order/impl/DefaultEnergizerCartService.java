@@ -108,6 +108,15 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						baseUom = coversionFactor.getConversionMultiplier();
 					}
 
+					//  ************ setting the OrderBlock  flag  ****************
+					if (b2bUnit.getOrderBlock())
+					{
+						cartData.setIsOrderBlocked(true);
+					}
+					else
+					{
+						cartData.setIsOrderBlocked(false);
+					}
 				}
 				catch (final Exception e)
 				{
@@ -155,6 +164,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			{
 				cartData.setIsContainerFull(false);
 			}
+
+
+
+
+
 
 		}
 		catch (final Exception exception)

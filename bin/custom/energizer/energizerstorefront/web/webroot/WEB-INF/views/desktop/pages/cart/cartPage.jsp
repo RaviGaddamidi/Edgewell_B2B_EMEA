@@ -41,7 +41,17 @@
 	<c:if test="${not empty cartData.entries}">
 		<spring:url value="${continueUrl}" var="continueShoppingUrl" htmlEscape="true"/>
 
-			<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
+			<!--   Start Code changes for order flag check -->
+			<c:choose>
+				<c:when test="${cartData.isOrderBlocked }">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
+				</c:when>
+				<c:otherwise>
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
+				</c:otherwise>
+			</c:choose>
+			<!--   Start Code changes for order flag check -->
+			
 			<cart:cartItems cartData="${cartData}"/>
 
 				<div class="clearfix fixthis_row_cls">
@@ -83,8 +93,17 @@
 				</div>
 		
 			<a class="button" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>
-			<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
-				
+			
+			<!--   Start Code changes for order flag check -->
+			<c:choose>
+				<c:when test="${cartData.isOrderBlocked }">
+					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
+				</c:when>
+				<c:otherwise>
+					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
+				</c:otherwise>
+			</c:choose>
+			<!--   Start Code changes for order flag check -->			
 		
 	</c:if>
 	
