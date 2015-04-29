@@ -116,7 +116,6 @@ public class SearchPageController extends AbstractSearchPageController
 		{
 			//need to handle the solr query to enforce the b2bunit restriction on the catalog before it proceeds to the OOTB solr search
 			searchText = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(null, searchText);
-
 			final PageableData pageableData = createPageableData(0, getSearchPageSize(), null, ShowMode.Page);
 			final SearchStateData searchState = new SearchStateData();
 			final SearchQueryData searchQueryData = new SearchQueryData();
@@ -162,6 +161,8 @@ public class SearchPageController extends AbstractSearchPageController
 			storeCmsPageInModel(model, getContentPageForLabelOrId(NO_RESULTS_CMS_PAGE_ID));
 		}
 
+		model.addAttribute("activeb2bunit", energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getUid());
+
 		addMetaData(model, "search.meta.description.results", searchText, "search.meta.description.on", PageType.PRODUCTSEARCH,
 				"no-index,follow");
 
@@ -197,6 +198,7 @@ public class SearchPageController extends AbstractSearchPageController
 			storeCmsPageInModel(model, getContentPageForLabelOrId(SEARCH_CMS_PAGE_ID));
 		}
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, searchBreadcrumbBuilder.getBreadcrumbs(null, searchPageData));
+		model.addAttribute("activeb2bunit", energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getUid());
 
 		addMetaData(model, "search.meta.description.results", searchText, "search.meta.description.on", PageType.PRODUCTSEARCH,
 				"no-index,follow");
@@ -259,6 +261,8 @@ public class SearchPageController extends AbstractSearchPageController
 		{
 			model.addAttribute("searchResultType", searchResultType);
 		}
+
+		model.addAttribute("activeb2bunit", energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getUid());
 
 		return ControllerConstants.Views.Fragments.Product.ProductLister;
 	}
