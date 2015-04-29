@@ -782,7 +782,7 @@ document.assignLeadTimeToDatePicker = function() {
 					ACC.checkoutB2B.refresh(data);   
 				}
 			});
-		},
+		}
 	});
 };
 
@@ -801,4 +801,5 @@ $('#checkoutPlaceOrder').click(function(){
 					return false;
 					}
 	});
+
 

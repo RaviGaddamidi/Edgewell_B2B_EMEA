@@ -114,7 +114,7 @@
 					</td>
 					
 					<td headers="header6" class="shipFrom">
-					 ${entry.product.shippingPointName}
+					 ${entry.product.shippingPoint}
 					</td>
 					
 					<td headers="header7" class="uom">

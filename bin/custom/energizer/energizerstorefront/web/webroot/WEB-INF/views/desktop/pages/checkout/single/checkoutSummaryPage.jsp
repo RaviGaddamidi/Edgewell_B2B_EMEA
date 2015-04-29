@@ -14,26 +14,6 @@
 
 <spring:url value="/checkout/single/simulateOrder" var="placeOrderUrl" />
 <spring:url value="/checkout/single/termsAndConditions" var="getTermsAndConditionsUrl" />
-<script src="${commonResourcePath}/js/jquery-1.7.2.min.js"></script>
- <script src="${commonResourcePath}/js/jquery-ui.js"></script>
-
-<script type="text/javascript">
- function validatePONumber()
- {
-	  var poNumber = document.getElementById("PurchaseOrderNumber").value;
-	 var poNumberPattern = ${poNumberPattern}
-	 var result;
-	 if (poNumberPattern.test(poNumber)) 
-	 {
-		return true;
-	 }
-	 else 
-	 {
-		alert('Please Enter Valid Purchase Order Number');
-		return false;
-	 }
- }
-</script>
 
 <template:page pageTitle="${pageTitle}">
 	
