@@ -27,7 +27,7 @@ import java.net.URLEncoder;
 public class ForgottenPasswordEmailContext extends CustomerEmailContext
 {
 	/**
-	 * This is to set the password expires config through the local.properties
+	 * This is to set the password expires time done through the local.properties
 	 **/
 	private int expiresInMinutes = Integer.parseInt(de.hybris.platform.util.Config
 			.getParameter("forgottenPassword.emailContext.expiresInMinutes"));
