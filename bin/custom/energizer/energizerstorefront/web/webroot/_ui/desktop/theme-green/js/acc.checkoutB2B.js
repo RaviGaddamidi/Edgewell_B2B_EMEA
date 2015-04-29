@@ -779,7 +779,7 @@ document.assignLeadTimeToDatePicker = function() {
 				},
 				success : function(data) {
 
-					ACC.checkoutB2B.refresh(data);
+					ACC.checkoutB2B.refresh(data);   
 				}
 			});
 		},
