@@ -117,7 +117,7 @@ ACC.quickorder = {
 	{
 		$("div.alert[id='"+productCode+"msg']").remove();
 		
-	},
+	}
 };
 
 
