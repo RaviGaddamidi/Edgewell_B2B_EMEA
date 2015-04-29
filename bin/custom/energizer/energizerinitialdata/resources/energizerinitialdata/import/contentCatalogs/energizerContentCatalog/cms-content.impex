@@ -77,7 +77,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;MyAccountLink;My Account Link;/my-account;MyAccountLink;MyAccountLink
 ;;MyCompanyLink;My Company Link;/my-company/organization-management;MyCompanyLink;MyCompanyLink
 ;;LogoutLink;Logout Link;/logout;LogoutLink;LogoutLink
-;;StoreFinderLink;Store Finder Link;/store-finder;StoreFinderLink;StoreFinderLink
+#;;StoreFinderLink;Store Finder Link;/store-finder;StoreFinderLink;StoreFinderLink
 ;;QuickOrderPageLink;Quick Order;/my-account/quickorder;QuickOrderPageLink;QuickOrderPageLink
 ;;ExcelOrderPageLink;Excel Order;/my-account/excelfileupload;ExcelOrderPageLink;ExcelOrderPageLink
 
@@ -100,7 +100,7 @@ UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];componen
 
 # CMS Navigation Nodes - Header
 INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);links(&linkRef);&nodeRef
-;HeaderLinksNode;;Header Links;SiteRootNode;UserLoginLink,MyAccountLink,MyCompanyLink,QuickOrderPageLink,ExcelOrderPageLink,LogoutLink,StoreFinderLink;HeaderLinksNode
+;HeaderLinksNode;;Header Links;SiteRootNode;UserLoginLink,MyAccountLink,MyCompanyLink,QuickOrderPageLink,ExcelOrderPageLink,LogoutLink;HeaderLinksNode
 
 # Header Navigation Component - Header
 INSERT_UPDATE HeaderNavigationComponent;$contentCV[unique=true];uid[unique=true];name;wrapAfter;link(uid, $contentCV);styleClass;navigationNode(&nodeRef);dropDownLayout(code)[default=AUTO];&componentRef
