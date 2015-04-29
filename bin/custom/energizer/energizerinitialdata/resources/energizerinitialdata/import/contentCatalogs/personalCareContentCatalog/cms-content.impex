@@ -14,6 +14,14 @@ $picture=media(code, $contentCV)
 $lang=en
 
 
+<<<<<<< HEAD
+=======
+# Content catalog for CMS contents
+INSERT_UPDATE ContentCatalog;id[unique=true];defaultCatalog
+;$contentCatalog;true
+
+
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 # CMS Site Settings
 UPDATE CMSSite;uid[unique=true];defaultPreviewCategory(code, $productCV);defaultPreviewProduct(code, $productCV)
 
@@ -189,6 +197,7 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 # CMS Mini Cart Component
 INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;totalDisplay(code);shownProductCount;lightboxBannerComponent(&componentRef);restrictions(uid,$contentCV)
 ;;MiniCart;Mini Cart;MiniCart;TOTAL;3;;CustomerGroupRestriction
+<<<<<<< HEAD
 
 # Footer Component
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;linkname;url;&componentRef;target(code)[default='sameWindow']
@@ -219,3 +228,5 @@ INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
 ;;FooterSlot;FooterComponent
+=======
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
