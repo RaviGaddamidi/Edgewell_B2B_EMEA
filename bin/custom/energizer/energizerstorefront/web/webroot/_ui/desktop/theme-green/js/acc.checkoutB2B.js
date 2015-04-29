@@ -1591,7 +1591,7 @@ document.assignLeadTimeToDatePicker = function() {
 					ACC.checkoutB2B.refresh(data);   
 				}
 			});
-		}
+		},
 	});
 };
 
