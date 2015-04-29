@@ -987,7 +987,14 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			 */
 			// TODO: handle more specific messaging, i.e. out of stock, product not available
 		}
-		return REDIRECT_PREFIX + "/checkout/single/summary";//checkoutSummary(model);
+		if (OrderValidationErros.size() > 0 || ShippingValidationErros.size() > 0)
+		{
+			return REDIRECT_PREFIX + "/my-account/order/" + orderCode;
+		}
+		else
+		{
+			return REDIRECT_PREFIX + "/checkout/single/summary";//checkoutSummary(model);
+		}
 	}
 
 	/**
