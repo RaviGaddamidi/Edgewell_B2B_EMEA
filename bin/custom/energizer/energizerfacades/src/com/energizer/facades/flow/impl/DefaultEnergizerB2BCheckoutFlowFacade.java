@@ -196,6 +196,11 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	public List<BusinessRuleError> getOrderShippingValidation(final AbstractOrderEntryModel orderEntryModel)
 	{
 		final OrderEntryData entrydata = getOrderEntryConverter().convert(orderEntryModel);
+		final String shippingPoint = entrydata.getProduct().getShippingPoint();
+		if (shippingPoint != null)
+		{
+			entrydata.setShippingPoint(shippingPoint);
+		}
 		final List<BusinessRuleError> OrderDataError = new ArrayList<BusinessRuleError>();
 		orderEntryBusinessRulesService.validateBusinessRules(entrydata);
 		if (orderEntryBusinessRulesService.hasErrors())
