@@ -41,6 +41,7 @@
 	<c:if test="${not empty cartData.entries}">
 		<spring:url value="${continueUrl}" var="continueShoppingUrl" htmlEscape="true"/>
 
+
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">

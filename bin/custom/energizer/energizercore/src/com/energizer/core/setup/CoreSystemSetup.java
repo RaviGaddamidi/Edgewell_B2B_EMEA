@@ -48,8 +48,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public static final String ACTIVATE_SOLR_CRON_JOBS = "activateSolrCronJobs";
 
 	//	public static final String ENERGIZER = "energizer";
-	public static final String ENERGIZER = "personalCare";
-
+		public static final String ENERGIZER = "personalCare";
 	//public static final String ENERGIZER = "houseHold";
 
 

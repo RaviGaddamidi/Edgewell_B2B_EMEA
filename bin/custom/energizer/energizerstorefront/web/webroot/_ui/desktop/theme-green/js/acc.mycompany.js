@@ -172,7 +172,7 @@ ACC.mycompany = {
 			$.postJSON(this.getAttribute('url'), {}, ACC.mycompany.deselectionCallback);
 			return false;
 		});
-	}
+	},
 
 
 };

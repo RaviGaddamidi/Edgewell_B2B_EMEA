@@ -26,8 +26,12 @@ import java.net.URLEncoder;
  */
 public class ForgottenPasswordEmailContext extends CustomerEmailContext
 {
+<<<<<<< HEAD
+	private int expiresInMinutes = 30;
+=======
 	private int expiresInMinutes = Integer.parseInt(de.hybris.platform.util.Config
 			.getParameter("forgottenPassword.emailContext.expiresInMinutes"));
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	private String token;
 
 	public int getExpiresInMinutes()
@@ -57,6 +61,14 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 
 	public String getRequestResetPasswordUrl() throws UnsupportedEncodingException
 	{
+<<<<<<< HEAD
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), false, "/login/pw/request");
+	}
+
+	public String getSecureRequestResetPasswordUrl() throws UnsupportedEncodingException
+	{
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), true, "/login/pw/request");
+=======
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), false,
 				"/login/pw/request");
 	}
@@ -66,30 +78,49 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	{
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
 				"/login/pw/request");
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	}
 
 	public String getResetPasswordUrl() throws UnsupportedEncodingException
 	{
+<<<<<<< HEAD
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), false, "/login/pw/change",
+				"token=" + getURLEncodedToken());
+=======
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), false,
 				"/login/pw/change", "token=" + getURLEncodedToken());
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	}
 
 	public String getSecureResetPasswordUrl() throws UnsupportedEncodingException
 	{
+<<<<<<< HEAD
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), true, "/login/pw/change",
+				"token=" + getURLEncodedToken());
+=======
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
 				"/login/pw/change", "token=" + getURLEncodedToken());
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	}
 
 	public String getDisplayResetPasswordUrl() throws UnsupportedEncodingException
 	{
+<<<<<<< HEAD
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), false, "/my-account/update-password");
+=======
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), false,
 				"/my-account/update-password");
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	}
 
 	public String getDisplaySecureResetPasswordUrl() throws UnsupportedEncodingException
 	{
+<<<<<<< HEAD
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),getUrlEncodingAttributes(), true, "/my-account/update-password");
+=======
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
 				"/my-account/update-password");
+>>>>>>> cba59dd9924fbe7c9e479c691379a55c7ecd77b9
 	}
 
 	@Override
