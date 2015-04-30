@@ -75,7 +75,8 @@
 		</form>
 	</script>
 	
-	<b>3.</b>Estimated Lead Time : <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
+	<div class="headline">3.<span id="deliverySectionNum" class="number"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/></div>
+	Estimated Lead Time : <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
 	Expected Delivery Date :
 	<div id="deliveryDateId">
 	<c:if test="${not empty cartData.requestedDeliveryDate }">
