@@ -49,7 +49,7 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;MyAccountLink;My Account
 ;;MyCompanyLink;My Company
 ;;LogoutLink;Logout
-#;;StoreFinderLink;Store Locator
+;;StoreFinderLink;Store Locator
 ;;QuickOrderPageLink;Quick Order
 ;;ExcelOrderPageLink;Excel Order
 

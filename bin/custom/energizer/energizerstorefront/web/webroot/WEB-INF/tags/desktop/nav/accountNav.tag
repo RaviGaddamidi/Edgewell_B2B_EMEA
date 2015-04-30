@@ -25,6 +25,7 @@
 						<a href="${encodedUrl}"><spring:theme code="text.account.profile" text="Profile"/></a>
 					</ycommerce:testId>
 				</li>
+				<%-- This section has been commented as per the review comments.
 				<sec:authorize ifAllGranted="ROLE_B2BCUSTOMERGROUP">
 					<li class='${selected eq 'address-book' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/address-book" var="encodedUrl" />
@@ -32,6 +33,7 @@
 							<a href="${encodedUrl}"><spring:theme code="text.account.addressBook" text="Address Book"/></a>
 						</ycommerce:testId>
 					</li>
+					--%>
 					<%-- This section has been commented as per the review comments.
 					
 					<li class='${selected eq 'payment-details' ? 'nav_selected' : ''}'>
@@ -59,7 +61,8 @@
 							<a href="${encodedUrl}"><spring:theme code="text.account.myReplenishment" text="My Replenishment Orders"/></a>
 						</ycommerce:testId>
 					</li> --%>
-				</sec:authorize>
+				<%--</sec:authorize>
+				--%>
 				<sec:authorize ifAllGranted="ROLE_B2BAPPROVERGROUP">
 					<li class='${selected eq 'approval-dashboard' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/approval-dashboard" var="encodedUrl" />

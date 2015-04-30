@@ -47,8 +47,8 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public static final String IMPORT_ACCESS_RIGHTS = "accessRights";
 	public static final String ACTIVATE_SOLR_CRON_JOBS = "activateSolrCronJobs";
 
-	public static final String ENERGIZER = "energizer";
-	//public static final String ENERGIZER = "personalCare";
+	//	public static final String ENERGIZER = "energizer";
+		public static final String ENERGIZER = "personalCare";
 	//public static final String ENERGIZER = "houseHold";
 
 
@@ -213,7 +213,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		importImpexFile(context, "/energizercore/import/contentCatalogs/" + catalogName + "ContentCatalog/catalog.impex", true);
 		importImpexFile(context, "/energizercore/import/contentCatalogs/" + catalogName + "ContentCatalog/cms-content.impex", true);
 		importImpexFile(context,
-		 			"/energizercore/import/contentCatalogs/" + catalogName + "ContentCatalog/cms-mobile-content.impex", false);
+				"/energizercore/import/contentCatalogs/" + catalogName + "ContentCatalog/cms-mobile-content.impex", false);
 
 		importImpexFile(context, "/energizercore/import/contentCatalogs/" + catalogName + "ContentCatalog/email-content.impex",
 				false);

@@ -55,9 +55,8 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 	private static final String IMPORT_SAMPLE_DATA = "importSampleData";
 	private static final String SAMPLE_DATA_IMPORT_FOLDER = "energizerinitialdata";
-
-	public static final String ENERGIZER = "energizer";
-	//public static final String ENERGIZER = "personalCare";
+	//	public static final String ENERGIZER = "energizer";
+public static final String ENERGIZER = "personalCare";
 	//public static final String ENERGIZER = "houseHold";
 
 	/**
@@ -108,8 +107,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 		{
 			importCommonData(context, SAMPLE_DATA_IMPORT_FOLDER);
 
-			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, ENERGIZER, ENERGIZER,
-					Collections.singletonList(ENERGIZER));
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, ENERGIZER, ENERGIZER, Collections.singletonList(ENERGIZER));
 
 			final ImportData powertoolsImportData = new ImportData();
 			powertoolsImportData.setProductCatalogName(ENERGIZER);

@@ -40,7 +40,7 @@
             </ul>
         </div>
 
-
+<%-- This section has been commented as per the review comments.
         <sec:authorize ifAllGranted="ROLE_B2BCUSTOMERGROUP">
 
             <div class="tile column addressBook">
@@ -52,6 +52,7 @@
                     </ycommerce:testId>
                 </ul>
             </div>
+            --%>
 
 			<%-- This section has been commented as per the review comments.
 
@@ -77,7 +78,7 @@
                     </ycommerce:testId>
                 </ul>
             </div> --%>
-             </sec:authorize>
+            <%-- </sec:authorize> --%>
              
              <sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
             <div class="tile column QuickOrders">
