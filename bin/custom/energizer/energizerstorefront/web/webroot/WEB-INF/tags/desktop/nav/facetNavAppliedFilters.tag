@@ -14,12 +14,14 @@
 	<div class="facetValues">
 		<ul class="facet_block">
 			<c:forEach items="${pageData.breadcrumbs}" var="breadcrumb">
+			<c:if test="${not empty activeB2BUnit and breadcrumb.facetValueName ne activeB2BUnit}">
 				<li class="remove_item_left">
 					<c:url value="${breadcrumb.removeQuery.url}" var="removeQueryUrl"/>
 					<span class="remove_item_left_name">${breadcrumb.facetValueName}</span>
 					<span class="remove"><a href="${removeQueryUrl}" ></a></span>
 					<div class="clear"></div>
 				</li>
+				</c:if>
 			</c:forEach>
 		</ul>
 	</div>

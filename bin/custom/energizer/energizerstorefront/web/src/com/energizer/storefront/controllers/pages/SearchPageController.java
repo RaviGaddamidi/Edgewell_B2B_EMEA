@@ -90,6 +90,8 @@ public class SearchPageController extends AbstractSearchPageController
 
 	private static final String INFINITE_SCROLL = "infiniteScroll";
 
+	private static final String ACTIVE_B2BUNIT = "activeB2BUnit";
+
 	@Resource(name = "b2bSolrProductSearchFacade")
 	private B2BProductSearchFacade<ProductData> solrProductSearchFacade;
 
@@ -161,7 +163,7 @@ public class SearchPageController extends AbstractSearchPageController
 		{
 			storeCmsPageInModel(model, getContentPageForLabelOrId(NO_RESULTS_CMS_PAGE_ID));
 		}
-
+		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
 		addMetaData(model, "search.meta.description.results", searchText, "search.meta.description.on", PageType.PRODUCTSEARCH,
 				"no-index,follow");
 
@@ -197,7 +199,7 @@ public class SearchPageController extends AbstractSearchPageController
 			storeCmsPageInModel(model, getContentPageForLabelOrId(SEARCH_CMS_PAGE_ID));
 		}
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, searchBreadcrumbBuilder.getBreadcrumbs(null, searchPageData));
-
+		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
 		addMetaData(model, "search.meta.description.results", searchText, "search.meta.description.on", PageType.PRODUCTSEARCH,
 				"no-index,follow");
 
@@ -259,7 +261,7 @@ public class SearchPageController extends AbstractSearchPageController
 		{
 			model.addAttribute("searchResultType", searchResultType);
 		}
-
+		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
 		return ControllerConstants.Views.Fragments.Product.ProductLister;
 	}
 
