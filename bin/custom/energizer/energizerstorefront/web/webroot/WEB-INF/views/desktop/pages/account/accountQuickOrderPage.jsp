@@ -132,7 +132,7 @@
 		
 		
 		<c:if test="${empty orderform}">
-			<div class="new_item_quick_order_form"><h2><spring:theme code="text.account.quickorder.noEntries" text="What are you waiting for! Start ordering!!"/></h2></div>
+			
 			<table class="orderListTable">
 				<thead>
 					<tr>
