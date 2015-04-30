@@ -14,7 +14,6 @@
 package com.energizer.storefront.breadcrumb.impl;
 
 import de.hybris.platform.servicelayer.i18n.I18NService;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,6 +23,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.MessageSource;
+
+import com.energizer.storefront.breadcrumb.Breadcrumb;
 
 
 /**
@@ -114,7 +115,7 @@ public class MyCompanyBreadcrumbBuilder
 
 	public List<Breadcrumb> createManageUserBreadcrumb()
 	{
-		final List<Breadcrumb> breadcrumbs = createOrganizationManagementBreadcrumbs();
+		final List<Breadcrumb> breadcrumbs = this.getBreadcrumbs(null);
 		breadcrumbs.add(new Breadcrumb("/my-company/organization-management/manage-users", messageSource.getMessage(
 				"text.company.manageUsers", null, i18nService.getCurrentLocale()), null));
 		return breadcrumbs;
