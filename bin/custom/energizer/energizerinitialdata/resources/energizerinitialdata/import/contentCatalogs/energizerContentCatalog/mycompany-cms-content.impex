@@ -137,7 +137,7 @@ UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];visible
 
 ####################################################################################################
 ##	   This is to disable the COMPANY BUDGETS,COMPANY COSTCENTERS							      ##
-##     COMPANY UNITS, COMPANY USERGROUPS, COMPANY PERMISSIONS								      ##
+##     COMPANY UNITS, COMPANY USERGROUPS, COMPANY PERMISSIONS, COMPANY MANAGEMENT 			      ##
 ## 	   WHEN visible=true, this will be enable the component on the left hand side  ELSE disabled  ##
 ####################################################################################################
 
@@ -147,3 +147,4 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];visible
 ;;CompanyPermissionsLink;false
 ;;CompanyUnitsLink;false
 ;;CompanyUserGroupsLink;false
+;;CompanyOrganizationtLink;false
