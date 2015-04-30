@@ -351,3 +351,6 @@ a:active {
 	font-weight: bold;
 	margin-left: 10px;
 }
+.summaryDeliveryMode img.ui-datepicker-trigger{
+vertical-align:middle; 
+}
