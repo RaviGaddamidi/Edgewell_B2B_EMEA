@@ -71,9 +71,11 @@ public class EnergizerProductShippingPointValueProvider extends AbstractProperty
 									.getCode());
 							for (final EnergizerCMIRModel cmir : cmirList)
 							{
-								if (cmir.getShippingPoint() != null)
+								if (cmir.getShippingPoint() != null
+										&& energizerProductService.getShippingPointName(cmir.getShippingPoint()) != null)
 								{
-									fieldValues.add(new FieldValue(fieldName, cmir.getShippingPoint()));
+									fieldValues.add(new FieldValue(fieldName, energizerProductService.getShippingPointName(cmir
+											.getShippingPoint())));
 									LOG.info("Field Name :" + fieldName + " Shipping Point : " + cmir.getShippingPoint());
 								}
 
