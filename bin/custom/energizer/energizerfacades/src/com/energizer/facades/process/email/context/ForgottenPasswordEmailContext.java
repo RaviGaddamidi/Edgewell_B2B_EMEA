@@ -31,8 +31,20 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	/**
 	 * This is to set the password expires time done through the local.properties
 	 **/
-	private int expiresInMinutes = Integer.parseInt(de.hybris.platform.util.Config.getParameter(EXP_IN_MIN));
+	private int expiresInMinutes = 0;
 	private String token;
+
+	private ForgottenPasswordEmailContext()
+	{
+		try
+		{
+			expiresInMinutes = Integer.parseInt(de.hybris.platform.util.Config.getParameter(EXP_IN_MIN));
+		}
+		catch (final NumberFormatException formatException)
+		{
+			expiresInMinutes = 30;
+		}
+	}
 
 	public int getExpiresInMinutes()
 	{
