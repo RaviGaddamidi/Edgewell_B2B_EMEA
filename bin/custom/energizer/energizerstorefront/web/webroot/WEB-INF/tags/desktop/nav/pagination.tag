@@ -44,7 +44,7 @@
 					</c:if>
 				</c:forEach>
 			</c:if>
-			<label for="sortOptions${top ? '1' : '2'}"><spring:theme code="${themeMsgKey}.sortTitle"/></label>
+			<!--<label for="sortOptions${top ? '1' : '2'}"><spring:theme code="${themeMsgKey}.sortTitle"/></label>
 			<select id="sortOptions${top ? '1' : '2'}" name="sort" class="sortOptions">
 				<c:forEach items="${searchPageData.sorts}" var="sort">
 					<option value="${sort.code}" ${sort.selected ? 'selected="selected"' : ''}>
@@ -58,7 +58,7 @@
 						</c:choose>
 					</option>
 				</c:forEach>
-			</select>
+			</select>-->
 			<c:if test="${not empty searchResultType}">
 				<input type="hidden" name="searchResultType" value="${searchResultType}"/>
 			</c:if>
