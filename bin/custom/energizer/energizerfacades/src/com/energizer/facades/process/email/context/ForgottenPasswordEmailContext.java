@@ -39,7 +39,6 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	/**
 	 * This is to set the password expires time done through the local.properties
 	 **/
-	@Value(${"#EXP_IN_MIN"})
 	private int expiresInMinutes = 0;
 	private String token;
 	@Autowired
@@ -47,7 +46,8 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 
 	private ForgottenPasswordEmailContext()
 	{
-		expiresInMinutes = configurationService.getConfiguration().getBigInteger(EXP_IN_MIN, BigInteger.valueOf(DEFAULT_TIMEOUT_IN_MINUTES)).intValue();
+		expiresInMinutes = configurationService.getConfiguration()
+				.getBigInteger(EXP_IN_MIN, BigInteger.valueOf(DEFAULT_TIMEOUT_IN_MINUTES)).intValue();
 	}
 
 	public int getExpiresInMinutes()
