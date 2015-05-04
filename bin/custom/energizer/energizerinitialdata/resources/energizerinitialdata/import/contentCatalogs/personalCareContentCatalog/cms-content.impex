@@ -48,7 +48,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Playtex_Link;Playtex Link;c/Feminine Care-Playtex;Playtex_Link
 ;;Carefree_Link;Carefree Link;c/Feminine Care-Carefree;Carefree_Link
 ;;Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree;Stayfree_Link
-;;Ob_Link;Ob Link;c/Feminine Care-Ob;Ob_Link
+;;Ob_Link;Ob Link;c/Feminine Care-o.b.;Ob_Link
 ;;Infant_Playtex_Link;Playtex Link;c/Infant Care-Playtex;Infant_Playtex_Link
 ;;Shick_Link;Shick Link;c/Shaving-Schick;Shick_Link
 ;;Edge_Link;Edge Link;c/Shaving-Edge;Edge_Link

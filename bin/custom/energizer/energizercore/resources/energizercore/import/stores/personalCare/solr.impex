@@ -86,9 +86,9 @@ INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[
 ;$solrIndexedType; url                    ;string ;            ;    ;true;    ;    ;    ;productUrlValueProvider;
 #;$solrIndexedType; primaryPromotionCode   ;string ;            ;    ;    ;    ;    ;    ;promotionCodeValueProvider;
 #;$solrIndexedType; primaryPromotionBanner ;string ;            ;    ;    ;    ;    ;    ;promotionImageValueProvider;
-;$solrIndexedType; stockLevelStatus       ;string ;            ;    ;    ;    ;    ;    ;productStockLevelStatusValueProvider;
-;$solrIndexedType; inStockFlag            ;boolean;            ;    ;    ;    ;    ;    ;productInStockFlagValueProvider;
-;$solrIndexedType; multidimensional       ;boolean;            ;    ;    ;    ;    ;    ;multidimentionalProductFlagValueProvider;
+#;$solrIndexedType; stockLevelStatus       ;string ;            ;    ;    ;    ;    ;    ;productStockLevelStatusValueProvider;
+#;$solrIndexedType; inStockFlag            ;boolean;            ;    ;    ;    ;    ;    ;productInStockFlagValueProvider;
+#;$solrIndexedType; multidimensional       ;boolean;            ;    ;    ;    ;    ;    ;multidimentionalProductFlagValueProvider;
 #;$solrIndexedType; priceRange             ;string ;            ;    ;    ;    ;    ;    ;productPriceRangeValueProvider;
 #;$solrIndexedType; firstVariantUrl        ;string ;            ;    ;    ;    ;    ;    ;firstGenericVariantProductUrlValueProvider;
 ;$solrIndexedType; firstCategoryNameList  ;string ;            ;    ;    ;    ;    ;    ;firstVariantCategoryNameListValueProvider;
@@ -153,7 +153,7 @@ SELECT DISTINCT tbl.pk, tbl.code FROM (
 # Define the available sorts
 INSERT_UPDATE SolrSort;&sortRefID;indexedType(identifier)[unique=true];code[unique=true];useBoost
 ;sortRef1;$solrIndexedType;relevance;true
-;sortRef2;$solrIndexedType;topRated;false
+#;sortRef2;$solrIndexedType;topRated;false
 ;sortRef3;$solrIndexedType;name-asc;false
 ;sortRef4;$solrIndexedType;name-desc;false
 #;sortRef5;$solrIndexedType;price-asc;false
