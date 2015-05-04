@@ -108,7 +108,7 @@ public class EnergizerSearchResultProductPopulator extends SearchResultProductPo
 		{
 			if (product.getPicture() != null && product.getPicture().getURL() != null)
 			{
-				imageData.setUrl(product.getThumbnail().getURL());
+				imageData.setUrl(product.getPicture().getURL());
 				images.add(imageData);
 			}
 		}

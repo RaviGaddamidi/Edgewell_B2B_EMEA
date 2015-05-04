@@ -36,7 +36,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 
 /**
- * This class provides b2bunit for the solr indexing
+ * This class provides shipping point value provider for the solr indexing
  * 
  * @author kaushik.ganguly
  */
