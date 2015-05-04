@@ -21,6 +21,12 @@
 /bin/ext-backoffice/*
 /bin/ext-atddtests/*
 /bin/ext-atdd/*
+/bin/ext-deprecated/*
+/bin/ext-print/*
+/bin/ext-supportability/*
+
+
+
 /log/*
 /bin/platform/*
 /sampleconfigurations/*

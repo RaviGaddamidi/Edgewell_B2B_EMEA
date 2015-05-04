@@ -16,9 +16,13 @@ package com.energizer.facades.process.email.context;
 import de.hybris.platform.acceleratorservices.model.cms2.pages.EmailPageModel;
 import de.hybris.platform.commerceservices.model.process.ForgottenPasswordProcessModel;
 import de.hybris.platform.commerceservices.model.process.StoreFrontCustomerProcessModel;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URLEncoder;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -27,23 +31,23 @@ import java.net.URLEncoder;
 public class ForgottenPasswordEmailContext extends CustomerEmailContext
 {
 
+	/**
+	 * 
+	 */
+	private static final int DEFAULT_TIMEOUT_IN_MINUTES = 30;
 	private static final String EXP_IN_MIN = "forgottenPassword.emailContext.expiresInMinutes";
 	/**
 	 * This is to set the password expires time done through the local.properties
 	 **/
+	@Value(${"#EXP_IN_MIN"})
 	private int expiresInMinutes = 0;
 	private String token;
+	@Autowired
+	private ConfigurationService configurationService;
 
 	private ForgottenPasswordEmailContext()
 	{
-		try
-		{
-			expiresInMinutes = Integer.parseInt(de.hybris.platform.util.Config.getParameter(EXP_IN_MIN));
-		}
-		catch (final NumberFormatException formatException)
-		{
-			expiresInMinutes = 30;
-		}
+		expiresInMinutes = configurationService.getConfiguration().getBigInteger(EXP_IN_MIN, BigInteger.valueOf(DEFAULT_TIMEOUT_IN_MINUTES)).intValue();
 	}
 
 	public int getExpiresInMinutes()
