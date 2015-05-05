@@ -161,10 +161,10 @@ INSERT_UPDATE SolrSort;&sortRefID;indexedType(identifier)[unique=true];code[uniq
 
 # Define the sort fields
 INSERT_UPDATE SolrSortField;sort(indexedType(identifier),code)[unique=true];fieldName[unique=true];ascending[unique=true]
-;$solrIndexedType:relevance;inStockFlag;false
+#;$solrIndexedType:relevance;inStockFlag;false
 ;$solrIndexedType:relevance;score;false
-;$solrIndexedType:topRated;inStockFlag;false
-;$solrIndexedType:topRated;reviewAvgRating;false
+#;$solrIndexedType:topRated;inStockFlag;false
+#;$solrIndexedType:topRated;reviewAvgRating;false
 ;$solrIndexedType:name-asc;productname;true
 ;$solrIndexedType:name-desc;productname;false
 #;$solrIndexedType:price-asc;priceValue;true
