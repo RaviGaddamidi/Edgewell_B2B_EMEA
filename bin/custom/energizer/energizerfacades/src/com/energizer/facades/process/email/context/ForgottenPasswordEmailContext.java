@@ -44,14 +44,10 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	@Autowired
 	private ConfigurationService configurationService;
 
-	private ForgottenPasswordEmailContext()
+	public int getExpiresInMinutes()
 	{
 		expiresInMinutes = configurationService.getConfiguration()
 				.getBigInteger(EXP_IN_MIN, BigInteger.valueOf(DEFAULT_TIMEOUT_IN_MINUTES)).intValue();
-	}
-
-	public int getExpiresInMinutes()
-	{
 		return expiresInMinutes;
 	}
 

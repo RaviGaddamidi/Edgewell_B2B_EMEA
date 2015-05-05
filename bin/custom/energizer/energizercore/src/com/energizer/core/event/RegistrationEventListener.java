@@ -79,7 +79,8 @@ public class RegistrationEventListener extends AbstractSiteEventListener<Registe
 	@Override
 	protected boolean shouldHandleEvent(final RegisterEvent event)
 	{
-		final BaseSiteModel site = baseSiteService.getBaseSiteForUID("energizer");
+		//		final BaseSiteModel site = baseSiteService.getBaseSiteForUID("energizer");
+		final BaseSiteModel site = baseSiteService.getCurrentBaseSite();
 		site.setChannel(SiteChannel.B2B);
 		event.setSite(site);
 		ServicesUtil.validateParameterNotNullStandardMessage("event.order.site", site);

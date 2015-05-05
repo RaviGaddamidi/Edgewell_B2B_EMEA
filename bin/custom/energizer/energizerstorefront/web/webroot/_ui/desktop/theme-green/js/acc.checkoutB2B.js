@@ -41,7 +41,7 @@ ACC.checkoutB2B = {
 
 
 
-			$("#PurchaseOrderNumber").on("blur",function(){
+			$("#PurchaseOrderNumber").on("mouseout",function(){
 				
 					$.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: $(this).val()}, function(data){
 						ACC.checkoutB2B.refresh(data);		
@@ -791,8 +791,16 @@ $('#checkoutPlaceOrder').click(function(){
 	var poNumber = $("#PurchaseOrderNumber").val();
 					
 					if(poNumber){
+						if($("#Terms1").prop('checked')){
+							return true;
+						}
+						else{
+							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
+							$('#globalMessages').html(html);
+							
+							return false;
+						}
 					
-					return true;
 					}else{
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
@@ -800,6 +808,12 @@ $('#checkoutPlaceOrder').click(function(){
 					
 					return false;
 					}
+					
 	});
+$('#Terms1').click(function(){
+	if($("#Terms1").prop('checked')){
+	$('#globalMessages').html("");
+	}
+});
 
 
