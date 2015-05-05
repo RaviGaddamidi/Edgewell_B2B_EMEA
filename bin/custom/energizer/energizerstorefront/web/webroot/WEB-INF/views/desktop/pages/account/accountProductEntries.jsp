@@ -25,11 +25,13 @@
 	<nav:accountNav selected="fileupload" />
 	
 		<div>
-		<c:if test="${not empty cartShippingPoint}">
-		<p><spring:theme code="text.account.quickorder.currentShippingPointInCart"/>${cartShippingPoint}</p>
+		<c:if test="${not empty cartData and not empty cartData.shippingPoint}">
+		<p><spring:theme code="text.account.quickorder.currentShippingPointInCart"/>${cartData.shippingPoint}</p>
 		
 		</c:if>
 		</div>
+		
+		
 	
 	<form:form  name="testform" action="/my-cart/addtocart" id="excelupload" method="post" modelAttribute = "excelUploadForm">
 		<table  cellspacing="10" cellpadding="10" border="1">

@@ -283,18 +283,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				return ControllerConstants.Views.Pages.Account.AccountExcelUpload;
 			}
 		}
-		if (energizerExcelUploadModels != null && energizerExcelUploadModels.size() > 0)
-		{
-			final EnergizerCMIRModel cmir = quickOrderFacade.getCMIRForProductCodeOrCustomerMaterialID(energizerExcelUploadModels
-					.get(0).getMaterialId(), energizerExcelUploadModels.get(0).getCustomerMaterialId());
-			if (cmir != null)
-			{
-				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerExcelUploadModels.get(0).getMaterialId(),
-						energizerExcelUploadModels.get(0).getCustomerMaterialId(), cmir);
-				model.addAttribute("cartShippingPoint",
-						orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
-			}
-		}
+
+		model.addAttribute("cartData", quickOrderFacade.getCurrentSessionCart());
 		return ControllerConstants.Views.Pages.Account.AccountExcelUploadEntries;
 	}
 
