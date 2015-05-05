@@ -28,13 +28,13 @@
 		<c:if test="${not empty searchPageData.results}">
 			<div class="description"><spring:theme code="text.account.orderHistory.viewOrders" text="View your orders"/></div>
 
-			<!--<nav:pagination top="true"  supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}"  searchPageData="${searchPageData}" searchUrl="/my-account/orders?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page"  numberPagesShown="${numberPagesShown}"/>-->
+			<nav:pagination top="true"  supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}"  searchPageData="${searchPageData}" searchUrl="/my-account/orders?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page"  numberPagesShown="${numberPagesShown}"/>
 
 			<table class="orderListTable">
 				<thead>
 					<tr>
-						<th id="header1"><spring:theme code="text.account.orderHistory.referenceNumber" text="Order Reference"/></th>
-						<th id="header2"><spring:theme code="text.account.orderHistory.sap.orderNumber" text="SAP Order No"/></th>
+						<th id="header1"><spring:theme code="text.account.orderHistory.referenceNumber" text="Reference Number"/></th>
+						<th id="header2"><spring:theme code="text.account.orderHistory.sap.orderNumber" text="Order No"/></th>
 						<th id="header3"><spring:theme code="text.account.orderHistory.orderType" text="Order Type"/></th>
 						<th id="header4"><spring:theme code="text.account.orderHistory.approvalStatus" text="Approval Status"/></th>
 						<th id="header5"><spring:theme code="text.account.orderHistory.datePlaced" text="Date Placed"/></th>
@@ -96,7 +96,7 @@
 				</tbody>
 			</table>
 
-			<!--<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/orders?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page"  numberPagesShown="${numberPagesShown}"/>-->
+			<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/orders?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page"  numberPagesShown="${numberPagesShown}"/>
 
 		</c:if>
 		<c:if test="${empty searchPageData.results}">

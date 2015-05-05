@@ -27,13 +27,13 @@
 		<div class="span-19">
 		<c:choose>
 				<c:when test="${not empty searchPageData.results}">
-				<!--<nav:pagination top="true" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>-->
+				<nav:pagination top="true" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>
 
 				<form>
 					<table id="order_history" class="orderListTable">
 						<thead>
 							<tr>
-								<th id="header1"><spring:theme code="text.account.orderApprovalDashBoard.orderNumber" text="Order Number"/></th>
+								<th id="header1"><spring:theme code="text.account.orderApprovalDashBoard.orderNumber" text="Reference Number"/></th>
 								<th id="header2"><spring:theme code="text.account.order.purchase" text="Purchaser"/></th>
 								<th id="header3"><spring:theme code="text.account.orderApprovalDashBoard.purchaseOrderNumber" text="P.O.No"/></th>
 								<th id="header4"><spring:theme code="text.account.orderApprovalDashBoard.orderCreated" text="Order Created"/></th>
