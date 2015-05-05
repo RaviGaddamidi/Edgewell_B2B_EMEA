@@ -82,7 +82,7 @@
 						</tbody>
 					</table>
 				</form>
-				<!--<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>-->
+				<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/my-account/approval-dashboard?sort=${searchPageData.pagination.sort}" msgKey="text.account.orderHistory.page" numberPagesShown="${numberPagesShown}"/>
 			</c:when>
 			<c:when test="${empty searchPageData.results}">
 				<p><spring:theme code="text.account.orderHistory.noOrders" text="You have no orders"/></p>
