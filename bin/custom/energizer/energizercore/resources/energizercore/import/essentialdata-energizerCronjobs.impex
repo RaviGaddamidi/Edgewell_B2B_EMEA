@@ -15,25 +15,28 @@ $interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrde
 $interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
 $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
 
+$technicalEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
+$businessEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
+$emailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
 
-INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;technicalEmailAddress;businessEmailAddress
-;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;Product Media Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;Customer Address Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;Product Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;Product Conversion Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerCMIRCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCMIR;Product CMIR Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerLeadTimeCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeLeadTime;Lead Time Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerOfflineOrderCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOfflineOrder;Offline Order Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerOrderUpdateCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOrderUpdate;Order Update Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProductNameCSVProcessor;energizerCSVFeedCronJob;en;energizerProductNameCSVProcessor;Product Name Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
-;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=true]
+;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;Product Media Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;Customer Address Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;Product Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;Product Conversion Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerCMIRCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCMIR;Product CMIR Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerLeadTimeCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeLeadTime;Lead Time Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerOfflineOrderCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOfflineOrder;Offline Order Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerOrderUpdateCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOrderUpdate;Order Update Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProductNameCSVProcessor;energizerCSVFeedCronJob;en;energizerProductNameCSVProcessor;Product Name Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
 
-;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com;selvaraja.savarimuthu@mindtree.com,ss@mindtree.com
+;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
 
 ######################################################################################################
 #				This is to send a email notification or registration email to B2BUnit Admin user     #

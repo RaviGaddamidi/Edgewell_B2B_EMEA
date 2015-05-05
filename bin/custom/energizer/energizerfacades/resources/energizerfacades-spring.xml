@@ -536,6 +536,17 @@
 		</property>
 	</bean>
 	
+	<!-- *********************** ContactNumberPopulator *************** -->
+	<bean id="contactNumberPopulator" class="com.energizer.facades.accounts.populators.ContactNumberPopulator" />
+	<bean id="contactNumberConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.user.data.CustomerData" />
+		<property name="populators">
+			<list>
+				<ref bean="contactNumberPopulator" />
+			</list>
+		</property>
+	</bean>
+	
 	<!--*********************** added new populator as part of implementation***************-->
 	<alias name="defaultEnergizerCustomerReversePopulator" alias="energizerCustomerReversePopulator" />
 	<bean id="defaultEnergizerCustomerReversePopulator" class="com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator">

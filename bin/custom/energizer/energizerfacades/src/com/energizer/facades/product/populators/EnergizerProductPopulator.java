@@ -76,9 +76,9 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 
 
 		//Setting the segment,family , group
-		productData.setSegmentName(energizerProductModel.getSegmentName() == null ? EMPTY : energizerProductModel.getSegmentName());
-		productData.setFamilyName(energizerProductModel.getFamilyName() == null ? EMPTY : energizerProductModel.getFamilyName());
-		productData.setGroupName(energizerProductModel.getGroupName() == null ? EMPTY : energizerProductModel.getGroupName());
+		productData.setSegmentName(energizerProductModel.getSegmentCode() == null ? EMPTY : energizerProductModel.getSegmentCode());
+		productData.setFamilyName(energizerProductModel.getFamilyCode() == null ? EMPTY : energizerProductModel.getFamilyCode());
+		productData.setGroupName(energizerProductModel.getGroupCode() == null ? EMPTY : energizerProductModel.getGroupCode());
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerCMIRModel energizerCMIRModel;
