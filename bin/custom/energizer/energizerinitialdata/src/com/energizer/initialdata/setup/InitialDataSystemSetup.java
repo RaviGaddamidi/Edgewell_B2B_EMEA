@@ -412,7 +412,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 		if (isExtensionLoaded(loadedExtensionNames, "cscockpit"))
 		{
-					importImpexFile(context, importRoot + "/cockpits/cscockpit/cscockpit-users.impex");
+			importImpexFile(context, importRoot + "/cockpits/cscockpit/cscockpit-users.impex");
 		}
 	}
 
