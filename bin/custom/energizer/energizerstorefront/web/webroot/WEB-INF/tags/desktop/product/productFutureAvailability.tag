@@ -10,7 +10,7 @@
 <%@ attribute name="futureStockEnabled" required="true" type="java.lang.Boolean" %>
 
 
-<sec:authorize ifAnyGranted="ROLE_CUSTOMERGROUP">
+<%-- sec:authorize ifAnyGranted="ROLE_CUSTOMERGROUP">
 	<c:if test="${futureStockEnabled}">
 		<ycommerce:testId code="productDetails_showAvailability_label">
 			<c:url value="${product.url}/futureStock" var="productfutureStockUrl"/>
@@ -19,4 +19,4 @@
 			</a>
 		</ycommerce:testId>
 	</c:if>
-</sec:authorize>
+</sec:authorize--%>
