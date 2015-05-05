@@ -23,6 +23,7 @@ import de.hybris.platform.core.initialization.SystemSetup.Type;
 import de.hybris.platform.core.initialization.SystemSetupContext;
 import de.hybris.platform.core.initialization.SystemSetupParameter;
 import de.hybris.platform.core.initialization.SystemSetupParameterMethod;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
 import de.hybris.platform.validation.services.ValidationService;
 
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
 
@@ -48,9 +51,11 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public static final String ACTIVATE_SOLR_CRON_JOBS = "activateSolrCronJobs";
 
 	//	public static final String ENERGIZER = "energizer";
-		public static final String ENERGIZER = "personalCare";
-	//public static final String ENERGIZER = "houseHold";
+	public static final String PERSONAL_CARE = "personalCare";
+	public static final String HOUSEHOLD = "houseHold";
 
+	@Resource
+	private ConfigurationService configurationService;
 
 
 	/**
@@ -79,6 +84,8 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	{
 		final List<SystemSetupParameter> params = new ArrayList<SystemSetupParameter>();
 
+		//params.add(createBooleanSystemSetupParameter(PERSONAL_CARE,"Personal Care", true));
+		//params.add(createBooleanSystemSetupParameter(HOUSEHOLD,"Household", true));
 		params.add(createBooleanSystemSetupParameter(IMPORT_SITES, "Import Sites", true));
 		params.add(createBooleanSystemSetupParameter(IMPORT_SYNC_CATALOGS, "Sync Products & Content Catalogs", false));
 		params.add(createBooleanSystemSetupParameter(IMPORT_ACCESS_RIGHTS, "Import Users & Groups", true));
@@ -97,23 +104,55 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public void createProjectData(final SystemSetupContext context)
 	{
 		final boolean importSites = getBooleanSystemSetupParameter(context, IMPORT_SITES);
+		final boolean personalcare = configurationService.getConfiguration().getBoolean("isEPCEnabled");//getBooleanSystemSetupParameter(context, PERSONAL_CARE);
+		final boolean household = configurationService.getConfiguration().getBoolean("isEHPEnabled");//getBooleanSystemSetupParameter(context, HOUSEHOLD);
 		//final boolean syncProducts = getBooleanSystemSetupParameter(context, IMPORT_SYNC_PRODUCTS);
 
 		final boolean importAccessRights = getBooleanSystemSetupParameter(context, IMPORT_ACCESS_RIGHTS);
 
-		if (importSites)
+		if (importSites && personalcare)
 		{
-			importProductCatalog(context, ENERGIZER);
+			importProductCatalog(context, PERSONAL_CARE);
 
-			importContentCatalog(context, ENERGIZER);
+			importContentCatalog(context, PERSONAL_CARE);
 
-			executeCatalogSyncJob(context, ENERGIZER);
+			executeCatalogSyncJob(context, PERSONAL_CARE);
 
-			importStore(context, ENERGIZER);
+			importStore(context, PERSONAL_CARE);
 
-			createAndActivateSolrIndex(context, ENERGIZER);
+			createAndActivateSolrIndex(context, PERSONAL_CARE);
 
 			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
+
+			final ImportData powertoolsImportData = new ImportData();
+			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE));
+			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
+			getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+
+		}
+
+		if (importSites && household)
+		{
+
+			importProductCatalog(context, HOUSEHOLD);
+
+			importContentCatalog(context, HOUSEHOLD);
+
+			executeCatalogSyncJob(context, HOUSEHOLD);
+
+			importStore(context, HOUSEHOLD);
+
+			createAndActivateSolrIndex(context, HOUSEHOLD);
+
+			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
+
+			final ImportData powertoolsImportData = new ImportData();
+			powertoolsImportData.setProductCatalogName(HOUSEHOLD);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(HOUSEHOLD));
+			powertoolsImportData.setStoreNames(Arrays.asList(HOUSEHOLD));
+			getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+
 		}
 
 		final List<String> extensionNames = Registry.getCurrentTenant().getTenantSpecificExtensionNames();
@@ -148,11 +187,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 			importImpexFile(context, "/energizercore/import/mcc-sites-links.impex");
 		}
 
-		final ImportData powertoolsImportData = new ImportData();
-		powertoolsImportData.setProductCatalogName(ENERGIZER);
-		powertoolsImportData.setContentCatalogNames(Arrays.asList(ENERGIZER));
-		powertoolsImportData.setStoreNames(Arrays.asList(ENERGIZER));
-		getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+
 
 	}
 
@@ -160,6 +195,9 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public PerformResult executeCatalogSyncJob(final SystemSetupContext context, final String catalogName)
 	{
 		final boolean syncCatalogs = getBooleanSystemSetupParameter(context, IMPORT_SYNC_CATALOGS);
+		final boolean personalcare = getBooleanSystemSetupParameter(context, PERSONAL_CARE);
+		final boolean household = getBooleanSystemSetupParameter(context, HOUSEHOLD);
+
 		logInfo(context, "Begin preparing catalogs sync job  [" + catalogName + "]");
 		importImpexFile(context, "/energizercore/import/catalogs-sync.impex", true);
 
@@ -168,10 +206,16 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 		logInfo(context, "Done preparing catalogs sync job  [" + catalogName + "]");
 		PerformResult syncCronJobResult = null;
-		if (syncCatalogs)
+		if (syncCatalogs && personalcare)
 		{
 			logInfo(context, "Executing catalogs sync job  [" + catalogName + "]");
-			syncCronJobResult = super.executeCatalogSyncJob(context, ENERGIZER + "Catalog");
+			syncCronJobResult = super.executeCatalogSyncJob(context, personalcare + "Catalog");
+			logInfo(context, "Executed catalogs sync job  [" + catalogName + "]");
+		}
+		if (syncCatalogs && household)
+		{
+			logInfo(context, "Executing catalogs sync job  [" + catalogName + "]");
+			syncCronJobResult = super.executeCatalogSyncJob(context, household + "Catalog");
 			logInfo(context, "Executed catalogs sync job  [" + catalogName + "]");
 		}
 		return syncCronJobResult;
