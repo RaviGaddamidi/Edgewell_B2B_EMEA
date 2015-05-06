@@ -264,7 +264,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	{
 		storeCmsPageInModel(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
-		model.addAttribute("breadcrumbs", myCompanyBreadcrumbBuilder.getBreadcrumbs("text.company.organizationManagement"));
+		model.addAttribute("breadcrumbs", myCompanyBreadcrumbBuilder.getBreadcrumbs(null));
 		model.addAttribute("unitUid", companyB2BCommerceFacade.getParentUnit().getUid());
 		model.addAttribute("userUid", customerFacade.getCurrentCustomer().getUid());
 		model.addAttribute("metaRobots", "no-index,no-follow");
