@@ -1,8 +1,8 @@
 #
 # Import the CMS content for the energizer site emails
 #
-$contentCatalog=houseHoldContentCatalog
-$energier=houseHold
+$contentCatalog=personalCareContentCatalog
+$energier=personalCare
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $wideContent=CMSImageComponent,BannerComponent
 $jarResourceCms=jar:com.energizer.core.setup.CoreSystemSetup&/energizercore/import/cockpits/cmscockpit

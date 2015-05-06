@@ -16,6 +16,17 @@
 /bin/ext-platform/*
 /bin/ext-platform-optional/*
 /bin/ext-template/*
+/bin/ext-integration/*
+/bin/ext-cockpit/*
+/bin/ext-backoffice/*
+/bin/ext-atddtests/*
+/bin/ext-atdd/*
+/bin/ext-deprecated/*
+/bin/ext-print/*
+/bin/ext-supportability/*
+
+
+
 /log/*
 /bin/platform/*
 /sampleconfigurations/*
