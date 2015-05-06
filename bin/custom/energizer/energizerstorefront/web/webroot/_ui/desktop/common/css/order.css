@@ -173,7 +173,10 @@
 .orderList .orderListTblFix tbody tr td.header4_cls input{width:30px!important;}
 .orderList .orderListTblFix tbody td:last-child{text-align:center !important;padding-left:30px;}
 
-
+.textHighlight {
+	font-weight: bold;
+    color: #06c;
+}
 
 
 
