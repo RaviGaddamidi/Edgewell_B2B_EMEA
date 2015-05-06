@@ -40,7 +40,7 @@
 			</h1>
 		</ycommerce:testId>
 
-		<product:productReviewSummary product="${product}"/>
+		<%-- product:productReviewSummary product="${product}"/--%>
 
 
 		<div class="summary">

@@ -29,7 +29,9 @@
 			<div class="span-7 spacing_cls">
 				
 				<spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
+				<c:if test="${not empty orderData.erpOrderNumber}">
 				<spring:theme code="text.account.orderHistory.SAPorderNumber" /> : ${orderData.erpOrderNumber}<br />
+				</c:if>
 				<spring:theme code="text.account.orderHistory.orderPlaced" /> : 
 				<c:if test="${not empty orderData.created}">
 					${DateTimeUtil.displayDate(orderData.created)}

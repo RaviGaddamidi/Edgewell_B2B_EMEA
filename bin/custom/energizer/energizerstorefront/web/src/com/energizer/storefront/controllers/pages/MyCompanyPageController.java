@@ -39,7 +39,6 @@ import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
-import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -507,7 +506,10 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			final EnergizerB2BCustomerModel b2bCustomerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(b2bCustomerData
 					.getUid());
 			b2bCustomerModel.setRegistrationEmailFlag(Boolean.TRUE);
-			customerAccountService.register(b2bCustomerModel, Config.getParameter(DEFAULT_PASSWORD));
+			if (null != b2bCustomerModel)
+			{
+				customerAccountService.register(b2bCustomerModel, Config.getParameter(DEFAULT_PASSWORD));
+			}
 			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.user.added");
 		}
 		catch (final DuplicateUidException e)
@@ -525,7 +527,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		if (!model.containsAttribute("b2BCustomerForm"))
 		{
 			final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
-			customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
+			//			customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
 			energizerCompanyB2BCommerceFacade.populateRolesByCustomer(user, customerData);
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
 			b2bCustomerForm.setUid(customerData.getUid());
@@ -647,7 +649,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			throws CMSItemNotFoundException
 	{
 		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
-		customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
+		//		customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
 		energizerCompanyB2BCommerceFacade.populateRolesByCustomer(user, customerData);
 		model.addAttribute("customerData", customerData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));

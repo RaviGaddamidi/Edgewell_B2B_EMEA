@@ -23,6 +23,7 @@ import de.hybris.platform.core.initialization.SystemSetup.Type;
 import de.hybris.platform.core.initialization.SystemSetupContext;
 import de.hybris.platform.core.initialization.SystemSetupParameter;
 import de.hybris.platform.core.initialization.SystemSetupParameterMethod;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -56,8 +59,11 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	private static final String IMPORT_SAMPLE_DATA = "importSampleData";
 	private static final String SAMPLE_DATA_IMPORT_FOLDER = "energizerinitialdata";
 	//	public static final String ENERGIZER = "energizer";
-public static final String ENERGIZER = "personalCare";
-	//public static final String ENERGIZER = "houseHold";
+	public static final String PERSONAL_CARE = "personalCare";
+	public static final String HOUSEHOLD = "houseHold";
+
+	@Resource
+	private ConfigurationService configurationService;
 
 	/**
 	 * Generates the Dropdown and Multi-select boxes for the project data import
@@ -68,6 +74,8 @@ public static final String ENERGIZER = "personalCare";
 	{
 		final List<SystemSetupParameter> params = new ArrayList<SystemSetupParameter>();
 
+		//params.add(createBooleanSystemSetupParameter(PERSONAL_CARE, "Personal Care Sample Data", true));
+		//params.add(createBooleanSystemSetupParameter(HOUSEHOLD, "Household Sample Data", true));
 		params.add(createBooleanSystemSetupParameter(IMPORT_SAMPLE_DATA, "Import Sample Data", true));
 		params.add(createBooleanSystemSetupParameter(CoreSystemSetup.ACTIVATE_SOLR_CRON_JOBS, "Activate Solr Cron Jobs", true));
 		// Add more Parameters here as your require
@@ -103,16 +111,33 @@ public static final String ENERGIZER = "personalCare";
 		// This would import a standard store: (one basestore, one cmssite, one product catalog, one content catalog)
 		// importStoreInitialData(context, "energizerinitialdata", "yb2baccelerator", "yb2baccelerator", Collections.singletonList("yb2baccelerator"));
 
-		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA))
+		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
+				&& configurationService.getConfiguration().getBoolean("isEPCEnabled"))
 		{
 			importCommonData(context, SAMPLE_DATA_IMPORT_FOLDER);
 
-			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, ENERGIZER, ENERGIZER, Collections.singletonList(ENERGIZER));
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE, PERSONAL_CARE,
+					Collections.singletonList(PERSONAL_CARE));
 
 			final ImportData powertoolsImportData = new ImportData();
-			powertoolsImportData.setProductCatalogName(ENERGIZER);
-			powertoolsImportData.setContentCatalogNames(Arrays.asList(ENERGIZER));
-			powertoolsImportData.setStoreNames(Arrays.asList(ENERGIZER));
+			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE));
+			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
+			// Send an event to notify any AddOns that the initial data import is complete
+			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+		}
+
+		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
+				&& configurationService.getConfiguration().getBoolean("isEHPEnabled"))
+		{
+			importCommonData(context, SAMPLE_DATA_IMPORT_FOLDER);
+
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, HOUSEHOLD, HOUSEHOLD, Collections.singletonList(HOUSEHOLD));
+
+			final ImportData powertoolsImportData = new ImportData();
+			powertoolsImportData.setProductCatalogName(HOUSEHOLD);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(HOUSEHOLD));
+			powertoolsImportData.setStoreNames(Arrays.asList(HOUSEHOLD));
 			// Send an event to notify any AddOns that the initial data import is complete
 			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
 		}
