@@ -132,9 +132,6 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
 
-
-
-
 	@Resource
 	private CartService cartService;
 
@@ -948,15 +945,17 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	{
 		// create a cart from the order and set it as session cart.
 		getCheckoutFlowFacade().createCartFromOrder(orderCode);
+
 		// validate for stock and availability
 		//final List<? extends CommerceCartModification> cartModifications = getCheckoutFlowFacade().validateSessionCart();
 		final CartModel cartModel = energizerB2BCheckoutFlowFacade.getSessionCart();
+
 		List<BusinessRuleError> OrderValidationErros = new ArrayList<BusinessRuleError>();
 		List<BusinessRuleError> ShippingValidationErros = new ArrayList<BusinessRuleError>();
 
 		for (final AbstractOrderEntryModel entryModel : cartModel.getEntries())
 		{
-			OrderValidationErros = energizerB2BCheckoutFlowFacade.getOrderValidation(entryModel);
+
 			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
 			if (ShippingValidationErros.size() > 0)
@@ -968,15 +967,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				}
 				break;
 			}
-			if (OrderValidationErros.size() > 0)
-			{
-				for (final BusinessRuleError orderErr : OrderValidationErros)
-				{
-					GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
-							Localization.getLocalizedString(orderErr.getMessage()));
-				}
-				break;
-			}
+
 			/*
 			 * else if (CommerceCartModificationStatus.NO_STOCK.equals(cartModification.getStatusCode())) {
 			 * GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
@@ -988,6 +979,18 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			 */
 			// TODO: handle more specific messaging, i.e. out of stock, product not available
 		}
+
+		OrderValidationErros = energizerB2BCheckoutFlowFacade.getOrderValidation(cartModel);
+		if (OrderValidationErros.size() > 0)
+		{
+			for (final BusinessRuleError orderErr : OrderValidationErros)
+			{
+				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
+						Localization.getLocalizedString(orderErr.getMessage()));
+			}
+
+		}
+
 		if (OrderValidationErros.size() > 0 || ShippingValidationErros.size() > 0)
 		{
 			return REDIRECT_PREFIX + "/my-account/order/" + orderCode;
