@@ -11,6 +11,7 @@
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 
 <c:url value="${entry.product.url}" var="productUrl"/>
+
 <tr class="item item_order_cls">
 	<td headers="header2" class="thumb">
 		<a href="${productUrl}">
@@ -47,7 +48,7 @@
 			</ul>
 		</c:if> 
 	</td>
-	<td headers="header4" class="quantity">
+	<td headers="header4" class="quantity" >
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.quantity}</ycommerce:testId>
 	</td>
 	
@@ -65,13 +66,13 @@
 			</c:choose>
 		</ycommerce:testId>
 	</td>
-	<td headers="header6" class="total">
+	<td headers="header6" class="total" >
 		<ycommerce:testId code="orderDetails_productTotalPrice_label"><format:price priceData="${entry.totalPrice}" displayFreeForZero="true"/></ycommerce:testId>
 	</td>
-	<td headers="header7" class="adjustedquantity">
+	<td headers="header7" class="adjustedquantity textHighlight">
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.adjustedQty}</ycommerce:testId>
 	</td>
-	<td headers="header8" class="adjustedPrice">
+	<td headers="header8" class="adjustedPrice textHighlight">
 		<ycommerce:testId code="orderDetails_productItemPrice_label">
 			<c:choose>
 				<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
@@ -97,6 +98,9 @@
 	<td headers="header15" class="rejected">
 		<ycommerce:testId code="orderDetails_CMIRId_label">${entry.product.customerMaterialId}</ycommerce:testId>
 	</td>
+	
+	
+	
 <!-- 	<td headers="header16" class="rejected">
 		<ycommerce:testId code="orderDetails_custProductName_label">${entry.product.customerProductName}</ycommerce:testId>
 	</td>
@@ -114,4 +118,6 @@
 	</td>
 	 -->
 </tr>
+
+
 			
