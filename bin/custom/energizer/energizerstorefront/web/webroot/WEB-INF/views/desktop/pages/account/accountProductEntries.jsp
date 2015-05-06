@@ -120,7 +120,7 @@
 		
 		<c:if test="${not empty shipmentData}">
 		<div id="addToCartform_button_panel" class="button positive">
-				<button class="excelOrderSubmitButton button" id='continueButton' disabled="disabled"> <spring:theme code="text.addToCart" text="Add To cart"/></button>
+				<button class="excelOrderSubmitButton button" id='continueButton' > <spring:theme code="text.addToCart" text="Add To cart"/></button>
 			</div>		
 		</c:if>
 			
