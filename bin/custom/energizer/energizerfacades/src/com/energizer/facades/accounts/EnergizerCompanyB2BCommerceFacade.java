@@ -24,7 +24,7 @@ public interface EnergizerCompanyB2BCommerceFacade
 	 * 
 	 * @param uuid
 	 */
-	public String getContactNumber(String uuid, CustomerData customerData);
+	//public String getContactNumber(String uuid, CustomerData customerData);
 
 	/**
 	 * validates the maximum user count for b2b unit

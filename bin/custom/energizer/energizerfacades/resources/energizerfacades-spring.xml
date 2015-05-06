@@ -538,13 +538,18 @@
 	
 	<!-- *********************** ContactNumberPopulator *************** -->
 	<bean id="contactNumberPopulator" class="com.energizer.facades.accounts.populators.ContactNumberPopulator" />
-	<bean id="contactNumberConverter" parent="abstractPopulatingConverter">
+	<!-- <bean id="contactNumberConverter" parent="abstractPopulatingConverter">
 		<property name="targetClass" value="de.hybris.platform.commercefacades.user.data.CustomerData" />
 		<property name="populators">
 			<list>
 				<ref bean="contactNumberPopulator" />
 			</list>
 		</property>
+	</bean> -->
+	
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="b2BCustomerConverter"/>
+		<property name="add" ref="contactNumberPopulator"/>
 	</bean>
 	
 	<!--*********************** added new populator as part of implementation***************-->
