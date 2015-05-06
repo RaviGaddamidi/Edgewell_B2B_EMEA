@@ -89,9 +89,15 @@ public class PasswordResetPageController extends AbstractPageController
 	}
 
 	@RequestMapping(value = "/request-page", method = RequestMethod.GET)
-	public String getPasswordRequestPage(final Model model) throws CMSItemNotFoundException
+	public String getPasswordRequestPage(final Model model, @RequestParam(required = false) final String uid)
+			throws CMSItemNotFoundException
 	{
-		model.addAttribute(new ForgottenPwdForm());
+		final ForgottenPwdForm forgottenPwdForm = new ForgottenPwdForm();
+		if (null != uid)
+		{
+			forgottenPwdForm.setEmail(uid);
+		}
+		model.addAttribute(forgottenPwdForm);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));

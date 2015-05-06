@@ -30,9 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ForgottenPasswordEmailContext extends CustomerEmailContext
 {
-
 	/**
-	 * 
+	 * set the DEFAULT_TIMEOUT_IN_MINUTES
 	 */
 	private static final int DEFAULT_TIMEOUT_IN_MINUTES = 30;
 	private static final String EXP_IN_MIN = "forgottenPassword.emailContext.expiresInMinutes";
@@ -40,9 +39,21 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	 * This is to set the password expires time done through the local.properties
 	 **/
 	private int expiresInMinutes = 0;
+
+
 	private String token;
 	@Autowired
 	private ConfigurationService configurationService;
+
+	@Override
+	public void init(final StoreFrontCustomerProcessModel storeFrontCustomerProcessModel, final EmailPageModel emailPageModel)
+	{
+		super.init(storeFrontCustomerProcessModel, emailPageModel);
+		if (storeFrontCustomerProcessModel instanceof ForgottenPasswordProcessModel)
+		{
+			setToken(((ForgottenPasswordProcessModel) storeFrontCustomerProcessModel).getToken());
+		}
+	}
 
 	public int getExpiresInMinutes()
 	{
@@ -81,7 +92,7 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 	public String getSecureRequestResetPasswordUrl() throws UnsupportedEncodingException
 	{
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
-				"/login/pw/request");
+				"/login/pw/request-page", "uid=" + getCustomer().getUid());
 	}
 
 	public String getResetPasswordUrl() throws UnsupportedEncodingException
@@ -108,13 +119,4 @@ public class ForgottenPasswordEmailContext extends CustomerEmailContext
 				"/my-account/update-password");
 	}
 
-	@Override
-	public void init(final StoreFrontCustomerProcessModel storeFrontCustomerProcessModel, final EmailPageModel emailPageModel)
-	{
-		super.init(storeFrontCustomerProcessModel, emailPageModel);
-		if (storeFrontCustomerProcessModel instanceof ForgottenPasswordProcessModel)
-		{
-			setToken(((ForgottenPasswordProcessModel) storeFrontCustomerProcessModel).getToken());
-		}
-	}
 }
