@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -168,70 +169,36 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				{
 					final Row row = rowIterator.next();
 
-					if (!(row.getRowNum() == 0) && (row.getCell(0) != null && !(row.getCell(0).getStringCellValue().isEmpty()))
-							&& (row.getCell(1) != null && !(row.getCell(1).getStringCellValue().isEmpty())))
-					{
-						uploadData = new EnergizerFileUploadData();
-						uploadData.setMaterialId(StringUtils.trim(row.getCell(0).getStringCellValue()));
-						uploadData.setCustomerMaterialId(StringUtils.trim(row.getCell(1).getStringCellValue()));
-						if (row.getCell(2) != null)
-						{
-							try
-							{
-								final Long quantity = (new Double(row.getCell(2).getNumericCellValue())).longValue();
-								uploadData.setQuantity(quantity);
-							}
-							catch (final IllegalStateException ise)
-							{
-								LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
-								GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
-							}
-						}
-						energizerFileUploadDatas.add(uploadData);
-					}
-
-					if (!(row.getRowNum() == 0) && (row.getCell(0) == null || (row.getCell(0).getStringCellValue().isEmpty()))
-							&& (row.getCell(1) != null && !(row.getCell(1).getStringCellValue().isEmpty())))
-					{
-						uploadData = new EnergizerFileUploadData();
-						uploadData.setCustomerMaterialId(StringUtils.trim(row.getCell(1).getStringCellValue()));
-						if (row.getCell(2) != null)
-						{
-							try
-							{
-								final Long quantity = (new Double(row.getCell(2).getNumericCellValue())).longValue();
-								uploadData.setQuantity(quantity);
-							}
-							catch (final IllegalStateException ise)
-							{
-								LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
-								GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
-							}
-						}
-						energizerFileUploadDatas.add(uploadData);
-					}
-
-					if (!(row.getRowNum() == 0) && (row.getCell(0) != null && (!(row.getCell(0).getStringCellValue().isEmpty())))
-							&& (row.getCell(1) == null || (row.getCell(1).getStringCellValue().isEmpty())))
+					if (!(row.getRowNum() == 0))
 					{
 
-						uploadData = new EnergizerFileUploadData();
-						uploadData.setMaterialId(StringUtils.trim(row.getCell(0).getStringCellValue()));
-						if (row.getCell(2) != null)
+						final String materialId = validateAndGetString(row.getCell(0));
+						final String customerMaterailId = validateAndGetString(row.getCell(1));
+
+						if (materialId != null || customerMaterailId != null)
 						{
-							try
+							uploadData = new EnergizerFileUploadData();
+
+							uploadData.setMaterialId(materialId);
+							uploadData.setCustomerMaterialId(customerMaterailId);
+
+							if (row.getCell(2) != null)
 							{
-								final Long quantity = (new Double(row.getCell(2).getNumericCellValue())).longValue();
-								uploadData.setQuantity(quantity);
+								try
+								{
+									final Long quantity = (new Double(row.getCell(2).getNumericCellValue())).longValue();
+									uploadData.setQuantity(quantity);
+								}
+								catch (final IllegalStateException ise)
+								{
+									LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
+									GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
+								}
 							}
-							catch (final IllegalStateException ise)
-							{
-								LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
-								GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
-							}
+							energizerFileUploadDatas.add(uploadData);
 						}
-						energizerFileUploadDatas.add(uploadData);
 					}
+
 				}
 				if (energizerFileUploadDatas.size() == 0)
 				{
@@ -452,5 +419,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			}
 		}
 		return shipmentMap;
+	}
+
+	private String validateAndGetString(final Cell cell)
+	{
+		return cell == null ? null : StringUtils.isBlank(cell.getStringCellValue()) ? null : cell.getStringCellValue();
 	}
 }
