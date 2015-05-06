@@ -32,12 +32,12 @@
 										<img src="${ctx.themeResourceUrl}/images/header_01.png" alt="" width="229" height="72" border="0" align="right" title="" />
 									</td>
 								</tr>
-								<!---Commented below lines as per the requirement-->
-								<!--<tr>
+								<!-- Commented below lines as per the requirement -->
+								<!-- <tr>
 									<td height="30" align="right" valign="middle" bgcolor="#51585c">
 										<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.secureBaseUrl}/my-account"><font color="#FFFFFF">${ctx.messages.myAccount}</font></a> | <a href="${ctx.baseUrl}/store-finder"><font color="#FFFFFF">${ctx.messages.storeFinder}</font></a> &nbsp;&nbsp;</font>
 									</td>
-								</tr>-->
+								</tr> -->
 								<tr>
 									<td align="center" valign="middle">
 										<a href="${ctx.baseUrl}" style="display:block; margin-top:10px;margin-bottom:10px;">${ctx.cmsSlotContents.TopContent}</a>
@@ -48,7 +48,7 @@
 								</tr>
 								<tr>
 									<td align="left" valign="top">
-#set ($secureAccountUrl = "${ctx.secureBaseUrl}")
+#set ($secureAccountUrl = "${ctx.secureBaseUrl}/my-account")
 #set ($securePswdResetUrl = "${ctx.secureRequestResetPasswordUrl}")
 #set ($mailToUrl = "mailto:${ctx.messages.contactUsEmailAddress}")
 #set ($instructionsContactUs = ${ctx.messages.getMessage('instructionsContactUs', "#genHtmlLinkStartTag(${ctx.messages.contactUsPage})", "#genHtmlLinkEndTag()", "#genHtmlLink($mailToUrl '#666666' ${ctx.messages.contactUsEmailAddress})")})
