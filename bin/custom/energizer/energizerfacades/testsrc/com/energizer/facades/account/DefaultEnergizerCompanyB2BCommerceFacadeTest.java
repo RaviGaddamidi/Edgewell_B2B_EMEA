@@ -9,6 +9,7 @@ import de.hybris.platform.b2b.services.B2BUnitService;
 import de.hybris.platform.b2bacceleratorfacades.order.populators.B2BCustomerReversePopulator;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
