@@ -100,11 +100,7 @@ public class UserManagementPageController extends MyCompanyPageController
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
-		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.getBreadcrumbs(null);
-		breadcrumbs.add(new Breadcrumb("/my-company/organization-management/", getMessageSource().getMessage(
-				"text.company.organizationManagement", null, getI18nService().getCurrentLocale()), null));
-		breadcrumbs.add(new Breadcrumb("/my-company/organization-management/manage-users", getMessageSource().getMessage(
-				"text.company.manageUsers", null, getI18nService().getCurrentLocale()), null));
+		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserBreadcrumb();
 		model.addAttribute("breadcrumbs", breadcrumbs);
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		return ControllerConstants.Views.Pages.MyCompany.MyCompanyManageUsersPage;
@@ -217,11 +213,7 @@ public class UserManagementPageController extends MyCompanyPageController
 		{
 			storeCmsPageInModel(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
-			final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.getBreadcrumbs(null);
-			breadcrumbs.add(new Breadcrumb("/my-company/organization-management/", getMessageSource().getMessage(
-					"text.company.organizationManagement", null, getI18nService().getCurrentLocale()), null));
-			breadcrumbs.add(new Breadcrumb("/my-company/organization-management/manage-users", getMessageSource().getMessage(
-					"text.company.manageUsers", null, getI18nService().getCurrentLocale()), null));
+			final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserBreadcrumb();
 			model.addAttribute("breadcrumbs", breadcrumbs);
 			model.addAttribute("metaRobots", "no-index,no-follow");
 			model.addAttribute("action", "manageUsers");
@@ -250,7 +242,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	{
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
-		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUnitsDetailsBreadcrumbs(user);
+		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserDetailsBreadcrumb(user);
 		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-users/disable?user=%s",
 				urlEncode(user)), getMessageSource().getMessage("text.company.manage.units.disable.breadcrumb", new Object[]
 		{ user }, "Disable {0} Customer", getI18nService().getCurrentLocale()), null));
@@ -269,7 +261,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	{
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
-		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUnitsDetailsBreadcrumbs(user);
+		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserDetailsBreadcrumb(user);
 		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-users/disable?user=%s",
 				urlEncode(user)), getMessageSource().getMessage("text.company.manageusers.disable.breadcrumb", new Object[]
 		{ user }, "Disable {0}  Customer ", getI18nService().getCurrentLocale()), null));
@@ -342,7 +334,7 @@ public class UserManagementPageController extends MyCompanyPageController
 		}
 
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder
-				.createManageUnitsDetailsBreadcrumbs(customerResetPasswordForm.getUid());
+				.createManageUserDetailsBreadcrumb(customerResetPasswordForm.getUid());
 		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-users/restpassword?user=%s",
 				urlEncode(customerResetPasswordForm.getUid())), getMessageSource().getMessage(
 				"text.company.manageusers.restpassword.breadcrumb", new Object[]
