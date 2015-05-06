@@ -8,6 +8,7 @@ import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.europe1.model.PriceRowModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
@@ -39,8 +40,9 @@ import com.energizer.core.model.EnergizerProductModel;
  * 
  * Sample file will look like
  * 
- * EnergizerAccountID,ERPMaterialID,CustomerMaterialID,Language,CustomerMaterial Description,MaterialList price,CustomerListPrice,CustomerListprice currency,ShipmentPointNumber
- * 1000,              10,           10,                EN,      tanning creme spf2 6 oz 4/3s,21,                12,               USD,                       712
+ * EnergizerAccountID,ERPMaterialID,CustomerMaterialID,Language,CustomerMaterial Description,MaterialList
+ * price,CustomerListPrice,CustomerListprice currency,ShipmentPointNumber 1000, 10, 10, EN, tanning creme spf2 6 oz
+ * 4/3s,21, 12, USD, 712
  * 
  * Total column count : 9
  */
@@ -60,10 +62,16 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private CommonI18NService defaultCommonI18NService;
 	@Resource
 	private UnitService defaultUnitService;
+	@Resource
+	ConfigurationService configurationService;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerCMIRCSVProcessor.class.getName());
 
 	private static final String UNIT = "EA";
+
+	private String defaultMOQ = "";
+
+	private String defaultUOM = "";
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -71,6 +79,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	{
 		Collection<PriceRowModel> priceRows;
 		EnergizerProductModel energizerProduct = null;
+		defaultMOQ = configurationService.getConfiguration().getString("feedprocessor.defalult.moq.value", null);
+		defaultUOM = configurationService.getConfiguration().getString("feedprocessor.defalult.uom.value", null);
 		try
 		{
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
@@ -245,6 +255,15 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerCMIRModel.setCustomerMaterialDescription(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION),
 				new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE).toLowerCase()));
 		energizerCMIRModel.setShippingPoint(csvValuesMap.get(EnergizerCoreConstants.SHIPMENT_POINT_NO));
+		// Setting Default UOM  and  MOQ
+
+		final String currentCMIRUom = energizerCMIRModel.getUom();
+		final Integer currentCMIRMoq = energizerCMIRModel.getOrderingUnit();
+		if (null == currentCMIRUom || currentCMIRUom.isEmpty() || null == currentCMIRMoq)
+		{
+			energizerCMIRModel.setUom(defaultUOM);
+			energizerCMIRModel.setOrderingUnit(Integer.parseInt(defaultMOQ));
+		}
 	}
 
 	private boolean isENRPriceRowModelSame(final EnergizerPriceRowModel enrPriceRow, final Map<String, String> csvValuesMap,
