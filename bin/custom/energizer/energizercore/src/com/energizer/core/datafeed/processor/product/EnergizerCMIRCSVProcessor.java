@@ -4,8 +4,6 @@
 package com.energizer.core.datafeed.processor.product;
 
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
-import de.hybris.platform.catalog.model.CatalogVersionModel;
-import de.hybris.platform.europe1.model.PriceRowModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
@@ -27,11 +25,6 @@ import org.apache.log4j.Logger;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
-import com.energizer.core.datafeed.EnergizerCSVFeedError;
-import com.energizer.core.model.EnergizerB2BUnitModel;
-import com.energizer.core.model.EnergizerCMIRModel;
-import com.energizer.core.model.EnergizerPriceRowModel;
-import com.energizer.core.model.EnergizerProductModel;
 
 
 /**
@@ -259,7 +252,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 		final String currentCMIRUom = energizerCMIRModel.getUom();
 		final Integer currentCMIRMoq = energizerCMIRModel.getOrderingUnit();
-		if (null == currentCMIRUom || currentCMIRUom.isEmpty() || null == currentCMIRMoq)
+
+R		if (null == currentCMIRUom || currentCMIRUom.isEmpty() || null == currentCMIRMoq)
 		{
 			energizerCMIRModel.setUom(defaultUOM);
 			energizerCMIRModel.setOrderingUnit(Integer.parseInt(defaultMOQ));
