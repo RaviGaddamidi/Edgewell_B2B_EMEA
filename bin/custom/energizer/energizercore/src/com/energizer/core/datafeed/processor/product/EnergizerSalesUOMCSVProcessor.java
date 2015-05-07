@@ -3,11 +3,7 @@
  */
 package com.energizer.core.datafeed.processor.product;
 
-import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
-import de.hybris.platform.category.model.CategoryModel;
-import de.hybris.platform.core.GenericSearchConstants.LOG;
-import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
@@ -28,12 +24,6 @@ import org.apache.log4j.Logger;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
-import com.energizer.core.datafeed.EnergizerCSVFeedError;
-import com.energizer.core.model.EnergizerB2BUnitModel;
-import com.energizer.core.model.EnergizerCMIRModel;
-import com.energizer.core.model.EnergizerCategoryModel;
-import com.energizer.core.model.EnergizerProductModel;
-import com.energizer.core.model.EnergizerSalesAreaUOMModel;
 import com.energizer.services.product.EnergizerB2BUnitService;
 import com.energizer.services.product.EnergizerSalesUOMService;
 
@@ -233,6 +223,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 												energizerCMIR.setUom(uom);
 												energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
 											}
+
 											modelService.saveAll();
 											break;
 										}

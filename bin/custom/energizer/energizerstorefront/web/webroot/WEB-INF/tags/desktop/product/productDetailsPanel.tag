@@ -54,10 +54,12 @@
 			<spring:theme code="basket.page.segmentName"/> : ${fn:escapeXml(product.segmentName)}<br>			
 			<spring:theme code="basket.page.familyName"/> : ${fn:escapeXml(product.familyName)}<br>
 			<spring:theme code="basket.page.groupName"/> : ${fn:escapeXml(product.groupName)}<br>				
-			<spring:theme code="basket.page.Weight"/> : ${fn:escapeXml(product.weight)}<br>
+			<%-- 
+			spring:theme code="basket.page.Weight"/> : ${fn:escapeXml(product.weight)}<br>
 			<spring:theme code="basket.page.weightUom"/> : ${fn:escapeXml(product.weightUom)}<br>
 			<spring:theme code="basket.page.volume"/> : ${fn:escapeXml(product.volume)}<br>
 			<spring:theme code="basket.page.volumeUom"/> : ${fn:escapeXml(product.volumeUom)}<br>
+			--%>
 			<%-- obsolete : ${product.obsolete}<br>	  --%>		
 			
 		</div>
