@@ -214,7 +214,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		final List<File> typeFilesList = new ArrayList<File>();
 		final File csvFiles = new File(sharedFolderPath + fileSeperator + type + fileSeperator + toProcess);
-
+		LOG.info("Loading files from :" + csvFiles);
 		if (csvFiles.isDirectory())
 		{
 			final File[] file = csvFiles.listFiles();
@@ -227,7 +227,6 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		}
 		return typeFilesList;
 	}
-
 
 	public String[] getHeadersForFeed(final String key)
 	{
