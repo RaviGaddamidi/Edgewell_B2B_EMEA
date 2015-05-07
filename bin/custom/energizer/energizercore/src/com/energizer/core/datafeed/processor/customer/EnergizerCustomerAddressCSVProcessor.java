@@ -33,8 +33,8 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
  * 
  * Sample file will look like
  * 
- * SPCustomerID,Status,SPNAME,          SPCITY,      SPPOSTALCODE,  SPSTREET,         SPCOUNTRYKEY,SPREGION,SPSalesPerson
- * 820,         1,     SONOCO CORRFLEX, CINNAMINSON, 8077,          2703 CINDEL DRIVE,US,           NJ,      ABC
+ * SPCustomerID,Status,SPNAME,SPCITY,SPPOSTALCODE,SPSTREET,SPCOUNTRYKEY,SPREGION,SPSalesPerson,CustomerID
+ * 0002707368,1,SAMY,MONTEVIDEO,11300,GENERAL HOMOS 4834,UY,00,sales_pc@abc.com,0098900010
  * 
  * Total column count : 9
  */
@@ -73,6 +73,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 	private static final String SP_COUNTRY_KEY = "SPCOUNTRYKEY";
 	private static final String SP_REGION = "SPREGION";
 	private static final String STATUS = "Status";
+	private static final String CUSTOMER_ID = "CustomerID";
 
 
 	/**
@@ -153,7 +154,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 							LOG.error("No Region or country Found", e);
 						}
 						final EnergizerB2BUnitModel b2bUnitmodel = (EnergizerB2BUnitModel) companyB2BCommerceService
-								.getUnitForUid(erpAddressId);
+								.getUnitForUid(csvValuesMap.get(CUSTOMER_ID).trim());
 						if (b2bUnitmodel != null)
 						{
 							energizerAddress.setOwner(b2bUnitmodel);
