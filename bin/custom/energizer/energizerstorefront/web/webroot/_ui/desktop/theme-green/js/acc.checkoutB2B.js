@@ -1,6 +1,6 @@
 ACC.checkoutB2B = {
 	cartData:"",
-	
+	pageInitDone:false,
 	settingDefaultCostCenter: function()
 	{
 		var costCenter = $(".constCenterSelect").val();
@@ -237,6 +237,7 @@ ACC.checkoutB2B = {
 	},
 	deliveryAddress: function (section)
 	{
+		
 			
 		$(document).on("click",'#summaryDeliveryAddressOverlay #summaryOverlayViewAddressForm', function (){
 			$("#summaryDeliveryAddressForm").show();
@@ -357,8 +358,8 @@ ACC.checkoutB2B = {
 
 		$(document).on("click",'#summaryDeliveryAddressBook .addressEntry .edit', function (e){
 			e.preventDefault();
-
-			var changeFormUrl= $(".summaryDeliveryAddress").data('get-form')+"?createUpdateStatus=1&addressId="+$(this).data("address");
+			
+			//var changeFormUrl= $(".summaryDeliveryAddress").data('get-form')+"?createUpdateStatus=1&addressId="+$(this).data("address");
 			$.get(changeFormUrl, function(data){
 
 				$("#summaryDeliveryAddressForm").remove();
@@ -373,7 +374,7 @@ ACC.checkoutB2B = {
 		});
 
 
-		$(document).on("click",'#summaryDeliveryAddressOverlay button.default', function (e){
+		/*$(document).on("click",'#summaryDeliveryAddressOverlay button.default', function (e){
 			e.preventDefault();
 			var addressId = $(this).data('address');
 			$.postJSON($('.summaryDeliveryAddress').data("setDefault"), {addressId: addressId}, function(data){
@@ -381,9 +382,9 @@ ACC.checkoutB2B = {
 				$("#summaryDeliveryAddressBook").html($(section+' .colorboxTemplate').tmpl({addresses: data}));
 			});
 			
-		});
-
-
+		});*/
+       
+		
 
 		
 	},
@@ -510,12 +511,23 @@ ACC.checkoutB2B = {
 		}
 	},
 	refreshSections: function(data){
+		
 		ACC.checkoutB2B.cartData=data;
 		ACC.checkoutB2B.refreshCart(data);
 		// ACC.checkoutB2B.refreshSection(".summaryPaymentType");
 		// ACC.checkoutB2B.refreshSection(".summaryCostCenter");
 		ACC.checkoutB2B.refreshSection(".summaryPayment");
 		ACC.checkoutB2B.refreshSection(".summaryDeliveryAddress");
+		if(!ACC.checkoutB2B.pageInitDone)
+		{
+			li=document.createElement("li");
+			$(li).html(noDeliveryAddressMesage);
+			$(".summaryDeliveryAddress ul li").remove();
+			$(".summaryDeliveryAddress ul").append(li);
+			
+			ACC.checkoutB2B.pageInitDone=!ACC.checkoutB2B.pageInitDone;
+		}
+		
 		ACC.checkoutB2B.refreshSection(".summaryDeliveryMode");
 
 		if (data.deliveryMode == null || data.deliveryAddress == null || (data.paymentType.code == "CARD" && data.paymentInfo == null)) {
@@ -741,17 +753,22 @@ $(document).ready(function ()
 	if($("body").hasClass("page-singleStepCheckoutSummaryPage"))
 	{
 		with(ACC.checkoutB2B){
+			
+			
 			refresh();
 			settingDefaultCostCenter();
 			PaymentType();
 			costCenter();
 			payment();
 			deliveryAddress();
+			
+			
 			deliveryMode();
 			scheduleReplenishment();
 			negotiateQuote();
 			placeOrder();
 			bindTermsAndConditionsLink();
+			
 		}
 	}
 });
@@ -792,6 +809,7 @@ $('#checkoutPlaceOrder').click(function(){
 					
 					if(poNumber){
 						if($("#Terms1").prop('checked')){
+							
 							return true;
 						}
 						else{

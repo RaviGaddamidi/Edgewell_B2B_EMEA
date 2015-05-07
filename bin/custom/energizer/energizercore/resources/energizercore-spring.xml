@@ -931,19 +931,7 @@
 		<property name="fallbackToSystemLocale" value="false"/>
 	</bean>
 	
-	<alias alias="b2bPermissionService" name="energizerb2bPermissionService" />
-	<bean id="energizerb2bPermissionService"
-	      class="com.energizer.services.order.EnergizerB2BPermissionService"
-	      parent="defaultB2BPermissionService">
-	</bean>
 	
-	<alias alias="findApprovers" name="energizerFindApprovers" />
-	<bean id="energizerFindApprovers"
-	      class="com.energizer.core.actions.FindApprovers"
-	      parent="abstractSimpleB2BApproveOrderDecisionAction">
-		<property name="b2bPermissionService" ref="b2bPermissionService"/>
-		<property name="permissionResultHelper" ref="permissionResultHelper"/>
-	</bean>
 	
 	
 </beans>

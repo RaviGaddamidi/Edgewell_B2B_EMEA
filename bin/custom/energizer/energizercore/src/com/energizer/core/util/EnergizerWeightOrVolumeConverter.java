@@ -3,6 +3,9 @@
  */
 package com.energizer.core.util;
 
+import java.math.BigDecimal;
+
+
 /**
  * @author Bivash Pandit
  * 
@@ -17,7 +20,7 @@ public class EnergizerWeightOrVolumeConverter
 	 */
 
 	private static String CUBIC_CM = "CCM";
-	private static String CUBIC_DECEMETER = "CD3";
+	private static String CUBIC_DECEMETER = "CDM";
 	private static String HECTO_LITRE = "HL";
 	private static String CUBIC_FEET = "FT3";
 	private static String GRAM = "G";
@@ -26,9 +29,9 @@ public class EnergizerWeightOrVolumeConverter
 	private static String METER_CUBE = "M3";
 
 
-	public static double getConversionValue(final String unit, final double value)
+	public static BigDecimal getConversionValue(final String unit, final BigDecimal value)
 	{
-		double convertedValue = 1;
+		BigDecimal convertedValue = new BigDecimal(1);
 		if (unit.equalsIgnoreCase(CUBIC_CM))
 		{
 			convertedValue = convertCubicCMtoMeterCube(value);
@@ -66,42 +69,41 @@ public class EnergizerWeightOrVolumeConverter
 	}
 
 
-	private static double convertGramToKG(final double gram)
+	private static BigDecimal convertGramToKG(final BigDecimal gram)
 	{
-		final double valueInKg = gram * 0.001;
+		final BigDecimal valueInKg = gram.multiply(new BigDecimal(.001));
 		return valueInKg;
 	}
 
-	private static double convertLBtoKG(final double lb)
+	private static BigDecimal convertLBtoKG(final BigDecimal lb)
 	{
-		final double valueInKg = lb * 0.453592;
+		final BigDecimal valueInKg = lb.multiply(new BigDecimal(0.453592));
 		return valueInKg;
 
 	}
 
-	private static double convertCubicCMtoMeterCube(final double CubicCM)
+	private static BigDecimal convertCubicCMtoMeterCube(final BigDecimal CubicCM)
 	{
-		final double valueInMeterCube = CubicCM * 0.0000001;
+		final BigDecimal valueInMeterCube = CubicCM.multiply(new BigDecimal(0.0000001));
 		return valueInMeterCube;
 
 	}
 
-	private static double convertCubicDecimeterToMeterCube(final double cubicDecimeter)
+	private static BigDecimal convertCubicDecimeterToMeterCube(final BigDecimal cubicDecimeter)
 	{
-		final double valueInMeterCube = cubicDecimeter * 0.001;
+		final BigDecimal valueInMeterCube = cubicDecimeter.multiply(new BigDecimal(0.001));
 		return valueInMeterCube;
 	}
 
-	private static double convertHectoLitreToMeterCube(final double hectoLitre)
+	private static BigDecimal convertHectoLitreToMeterCube(final BigDecimal hectoLitre)
 	{
-		final double valueInMeterCube = hectoLitre * 0.01;
+		final BigDecimal valueInMeterCube = hectoLitre.multiply(new BigDecimal(0.01));
 		return valueInMeterCube;
 	}
 
-	private static double convertCubicFtToMeterCube(final double cubicFt)
+	private static BigDecimal convertCubicFtToMeterCube(final BigDecimal cubicFt)
 	{
-		final double valueInMeterCube = cubicFt * 0.0283168;
+		final BigDecimal valueInMeterCube = cubicFt.multiply(new BigDecimal(0.0283168));
 		return valueInMeterCube;
 	}
-
 }

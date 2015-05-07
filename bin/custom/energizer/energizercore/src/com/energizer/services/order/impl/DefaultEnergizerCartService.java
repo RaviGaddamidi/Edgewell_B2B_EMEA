@@ -11,6 +11,8 @@ import de.hybris.platform.order.CartService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.user.UserService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -48,11 +50,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	private B2BCommerceUserService b2bCommerceUserService;
 
 
-	private double twentyFeetContainerVolume;
-	private double twentyFeetContainerWeight;
-	private double fourtyFeetContainerVolume;
-	private double fourtyFeetContainerWeight;
-	private final double hundred = 100;
+	private BigDecimal twentyFeetContainerVolume;
+	private BigDecimal twentyFeetContainerWeight;
+	private BigDecimal fourtyFeetContainerVolume;
+	private BigDecimal fourtyFeetContainerWeight;
+	private final BigDecimal hundred = new BigDecimal(100);
 
 	private static final Logger LOG = Logger.getLogger(DefaultEnergizerCartService.class.getName());
 
@@ -61,6 +63,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	private static final String FORTY_FEET_CONTAINER_VOLUME_KEY = "fourty.feet.container.volume";
 	private static final String FORTY_FEET_CONTAINER_WEIGHT_KEY = "fourty.feet.container.weight";
 
+	private final BigDecimal ZERO = new BigDecimal(0);
+
 	@Override
 	public CartData calCartContainerUtilization(final CartData cartData)
 	{
@@ -68,27 +72,32 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		{
 			final CartModel cartModel = cartService.getSessionCart();
 			final List<AbstractOrderEntryModel> cartEntries = cartModel.getEntries();
-			double totalCartVolume = 0;
-			double totalCartWt = 0;
+			BigDecimal totalCartVolume = new BigDecimal(0);
+			BigDecimal totalCartWt = new BigDecimal(0);
 			/**
-			 * # volume in M3 and weight in KG *******************************************
-			 * twenty.feet.container.volume=11.32672, twenty.feet.container.weight=10000
-			 * fourty.feet.container.volume=22.65344 , fourty.feet.container.weight=20000
+			 * # Container volume in M3 and weight in KG ##########################################
+			 * 
+			 * twenty.feet.container.volume=30.44056 twenty.feet.container.weight=15961.90248
+			 * fourty.feet.container.volume=70.62209 fourty.feet.container.weight=18234.3948
 			 */
 
-			twentyFeetContainerVolume = configurationService.getConfiguration().getDouble(TWENTY_FEET_CONTAINER_VOLUME_KEY, null);
-			twentyFeetContainerWeight = configurationService.getConfiguration().getDouble(TWENTY_FEET_CONTAINER_WEIGHT_KEY, null);
-			fourtyFeetContainerVolume = configurationService.getConfiguration().getDouble(FORTY_FEET_CONTAINER_VOLUME_KEY, null);
-			fourtyFeetContainerWeight = configurationService.getConfiguration().getDouble(FORTY_FEET_CONTAINER_WEIGHT_KEY, null);
+			twentyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
+					TWENTY_FEET_CONTAINER_VOLUME_KEY, null));
+			twentyFeetContainerWeight = new BigDecimal(configurationService.getConfiguration().getDouble(
+					TWENTY_FEET_CONTAINER_WEIGHT_KEY, null));
+			fourtyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
+					FORTY_FEET_CONTAINER_VOLUME_KEY, null));
+			fourtyFeetContainerWeight = new BigDecimal(configurationService.getConfiguration().getDouble(
+					FORTY_FEET_CONTAINER_WEIGHT_KEY, null));
 
 			for (final AbstractOrderEntryModel abstractOrderEntryModel : cartEntries)
 			{
 				final EnergizerProductModel enerGizerProductModel = (EnergizerProductModel) abstractOrderEntryModel.getProduct();
 				final String erpMaterialId = enerGizerProductModel.getCode();
-				final long itemQuantity = abstractOrderEntryModel.getQuantity().longValue();
+				final BigDecimal itemQuantity = new BigDecimal((abstractOrderEntryModel.getQuantity().longValue()));
 				EnergizerProductConversionFactorModel coversionFactor = null;
 				String cmirUom = null;
-				double baseUom = 0;
+				BigDecimal baseUom = new BigDecimal(0);
 
 				try
 				{
@@ -105,7 +114,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					if (null != alternateUOM && null != cmirUom && alternateUOM.equalsIgnoreCase(cmirUom))
 					{
 						coversionFactor = energizerProductConversionFactorModel;
-						baseUom = coversionFactor.getConversionMultiplier();
+						baseUom = new BigDecimal((coversionFactor.getConversionMultiplier()));
 					}
 
 					//  ************ setting the OrderBlock  flag  ****************
@@ -126,37 +135,38 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 				if (null != coversionFactor && null != coversionFactor.getPackageVolume())
 				{
-					double lineItemTotvolume = 0;
-					final double unitVolume = coversionFactor.getPackageVolume().getMeasurement();
-					if (unitVolume != 0)
+					BigDecimal lineItemTotvolume = new BigDecimal(0);
+					final BigDecimal unitVolume = new BigDecimal(coversionFactor.getPackageVolume().getMeasurement());
+					if (unitVolume.compareTo(ZERO) != 0)
 					{
-						lineItemTotvolume = unitVolume * baseUom * itemQuantity;
+						lineItemTotvolume = unitVolume.multiply(baseUom).multiply(itemQuantity);
 					}
 					final String volumeUnit = coversionFactor.getPackageVolume().getMeasuringUnits();
-					totalCartVolume = totalCartVolume
-							+ EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, lineItemTotvolume);
+					totalCartVolume = totalCartVolume.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit,
+							lineItemTotvolume));
 				}
 
 				if (null != coversionFactor && null != coversionFactor.getPackageWeight())
 				{
-					double lineItemTotWt = 0;
-					final double unitWeight = coversionFactor.getPackageWeight().getMeasurement();
-					if (unitWeight != 0)
+					BigDecimal lineItemTotWt = new BigDecimal(0);
+					final BigDecimal unitWeight = new BigDecimal(coversionFactor.getPackageWeight().getMeasurement());
+					if (unitWeight.compareTo(ZERO) != 0)
 					{
-						lineItemTotWt = unitWeight * baseUom * itemQuantity;
+						lineItemTotWt = unitWeight.multiply(baseUom).multiply(itemQuantity);
 					}
 					final String weightUnit = coversionFactor.getPackageWeight().getMeasuringUnits();
-					totalCartWt = totalCartWt + EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, lineItemTotWt);
+					totalCartWt = totalCartWt.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, lineItemTotWt));
 				}
 
 			}
+
+			LOG.info("|| totalCartWt => " + totalCartWt + " || totalCartVolume => " + totalCartVolume);
 
 			final ContainerData containerData = getPercentageContainerUtil(totalCartWt, totalCartVolume);
 			cartData.setTotalProductVolumeInPercent(containerData.getPercentVolumeUses());
 			cartData.setTotalProductWeightInPercent(containerData.getPercentWeightUses());
 
-			if ((cartData.getTotalProductVolumeInPercent().doubleValue() > hundred)
-					|| (cartData.getTotalProductWeightInPercent().doubleValue() > hundred))
+			if ((cartData.getTotalProductVolumeInPercent() > 100) || (cartData.getTotalProductWeightInPercent() > 100))
 			{
 				cartData.setIsContainerFull(true);
 			}
@@ -184,26 +194,30 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	 * @param totalCartVolume
 	 * @return
 	 */
-	private ContainerData getPercentageContainerUtil(final double totalCartWt, final double totalCartVolume)
+	private ContainerData getPercentageContainerUtil(final BigDecimal totalCartWt, final BigDecimal totalCartVolume)
 	{
 		final ContainerData containerData = new ContainerData();
-		if (totalCartWt < twentyFeetContainerWeight && totalCartVolume < twentyFeetContainerVolume)
+		if (totalCartWt.compareTo(twentyFeetContainerWeight) == -1 && totalCartVolume.compareTo(twentyFeetContainerVolume) == -1)
 		{
 			containerData.setContainerType("twentyFeetContainer");
-			final double volumePercentage = (totalCartVolume * hundred) / twentyFeetContainerVolume;
-			final double weightPercentage = (totalCartWt * hundred) / twentyFeetContainerWeight;
+			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(twentyFeetContainerVolume, 4,
+					RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(twentyFeetContainerWeight, 4,
+					RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
-			containerData.setPercentVolumeUses(Math.round(volumePercentage));
-			containerData.setPercentWeightUses(Math.round(weightPercentage));
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
 		}
 		else
 		{
 			containerData.setContainerType("fourtyFeetContainer");
-			final double volumePercentage = (totalCartVolume * hundred) / fourtyFeetContainerVolume;
-			final double weightPercentage = (totalCartWt * hundred) / fourtyFeetContainerWeight;
+			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(fourtyFeetContainerVolume, 4,
+					RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(fourtyFeetContainerWeight, 4,
+					RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
-			containerData.setPercentVolumeUses(Math.round(volumePercentage));
-			containerData.setPercentWeightUses(Math.round(weightPercentage));
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
 		}
 		return containerData;
 	}
