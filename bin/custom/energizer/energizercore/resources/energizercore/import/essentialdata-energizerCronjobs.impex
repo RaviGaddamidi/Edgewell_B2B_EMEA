@@ -17,7 +17,7 @@ $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
 
 $technicalEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
 $businessEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
-$emailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
+$emailAddress=sriram.venkatasubramanian@energizer.com
 
 INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=true]
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress

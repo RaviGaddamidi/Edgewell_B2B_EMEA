@@ -135,6 +135,10 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 				emailAddress = emailService.getOrCreateEmailAddressForEmail(toAddress, "Error Message");
 				toAddressModels.add(emailAddress);
 			}
+			emailAddress = emailService.getOrCreateEmailAddressForEmail(
+					configurationService.getConfiguration().getString("cronjobs.from.email", "customerservice@energizer.com"),
+					"Customer Service");
+
 			emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
 					Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
 			emailService.send(emailMessageModel);
@@ -214,7 +218,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		final List<File> typeFilesList = new ArrayList<File>();
 		final File csvFiles = new File(sharedFolderPath + fileSeperator + type + fileSeperator + toProcess);
-
+		LOG.info("Loading files from :" + csvFiles);
 		if (csvFiles.isDirectory())
 		{
 			final File[] file = csvFiles.listFiles();
@@ -227,7 +231,6 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		}
 		return typeFilesList;
 	}
-
 
 	public String[] getHeadersForFeed(final String key)
 	{

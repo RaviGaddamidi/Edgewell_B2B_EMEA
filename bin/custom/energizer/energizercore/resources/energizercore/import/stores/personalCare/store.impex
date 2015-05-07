@@ -10,7 +10,7 @@ $storeUid=personalCare
 $defaultCurrency=USD
 $languages=en,es
 $defaultLanguage=en
-$deliveryCountries=US
+$deliveryCountries=US,AR,BO,BR,CL,CO,EC,FK,GF,GY,GY,PY,PE,SR,UY,VE
 $submitOrderProcessCode=order-process
 $paymentProvider=Mockup
 
