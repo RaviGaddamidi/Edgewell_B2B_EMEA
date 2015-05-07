@@ -15,6 +15,7 @@ package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.services.B2BUnitService;
 import de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade;
+import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.B2BOrderFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderHistoryEntryData;
@@ -199,6 +200,10 @@ public class AccountPageController extends AbstractSearchPageController
 	@Resource(name = "energizerB2BCheckoutFlowFacade")
 	private EnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
 
+	@Resource(name = "b2bCommerceFacade")
+	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+
+
 	@ModelAttribute("comments")
 	public List<String> getApproverComments()
 	{
@@ -289,7 +294,9 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final List<TitleData> titles = userFacade.getTitles();
 
-		final CustomerData customerData = customerFacade.getCurrentCustomer();
+		//final CustomerData customerData = customerFacade.getCurrentCustomer();
+		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
+				.getUid());
 		//customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		if (customerData.getTitleCode() != null)
 		{
@@ -398,7 +405,9 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		model.addAttribute("titleData", userFacade.getTitles());
 
-		final CustomerData customerData = customerFacade.getCurrentCustomer();
+		//final CustomerData customerData = customerFacade.getCurrentCustomer();
+		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
+				.getUid());
 		final UpdateProfileForm updateProfileForm = new UpdateProfileForm();
 		//customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		updateProfileForm.setTitleCode(customerData.getTitleCode());

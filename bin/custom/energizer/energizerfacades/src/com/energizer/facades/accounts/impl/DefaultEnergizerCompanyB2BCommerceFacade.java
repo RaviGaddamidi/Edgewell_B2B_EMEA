@@ -34,7 +34,6 @@ import org.apache.commons.lang.StringUtils;
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade;
-import com.energizer.facades.accounts.populators.ContactNumberPopulator;
 import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator;
 
 
@@ -63,8 +62,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	@Resource(name = "companyB2BCommerceService")
 	private CompanyB2BCommerceService companyB2BCommerceService;
 
-	@Resource(name = "contactNumberPopulator")
-	private ContactNumberPopulator contactNumberPopulator;
+	/*
+	 * @Resource(name = "contactNumberPopulator") private ContactNumberPopulator contactNumberPopulator;
+	 */
 
 	@Resource(name = "energizerGroupsLookUpStrategy")
 	private DefaultEnergizerGroupsLookUpStrategy energizerGroupsLookUpStrategy;
@@ -74,13 +74,11 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	 * 
 	 * @see de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade#getContactNumber(java.lang.String)
 	 */
-	@Override
-	public String getContactNumber(final String uuid, final CustomerData customerData)
-	{
-		final EnergizerB2BCustomerModel model = userService.getUserForUID(uuid, EnergizerB2BCustomerModel.class);
-		contactNumberPopulator.populate(model, customerData);
-		return customerData.getContactNumber();
-	}
+	/*
+	 * @Override public String getContactNumber(final String uuid, final CustomerData customerData) { final
+	 * EnergizerB2BCustomerModel model = userService.getUserForUID(uuid, EnergizerB2BCustomerModel.class);
+	 * contactNumberPopulator.populate(model, customerData); return customerData.getContactNumber(); }
+	 */
 
 	/**
 	 * This method retrieves the EnergizerB2BUnitModel of the currently logged in user.
