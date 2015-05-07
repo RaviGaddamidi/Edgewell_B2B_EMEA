@@ -135,6 +135,10 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 				emailAddress = emailService.getOrCreateEmailAddressForEmail(toAddress, "Error Message");
 				toAddressModels.add(emailAddress);
 			}
+			emailAddress = emailService.getOrCreateEmailAddressForEmail(
+					configurationService.getConfiguration().getString("cronjobs.from.email", "customerservice@energizer.com"),
+					"Customer Service");
+
 			emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
 					Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
 			emailService.send(emailMessageModel);

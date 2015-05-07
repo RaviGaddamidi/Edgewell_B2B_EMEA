@@ -63,6 +63,10 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				.getApplicationContext().getBean(type);
 		final List<File> files = energizerCSVProcessor.getFilesForFeedType(type);
 		LOG.info("Found " + files.size() + " CSV files to process");
+		if (files.size() == 0)
+		{
+			return new PerformResult(CronJobResult.ERROR, CronJobStatus.FINISHED);
+		}
 		Boolean exceptionOccured = false;
 		if (null != cronjob.getEmailAddress())
 		{
