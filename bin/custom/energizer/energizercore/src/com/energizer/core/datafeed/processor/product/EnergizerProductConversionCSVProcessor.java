@@ -11,6 +11,7 @@ import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.session.SessionService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,8 @@ import com.energizer.core.model.MetricUnitModel;
  * 
  * Sample file will look like
  * 
- * ERPMaterialID,AlternateUOM,BaseUOMMultiplier,VolumeInUOM,VolumeUOM,WeightInUOM,WeightUOM
- * 3,            EA,          1,                 0.311,      CDM,      126.552    ,G
+ * ERPMaterialID,AlternateUOM,BaseUOMMultiplier,VolumeInUOM,VolumeUOM,WeightInUOM,WeightUOM 3, EA, 1, 0.311, CDM,
+ * 126.552 ,G
  * 
  * Total column count : 7
  */
@@ -75,12 +76,12 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 
-				if (getTechnicalFeedErrors().size() != 0)
+				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					continue;
 				}
-				if (getBusinessFeedErrors().size() != 0)
+				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
 					continue;
@@ -156,7 +157,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					}
 					catch (final Exception e)
 					{
-						LOG.error("Error ---- " + e.getMessage());
+						LOG.error("Error ---- " + e);
 						//this.logErrors(errors);
 						continue;
 					}
@@ -166,7 +167,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		}
 		catch (final Exception e)
 		{
-			LOG.error("Error ---- " + e.getMessage());
+			LOG.error("Error ---- " + e);
 		}
 		return getCsvFeedErrorRecords();
 	}
@@ -225,40 +226,72 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
-		final List<String> columnNames = new ArrayList<String>();
-		final List<Integer> columnNumbers = new ArrayList<Integer>();
+
 		Integer columnNumber = 0;
+		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : map.keySet())
 		{
 			columnNumber++;
+			long recordFailed = getRecordFailed();
+			setTotalRecords(record.getRecordNumber());
 			final String value = map.get(columnHeader).trim();
-			columnNames.add(columnHeader);
-			columnNumbers.add(columnNumber);
 
-			if (value.isEmpty() || value == null || value.equals("0"))
+			if (value.isEmpty())
 			{
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
 				error = new EnergizerCSVFeedError();
 				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setUserType(TECHNICAL_USER);
 				error.setColumnName(columnNames);
-				error.setMessage(columnHeader + " column cannot be empty");
+				columnNumbers.add(columnNumber);
+				error.setMessage(columnHeader + " column should not be empty");
 				error.setColumnNumber(columnNumbers);
-				error.setUserType(BUSINESS_USER);
-				getBusinessFeedErrors().add(error);
+				getTechnicalFeedErrors().add(error);
+				setTechRecordError(getTechnicalFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
 			}
-
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.BASE_UOM_MULTIPLIER)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM))
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.BASE_UOM_MULTIPLIER))
 			{
-				if (!NumberUtils.isNumber(value))
+				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
+					error.setUserType(TECHNICAL_USER);
+					columnNames.add(columnHeader);
 					error.setLineNumber(record.getRecordNumber());
 					error.setColumnName(columnNames);
 					error.setMessage(columnHeader + " column should be numeric");
+					columnNumbers.add(columnNumber);
 					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+				}
+			}
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM))
+			{
+				if (!NumberUtils.isNumber(value) || new BigDecimal(value).compareTo(BigDecimal.ZERO) == 0)
+				{
+					final List<String> columnNamesB = new ArrayList<String>();
+					final List<Integer> columnNumbersB = new ArrayList<Integer>();
+					error = new EnergizerCSVFeedError();
 					error.setUserType(BUSINESS_USER);
+					error.setLineNumber(record.getRecordNumber());
+					columnNamesB.add(columnHeader);
+					error.setColumnName(columnNamesB);
+					error.setMessage(columnHeader + " column should be numeric and greater than 0");
+					columnNumbersB.add(columnNumber);
+					error.setColumnNumber(columnNumbersB);
 					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
 			}
 		}

@@ -311,8 +311,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
-		final List<String> columnNames = new ArrayList<String>();
-		final List<Integer> columnNumbers = new ArrayList<Integer>();
+
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : record.toMap().keySet())
@@ -323,8 +322,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			final String value = map.get(columnHeader).trim();
 			if (!columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_ID))
 			{
-				if (value.isEmpty() || value == null)
+				if (value == null || value.isEmpty())
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -343,6 +344,8 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			{
 				if (!NumberUtils.isNumber(value) || value == "0")
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -362,6 +365,8 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			{
 				if (!packgingUnits.contains(value))
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
