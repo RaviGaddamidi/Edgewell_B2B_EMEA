@@ -6,7 +6,6 @@ package com.energizer.core.datafeed.processor.product;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
 import de.hybris.platform.category.model.CategoryModel;
-import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
@@ -233,6 +232,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 												energizerCMIR.setUom(uom);
 												energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
 											}
+
 											modelService.saveAll();
 											break;
 										}

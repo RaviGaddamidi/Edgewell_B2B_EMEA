@@ -259,6 +259,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 		final String currentCMIRUom = energizerCMIRModel.getUom();
 		final Integer currentCMIRMoq = energizerCMIRModel.getOrderingUnit();
+
 		if (null == currentCMIRUom || currentCMIRUom.isEmpty() || null == currentCMIRMoq)
 		{
 			energizerCMIRModel.setUom(defaultUOM);
