@@ -13,11 +13,11 @@ import de.hybris.platform.commercefacades.product.data.PriceData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
+import de.hybris.platform.core.model.order.AbstractOrderModel;
 import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.core.model.user.AddressModel;
-import de.hybris.platform.jalo.order.price.PriceInformation;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.OrderService;
 import de.hybris.platform.product.PriceService;
@@ -156,25 +156,26 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	 * .AbstractOrderEntryModel)
 	 */
 	@Override
-	public List<BusinessRuleError> getOrderValidation(final AbstractOrderEntryModel orderEntryModel)
+	public List<BusinessRuleError> getOrderValidation(final AbstractOrderModel orderModel)
 	{
 		final OrderData orderData = new OrderData();
-		final ProductModel product = orderEntryModel.getProduct();
-		final List<PriceInformation> prices = priceService.getPriceInformationsForProduct(product);
-		final ProductData productData = new ProductData();
-		productData.setCode(product.getCode());
-		productData.setDescription(product.getDescription());
-		productData.setName(product.getName());
+		/*
+		 * final ProductModel product = orderEntryModel.getProduct(); final List<PriceInformation> prices =
+		 * priceService.getPriceInformationsForProduct(product); final ProductData productData = new ProductData();
+		 * productData.setCode(product.getCode()); productData.setDescription(product.getDescription());
+		 * productData.setName(product.getName());
+		 * 
+		 * if (!prices.isEmpty()) { final PriceInformation price = prices.iterator().next(); final PriceData priceData =
+		 * new PriceData(); priceData.setCurrencyIso(price.getPriceValue().getCurrencyIso());
+		 * priceData.setValue(BigDecimal.valueOf(price.getPriceValue().getValue())); productData.setPrice(priceData); }
+		 */
 
-		if (!prices.isEmpty())
-		{
-			final PriceInformation price = prices.iterator().next();
-			final PriceData priceData = new PriceData();
-			priceData.setCurrencyIso(price.getPriceValue().getCurrencyIso());
-			priceData.setValue(BigDecimal.valueOf(price.getPriceValue().getValue()));
-			productData.setPrice(priceData);
-		}
-		orderData.setTotalPrice(productData.getPrice());
+		final PriceData priceData = new PriceData();
+		priceData.setCurrencyIso(orderModel.getCurrency().getIsocode());
+		priceData.setValue(BigDecimal.valueOf(orderModel.getTotalPrice()));
+
+
+		orderData.setTotalPrice(priceData);
 		final List<BusinessRuleError> OrderDataError = new ArrayList<BusinessRuleError>();
 
 		orderBusinessRulesService.validateBusinessRules(orderData);

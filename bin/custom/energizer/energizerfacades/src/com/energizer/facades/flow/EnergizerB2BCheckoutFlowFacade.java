@@ -7,6 +7,7 @@ import de.hybris.platform.commercefacades.order.data.AbstractOrderData;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
+import de.hybris.platform.core.model.order.AbstractOrderModel;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import com.energizer.core.model.EnergizerB2BCustomerModel;
  */
 public interface EnergizerB2BCheckoutFlowFacade
 {
-	public List<BusinessRuleError> getOrderValidation(AbstractOrderEntryModel orderEntryModel);
+	public List<BusinessRuleError> getOrderValidation(AbstractOrderModel orderEntryModel);
 
 	public List<BusinessRuleError> getOrderShippingValidation(AbstractOrderEntryModel orderEntryModel);
 

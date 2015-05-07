@@ -930,4 +930,8 @@
 		<property name="cacheSeconds" value="#{configurationService.configuration.getProperty('storefront.resourceBundle.cacheSeconds')}"/>
 		<property name="fallbackToSystemLocale" value="false"/>
 	</bean>
+	
+	
+	
+	
 </beans>

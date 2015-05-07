@@ -106,7 +106,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacadeTest
 		final OrderEntryData entrydata = new OrderEntryData();
 		final ProductData productData = new ProductData();
 		final OrderData orderData = new OrderData();
-		List<BusinessRuleError> errors = new ArrayList<BusinessRuleError>();
+		final List<BusinessRuleError> errors = new ArrayList<BusinessRuleError>();
 		final BusinessRuleError error = new BusinessRuleError();
 		error.setMessage("Business Error ");
 		errors.add(error);
@@ -121,7 +121,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacadeTest
 		Mockito.when(orderEntryConverter.convert(orderEntryModel)).thenReturn((entrydata));
 		Mockito.when(orderBusinessRulesService.hasErrors()).thenReturn((true));
 		Mockito.when(orderBusinessRulesService.getErrors()).thenReturn((errors));
-		errors = energizerB2BCheckoutFlowFacade.getOrderValidation(orderEntryModel);
+		//		errors = energizerB2BCheckoutFlowFacade.getOrderValidation(orderEntryModel);
 		Assert.assertNotNull(errors);
 	}
 

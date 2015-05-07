@@ -39,7 +39,7 @@ public class CustomerEmailContext extends AbstractEmailContext<StoreFrontCustome
 	public String getSecureRequestResetPasswordUrl() throws UnsupportedEncodingException
 	{
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
-				"/login/pw/request-page");
+				"/login/pw/request-page", "uid=" + getCustomer().getUid());
 	}
 
 	@Override
