@@ -155,7 +155,7 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 
 # Site Logo Component
 INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
-;;HomePageBannerComponent;Homepage banner component;HomePageBannerComponent;;/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpgbanners 950px x600px Q4.jpg
+;;HomePageBannerComponent;Homepage banner component;HomePageBannerComponent;;/images/banners/homepage/banners 950px x600px Q4.jpg
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
 ;;Section1Slot-EnergizerHomePageBanner;HomePageBannerComponent
