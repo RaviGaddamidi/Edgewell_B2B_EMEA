@@ -3,9 +3,11 @@
  */
 package com.energizer.core.datafeed.processor.product;
 
+import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
+import de.hybris.platform.category.model.CategoryModel;
+import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
-import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -18,12 +20,17 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
+import com.energizer.core.datafeed.EnergizerCSVFeedError;
+import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerCategoryModel;
+import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.core.model.EnergizerSalesAreaUOMModel;
 import com.energizer.services.product.EnergizerB2BUnitService;
 import com.energizer.services.product.EnergizerSalesUOMService;
 
@@ -62,12 +69,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "energizerSalesUOMService")
 	private EnergizerSalesUOMService energizerSalesUOMService;
 
-	@Resource
-	ConfigurationService configurationService;
-
 	List<String> packgingUnits;
-
-
 
 	private static final Logger LOG = Logger.getLogger(EnergizerSalesUOMCSVProcessor.class);
 
@@ -106,9 +108,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			packgingUnits.add(EnergizerCoreConstants.LAYER);
 			packgingUnits.add(EnergizerCoreConstants.PALLET);
 			packgingUnits.add(EnergizerCoreConstants.EA);
-
-			final String defaultMOQ = configurationService.getConfiguration().getString("feedprocessor.defalult.moq.value", null);
-			final String defaultUOM = configurationService.getConfiguration().getString("feedprocessor.defalult.uom.value", null);
 
 			long succeedRecord = getRecordSucceeded();
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
@@ -213,17 +212,8 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 									{
 										if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerB2BUnitModel.getUid()))
 										{
-											if (StringUtils.isEmpty(moq) && (StringUtils.isEmpty(uom)))
-											{
-												energizerCMIR.setUom(defaultUOM);
-												energizerCMIR.setOrderingUnit(Integer.parseInt(defaultMOQ));
-											}
-											else
-											{
-												energizerCMIR.setUom(uom);
-												energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
-											}
-
+											energizerCMIR.setUom(uom);
+											energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
 											modelService.saveAll();
 											break;
 										}
@@ -253,16 +243,8 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 								{
 									if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(customerId))
 									{
-										if (StringUtils.isEmpty(moq) && (StringUtils.isEmpty(uom)))
-										{
-											energizerCMIR.setUom(defaultUOM);
-											energizerCMIR.setOrderingUnit(Integer.parseInt(defaultMOQ));
-										}
-										else
-										{
-											energizerCMIR.setUom(uom);
-											energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
-										}
+										energizerCMIR.setUom(uom);
+										energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
 										modelService.saveAll();
 										break;
 									}
@@ -329,8 +311,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
-		final List<String> columnNames = new ArrayList<String>();
-		final List<Integer> columnNumbers = new ArrayList<Integer>();
+
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : record.toMap().keySet())
@@ -339,12 +320,12 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			long recordFailed = getRecordFailed();
 			final String value = map.get(columnHeader).trim();
-			if (!(columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_ID)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ) || columnHeader
-						.equalsIgnoreCase(EnergizerCoreConstants.UOM)))
+			if (!columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_ID))
 			{
-				if (value.isEmpty() || value == null)
+				if (value == null || value.isEmpty())
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -359,12 +340,12 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setRecordFailed(recordFailed);
 				}
 			}
-
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
-
 			{
-				if (!value.isEmpty() && (!NumberUtils.isNumber(value) || value == "0"))
+				if (!NumberUtils.isNumber(value) || value == "0")
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -382,8 +363,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.UOM))
 			{
-				if (!value.isEmpty() && !packgingUnits.contains(value))
+				if (!packgingUnits.contains(value))
 				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -399,7 +382,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setRecordFailed(recordFailed);
 				}
 			}
-
 		}
 	}
 }

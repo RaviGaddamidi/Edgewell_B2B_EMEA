@@ -48,7 +48,6 @@
 						<td>${fn:escapeXml(customerData.contactNumber)}</td>
 					</tr>
  				</table>
-
 				
 				<a class="button" href="update-password"><spring:theme code="text.account.profile.changePassword" text="Change password"/></a>
 				<a class="button" href="update-profile"><spring:theme code="text.account.profile.updatePersonalDetails" text="Update personal details"/></a>

@@ -10,7 +10,6 @@ import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.order.OrderModel;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +42,8 @@ public class DefaultEnergizerB2BOrderHistoryDAO implements EnergizerB2BOrderHist
 		final Map queryParameters = new HashMap();
 		final List sortedResults;
 		queryParameters.put("name", unitId);
-		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk}}";
-		sortedResults = Arrays.asList(new SortQueryData[]
-		{ getSortedResultData("byDate", query), });
-		final SearchPageData<OrderModel> results = pagedFlexibleSearchService.search(sortedResults, "byDate", queryParameters,
-				pageableData);
+		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk} } ORDER BY {o.code} DESC ";
+		final SearchPageData<OrderModel> results = pagedFlexibleSearchService.search(query, queryParameters, pageableData);
 		return results;
 	}
 
