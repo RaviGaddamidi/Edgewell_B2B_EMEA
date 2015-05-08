@@ -162,17 +162,25 @@ INSERT_UPDATE LanguageCurrencyComponent;$contentCV[unique=true];uid[unique=true]
 # Site Logo
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
 ;;/images/banners/homepage/ENR_Battery.jpg;ENR_Battery.jpg;$siteResource/images/banners/homepage/ENR_Battery.jpg;image/jpg;Eveready
-;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Energizer
-;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Energizer
+;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Eveready
+;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Eveready
 #;;/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;Powertools_468x418_Rotating_Image_EN_02.jpg;$siteResource/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;image/jpg;Energizer
 
 
 # Site Logo Component
-INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
-;;HomePageBannerComponent;Homepage banner component;HomePageBannerComponent;;/images/banners/homepage/ENR_Battery.jpg
+INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;;/images/banners/homepage/ENR_Battery.jpg
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;;/images/banners/homepage/ENR_Lights.jpg
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg
+
+
+INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
+;;rotatingbanner;rotatingbanner;rotatingbanner;HomePageBannerComponent11,HomePageBannerComponent22,HomePageBannerComponent33
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;Section1Slot-EnergizerHomePageBanner;HomePageBannerComponent
+;;Section1Slot-EnergizerHomePageBanner;rotatingbanner
+
+
 # ContentSlotForPage 
 INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='homepage'];contentSlot(uid,$contentCV)[unique=true];;;
 ;;Section1-EnergizerHomePageBanner;Section1;;Section1Slot-EnergizerHomePageBanner;;;

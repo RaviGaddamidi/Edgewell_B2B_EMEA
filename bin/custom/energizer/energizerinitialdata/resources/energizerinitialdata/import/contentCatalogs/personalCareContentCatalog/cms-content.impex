@@ -145,6 +145,7 @@ INSERT_UPDATE LanguageCurrencyComponent;$contentCV[unique=true];uid[unique=true]
 
 
 
+
 # Site Logo
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
 ;;/images/banners/homepage/banners 950px x600px Q4.jpg;banners 950px x600px Q4.jpg;$siteResource/images/banners/homepage/banners 950px x600px Q4.jpg;image/jpg;Edgewell
@@ -154,11 +155,17 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 
 
 # Site Logo Component
-INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
-;;HomePageBannerComponent;Homepage banner component;HomePageBannerComponent;;/images/banners/homepage/banners 950px x600px Q4.jpg
+INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;;/images/banners/homepage/banners 950px x600px Q4.jpg
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;;/images/banners/homepage/banners 950px x600px X3.jpg
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;;/images/banners/homepage/BB  950px x 600px BB.jpg
+
+
+INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
+;;rotatingbanner;rotatingbanner;rotatingbanner;HomePageBannerComponent11,HomePageBannerComponent22,HomePageBannerComponent33
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;Section1Slot-EnergizerHomePageBanner;HomePageBannerComponent
+;;Section1Slot-EnergizerHomePageBanner;rotatingbanner
 # ContentSlotForPage 
 INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='homepage'];contentSlot(uid,$contentCV)[unique=true];;;
 ;;Section1-EnergizerHomePageBanner;Section1;;Section1Slot-EnergizerHomePageBanner;;;
