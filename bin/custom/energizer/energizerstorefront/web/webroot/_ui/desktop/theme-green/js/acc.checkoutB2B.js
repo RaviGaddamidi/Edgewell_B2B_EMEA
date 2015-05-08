@@ -680,6 +680,7 @@ ACC.checkoutB2B = {
 					$('#Terms1,#Terms2').removeAttr('checked')
 				}
 			});
+			
 
 			
 	},
@@ -785,7 +786,7 @@ document.assignLeadTimeToDatePicker = function() {
 		buttonText : "Select Date",
 		onSelect : function() {
 			document.getElementById("checkoutPlaceOrder").disabled = false;
-
+			document.getElementById("checkoutPlaceOrder2").disabled = false;
 			var deliveryDate = $('#datepicker-2').val();
 			document.getElementById("deliveryDateId").innerHTML = deliveryDate;
 			$.ajax({
@@ -828,9 +829,47 @@ $('#checkoutPlaceOrder').click(function(){
 					}
 					
 	});
+$('#checkoutPlaceOrder2').click(function(){
+    
+	var poNumber = $("#PurchaseOrderNumber").val();
+					
+					if(poNumber){
+						if($("#Terms1").prop('checked')){
+							
+							return true;
+						}
+						else{
+							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
+							$('#globalMessages').html(html);
+							
+							return false;
+						}
+					
+					}else{
+					
+					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
+					$('#globalMessages').html(html);
+					
+					return false;
+					}
+					
+	});
 $('#Terms1').click(function(){
 	if($("#Terms1").prop('checked')){
 	$('#globalMessages').html("");
+	}
+});
+$('#Terms2').click(function(){
+	if($("#Terms2").prop('checked')){
+	$('#globalMessages').html("");
+	}
+});
+
+$(document).on("click",'#Terms1PlaceOrder,#Terms2PlaceOrder', function (e){
+	if($(this).attr('checked')){
+		$('#Terms1PlaceOrder,#Terms2PlaceOrder').attr('checked','checked')
+	}else{
+		$('#Terms1PlaceOrder,#Terms2PlaceOrder').removeAttr('checked')
 	}
 });
 
