@@ -702,8 +702,10 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final AbstractOrderData orderData)
 	{
 		// todo -- handle messagetable and order-incomplete data coming from SAP
-		final String supportEmail = Config.getString("energizer.customer.support.email", "test@test.com");
+		String supportEmail = Config.getString("energizer.customer.support.to.email", "test@test.com");
 		final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+		supportEmail = Config.getString("energizer.customer.support.from.email", "test@test.com");
+		final EmailAddressModel fromAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
 		//b2bunit,enduser, time, cartno
 		StringBuilder emailBody = new StringBuilder();
 
@@ -737,7 +739,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			unmarshalledOrdCreationObject.getMESSAGETABLE().getValue().getBAPIRET2().toString();
 		}
 
-		final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, toAddress, "",
+		final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
 				"ERROR: Order simulation failed in SAP", emailBody.toString(), null);
 
 		if (unmarshalledSimulateObject != null)
