@@ -122,6 +122,17 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private static final String SEND_EMAIL_FOR_ORDER_STATUS = Config.getParameter("sendEmailForOrderStatus");
 	private static final String ENERGIZER_ORDER_UPDATE_FEED_MANDATORY_KEY = "feedprocessor.energizerOrderUpdateFeed.mandatory";
 	private static final String ENERGIZER_POSSIBLE_ORDER_STATUS_KEY = Config.getParameter("possibleOrderStatus");
+	private static final HashMap<String, String> ENERGIZER_POSSIBLE_ORDER_STATUS_MAP = new HashMap<String, String>()
+	{
+		{
+			put("1", "PENDING");
+			put("2", "IN_PROCESS");
+			put("3", "SHIPPED");
+			put("4", "INVOICED");
+			put("5", "CANCELLED");
+		}
+	};
+
 	private static final String ENERGIZER_DATE_FORMAT_KEY = Config.getParameter("dateFormat");
 	private static final SimpleDateFormat ORDER_DATE_FORMATTER = new SimpleDateFormat(ENERGIZER_DATE_FORMAT_KEY);
 	private static final Logger LOG = Logger.getLogger(EnergizerOrderUpdateCSVProcessor.class);
@@ -328,77 +339,82 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		OrderEntryModel energizerOrderEntry = null;
 
 		final EnergizerProductModel existEnergizerProduct = energizerOrderService.getEnergizerProduct(erpMaterialID);
-
-		UnitModel existUnit;
-		try
+		final UnitModel existUnit;
+		for (final EnergizerCMIRModel prodCMIR : existEnergizerProduct.getProductCMIR())
 		{
-			existUnit = unitService.getUnitForCode(uom);
-		}
-		catch (final Exception e)
-		{
-			existUnit = null;
-		}
-
-		if (existEnergizerProduct == null || existUnit == null)
-		{
-			LOG.info("In Record Number " + record.getRecordNumber() + " " + ERP_MATERIAL_ID + " " + erpMaterialID + " or " + UOM
-					+ " " + uom + " is not valid");
-		}
-		else
-		{
-			final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(erpMaterialID,
-					energizerOrderModel.getB2bUnit().getUid());
-
-			if (energizerCMIRModel == null)
+			if (prodCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerOrderModel.getB2bUnit().getUid()))
 			{
-				LOG.info("No CMIR exist for Record Number " + record.getRecordNumber() + " " + ERP_MATERIAL_ID + " " + erpMaterialID
-						+ " and B2B unit " + energizerOrderModel.getB2bUnit().getUid());
-			}
-			else
-			{
-				energizerOrderEntry = energizerOrderService.getExistingOrderItem(energizerOrderModel, existEnergizerProduct);
-				if (energizerOrderEntry == null)
+				if (!prodCMIR.getUom().equalsIgnoreCase(uom))
 				{
-					energizerOrderEntry = modelService.create(OrderEntryModel.class);
-					energizerOrderEntry.setOrder(energizerOrderModel);
-					energizerOrderEntry.setProduct(existEnergizerProduct);
-					energizerOrderEntry.setQuantity(orderEntryQty);
-					energizerOrderEntry.setTotalPrice(lineItemTotalPrice);
+					LOG.info("In Record Number " + record.getRecordNumber() + " " + ERP_MATERIAL_ID + " " + erpMaterialID + " and "
+							+ UOM + " " + uom + " is not valid");
 				}
 				else
 				{
-					energizerOrderEntry.setAdjustedQty((energizerOrderEntry.getAdjustedQty() == null) ? orderEntryQty.intValue()
-							: orderEntryQty.intValue() + energizerOrderEntry.getAdjustedQty());
-					energizerOrderEntry.setAdjustedLinePrice((energizerOrderEntry.getAdjustedLinePrice() == null) ? BigDecimal
-							.valueOf(lineItemTotalPrice) : energizerOrderEntry.getAdjustedLinePrice().add(
-							BigDecimal.valueOf(lineItemTotalPrice)));
-				}
-				energizerOrderEntry.setUnit(existUnit);
-				energizerOrderEntry.setRejectionReason(rejectionReason);
-				energizerOrderEntry.setBasePrice(itemTotalPrice);
-				energizerOrderEntry.setItemTotalShipment(itemTotalShipment);
+					final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(erpMaterialID,
+							energizerOrderModel.getB2bUnit().getUid());
 
-				if (itemTotalPrice != null && itemTotalDiscount != null)
-				{
-					//Create Discount value list and attach with order entry
-					final DiscountValue discountValue1 = new DiscountValue("SAP Discount", itemTotalPrice, true, itemTotalDiscount,
-							energizerOrderModel.getCurrency().getIsocode());
-					final List<DiscountValue> discountValuesList = new ArrayList<DiscountValue>();
-					discountValuesList.add(discountValue1);
-					energizerOrderEntry.setDiscountValues(discountValuesList);
+					if (energizerCMIRModel == null)
+					{
+						LOG.info("No CMIR exist for Record Number " + record.getRecordNumber() + " " + ERP_MATERIAL_ID + " "
+								+ erpMaterialID + " and B2B unit " + energizerOrderModel.getB2bUnit().getUid());
+					}
+					else
+					{
+						energizerOrderEntry = energizerOrderService.getExistingOrderItem(energizerOrderModel, existEnergizerProduct);
+						if (energizerOrderEntry == null)
+						{
+							energizerOrderEntry = modelService.create(OrderEntryModel.class);
+							energizerOrderEntry.setOrder(energizerOrderModel);
+							energizerOrderEntry.setProduct(existEnergizerProduct);
+							energizerOrderEntry.setQuantity(orderEntryQty);
+							energizerOrderEntry.setTotalPrice(lineItemTotalPrice);
+						}
+						else
+						{
+							energizerOrderEntry.setAdjustedQty((energizerOrderEntry.getAdjustedQty() == null) ? orderEntryQty.intValue()
+									: orderEntryQty.intValue() + energizerOrderEntry.getAdjustedQty());
+							energizerOrderEntry.setAdjustedLinePrice((energizerOrderEntry.getAdjustedLinePrice() == null) ? BigDecimal
+									.valueOf(lineItemTotalPrice) : energizerOrderEntry.getAdjustedLinePrice().add(
+									BigDecimal.valueOf(lineItemTotalPrice)));
+						}
+						//energizerOrderEntry.setUnit(existUnit);
+						energizerOrderEntry.setRejectionReason(rejectionReason);
+						energizerOrderEntry.setBasePrice(itemTotalPrice);
+						energizerOrderEntry.setItemTotalShipment(itemTotalShipment);
 
-				}
-				if (itemTotalPrice != null && itemTax != null)
-				{
-					//Create Tax value list and attach with order entry
-					final TaxValue taxValue1 = new TaxValue("SAP TAX", itemTotalPrice, true, itemTax, energizerOrderModel
-							.getCurrency().getIsocode());
-					final List<TaxValue> taxValuesList = new ArrayList<TaxValue>();
-					taxValuesList.add(taxValue1);
-					energizerOrderEntry.setTaxValues(taxValuesList);
+						if (itemTotalPrice != null && itemTotalDiscount != null)
+						{
+							//Create Discount value list and attach with order entry
+							final DiscountValue discountValue1 = new DiscountValue("SAP Discount", itemTotalPrice, true,
+									itemTotalDiscount, energizerOrderModel.getCurrency().getIsocode());
+							final List<DiscountValue> discountValuesList = new ArrayList<DiscountValue>();
+							discountValuesList.add(discountValue1);
+							energizerOrderEntry.setDiscountValues(discountValuesList);
+
+						}
+						if (itemTotalPrice != null && itemTax != null)
+						{
+							//Create Tax value list and attach with order entry
+							final TaxValue taxValue1 = new TaxValue("SAP TAX", itemTotalPrice, true, itemTax, energizerOrderModel
+									.getCurrency().getIsocode());
+							final List<TaxValue> taxValuesList = new ArrayList<TaxValue>();
+							taxValuesList.add(taxValue1);
+							energizerOrderEntry.setTaxValues(taxValuesList);
+						}
+					}
 				}
 			}
 		}
+		/*
+		 * UnitModel existUnit; try { existUnit = unitService.getUnitForCode(uom); } catch (final Exception e) { existUnit
+		 * = null; }
+		 * 
+		 * if (existEnergizerProduct == null || existUnit == null) { LOG.info("In Record Number " +
+		 * record.getRecordNumber() + " " + ERP_MATERIAL_ID + " " + erpMaterialID + " or " + UOM + " " + uom +
+		 * " is not valid"); }
+		 */
+
 		return energizerOrderEntry;
 	}
 
@@ -503,7 +519,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(STATUS)))
 		{
-			status = csvValuesMap.get(STATUS);
+			status = ENERGIZER_POSSIBLE_ORDER_STATUS_MAP.get(csvValuesMap.get(STATUS));
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(CONTAINER_ID)))
