@@ -931,7 +931,7 @@
 		<property name="fallbackToSystemLocale" value="false"/>
 	</bean>
 	
-	<alias alias="customerAccountService" name="defaultCustomerAccountService"/>
+	<alias alias="customerAccountService" name="energizerCustomerAccountService"/>
 	<bean id="energizerCustomerAccountService"
 			class="de.hybris.platform.commerceservices.customer.impl.DefaultCustomerAccountService">
 		<property name="userService" ref="userService"/>
