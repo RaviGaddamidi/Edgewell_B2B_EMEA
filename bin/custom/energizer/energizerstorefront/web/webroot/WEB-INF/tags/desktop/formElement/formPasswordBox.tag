@@ -29,7 +29,7 @@
 				<span class="skip"><form:errors path="${path}"/></span>
 			</label>
 			<div class="controls">
-				<form:password cssClass="${inputCSS}" id="${idKey}" path="${path}"/>
+				<form:password cssClass="${inputCSS}" id="${idKey}" path="${path}" autocomplete="off"/>
 			</div>
 	</ycommerce:testId>
 </template:errorSpanField>
