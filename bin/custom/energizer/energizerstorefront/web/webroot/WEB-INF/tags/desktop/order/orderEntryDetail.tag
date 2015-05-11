@@ -48,6 +48,12 @@
 			</ul>
 		</c:if> 
 	</td>
+	<td headers="header14" class="rejected">
+	<ycommerce:testId code="orderDetails_MaterialId_label">${entry.product.code}</ycommerce:testId>
+</td>
+<td headers="header15" class="rejected">
+	<ycommerce:testId code="orderDetails_CMIRId_label">${entry.product.customerMaterialId}</ycommerce:testId>
+</td>
 	<td headers="header4" class="quantity" >
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.quantity}</ycommerce:testId>
 	</td>
@@ -92,12 +98,7 @@
 	<td headers="header10" class="rejected">
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.rejectedStatus}</ycommerce:testId>
 	</td>
-	<td headers="header14" class="rejected">
-		<ycommerce:testId code="orderDetails_MaterialId_label">${entry.product.code}</ycommerce:testId>
-	</td>
-	<td headers="header15" class="rejected">
-		<ycommerce:testId code="orderDetails_CMIRId_label">${entry.product.customerMaterialId}</ycommerce:testId>
-	</td>
+	
 	
 	
 	
