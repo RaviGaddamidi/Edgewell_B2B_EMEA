@@ -19,6 +19,7 @@
 		setDeliveryAddressUrl = '${setDeliveryAddressUrl}';
 		getDeliveryAddressFormUrl = '${getDeliveryAddressFormUrl}';
 		setDefaultAddressUrl = '${setDefaultAddressUrl}';
+		noDeliveryAddressMesage = "<spring:theme code="checkout.summary.deliveryAddress.noneSelected"/>";
 </script>
 
 

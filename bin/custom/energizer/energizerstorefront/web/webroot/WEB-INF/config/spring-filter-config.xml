@@ -39,6 +39,8 @@
 
         <!-- filter to handle url encoding attributes -->
         <ref bean="urlEncoderFilter"/>
+        
+        <ref bean="energizerSecurityFilter"/>
 
 		<!-- Security -->
 		<ref bean="springSecurityFilterChain"/>
@@ -137,6 +139,10 @@
 
 	<bean id="btgSegmentFilter" class="com.energizer.storefront.filters.btg.BTGSegmentFilter" >
 		<property name="btgSegmentStrategy" ref="btgSegmentStrategy"/>
+	</bean>
+	
+	<bean id="energizerSecurityFilter" class="com.energizer.storefront.filters.cms.EnergizerSecurityFilter" >
+		
 	</bean>
 
 </beans>

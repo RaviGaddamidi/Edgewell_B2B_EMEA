@@ -290,7 +290,7 @@ public class AccountPageController extends AbstractSearchPageController
 		final List<TitleData> titles = userFacade.getTitles();
 
 		final CustomerData customerData = customerFacade.getCurrentCustomer();
-		//customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
+		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		if (customerData.getTitleCode() != null)
 		{
 			model.addAttribute("title", CollectionUtils.find(titles, new Predicate()
@@ -400,7 +400,7 @@ public class AccountPageController extends AbstractSearchPageController
 
 		final CustomerData customerData = customerFacade.getCurrentCustomer();
 		final UpdateProfileForm updateProfileForm = new UpdateProfileForm();
-		//customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
+		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		updateProfileForm.setTitleCode(customerData.getTitleCode());
 		updateProfileForm.setFirstName(customerData.getFirstName());
 		updateProfileForm.setLastName(customerData.getLastName());

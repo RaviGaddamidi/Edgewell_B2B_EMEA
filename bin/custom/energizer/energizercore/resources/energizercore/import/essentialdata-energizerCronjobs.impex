@@ -19,7 +19,7 @@ $technicalEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@e
 $businessEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
 $emailAddress=sriram.venkatasubramanian@energizer.com
 
-INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=true]
+INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false]
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
 ;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
 ;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
