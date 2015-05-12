@@ -169,8 +169,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	private void updateB2BCustomer(final Map<String, String> csvValuesMap, final EnergizerB2BCustomerModel b2bCustomerModel)
 	{
 		b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
-		b2bCustomerModel.setOriginalUid(csvValuesMap.get(USERID).trim());
-		b2bCustomerModel.setCustomerID(csvValuesMap.get(USERID).trim());
+		//		b2bCustomerModel.setOriginalUid(csvValuesMap.get(EMAIL_ID).trim());
+		//		b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
 		b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
 		b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
 		b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
@@ -200,8 +200,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			b2bCustomerModel.setUid(csvValuesMap.get(EMAIL_ID).trim());
 			b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
-			b2bCustomerModel.setOriginalUid(csvValuesMap.get(USERID).trim());
-			b2bCustomerModel.setCustomerID(csvValuesMap.get(USERID).trim());
+			b2bCustomerModel.setOriginalUid(b2bCustomerModel.getUid());
+			b2bCustomerModel.setCustomerID(b2bCustomerModel.getUid());
 			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
 			b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
 			b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
