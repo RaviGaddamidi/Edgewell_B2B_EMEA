@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +112,17 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	private static final String SEND_EMAIL_FOR_ORDER_STATUS = Config.getParameter("sendEmailForOrderStatus");
 	private static final String ENERGIZER_OFFLINE_ORDER_FEED_MANDATORY_KEY = "feedprocessor.energizerOfflineOrderFeed.mandatory";
 	private static final String ENERGIZER_POSSIBLE_ORDER_STATUS_KEY = Config.getParameter("possibleOrderStatus");
+	private static final HashMap<String, String> ENERGIZER_POSSIBLE_ORDER_STATUS_MAP = new HashMap<String, String>()
+	{
+		{
+			put("1", "PENDING");
+			put("2", "IN_PROCESS");
+			put("3", "SHIPPED");
+			put("4", "INVOICED");
+			put("5", "CANCELLED");
+		}
+	};
+
 	private static final String ENERGIZER_DATE_FORMAT_KEY = Config.getParameter("dateFormat");
 	private static final SimpleDateFormat ORDER_DATE_FORMATTER = new SimpleDateFormat(ENERGIZER_DATE_FORMAT_KEY);
 	private static final String ENERGIZER_SITE = Config.getParameter("offline.energizer.site");
@@ -228,7 +240,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 		}//end of try block
 		catch (final Exception e)
 		{
-			
+
 			LOG.error("EnergizerOfflineOrderCSVProcessor ", e);
 		}
 		return errors;
@@ -329,11 +341,12 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 					energizerOrderModel.setCurrency(currency);
 					final UserModel userModel = userService.getUserForUID(adminIdsOfEnergizerB2BUnitModel.get(0));
 					energizerOrderModel.setB2bUnit(energizerB2BUnitModel);
+					energizerOrderModel.setUnit(energizerB2BUnitModel);
 					energizerOrderModel.setUser(userModel);
 					energizerOrderModel.setSealNumber(sealNumber);
 					energizerOrderModel.setVesselNumber(vesselNumber);
 					energizerOrderModel.setInvoicePDF(invoicePDF);
-					
+
 
 					isOrderCreatedOrUpdated = true;
 				}
@@ -368,7 +381,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	{
 		OrderEntryModel energizerOrderEntry = null;
 
-		final EnergizerProductModel existEnergizerProduct = energizerOrderService.getEnergizerProduct(erpMaterialID);
+		final EnergizerProductModel existEnergizerProduct = (EnergizerProductModel) productService.getProductForCode(erpMaterialID);
 
 		UnitModel existUnit;
 		try
@@ -561,7 +574,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(STATUS)))
 		{
-			status = csvValuesMap.get(STATUS);
+			status = ENERGIZER_POSSIBLE_ORDER_STATUS_MAP.get(csvValuesMap.get(STATUS));
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(CONTAINER_ID)))
