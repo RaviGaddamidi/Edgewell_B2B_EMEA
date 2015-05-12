@@ -8,7 +8,7 @@ $storeName=houseHold
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default=Staged])[unique=true,default=$productCatalog:Staged]
 $siteResource=jar:com.energizer.initialdata.setup.InitialDataSystemSetup&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-$jarResourceCms=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/cockpits/cmscockpit
+
 
 $picture=media(code, $contentCV)
 $lang=en
@@ -35,7 +35,6 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
 ;;SiteLogoComponent;Site Logo Component;SiteLogoComponent;/;/images/theme/HHLogo.png
 
-
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
 ;;HomepageNavLink;Home Page Nav Link;/;HomepageNavLink
 ;;Energizer_Batteries_Link;Energizer Batteries Link;c/Energizer Batteries;Energizer_Batteries_Link
@@ -43,27 +42,27 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Lighting_Products_Link;Lighting Products Link;c/Lighting Products;Lighting_Products_Link
 ;;Rechargeable_Link;Rechargeable Link;c/Rechargeable;Rechargeable_Link
 ;;Specialty_Batteries_Link;Specialty Batteries Link;c/Specialty Batteries;Specialty_Batteries_Link
-;;Energizer_Max_Link;Energizer Max Link;c/Energizer Max;Energizer_Max_Link
-;;Advanced_Lithium_Link;Advanced Lithium Link;c/Advanced Lithium;Advanced_Lithium_Link
-;;Ultimate_Lithium_Link;Ultimate Lithium Link;c/Ultimate Lithium;Ultimate_Lithium_Link
-;;Eco_Advanced_Link;Eco Advanced Link;c/Eco Advanced;Eco_Advanced_Link
-;;Extra_Duration_Link;Extra Duration Link;c/Extra Duration;Extra_Duration_Link
-;;Eveready_Gold_Link;Eveready Gold Link;c/Eveready Gold;Eveready_Gold_Link
-;;Heavy_Duty_Link;Heavy Duty Link;c/Heavy Duty;Heavy_Duty_Link
-;;General_Purpose_Link;General Purpose Link;c/General Purpose;General_Purpose_Link
-;;Eveready_Silver_Link;Eveready Silver Link;c/Eveready Silver;Eveready_Silver_Link
-;;Nightlights_Link;Nightlights Link;c/Nightlights;Nightlights_Link
-;;Handsfree_Lights_Link;Handsfree Lights Link;c/Handsfree Lights;Handsfree_Lights_Link
-;;Kids_Lights_Link;Kids Lights Link;c/Kids Lights;Kids_Lights_Link
-;;Handheld_Lights_Link;Handheld Lights Link;c/Handheld Lights;Handheld_Lights_Link
-;;Area_Lights_Link;Area Lights Link;c/Area Lights;Area_Lights_Link
-;;Spot_Lights_Link;Spot Lights Link;c/Spot Lights;Spot_Lights_Link
-;;Chargers_Link;Chargers Link;c/Chargers;Chargers_Link
-;;Batteries_Link;Batteries Link;c/Batteries;Batteries_Link
-;;Electronic_Batteries_Link;Electronic Batteries Link;c/Electronic Batteries;Electronic_Batteries_Link
-;;Photo_Batteries_Link;Photo Batteries Link;c/Photo Batteries;Photo_Batteries_Link
-;;Watch_Batteries_Link;Watch Batteries Link;c/Watch Batteries;Watch_Batteries_Link
-;;Hearing_Aid_Batteries_Link;Hearing Aid Batteries Link;c/Hearing Aid Batteries;Hearing_Aid_Batteries_Link
+;;Energizer_Max_Link;Energizer Max Link;c/Energizer Batteries-Energizer Max;Energizer_Max_Link
+;;Advanced_Lithium_Link;Advanced Lithium Link;c/Energizer Batteries-Advanced Lithium;Advanced_Lithium_Link
+;;Ultimate_Lithium_Link;Ultimate Lithium Link;c/Energizer Batteries-Ultimate Lithium;Ultimate_Lithium_Link
+;;Eco_Advanced_Link;Eco Advanced Link;c/Energizer Batteries-Eco Advanced;Eco_Advanced_Link
+;;Extra_Duration_Link;Extra Duration Link;c/Eveready Batteries-Extra Duration Super Heavy Duty;Extra_Duration_Link
+;;Eveready_Gold_Link;Eveready Gold Link;c/Eveready Batteries-Eveready Gold;Eveready_Gold_Link
+;;Heavy_Duty_Link;Heavy Duty Link;c/Eveready Batteries-Heavy Duty;Heavy_Duty_Link
+;;General_Purpose_Link;General Purpose Link;c/Eveready Batteries-General Purpose;General_Purpose_Link
+;;Eveready_Silver_Link;Eveready Silver Link;c/Eveready Batteries-Eveready Silver;Eveready_Silver_Link
+;;Nightlights_Link;Nightlights Link;c/Lighting Products-Nightlights;Nightlights_Link
+;;Handsfree_Lights_Link;Handsfree Lights Link;c/Lighting Products-Handsfree Lights;Handsfree_Lights_Link
+;;Kids_Lights_Link;Kids Lights Link;c/Lighting Products-Kids Lights;Kids_Lights_Link
+;;Handheld_Lights_Link;Handheld Lights Link;c/Lighting Products-Handheld Lights;Handheld_Lights_Link
+;;Area_Lights_Link;Area Lights Link;c/Lighting Products-Area Lights;Area_Lights_Link
+;;Spot_Lights_Link;Spot Lights Link;c/Lighting Products-Spot Lights;Spot_Lights_Link
+;;Chargers_Link;Chargers Link;c/Rechargeable-Chargers;Chargers_Link
+;;Batteries_Link;Batteries Link;c/Rechargeable-Batteries;Batteries_Link
+;;Electronic_Batteries_Link;Electronic Batteries Link;c/Specialty Batteries-Electronic Batteries;Electronic_Batteries_Link
+;;Photo_Batteries_Link;Photo Batteries Link;c/Specialty Batteries-Photo Batteries;Photo_Batteries_Link
+;;Watch_Batteries_Link;Watch Batteries Link;c/Specialty Batteries-Watch Batteries;Watch_Batteries_Link
+;;Hearing_Aid_Batteries_Link;Hearing Aid Batteries Link;c/Specialty Batteries-Hearing Aid Batteries;Hearing_Aid_Batteries_Link
 
 
 # CMS Navigation Nodes #
@@ -106,7 +105,6 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;Photo_Batteries_Nav_Node;;Photo Batteries;Specialty_Batteries_Nav_Node; ;Photo_Batteries_Link;Photo_Batteries_Nav_Node
 ;Watch_Batteries_Nav_Node;;Watch Batteries;Specialty_Batteries_Nav_Node; ;Watch_Batteries_Link;Watch_Batteries_Nav_Node
 ;Hearing_Aid_Batteries_Nav_Node;;Hearing Aid Batteries;Specialty_Batteries_Nav_Node; ;Hearing_Aid_Batteries_Link;Hearing_Aid_Batteries_Nav_Node
-
 
 
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&linkRef;&componentRef;target(code)[default='sameWindow']
@@ -218,19 +216,19 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 ;;AddToCart-ProductDetails;AddToCart;;AddToCartSlot;true
 
 # Footer Component
-INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;linkname;url;&componentRef;target(code)[default='sameWindow']
-;;AboutUSLink;About US Link;About US;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
-;;CopyRightLink;CopyRight Link;Copyright;/copyright;CopyRightLink;newWindow
-;;TrademarkLink;Trademark Link;Trademark;/trademark;TrademarkLink;newWindow
-;;TermsAndConditionsLink;Terms And Conditions Link;Terms and Conditions;/termsAndConditions;TermsAndConditionsLink;newWindow
-;;PrivacyPolicyLink;Privacy Policy Link;Privacy Policy;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
-;;ContactUSLink;Contact US Link;Contact US;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
-;;LegalLink;Legal Link;Legal;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
-;;FAQLink;FAQ Link;FAQ;/faq;FAQLink;newWindow
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
+;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
+;;CopyRightLink;CopyRight Link;/copyright;CopyRightLink;newWindow
+;;TrademarkLink;Trademark Link;/trademark;TrademarkLink;newWindow
+;;TermsAndConditionsLink;Terms And Conditions Link;/termsAndConditions;TermsAndConditionsLink;newWindow
+;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
+;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
+;;LegalLink;Legal Link;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
+;;FAQLink;FAQ Link;/faq;FAQLink;newWindow
 
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
-;;frequentlyAskedQuestionsPage;text/png;FrequentlyAskedQuestionsPage.png;$jarResourceCms/preview-images/apparel_de/FrequentlyAskedQuestionsPage.png;;;
-;;termsAndConditionsPage;text/png;TermsAndConditionsPage.png;$jarResourceCms/preview-images/apparel_uk/TermsAndConditionsPage.png;;;
+;;frequentlyAskedQuestionsPage;text/png;;;;;
+;;termsAndConditionsPage;text/png;;;;;
 
 # Simple Content Pages
 UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV);linkComponents(uid, $contentCV);;;;;

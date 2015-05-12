@@ -75,10 +75,21 @@
 	<td headers="header6" class="total" >
 		<ycommerce:testId code="orderDetails_productTotalPrice_label"><format:price priceData="${entry.totalPrice}" displayFreeForZero="true"/></ycommerce:testId>
 	</td>
-	<td headers="header7" class="adjustedquantity textHighlight">
+	<c:choose>
+	<c:when test="${entry.adjustedQty eq entry.quantity}">
+	<td headers="header7" class="adjustedquantity">
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.adjustedQty}</ycommerce:testId>
 	</td>
-	<td headers="header8" class="adjustedPrice textHighlight">
+	</c:when>
+	<c:otherwise>
+	<td headers="header7" class="adjustedquantity textHighlight">
+	<ycommerce:testId code="orderDetails_productQuantity_label">${entry.adjustedQty}</ycommerce:testId>
+</td>
+	</c:otherwise>
+	</c:choose>
+	<c:choose>
+	<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
+	<td headers="header8" class="adjustedPrice">
 		<ycommerce:testId code="orderDetails_productItemPrice_label">
 			<c:choose>
 				<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
@@ -92,6 +103,24 @@
 			</c:choose>
 		</ycommerce:testId>
 	</td>
+	</c:when>
+	<c:otherwise>
+	<td headers="header8" class="adjustedPrice textHighlight">
+	<ycommerce:testId code="orderDetails_productItemPrice_label">
+		<c:choose>
+			<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
+				<format:price priceData="${entry.basePrice}" displayFreeForZero="true"/>
+			</c:when>
+			<c:otherwise>
+				<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="true"/>
+				
+				<format:price priceData="${entry.product.priceRange.maxPrice}" displayFreeForZero="true"/>
+			</c:otherwise>
+		</c:choose>
+	</ycommerce:testId>
+</td>
+	</c:otherwise>
+	</c:choose>
 	<td headers="header9" class="adjustedTotalPrice">
 		<ycommerce:testId code="orderDetails_productQuantity_label" ><fmt:formatNumber value="${entry.adjustedLinePrice}" maxFractionDigits="0"/></ycommerce:testId>
 	</td>

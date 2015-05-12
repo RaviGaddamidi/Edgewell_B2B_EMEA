@@ -90,6 +90,14 @@ public class EnergizerProductCustomerMaterialDescriptionValueProvider extends Ab
 										{
 											fieldValues.add(new FieldValue(fieldN, cmir.getCustomerMaterialId().toLowerCase()));
 										}
+										if (energizerProduct.getCode() != null)
+										{
+											fieldValues.add(new FieldValue(fieldN, energizerProduct.getCode()));
+										}
+										if (energizerProduct.getCode() != null)
+										{
+											fieldValues.add(new FieldValue(fieldN, energizerProduct.getCode().toLowerCase()));
+										}
 										if (energizerProduct.getName(new Locale(language.getIsocode())) != null)
 										{
 											fieldValues.add(new FieldValue(fieldN, energizerProduct.getName(

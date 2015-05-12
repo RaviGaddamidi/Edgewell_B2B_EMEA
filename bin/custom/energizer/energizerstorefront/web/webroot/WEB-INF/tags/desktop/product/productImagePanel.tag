@@ -31,7 +31,7 @@
 			<c:url value="${product.url}/zoomImages" var="productZoomImagesUrl"/>
 		</c:if>
 		<a class="productImagePrimaryLink" id="imageLink" href="${productZoomImagesUrl}" data-href="${productZoomImagesUrl}" target="_blank" title="<spring:theme code="general.zoom"/>">
-			<product:productPrimaryImage product="${product}" format="zoom"/>
+			<product:productPrimaryImage product="${product}" format="product"/>
 		</a>
 		<ycommerce:testId code="productDetails_zoomImage_button">
 			<a class="productImageZoomLink"  id="zoomLink" href="${productZoomImagesUrl}" data-href="${productZoomImagesUrl}"  target="_blank" title="<spring:theme code="general.zoom"/>">	</a>
