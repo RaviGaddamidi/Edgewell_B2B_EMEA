@@ -13,7 +13,7 @@ body{background:#fff;color:#777;font-family:Arial,"Helvetica Neue",Helvetica,san
 a.button, button:hover{color:#ed5f69;font-weight:bold;} */
 .facet_block li{margin:20px 0; height:26px;}  
 #excelupload table th{height:50px; width:150px; color:#436EEE; font-weight:bold;vertical-align:middle;text-align:center;}
-#excelupload table td{height:30px; width:24%;text-align:center;}
+#excelupload table td{height:30px; width:24%;text-align:center;} 
 #excelupload table {
     border-collapse: separate;
     border-spacing: 0px 0px;
