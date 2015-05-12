@@ -8,7 +8,7 @@ $storeName=personalCare
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default=Staged])[unique=true,default=$productCatalog:Staged]
 $siteResource=jar:com.energizer.initialdata.setup.InitialDataSystemSetup&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-$jarResourceCms=jar:de.hybris.platform.apparelstore.constants.ApparelstoreConstants&/apparelstore/import/sampledata/cockpits/cmscockpit
+
 
 $picture=media(code, $contentCV)
 $lang=en
@@ -210,19 +210,19 @@ INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&c
 
 
 # Footer Component
-INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;linkname;url;&componentRef;target(code)[default='sameWindow']
-;;AboutUSLink;About US Link;About US;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
-;;CopyRightLink;CopyRight Link;Copyright;/copyright;CopyRightLink;newWindow
-;;TrademarkLink;Trademark Link;Trademark;/trademark;TrademarkLink;newWindow
-;;TermsAndConditionsLink;Terms And Conditions Link;Terms and Conditions;/termsAndConditions;TermsAndConditionsLink;newWindow
-;;PrivacyPolicyLink;Privacy Policy Link;Privacy Policy;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
-;;ContactUSLink;Contact US Link;Contact US;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
-;;LegalLink;Legal Link;Legal;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
-;;FAQLink;FAQ Link;FAQ;/faq;FAQLink;newWindow
+INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
+;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
+;;CopyRightLink;CopyRight Link;/copyright;CopyRightLink;newWindow
+;;TrademarkLink;Trademark Link;/trademark;TrademarkLink;newWindow
+;;TermsAndConditionsLink;Terms And Conditions Link;/termsAndConditions;TermsAndConditionsLink;newWindow
+;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
+;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
+;;LegalLink;Legal Link;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
+;;FAQLink;FAQ Link;/faq;FAQLink;newWindow
 
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
-;;frequentlyAskedQuestionsPage;text/png;FrequentlyAskedQuestionsPage.png;$jarResourceCms/preview-images/apparel_de/FrequentlyAskedQuestionsPage.png;;;
-;;termsAndConditionsPage;text/png;TermsAndConditionsPage.png;$jarResourceCms/preview-images/apparel_uk/TermsAndConditionsPage.png;;;
+;;frequentlyAskedQuestionsPage;text/png;;;;;
+;;termsAndConditionsPage;text/png;;;;;
 
 # Simple Content Pages
 UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV);linkComponents(uid, $contentCV);;;;;
