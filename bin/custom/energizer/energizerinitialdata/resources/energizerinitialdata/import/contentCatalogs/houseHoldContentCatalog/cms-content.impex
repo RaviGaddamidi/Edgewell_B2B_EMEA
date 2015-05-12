@@ -38,32 +38,32 @@ INSERT_UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];nam
 
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
 ;;HomepageNavLink;Home Page Nav Link;/;HomepageNavLink
-;;Energizer_Batteries_Link;Energizer Batteries Link;c/SEG1001;Energizer_Batteries_Link
-;;Eveready_Batteries_Link; Eveready Batteries Link;c/SEG1002;Eveready_Batteries_Link
-;;Lighting_Products_Link;Lighting Products Link;c/SEG1003;Lighting_Products_Link
-;;Rechargeable_Link;Rechargeable Link;c/SEG1004;Rechargeable_Link
-;;Specialty_Batteries_Link;Specialty Batteries Link;c/SEG1004;Specialty_Batteries_Link
-;;Energizer_Max_Link;Energizer Max Link;c/SEG;Energizer_Max_Link
-;;Advanced_Lithium_Link;Advanced Lithium Link;c/SEG001;Advanced_Lithium_Link
-;;Ultimate_Lithium_Link;Ultimate Lithium Link;c/SEG001;Ultimate_Lithium_Link
-;;Eco_Advanced_Link;Eco Advanced Link;c/SEG001;Eco_Advanced_Link
-;;Extra_Duration_Link;Extra Duration Link;c/SEG;Extra_Duration_Link
-;;Eveready_Gold_Link;Eveready Gold Link;c/SEG;Eveready_Gold_Link
-;;Heavy_Duty_Link;Heavy Duty Link;c/SEG;Heavy_Duty_Link
-;;General_Purpose_Link;General Purpose Link;c/SEG;General_Purpose_Link
-;;Eveready_Silver_Link;Eveready Silver Link;c/SEG;Eveready_Silver_Link
-;;Nightlights_Link;Nightlights Link;c/SEG001;Nightlights_Link
-;;Handsfree_Lights_Link;Handsfree Lights;c/SEG001;Handsfree_Lights_Link
-;;Kids_Lights_Link;Kids Lights;c/SEG001;Kids_Lights_Link
-;;Handheld_Lights_Link;Handheld Lights;c/SEG001;Handheld_Lights_Link
-;;Area_Lights_Link;Area Lights;c/SEG001;Area_Lights_Link
-;;Spot_Lights_Link;Spot Lights Link;c/SEG001;Spot_Lights_Link
-;;Chargers_Link;Chargers Link;c/SEG001;Chargers_Link
-;;Batteries_Link;Batteries Link;c/SEG001;Batteries_Link
-;;Electronic_Batteries_Link;Electronic Batteries Link;c/SEG001;Electronic_Batteries_Link
-;;Photo_Batteries_Link;Photo Batteries Link;c/SEG001;Photo_Batteries_Link
-;;Watch_Batteries_Link;Watch Batteries Link;c/SEG001;Watch_Batteries_Link
-;;Hearing_Aid_Batteries_Link;Hearing Aid Batteries Link;c/SEG001;Hearing_Aid_Batteries_Link
+;;Energizer_Batteries_Link;Energizer Batteries Link;c/Energizer Batteries;Energizer_Batteries_Link
+;;Eveready_Batteries_Link;Eveready Batteries Link;c/Eveready Batteries;Eveready_Batteries_Link
+;;Lighting_Products_Link;Lighting Products Link;c/Lighting Products;Lighting_Products_Link
+;;Rechargeable_Link;Rechargeable Link;c/Rechargeable;Rechargeable_Link
+;;Specialty_Batteries_Link;Specialty Batteries Link;c/Specialty Batteries;Specialty_Batteries_Link
+;;Energizer_Max_Link;Energizer Max Link;c/Energizer Max;Energizer_Max_Link
+;;Advanced_Lithium_Link;Advanced Lithium Link;c/Advanced Lithium;Advanced_Lithium_Link
+;;Ultimate_Lithium_Link;Ultimate Lithium Link;c/Ultimate Lithium;Ultimate_Lithium_Link
+;;Eco_Advanced_Link;Eco Advanced Link;c/Eco Advanced;Eco_Advanced_Link
+;;Extra_Duration_Link;Extra Duration Link;c/Extra Duration;Extra_Duration_Link
+;;Eveready_Gold_Link;Eveready Gold Link;c/Eveready Gold;Eveready_Gold_Link
+;;Heavy_Duty_Link;Heavy Duty Link;c/Heavy Duty;Heavy_Duty_Link
+;;General_Purpose_Link;General Purpose Link;c/General Purpose;General_Purpose_Link
+;;Eveready_Silver_Link;Eveready Silver Link;c/Eveready Silver;Eveready_Silver_Link
+;;Nightlights_Link;Nightlights Link;c/Nightlights;Nightlights_Link
+;;Handsfree_Lights_Link;Handsfree Lights Link;c/Handsfree Lights;Handsfree_Lights_Link
+;;Kids_Lights_Link;Kids Lights Link;c/Kids Lights;Kids_Lights_Link
+;;Handheld_Lights_Link;Handheld Lights Link;c/Handheld Lights;Handheld_Lights_Link
+;;Area_Lights_Link;Area Lights Link;c/Area Lights;Area_Lights_Link
+;;Spot_Lights_Link;Spot Lights Link;c/Spot Lights;Spot_Lights_Link
+;;Chargers_Link;Chargers Link;c/Chargers;Chargers_Link
+;;Batteries_Link;Batteries Link;c/Batteries;Batteries_Link
+;;Electronic_Batteries_Link;Electronic Batteries Link;c/Electronic Batteries;Electronic_Batteries_Link
+;;Photo_Batteries_Link;Photo Batteries Link;c/Photo Batteries;Photo_Batteries_Link
+;;Watch_Batteries_Link;Watch Batteries Link;c/Watch Batteries;Watch_Batteries_Link
+;;Hearing_Aid_Batteries_Link;Hearing Aid Batteries Link;c/Hearing Aid Batteries;Hearing_Aid_Batteries_Link
 
 
 # CMS Navigation Nodes #
@@ -106,6 +106,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;Photo_Batteries_Nav_Node;;Photo Batteries;Specialty_Batteries_Nav_Node; ;Photo_Batteries_Link;Photo_Batteries_Nav_Node
 ;Watch_Batteries_Nav_Node;;Watch Batteries;Specialty_Batteries_Nav_Node; ;Watch_Batteries_Link;Watch_Batteries_Nav_Node
 ;Hearing_Aid_Batteries_Nav_Node;;Hearing Aid Batteries;Specialty_Batteries_Nav_Node; ;Hearing_Aid_Batteries_Link;Hearing_Aid_Batteries_Nav_Node
+
 
 
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&linkRef;&componentRef;target(code)[default='sameWindow']
