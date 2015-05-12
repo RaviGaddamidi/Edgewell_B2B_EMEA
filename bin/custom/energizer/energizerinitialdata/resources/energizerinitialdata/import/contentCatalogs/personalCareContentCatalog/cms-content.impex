@@ -156,9 +156,9 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 
 # Site Logo Component
 INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang]
-;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;;/images/banners/homepage/banners 950px x600px Q4.jpg
-;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;;/images/banners/homepage/banners 950px x600px X3.jpg
-;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;;/images/banners/homepage/BB  950px x 600px BB.jpg
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.schicklatinoamerica.com/?genero=hombre;/images/banners/homepage/banners 950px x600px Q4.jpg
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.schicklatinoamerica.com/?genero=hombre;/images/banners/homepage/banners 950px x600px X3.jpg
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.bananaboatlatinoamerica.com/;/images/banners/homepage/BB  950px x 600px BB.jpg
 
 
 INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
