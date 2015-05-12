@@ -46,7 +46,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Advanced_Lithium_Link;Advanced Lithium Link;c/Energizer Batteries-Advanced Lithium;Advanced_Lithium_Link
 ;;Ultimate_Lithium_Link;Ultimate Lithium Link;c/Energizer Batteries-Ultimate Lithium;Ultimate_Lithium_Link
 ;;Eco_Advanced_Link;Eco Advanced Link;c/Energizer Batteries-Eco Advanced;Eco_Advanced_Link
-;;Extra_Duration_Link;Extra Duration Link;c/Eveready Batteries-Extra Duration;Extra_Duration_Link
+;;Extra_Duration_Link;Extra Duration Link;c/Eveready Batteries-Extra Duration Super Heavy Duty;Extra_Duration_Link
 ;;Eveready_Gold_Link;Eveready Gold Link;c/Eveready Batteries-Eveready Gold;Eveready_Gold_Link
 ;;Heavy_Duty_Link;Heavy Duty Link;c/Eveready Batteries-Heavy Duty;Heavy_Duty_Link
 ;;General_Purpose_Link;General Purpose Link;c/Eveready Batteries-General Purpose;General_Purpose_Link
