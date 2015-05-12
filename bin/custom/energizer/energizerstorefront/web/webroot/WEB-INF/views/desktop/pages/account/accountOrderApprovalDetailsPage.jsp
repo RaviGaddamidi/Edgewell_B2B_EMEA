@@ -52,11 +52,13 @@
 				<order:orderHistoryEntriesDetailsItem orderHistoryEntries="${orderApprovalData.orderHistoryEntriesData}" itemHolderTitleKey="text.account.orderHistoryEntry.customerTitle"/>
 			</div> 
 			
-			 <div class="span-19 delivery_stages">
+			 
+				<c:choose>
+				<c:when test="${orderApprovalData.approvalDecisionRequired}">
+				<div class="span-19 delivery_stages">
 				<div class="headline">
 					<spring:theme code="text.account.orderApprovalDetails.comments.label" text="Comments"/>
 				</div>
-
 				<div class="item_container">
 					<div class="your_cart">
 					<form:select name="comments" path="comments" cssStyle="width:290px;height:30px;">
@@ -68,8 +70,8 @@
 			</div> 
 			
 			
-			<c:choose>
-				<c:when test="${orderApprovalData.approvalDecisionRequired}">
+			
+				
 					<div class="span-19 approvereject_fixcls">
 						<form:input type="hidden" name="workflowActionCode" path="workFlowActionCode" value="${orderApprovalData.workflowActionModelCode}"/>
 						<form:input type="hidden" name="approverSelectedDecision" path="approverSelectedDecision" id="approverSelectedDecision"/>
