@@ -52,14 +52,6 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;StoreFinderLink;Store Locator
 ;;QuickOrderPageLink;Quick Order
 ;;ExcelOrderPageLink;Excel Order
-;;AboutUSLink;About US
-;;CopyRightLink;Copyright
-;;TrademarkLink;Trademark
-;;TermsAndConditionsLink;Terms And Conditions
-;;PrivacyPolicyLink;Privacy Policy
-;;ContactUSLink;Contact US
-;;LegalLink;Legal
-;;FAQLink;FAQ
 
 # Lightbox Banner for Mini Cart
 UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;&imageRef
