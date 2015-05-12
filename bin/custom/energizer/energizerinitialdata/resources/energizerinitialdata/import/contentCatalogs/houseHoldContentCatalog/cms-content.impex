@@ -8,7 +8,7 @@ $storeName=houseHold
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default=Staged])[unique=true,default=$productCatalog:Staged]
 $siteResource=jar:com.energizer.initialdata.setup.InitialDataSystemSetup&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-$jarResourceCms=jar:de.hybris.platform.apparelstore.constants.ApparelstoreConstants&/apparelstore/import/sampledata/cockpits/cmscockpit
+$jarResourceCms=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/cockpits/cmscockpit
 
 $picture=media(code, $contentCV)
 $lang=en

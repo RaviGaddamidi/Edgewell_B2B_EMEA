@@ -17,6 +17,8 @@
 		<thead>
 			<tr>
 				<th id="header2" colspan="2"><spring:theme code="text.productDetails" text="Product Details"/></th>
+				<th id="header11"><spring:theme code="basket.page.prdCode" text="Material ID"/></th>
+				<th id="header12"><spring:theme code="basket.page.cmirId" text="CMIR ID"/></th>
 				<th id="header4"><spring:theme code="text.quantity" text="Quantity"/></th>
 				
 				<th id="header5"><spring:theme code="basket.page.unitPrice" text="Item Price"/></th>
@@ -25,8 +27,7 @@
 				<th id="header8"><spring:theme code="text.adjustedprice" text="Adjusted Price"/></th>
 				<th id="header9"><spring:theme code="text.adjustedtotal" text="Adjusted Total"/></th>
 				<th id="header10"><spring:theme code="text.rejectedStatus" text="Rejected"/></th>
-				<th id="header11"><spring:theme code="basket.page.prdCode" text="Material ID"/></th>
-				<th id="header12"><spring:theme code="basket.page.cmirId" text="CMIR ID"/></th>
+				
 				
 			</tr>
 		</thead>
