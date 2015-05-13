@@ -16,6 +16,7 @@ package com.energizer.storefront.controllers.pages;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
+import de.hybris.platform.util.Config;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -54,6 +55,7 @@ public class PasswordResetPageController extends AbstractPageController
 	private static final String REDIRECT_HOME = "redirect:/";
 
 	private static final String UPDATE_PWD_CMS_PAGE = "updatePassword";
+	private static final String FORGOTTEN_PASSWORD_EXP_VALUE = "forgottenPassword.emailContext.expiresInMinutes";
 
 	@Resource(name = "simpleBreadcrumbBuilder")
 	private ResourceBreadcrumbBuilder resourceBreadcrumbBuilder;
@@ -109,6 +111,7 @@ public class PasswordResetPageController extends AbstractPageController
 			final Model model) throws CMSItemNotFoundException
 	{
 		model.addAttribute(forgottenPwdForm);
+		final String fotgottenPassExpValue = Config.getParameter(FORGOTTEN_PASSWORD_EXP_VALUE);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
@@ -122,12 +125,16 @@ public class PasswordResetPageController extends AbstractPageController
 			try
 			{
 				getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
-				GlobalMessages.addConfMessage(model, "account.confirmation.forgotten.password.link.sent");
+				GlobalMessages.addMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"account.confirmation.forgotten.password.link.sent", new Object[]
+						{ fotgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());
 			}
 			catch (final UnknownIdentifierException unknownIdentifierException)
 			{
-				GlobalMessages.addConfMessage(model, "account.confirmation.forgotten.password.link.sent");
+				GlobalMessages.addMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"account.confirmation.forgotten.password.link.sent", new Object[]
+						{ fotgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());
 				LOG.warn("Email: " + forgottenPwdForm.getEmail() + " does not exist in the database.");
 			}
