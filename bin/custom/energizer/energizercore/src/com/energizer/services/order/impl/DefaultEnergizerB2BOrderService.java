@@ -297,7 +297,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final ArrayOfZSD_TSOPART_Fa2309 prtnerArray = new ArrayOfZSD_TSOPART_Fa2309();
 			ZSD_TSOPART_Fa2309 partner = objectFactory.createZSD_TSOPART_Fa2309();
 			partner.setPARTN_ROLE(objectFactory.createZSD_TSOPART_Fa2309PARTN_ROLE("SP"));
-			partner.setPARTN_NUMB(objectFactory.createZSD_TSOPART_Fa2309PARTN_NUMB(b2bUnitData.getUid()));
+			partner
+					.setPARTN_NUMB(objectFactory.createZSD_TSOPART_Fa2309PARTN_NUMB(orderData.getDeliveryAddress().getErpAddressId()));
 			prtnerArray.getZSD_TSOPART().add(partner);
 			partner = objectFactory.createZSD_TSOPART_Fa2309();
 			//	partner.setPARTN_ROLE(objectFactory.createZSD_TSOPART_Fa2309PARTN_ROLE("PY"));
@@ -466,7 +467,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final ArrayOfZSD_TSOPART_D31E8C prtnerArray = new ArrayOfZSD_TSOPART_D31E8C();
 			ZSD_TSOPART_D31E8C partner = objectFactory.createZSD_TSOPART_D31E8C();
 			partner.setPARTN_ROLE(objectFactory.createZSD_TSOPART_D31E8CPARTN_ROLE("SP"));
-			partner.setPARTN_NUMB(objectFactory.createZSD_TSOPART_D31E8CPARTN_NUMB(b2bUnitData.getUid()));
+			partner.setPARTN_NUMB(objectFactory.createZSD_TSOPART_D31E8CPARTN_NUMB(order.getDeliveryAddress().getErpAddressId()));
 			prtnerArray.getZSD_TSOPART().add(partner);
 			partner = objectFactory.createZSD_TSOPART_D31E8C();
 			//	partner.setPARTN_ROLE(objectFactory.createZSD_TSOPART_Fa2309PARTN_ROLE("PY"));
@@ -719,7 +720,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		{
 			emailBody.append("Hybris Ref No :" + orderData.getCode());
 			emailBody.append("\n");
-			emailBody.append("user :" + orderData.getUser());
+			emailBody.append("user :" + orderData.getUser().getUid());
 		}
 		emailBody.append("\n");
 		emailBody.append("Date :" + new Date().toString());

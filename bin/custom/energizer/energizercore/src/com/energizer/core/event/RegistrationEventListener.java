@@ -23,6 +23,8 @@ import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.util.ServicesUtil;
 import de.hybris.platform.site.BaseSiteService;
 
+import java.util.Collection;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Required;
@@ -79,11 +81,24 @@ public class RegistrationEventListener extends AbstractSiteEventListener<Registe
 	@Override
 	protected boolean shouldHandleEvent(final RegisterEvent event)
 	{
-		//		final BaseSiteModel site = baseSiteService.getBaseSiteForUID("energizer");
-		final BaseSiteModel site = baseSiteService.getCurrentBaseSite();
-		site.setChannel(SiteChannel.B2B);
-		event.setSite(site);
-		ServicesUtil.validateParameterNotNullStandardMessage("event.order.site", site);
-		return SiteChannel.B2B.equals(site.getChannel());
+		/*
+		 * final BaseSiteModel site = baseSiteService.getBaseSiteForUID("personalCare"); site.setChannel(SiteChannel.B2B);
+		 * event.setSite(site); ServicesUtil.validateParameterNotNullStandardMessage("event.order.site", site); return
+		 * SiteChannel.B2B.equals(site.getChannel());
+		 */
+
+
+		//		final BaseSiteModel site = baseSiteService.getBaseSiteForUID("personalCare");
+		//		final BaseSiteModel site = baseSiteService.getCurrentBaseSite();
+		boolean siteFlag = false;
+		final Collection<BaseSiteModel> allSite = baseSiteService.getAllBaseSites();
+		for (final BaseSiteModel baseSiteModel : allSite)
+		{
+			baseSiteModel.setChannel(SiteChannel.B2B);
+			event.setSite(baseSiteModel);
+			ServicesUtil.validateParameterNotNullStandardMessage("event.order.site", baseSiteModel);
+			siteFlag = SiteChannel.B2B.equals(baseSiteModel.getChannel());
+		}
+		return siteFlag;
 	}
 }

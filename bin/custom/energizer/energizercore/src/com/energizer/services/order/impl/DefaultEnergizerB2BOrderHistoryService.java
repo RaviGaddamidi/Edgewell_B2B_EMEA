@@ -36,7 +36,6 @@ public class DefaultEnergizerB2BOrderHistoryService implements EnergizerB2BOrder
 	public SearchPageData<OrderModel> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData)
 	{
 
-		System.out.println("In Service class ");
 		final SearchPageData<OrderModel> ordersHistoryList = orderDAO.getOrdersForB2BUnit(unitId, pageableData);
 
 		return ordersHistoryList;

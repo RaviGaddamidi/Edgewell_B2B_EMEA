@@ -338,8 +338,16 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	{
 		OrderEntryModel energizerOrderEntry = null;
 
-		final EnergizerProductModel existEnergizerProduct = energizerOrderService.getEnergizerProduct(erpMaterialID);
-		final UnitModel existUnit;
+		final EnergizerProductModel existEnergizerProduct = (EnergizerProductModel) productService.getProductForCode(erpMaterialID);
+		UnitModel existUnit;
+		try
+		{
+			existUnit = unitService.getUnitForCode(uom);
+		}
+		catch (final Exception e)
+		{
+			existUnit = null;
+		}
 		for (final EnergizerCMIRModel prodCMIR : existEnergizerProduct.getProductCMIR())
 		{
 			if (prodCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerOrderModel.getB2bUnit().getUid()))
@@ -378,7 +386,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 									.valueOf(lineItemTotalPrice) : energizerOrderEntry.getAdjustedLinePrice().add(
 									BigDecimal.valueOf(lineItemTotalPrice)));
 						}
-						//energizerOrderEntry.setUnit(existUnit);
+						energizerOrderEntry.setUnit(existUnit);
 						energizerOrderEntry.setRejectionReason(rejectionReason);
 						energizerOrderEntry.setBasePrice(itemTotalPrice);
 						energizerOrderEntry.setItemTotalShipment(itemTotalShipment);

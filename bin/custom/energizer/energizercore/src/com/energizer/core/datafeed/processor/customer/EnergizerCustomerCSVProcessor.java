@@ -33,8 +33,8 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
  * 
  * Sample file will look like
  * 
- * CustomerID,SalesOrg,DistributionChannel,Division,Customername,OrderType,DeletionFlag,Status,Currency,MinimumOrderValue,DefaultLanguage
- * 1006,      1000,    10,                 10,      tyfg,        ZOR,      1,           1,      USD,    10,               EN
+ * CustomerID,SalesOrg,DistributionChannel,Division,Customername,OrderType,DeletionFlag,Status,Currency,
+ * MinimumOrderValue,DefaultLanguage 1006, 1000, 10, 10, tyfg, ZOR, 1, 1, USD, 10, EN
  * 
  * Total column count : 11
  */
@@ -108,8 +108,10 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						energizeB2BUnit.setName(csvValuesMap.get(CUSTOMER_NAME).trim());
 						energizeB2BUnit.setCustomerAccountName(csvValuesMap.get(CUSTOMER_NAME).trim());
 						energizeB2BUnit.setErpOrderingType(csvValuesMap.get(ORDER_TYPE).trim());
-						energizeB2BUnit.setOrderBlock(new Boolean(csvValuesMap.get(STATUS).trim()));
-						energizeB2BUnit.setDN(csvValuesMap.get(DELETION_FLAG).trim());
+						final boolean blockStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
+						energizeB2BUnit.setOrderBlock(blockStatus);
+						final boolean active = csvValuesMap.get(DELETION_FLAG).trim().equalsIgnoreCase("1") ? false : true;
+						energizeB2BUnit.setActive(active);
 						try
 						{
 							final CurrencyModel currencyModel = commonI18NService.getCurrency(csvValuesMap.get(CURRENCY).trim());
@@ -151,8 +153,10 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						b2bUnit.setDivision(csvValuesMap.get(DIVISION).trim());
 						b2bUnit.setName(csvValuesMap.get(CUSTOMER_NAME).trim());
 						b2bUnit.setErpOrderingType(csvValuesMap.get(ORDER_TYPE).trim());
-						b2bUnit.setDN(csvValuesMap.get(DELETION_FLAG).trim());
-						b2bUnit.setOrderBlock(new Boolean(csvValuesMap.get(STATUS).trim()));
+						final boolean active = csvValuesMap.get(DELETION_FLAG).trim().equalsIgnoreCase("1") ? false : true;
+						b2bUnit.setActive(active);
+						final boolean blockStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
+						b2bUnit.setOrderBlock(blockStatus);
 						b2bUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
 						try
 						{
