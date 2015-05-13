@@ -446,7 +446,16 @@
 			</list>
 		</property>
 	</bean>
-
+	<alias name="defaultAddressConverter" alias="addressConverter"/>
+	<bean id="defaultAddressConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+		<property name="populators">
+			<list>
+				<ref bean="addressPopulator"/>
+				<ref bean="energizerAddressPopulator"/>				
+			</list>
+		</property>
+	</bean>
 
 	<alias name="energizerOrderPopulator" alias="orderPopulator"/>
 	<bean id="energizerOrderPopulator"
