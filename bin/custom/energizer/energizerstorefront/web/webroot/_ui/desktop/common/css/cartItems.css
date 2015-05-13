@@ -200,3 +200,13 @@ button.doCheckoutBut {
 #content #cartItems table.cart td{width:auto;}
 #content #cartItems thead th{text-align:center;}
 #cartItems thead th#header6{text-align:center;}
+
+#content #cartItems table.cart td {
+	  width: auto;
+	  padding: 15px;
+	}
+#content #cartItems thead th {
+	  text-align: center;
+	  line-height: 20px;
+	  padding-bottom: 17px;
+	}
