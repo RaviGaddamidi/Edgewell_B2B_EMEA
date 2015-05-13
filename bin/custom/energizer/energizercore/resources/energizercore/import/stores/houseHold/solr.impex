@@ -181,3 +181,8 @@ INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[
 #;$solrIndexedType; customerMaterialDescription;95;true;Customer Material;Group;false;true
 ;$solrIndexedType; shippingPoint;94;true;Shipping Point;Shipping Point;true;true
 ;$solrIndexedType; searchAttribute ;93;true;Cell Size;Tamaño de la pila;true;false
+
+
+
+
+
