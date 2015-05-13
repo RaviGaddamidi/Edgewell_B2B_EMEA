@@ -11,7 +11,7 @@
 
 
 <div class="span-14 productImage">
-	<div class="productImageGallery">
+	<div class="productImageGallery display_none">
 		<ul class="jcarousel-skin">
 			<c:forEach items="${galleryImages}" var="container" varStatus="varStatus">
 				<li>
@@ -34,7 +34,7 @@
 			<product:productPrimaryImage product="${product}" format="product"/>
 		</a>
 		<ycommerce:testId code="productDetails_zoomImage_button">
-			<a class="productImageZoomLink"  id="zoomLink" href="${productZoomImagesUrl}" data-href="${productZoomImagesUrl}"  target="_blank" title="<spring:theme code="general.zoom"/>">	</a>
+			<%-- <a class="productImageZoomLink"  id="zoomLink" href="${productZoomImagesUrl}" data-href="${productZoomImagesUrl}"  target="_blank" title="<spring:theme code="general.zoom"/>">	</a> --%>
 		</ycommerce:testId>
 	</div>
 </div>
