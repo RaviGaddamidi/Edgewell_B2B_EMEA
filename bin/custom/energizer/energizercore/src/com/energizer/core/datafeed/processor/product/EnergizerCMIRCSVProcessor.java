@@ -65,6 +65,12 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	ConfigurationService configurationService;
 
+
+	boolean hasCustomerListPriceBusinessError = false;
+	boolean hasCustomerListPriceTechnicalError = false;
+	boolean hasCustomerBusinessError = false;
+	boolean hasCustomerTechnicalError = false;
+
 	private static final Logger LOG = Logger.getLogger(EnergizerCMIRCSVProcessor.class.getName());
 
 	private static final String UNIT = "EA";
@@ -92,12 +98,13 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
-				if (!getTechnicalFeedErrors().isEmpty())
+				if (!getTechnicalFeedErrors().isEmpty() && hasCustomerTechnicalError)
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					continue;
 				}
-				if (!getBusinessFeedErrors().isEmpty())
+
+				if (!getBusinessFeedErrors().isEmpty() && hasCustomerBusinessError)
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
 					continue;
@@ -295,6 +302,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			final String value = record.toMap().get(columnHeader);
 			if (value.isEmpty())
 			{
+				hasCustomerTechnicalError = false;
 				long recordFailed = getRecordFailed();
 				final List<String> columnNames = new ArrayList<String>();
 				final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -311,11 +319,22 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				setTechRecordError(getTechnicalFeedErrors().size());
 				recordFailed++;
 				setRecordFailed(recordFailed);
+
+				if ((columnHeader.equalsIgnoreCase("CustomerListPrice") || columnHeader
+						.equalsIgnoreCase("CustomerListprice currency")))
+				{
+					hasCustomerListPriceTechnicalError = true;
+				}
+				else
+				{
+					hasCustomerTechnicalError = true;
+				}
 			}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE))
 			{
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
+					hasCustomerBusinessError = false;
 					long recordFailed = getRecordFailed();
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -332,6 +351,15 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+
+					if (columnHeader.equalsIgnoreCase("CustomerListPrice"))
+					{
+						hasCustomerListPriceBusinessError = true;
+					}
+					else
+					{
+						hasCustomerBusinessError = true;
+					}
 				}
 			}
 		}
@@ -349,6 +377,41 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				.getUnitForUid(b2bUnitId);
 		return energizerB2BUnitModel;
 	}
+
+	/**
+	 * @return the hasCustomerListPriceBusinessError
+	 */
+	public boolean isHasCustomerListPriceBusinessError()
+	{
+		return hasCustomerListPriceBusinessError;
+	}
+
+	/**
+	 * @param hasCustomerListPriceBusinessError
+	 *           the hasCustomerListPriceBusinessError to set
+	 */
+	public void setHasCustomerListPriceBusinessError(final boolean hasCustomerListPriceBusinessError)
+	{
+		this.hasCustomerListPriceBusinessError = hasCustomerListPriceBusinessError;
+	}
+
+	/**
+	 * @return the hasCustomerListPriceTechnicalError
+	 */
+	public boolean isHasCustomerListPriceTechnicalError()
+	{
+		return hasCustomerListPriceTechnicalError;
+	}
+
+	/**
+	 * @param hasCustomerListPriceTechnicalError
+	 *           the hasCustomerListPriceTechnicalError to set
+	 */
+	public void setHasCustomerListPriceTechnicalError(final boolean hasCustomerListPriceTechnicalError)
+	{
+		this.hasCustomerListPriceTechnicalError = hasCustomerListPriceTechnicalError;
+	}
+
 
 
 }
