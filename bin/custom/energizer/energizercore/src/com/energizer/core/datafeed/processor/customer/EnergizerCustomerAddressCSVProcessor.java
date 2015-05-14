@@ -94,6 +94,10 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
+
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				String erpAddressId = "";
 				if (null != csvValuesMap.get(SP_CUSTOMER_ID).trim())

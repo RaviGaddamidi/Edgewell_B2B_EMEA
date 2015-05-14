@@ -101,14 +101,14 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getTechRecordError());
 					energizerCSVProcessor.mailErrors(cronjob, techfeedErrors, cronjob.getTechnicalEmailAddress(), emailAttachmentList);
-					energizerCSVProcessor.cleanup(type, file, cronjob, techfeedErrors);
+					//					energizerCSVProcessor.cleanup(type, file, cronjob, techfeedErrors);
 				}
 				final List<EnergizerCSVFeedError> busfeedErrors = energizerCSVProcessor.getBusinessFeedErrors();
 				if (!busfeedErrors.isEmpty())
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getBusRecordError());
 					energizerCSVProcessor.mailErrors(cronjob, busfeedErrors, cronjob.getBusinessEmailAddress(), emailAttachmentList);
-					energizerCSVProcessor.cleanup(type, file, cronjob, busfeedErrors);
+					//					energizerCSVProcessor.cleanup(type, file, cronjob, busfeedErrors);
 				}
 				energizerCSVProcessor.setTotalRecords(0);
 				energizerCSVProcessor.setRecordFailed(0);
@@ -116,7 +116,14 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				energizerCSVProcessor.setBusRecordError(0);
 				energizerCSVProcessor.setTechRecordError(0);
 				emailAttachmentList.clear();
-				energizerCSVProcessor.cleanup(type, file, cronjob, busfeedErrors);
+				if ((techfeedErrors != null && techfeedErrors.size() > 0) || (busfeedErrors != null && busfeedErrors.size() > 0))
+				{
+					energizerCSVProcessor.cleanup(type, file, cronjob, true);
+				}
+				else
+				{
+					energizerCSVProcessor.cleanup(type, file, cronjob, false);
+				}
 
 			}
 			catch (final FileNotFoundException e)

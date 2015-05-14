@@ -27,15 +27,16 @@ import com.energizer.core.datafeed.EnergizerCSVFeedError;
 import com.energizer.core.model.EnergizerProductModel;
 
 
- 
+
 /**
  * 
  * This processors imports the product category.
  * 
  * Sample file will look like
  * 
- * ERPMaterialID,SegmentName,SegmentDescription,FamilyName,    FamilyDescription,GroupName,GroupDescription,SubGroupName,SubGroupDescription
- * E0213600,     Skin Care,  skin care product, Skin Care-Edge, abc product,      Skin Care-Edge-Holder,     ,12345,       skin care prodcut
+ * ERPMaterialID,SegmentName,SegmentDescription,FamilyName,
+ * FamilyDescription,GroupName,GroupDescription,SubGroupName,SubGroupDescription E0213600, Skin Care, skin care product,
+ * Skin Care-Edge, abc product, Skin Care-Edge-Holder, ,12345, skin care prodcut
  * 
  * Total column count : 9
  */
@@ -86,6 +87,10 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 		CSV_HEADERS = Config.getParameter(MATERIAL_CATEGORY_FEED_HEADERS_KEY).split(new Character(DELIMETER).toString());
 		for (final CSVRecord record : records)
 		{
+
+			super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 			final Map<String, String> csvValuesMap = record.toMap();
 			validate(record);
 			if (!getTechnicalFeedErrors().isEmpty())

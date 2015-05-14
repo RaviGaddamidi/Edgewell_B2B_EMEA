@@ -80,6 +80,10 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
+
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty())

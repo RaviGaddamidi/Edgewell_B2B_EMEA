@@ -34,8 +34,7 @@ public interface EnergizerCSVProcessor
 
 	public void logErrors(final EnergizerCronJobModel cronjob, final List<EnergizerCSVFeedError> errors);
 
-	public void cleanup(final String type, final File file, final EnergizerCronJobModel cronjob,
-			final List<EnergizerCSVFeedError> errors);
+	public void cleanup(final String type, final File file, final EnergizerCronJobModel cronjob, boolean errors);
 
 	/**
 	 * @return the recordErrors

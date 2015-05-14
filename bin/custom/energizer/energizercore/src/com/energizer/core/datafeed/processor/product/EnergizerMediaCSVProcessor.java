@@ -82,6 +82,9 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getBusinessFeedErrors().isEmpty())
@@ -89,8 +92,18 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
 					continue;
 				}
-				existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
-						(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+
+
+				try
+				{
+					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
+							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+				}
+				catch (final Exception e)
+				{
+					LOG.info("existEnergizerProd DOES NOT EXIST");
+				}
+
 				if (null != existEnergizerProd)
 				{
 					addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);

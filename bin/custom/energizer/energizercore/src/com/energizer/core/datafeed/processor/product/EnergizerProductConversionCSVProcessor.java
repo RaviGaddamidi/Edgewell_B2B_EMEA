@@ -73,6 +73,9 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				LOG.info(" CSV Record number: " + record.getRecordNumber());
 				LOG.info(" CSV Record: " + record.toMap());
 
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 

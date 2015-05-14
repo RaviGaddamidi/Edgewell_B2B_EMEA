@@ -36,9 +36,8 @@ import com.energizer.core.model.EnergizerProductModel;
 /**
  * @author Bivash Pandit
  * 
- *         CSV File : XXXPRODUCTDATAXXXX 
- *         SAMPLE HEADERS and DATA: 
- *         ERPMaterialID,Product Group,ListPrice,ListPriceCurrency,ObsoleteStatus 000000000000000003,LITM, 10.00,USD,0
+ *         CSV File : XXXPRODUCTDATAXXXX SAMPLE HEADERS and DATA: ERPMaterialID,Product
+ *         Group,ListPrice,ListPriceCurrency,ObsoleteStatus 000000000000000003,LITM, 10.00,USD,0
  * 
  */
 public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -72,6 +71,10 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
+
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty())
