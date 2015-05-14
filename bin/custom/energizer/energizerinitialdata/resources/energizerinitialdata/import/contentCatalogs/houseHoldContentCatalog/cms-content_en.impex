@@ -20,10 +20,10 @@ UPDATE CMSImageComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
 ;;HomepageNavLink;Energizer
 ;;Energizer_Batteries_Link;Energizer Batteries
-;;Energizer_Max_Link;Energizer_Max
+;;Energizer_Max_Link;Energizer Max
 ;;Advanced_Lithium_Link;Advanced Lithium
 ;;Ultimate_Lithium_Link;Ultimate Lithium
-;;Eco_Advanced_Link;Eco_Advanced
+;;Eco_Advanced_Link;Eco Advanced
 ;;Eveready_Batteries_Link;Eveready Batteries
 ;;Extra_Duration_Link;Extra Duration Super Heavy Duty
 ;;Eveready_Gold_Link;Eveready Gold
