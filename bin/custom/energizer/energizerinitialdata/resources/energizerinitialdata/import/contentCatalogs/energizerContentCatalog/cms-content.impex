@@ -177,9 +177,9 @@ INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&c
 # Footer Component
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
 ;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
-;;CopyRightLink;CopyRight Link;/copyright;CopyRightLink;newWindow
-;;TrademarkLink;Trademark Link;/trademark;TrademarkLink;newWindow
-;;TermsAndConditionsLink;Terms And Conditions Link;/termsAndConditions;TermsAndConditionsLink;newWindow
+;;CopyRightLink;CopyRight Link;"http://www.energizerholdings.com/en/Pages/default.aspx";CopyRightLink;newWindow
+;;TrademarkLink;Trademark Link;"http://www.energizerholdings.com/en/Pages/default.aspx";TrademarkLink;newWindow
+;;TermsAndConditionsLink;Terms And Conditions Link;"http://www.energizerholdings.com/en/pages/legal.aspx";TermsAndConditionsLink;newWindow
 ;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
 ;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
 ;;LegalLink;Legal Link;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
@@ -187,12 +187,10 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
 ;;frequentlyAskedQuestionsPage;text/png;;;;;
-;;termsAndConditionsPage;text/png;;;;;
 
 # Simple Content Pages
 UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV);linkComponents(uid, $contentCV);;;;;
 ;;faq;frequentlyAskedQuestionsPage;FAQLink;;;;;
-;;termsAndConditions;termsAndConditionsPage;TermsAndConditionsLink;;;;;
 
 INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);links(&componentRef);&nodeRef
 ;SiteRootNode;;SiteRootNode;root;;SiteRootNode;EnergizerNavNode;;Energizer Site;SiteRootNode;;EnergizerNavNode
