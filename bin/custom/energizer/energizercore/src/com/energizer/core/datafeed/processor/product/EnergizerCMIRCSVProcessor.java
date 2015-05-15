@@ -79,6 +79,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 	private String defaultUOM = "";
 
+	private final String ZERO = "0";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -95,6 +97,9 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			{
 				LOG.info(" CSV Record number: " + record.getRecordNumber());
 				LOG.info(" CSV Record: " + record.toMap());
+
+				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
@@ -115,8 +120,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				final String b2bUnitId = csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID);
 				final String erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID);
 				final String customerMaterialId = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID);
-				final String currency = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE_CURRENCY);
-				final String customerlistprice = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE);
+				String currency = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE_CURRENCY);
+				String customerlistprice = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE);
 
 				try
 				{
@@ -131,107 +136,126 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					LOG.warn(erpMaterialId + " EnergizerProduct does  not exist ");
 					//TO DO log into EnergizerCSVFeedError...so that it can be mailed					
 				}
-
-				//chec if b2bunit exists
-				final EnergizerB2BUnitModel energizerB2BUnitModel = getEnergizerB2BUnit(b2bUnitId);
-
-				final List<EnergizerCMIRModel> energizerCmirModels = energizerProduct.getProductCMIR();
-				final ArrayList<EnergizerCMIRModel> tmpCMIRModelList = new ArrayList<EnergizerCMIRModel>();
-
-				//If there is no associated EnergizerCMIRModel then create and attach with the product
-				EnergizerCMIRModel energizerCMIRModel = null;
-
-				boolean matchingRecordFound = false;
-				if (energizerCmirModels != null)
-				{
-					tmpCMIRModelList.addAll(energizerCmirModels);
-					LOG.info("The size of productCMIRModels is :" + tmpCMIRModelList.size());
-					//Retrieve the CMIRModel and perform the matching process and do an update in case of any mismatch
-
-					for (final EnergizerCMIRModel energizerProductCMIRModel : energizerCmirModels)
-					{
-						LOG.info("CMIR Model Material ID is:" + energizerProductCMIRModel.getErpMaterialId());
-
-						if (isCMIRModelSame(energizerProductCMIRModel, csvValuesMap))
-						{
-							matchingRecordFound = true;
-							energizerCMIRModel = energizerProductCMIRModel;
-							break;
-						}
-					}
-				}
-				if (!matchingRecordFound)
-				{
-					energizerCMIRModel = modelService.create(EnergizerCMIRModel.class);
-					energizerCMIRModel.setErpMaterialId(erpMaterialId);
-					energizerCMIRModel.setCustomerMaterialId(customerMaterialId);
-					energizerCMIRModel.setB2bUnit(energizerB2BUnitModel);
-
-					tmpCMIRModelList.add(energizerCMIRModel);
-				}
-				this.addUpdateCMIRRecord(energizerCMIRModel, csvValuesMap);
-				energizerProduct.setProductCMIR(tmpCMIRModelList);
-				modelService.saveAll();
-
-				priceRows = energizerProduct.getEurope1Prices();
-				final List<PriceRowModel> energizerPriceRowModels = new ArrayList<PriceRowModel>(energizerProduct.getEurope1Prices());
-
-				final ArrayList<PriceRowModel> tmpPriceRowModelList = new ArrayList<PriceRowModel>();
-
-				//If there is no associated EnergizerPriceRowModel then create and attach with the product
-				EnergizerPriceRowModel priceRowModel = null;
-
-				boolean matchingPriceRowFound = false;
-				if (energizerPriceRowModels != null)
-				{
-					tmpPriceRowModelList.addAll(energizerPriceRowModels);
-					LOG.info("The size of product price row models is :" + tmpPriceRowModelList.size());
-					//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
-					for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
-					{
-						LOG.info("Product price product :" + enrPriceRowModel.getProduct().getCode());
-						if (!(enrPriceRowModel instanceof EnergizerPriceRowModel))
-						{
-							LOG.info("Not an energizer price row");
-							continue;
-						}
-						final EnergizerPriceRowModel enrPriceRow = (EnergizerPriceRowModel) enrPriceRowModel;
-
-						if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
-						{
-							matchingPriceRowFound = true;
-							priceRowModel = enrPriceRow;
-							break;
-						}
-					}
-				}
-				if (!matchingPriceRowFound)
-				{
-					priceRowModel = modelService.create(EnergizerPriceRowModel.class);
-					priceRowModel.setB2bUnit(energizerB2BUnitModel);
-					priceRowModel.setProduct(energizerProduct);
-
-					tmpPriceRowModelList.add(priceRowModel);
-				}
-				//this.addUpdateENRPriceRowRecord(priceRowModel, csvValuesMap);
-
-				if (priceRowModel != null && priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() != null
-						&& !priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode().equals(currency))
-				{
-					LOG.error("Energizer price row currency preference "
-							+ priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() + " does not match with : " + currency);
-				}
 				else
 				{
-					priceRowModel.setCatalogVersion(catalogVersion);
-					priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
-					priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
-					priceRowModel.setPrice(Double.parseDouble(customerlistprice));
-					energizerProduct.setEurope1Prices(tmpPriceRowModelList);
+
+
+					//chec if b2bunit exists
+					final EnergizerB2BUnitModel energizerB2BUnitModel = getEnergizerB2BUnit(b2bUnitId);
+
+					final List<EnergizerCMIRModel> energizerCmirModels = energizerProduct.getProductCMIR();
+					final ArrayList<EnergizerCMIRModel> tmpCMIRModelList = new ArrayList<EnergizerCMIRModel>();
+
+					//If there is no associated EnergizerCMIRModel then create and attach with the product
+					EnergizerCMIRModel energizerCMIRModel = null;
+
+					boolean matchingRecordFound = false;
+					if (energizerCmirModels != null)
+					{
+						tmpCMIRModelList.addAll(energizerCmirModels);
+						LOG.info("The size of productCMIRModels is :" + tmpCMIRModelList.size());
+						//Retrieve the CMIRModel and perform the matching process and do an update in case of any mismatch
+
+						for (final EnergizerCMIRModel energizerProductCMIRModel : energizerCmirModels)
+						{
+							LOG.info("CMIR Model Material ID is:" + energizerProductCMIRModel.getErpMaterialId());
+
+							if (isCMIRModelSame(energizerProductCMIRModel, csvValuesMap))
+							{
+								matchingRecordFound = true;
+								energizerCMIRModel = energizerProductCMIRModel;
+								break;
+							}
+						}
+					}
+					if (!matchingRecordFound)
+					{
+						energizerCMIRModel = modelService.create(EnergizerCMIRModel.class);
+						energizerCMIRModel.setErpMaterialId(erpMaterialId);
+						energizerCMIRModel.setCustomerMaterialId(customerMaterialId);
+						energizerCMIRModel.setB2bUnit(energizerB2BUnitModel);
+
+						tmpCMIRModelList.add(energizerCMIRModel);
+					}
+					this.addUpdateCMIRRecord(energizerCMIRModel, csvValuesMap);
+					energizerProduct.setProductCMIR(tmpCMIRModelList);
 					modelService.saveAll();
-				}//else
-				succeedRecord++;
-				setRecordSucceeded(succeedRecord);
+
+					priceRows = energizerProduct.getEurope1Prices();
+					final List<PriceRowModel> energizerPriceRowModels = new ArrayList<PriceRowModel>(
+							energizerProduct.getEurope1Prices());
+
+					final ArrayList<PriceRowModel> tmpPriceRowModelList = new ArrayList<PriceRowModel>();
+
+					//If there is no associated EnergizerPriceRowModel then create and attach with the product
+					EnergizerPriceRowModel priceRowModel = null;
+
+					boolean matchingPriceRowFound = false;
+					if (energizerPriceRowModels != null)
+					{
+						tmpPriceRowModelList.addAll(energizerPriceRowModels);
+						LOG.info("The size of product price row models is :" + tmpPriceRowModelList.size());
+						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
+						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
+						{
+							LOG.info("Product price product :" + enrPriceRowModel.getProduct().getCode());
+							if (!(enrPriceRowModel instanceof EnergizerPriceRowModel))
+							{
+								LOG.info("Not an energizer price row");
+								continue;
+							}
+							final EnergizerPriceRowModel enrPriceRow = (EnergizerPriceRowModel) enrPriceRowModel;
+
+							if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
+							{
+								matchingPriceRowFound = true;
+								priceRowModel = enrPriceRow;
+								break;
+							}
+						}
+					}
+
+					if (customerlistprice.isEmpty() && currency.isEmpty())
+					{
+						customerlistprice = ZERO;
+						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
+					}
+
+
+					if (!matchingPriceRowFound)
+					{
+						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
+						priceRowModel.setB2bUnit(energizerB2BUnitModel);
+						priceRowModel.setProduct(energizerProduct);
+
+						tmpPriceRowModelList.add(priceRowModel);
+					}
+					//this.addUpdateENRPriceRowRecord(priceRowModel, csvValuesMap);
+
+					if (priceRowModel != null && priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() != null
+							&& !priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode().equals(currency))
+					{
+						LOG.error("Energizer price row currency preference "
+								+ priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() + " does not match with : " + currency);
+					}
+					else
+					{
+						priceRowModel.setCatalogVersion(catalogVersion);
+						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
+						priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
+						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
+						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
+						modelService.saveAll();
+					}//else
+
+
+
+
+
+					succeedRecord++;
+					setRecordSucceeded(succeedRecord);
+
+				}
 			} //for
 		}//try
 		catch (final Exception e)

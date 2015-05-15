@@ -169,8 +169,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	}
 
 	@Override
-	public void cleanup(final String type, final File file, final EnergizerCronJobModel cronjob,
-			final List<EnergizerCSVFeedError> errors)
+	public void cleanup(final String type, final File file, final EnergizerCronJobModel cronjob, final boolean hasErrors)
 	{
 		try
 		{
@@ -180,10 +179,10 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		{
 			e1.printStackTrace();
 		}
-		if (errors != null && errors.size() > 0)
+		if (hasErrors)
 		{
 			//			logErrors(cronjob, errors);
-			errors.clear();
+			//			errors.clear();
 			try
 			{
 				final Path sourcePath1 = Paths.get(sharedFolderPath + fileSeperator + type + fileSeperator + toProcess

@@ -34,8 +34,7 @@ import com.energizer.core.model.EnergizerProductModel;
  * 
  * Sample file will look like
  * 
- * ERPMaterialID,Language,ProductDesription 
- * 10,           EN,      omkar singh spf2 6 oz 4/3s
+ * ERPMaterialID,Language,ProductDesription 10, EN, omkar singh spf2 6 oz 4/3s
  * 
  * Total column count : 3
  */
@@ -85,6 +84,10 @@ public class EnergizerMaterialNameCSVProcessor extends AbstractEnergizerCSVProce
 		CSV_HEADERS = Config.getParameter(MATERIAL_NAME_FEED_HEADERS_KEY).split(new Character(DELIMETER).toString());
 		for (final CSVRecord record : records)
 		{
+
+			super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+
 			final Map<String, String> csvValuesMap = record.toMap();
 			validate(record);
 			if (!getTechnicalFeedErrors().isEmpty())
