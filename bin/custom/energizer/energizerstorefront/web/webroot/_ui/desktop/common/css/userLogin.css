@@ -190,3 +190,9 @@ div.secure_container_holder h2{
 .secure_container_holder dd {
 	margin-left: 0;
 }
+
+.userLogin {
+	  border: 1px dotted #A5A5A5;
+	  padding: 0 20px 10px 20px;
+	  width: 86%;
+	}
