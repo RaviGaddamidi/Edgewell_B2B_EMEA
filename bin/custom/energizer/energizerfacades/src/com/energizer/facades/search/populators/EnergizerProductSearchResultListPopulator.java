@@ -65,22 +65,49 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 		setLoggedInUserB2bUnit();
 		final String productCode = source.getValues().get("code").toString();
 		final EnergizerProductModel energizerProductModel = (EnergizerProductModel) productService.getProductForCode(productCode);
-		productData.setObsolete((energizerProductModel.getObsolete() == null ? false : energizerProductModel.getObsolete()));
-		productData.setDescription(energizerProductModel.getDescription() == null ? EMPTY : energizerProductModel.getDescription());
-		productData.setErpMaterialID(energizerProductModel.getCode() == null ? EMPTY : energizerProductModel.getCode());
+
+		if (null != energizerProductModel)
+		{
+
+			productData.setObsolete((energizerProductModel.getObsolete() == null ? false : energizerProductModel.getObsolete()));
+
+			if (null != energizerProductModel.getDescription())
+			{
+				productData.setDescription(energizerProductModel.getDescription());
+			}
+			if (null != energizerProductModel.getCode())
+			{
+				productData.setErpMaterialID(energizerProductModel.getCode());
+			}
+
+		}
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
-
-		productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
-				.getCustomerMaterialId());
-		productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY : energizerCMIRModel
-				.getCustomerMaterialDescription());
-		productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
-		productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
-		productData.setShippingPoint(energizerCMIRModel.getShippingPoint());
-
+		if (null != energizerCMIRModel)
+		{
+			if (null != energizerCMIRModel.getCustomerMaterialId())
+			{
+				productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId());
+			}
+			if (null != energizerCMIRModel.getCustomerMaterialDescription())
+			{
+				productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription());
+			}
+			if (null != energizerCMIRModel.getOrderingUnit())
+			{
+				productData.setMoq(energizerCMIRModel.getOrderingUnit());
+			}
+			if (null != energizerCMIRModel.getUom())
+			{
+				productData.setUom(energizerCMIRModel.getUom());
+			}
+			if (null != energizerCMIRModel.getShippingPoint())
+			{
+				productData.setShippingPoint(energizerCMIRModel.getShippingPoint());
+			}
+		}
 		final EnergizerProductConversionFactorModel energizerProductConversionFactorModel = energizerProductService
 				.getEnergizerProductConversion(productCode, b2bUnit.getUid());
 

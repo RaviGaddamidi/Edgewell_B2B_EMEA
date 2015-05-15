@@ -9,6 +9,7 @@ import de.hybris.platform.core.model.c2l.CurrencyModel;
 import de.hybris.platform.core.model.order.OrderEntryModel;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.product.UnitModel;
+import de.hybris.platform.core.model.user.AddressModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
@@ -37,6 +38,7 @@ import org.apache.log4j.Logger;
 
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
 import com.energizer.core.datafeed.EnergizerCSVFeedError;
+import com.energizer.core.datafeed.facade.impl.DefaultEnergizerAddressFacade;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerProductModel;
@@ -79,6 +81,9 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	EnergizerProductService energizerProductService;
 	@Resource
 	CMSSiteService cmsSiteService;
+
+	@Resource
+	private DefaultEnergizerAddressFacade defaultEnergizerAddressFacade;
 
 	//Constant declarations for CSV header names
 	private static final String SAP_ORDER_NO = "SAPOrderNo";
@@ -275,8 +280,18 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	{
 		//Flag variable to hold record creating or updating status if record is neither created nor updated then this flag will hold null
 		Boolean isOrderCreatedOrUpdated = true;
-		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService
-				.getUnitForUid(b2bAccount);
+
+		// EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService.getUnitForUid(b2bAccount);
+		EnergizerB2BUnitModel energizerB2BUnitModel = null;
+		final List<AddressModel> addresses = defaultEnergizerAddressFacade.fetchAddress(b2bAccount);
+		//only one sold to party will be assigned to one address
+		for (final AddressModel address : addresses)
+		{
+			if (address.getOwner() instanceof EnergizerB2BUnitModel)
+			{
+				energizerB2BUnitModel = (EnergizerB2BUnitModel) address.getOwner();
+			}
+		}
 
 		// adding extra parameter - Start
 		if (null != energizerOrderModel)
@@ -305,7 +320,8 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		if (energizerB2BUnitModel == null)
 		{
-			LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + b2bAccount + " is not exist");
+			LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + energizerB2BUnitModel.getUid()
+					+ " is not exist");
 			isOrderCreatedOrUpdated = false;
 		}
 		else
@@ -352,14 +368,14 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				}
 				else
 				{
-					LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + b2bAccount
+					LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + energizerB2BUnitModel.getUid()
 							+ " is not having currency preference");
 					isOrderCreatedOrUpdated = false;
 				}
 			}
 			else
 			{
-				LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + b2bAccount
+				LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + energizerB2BUnitModel.getUid()
 						+ " is not having any members of admin group");
 				isOrderCreatedOrUpdated = false;
 			}

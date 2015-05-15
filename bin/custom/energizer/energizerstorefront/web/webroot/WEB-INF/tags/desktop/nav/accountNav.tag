@@ -15,7 +15,8 @@
 					<span></span>
 				</div>
 			</div>
-			<h2><spring:theme code="text.account.yourAccount" text="Your Account"/></h2>
+			<div class="accountNav">
+			<div class="headline"><spring:theme code="text.account.yourAccount" text="Your Account"/></div></div>
 		</div>
 		<div class="item">
 			<ul class="facet_block indent">

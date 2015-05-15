@@ -178,6 +178,12 @@
     color: #06c;
 }
 
+.orderList .orderListTable tbody tr.item_order_cls td.details .itemName{
+	word-wrap: break-word;
+    width: 30px;
+	
+}
+
 
 
 

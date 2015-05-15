@@ -27,4 +27,4 @@ INSERT_UPDATE Trigger;cronJob(code)[unique=true];second;minute;hour;day;month;ye
 
 # EnergizerShippingPoint 
 INSERT_UPDATE EnergizerShippingPoint;shippingPointId[unique=true];shippingPointName
-;A419;A419
+;A419;South China DC
