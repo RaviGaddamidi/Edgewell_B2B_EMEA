@@ -102,7 +102,7 @@
 		
 		<button type="submit" class="positive right" id="checkoutPlaceOrder2" disabled="disabled" onclick="validatePONumber();" ><spring:theme code="checkout.summary.placeOrder"/></button>
 		
-		<div class="terms right">
+		<div class="terms left">
 			<formElement:formCheckbox idKey="Terms2" labelKey="checkout.summary.placeOrder.readTermsAndConditions" inputCSS="checkbox-input" labelCSS="checkbox-label" path="termsCheck" mandatory="true" />
 		</div>
 	</form:form>
