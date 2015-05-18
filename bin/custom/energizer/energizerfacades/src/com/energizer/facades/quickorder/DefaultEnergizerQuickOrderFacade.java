@@ -15,6 +15,7 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.util.ArrayList;
@@ -158,13 +159,27 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 		ProductModel productModel = null;
 		if (!productCode.isEmpty())
 		{
-			productModel = productService.getProductForCode(productCode);
+			try
+			{
+				productModel = productService.getProductForCode(productCode);
+			}
+			catch (final UnknownIdentifierException ex)
+			{
+				productModel = null;
+			}
 		}
 		if (!customerProductCode.isEmpty())
 		{
 			if (cmir != null)
 			{
-				productModel = productService.getProductForCode(cmir.getErpMaterialId());
+				try
+				{
+					productModel = productService.getProductForCode(cmir.getErpMaterialId());
+				}
+				catch (final UnknownIdentifierException ex)
+				{
+					productModel = null;
+				}
 			}
 		}
 		if (productModel != null)

@@ -5,8 +5,8 @@
 
     <core name="master_energizerFirst_EnergizerProduct_1" instanceDir="D:\hy5.4\Distributor-Portal\config/solr/embedded" dataDir="D:\hy5.4\Distributor-Portal\data\solrfacetsearch\MASTER\energizerFirst_EnergizerProduct"/>
 
-    <core name="master_personalCare_EnergizerProduct" instanceDir="D:\hy5.4\Distributor-Portal\config/solr/embedded" dataDir="D:\hy5.4\Distributor-Portal\data\solrfacetsearch\MASTER\personalCare_EnergizerProduct_1"/>
+    <core name="master_personalCare_EnergizerProduct" instanceDir="D:\hy5.4\Distributor-Portal\config/solr/embedded" dataDir="D:\hy5.4\Distributor-Portal\data\solrfacetsearch\MASTER\personalCare_EnergizerProduct"/>
 
-    <core name="master_personalCare_EnergizerProduct_1" instanceDir="D:\hy5.4\Distributor-Portal\config/solr/embedded" dataDir="D:\hy5.4\Distributor-Portal\data\solrfacetsearch\MASTER\personalCare_EnergizerProduct"/>
+    <core name="master_personalCare_EnergizerProduct_1" instanceDir="D:\hy5.4\Distributor-Portal\config/solr/embedded" dataDir="D:\hy5.4\Distributor-Portal\data\solrfacetsearch\MASTER\personalCare_EnergizerProduct_1"/>
 </cores>
 </solr>
