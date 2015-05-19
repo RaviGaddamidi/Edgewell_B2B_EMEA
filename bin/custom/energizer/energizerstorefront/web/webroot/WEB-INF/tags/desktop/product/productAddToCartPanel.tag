@@ -50,7 +50,7 @@
 						<a href="${productOrderFormUrl}" class="button negative" id="productOrderButton" ><spring:theme code="order.form" /></a>
 					</sec:authorize>
 				</c:if>
-	<form id="addToCartForm" class="add_to_cart_form" action="<c:url value="/cart/add"/>" method="post">
+	<form id="addToCartForm" class="add_to_cart_form" action_data="<c:url value="/cart/add"/>" method="post">
 	<c:if test="${product.purchasable}">
 		<input type="hidden" maxlength="3" size="1" id="qty" name="qty" class="qty" value="${fn:escapeXml(product.moq)}">
 	</c:if>
