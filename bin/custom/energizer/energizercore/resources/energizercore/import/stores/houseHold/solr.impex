@@ -176,7 +176,7 @@ INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[
 ;$solrIndexedType; b2bunit ;100;false;Distributor;true;true
 ;$solrIndexedType; segment ;99;true;Product Category;Categoría del producto;true;true
 ;$solrIndexedType; family  ;98;true;Sub-brand/Segment;Sub-marca / segmento;true;true
-;$solrIndexedType; group   ;97;true;;;true;true
+;$solrIndexedType; group   ;97;true;Sub-brand/Segment;Sub-marca / segmento;true;true
 #;$solrIndexedType; customerMaterialId;96;true;Customer Material Description;Group;false;true
 #;$solrIndexedType; customerMaterialDescription;95;true;Customer Material;Group;false;true
 ;$solrIndexedType; shippingPoint;94;true;Shipping Point;Shipping Point;true;true
