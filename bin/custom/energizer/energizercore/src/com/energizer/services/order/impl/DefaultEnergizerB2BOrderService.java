@@ -359,7 +359,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final ZSD_BAPI_SALESORDER_CREATE xmlRoot = objectFactory.createZSD_BAPI_SALESORDER_CREATE();
 			final EnergizerB2BUnitModel b2bUnitData = order.getB2bUnit();
 			final ZSD_ISOHEAD_D31E8C xmlHead = objectFactory.createZSD_ISOHEAD_D31E8C();
-			final JAXBElement<String> purchaseno = objectFactory.createZSD_ISOHEAD_D31E8CPURCH_NO(order.getCode());
+			final JAXBElement<String> purchaseno = objectFactory.createZSD_ISOHEAD_D31E8CPURCH_NO(order.getPurchaseOrderNumber());
 			final JAXBElement<String> purchasenos = objectFactory.createZSD_ISOHEAD_D31E8CPURCH_NO_S(order.getCode());
 			final JAXBElement<String> salesOrg = objectFactory.createZSD_ISOHEAD_D31E8CSALES_ORG(b2bUnitData.getSalesOrganisation());
 			final JAXBElement<String> salesDiv = objectFactory.createZSD_ISOHEAD_D31E8CDIVISION(b2bUnitData.getDivision());
