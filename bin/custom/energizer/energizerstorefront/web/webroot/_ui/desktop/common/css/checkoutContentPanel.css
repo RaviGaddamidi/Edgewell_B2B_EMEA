@@ -550,6 +550,10 @@ button.place-order {
 	font-size: 140%;
 	margin-top: 0;
 }
+/*new css fix */
+#checkoutContentPanel .summarySection {
+	width: 235px;
+}
 
 
 
