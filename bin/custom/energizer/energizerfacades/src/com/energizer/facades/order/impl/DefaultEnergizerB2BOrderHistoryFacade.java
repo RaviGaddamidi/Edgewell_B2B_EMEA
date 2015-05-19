@@ -11,6 +11,7 @@ import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.converters.Converters;
+import de.hybris.platform.core.enums.OrderStatus;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
@@ -67,9 +68,11 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 	 * com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getOrdersForB2BUnit(de.hybris.platform.b2b.jalo.B2BUnit
 	 * )
 	 */
-	public SearchPageData<OrderHistoryData> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData)
+	public SearchPageData<OrderHistoryData> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData,
+			final OrderStatus[] orderStatuses)
 	{
-		final SearchPageData<OrderModel> ordersHistoryList = b2bOrderHistoryService.getOrdersForB2BUnit(unitId, pageableData);
+		final SearchPageData<OrderModel> ordersHistoryList = b2bOrderHistoryService.getOrdersForB2BUnit(unitId, pageableData,
+				orderStatuses);
 		return convertPageData(ordersHistoryList, energizerOrderHistoryConverter);
 	}
 

@@ -247,7 +247,7 @@ public class AccountPageController extends AbstractSearchPageController
 				.getEnergizerB2BUnitModelForLoggedInUser();
 
 		final SearchPageData<OrderHistoryData> searchPageData = orderHistoryFacade.getOrdersForB2BUnit(energizerB2BUnitModel,
-				pageableData);
+				pageableData, orderStatuses);
 		populateModel(model, searchPageData, showMode);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORDER_HISTORY_CMS_PAGE));
@@ -264,6 +264,7 @@ public class AccountPageController extends AbstractSearchPageController
 		try
 		{
 			final OrderData orderDetails = orderFacade.getOrderDetailsForCode(orderCode);
+			//	orderFacade.getOrderHistoryForStatuses(statuses);
 
 			model.addAttribute("orderData", orderDetails);
 			model.addAttribute(new ReorderForm());

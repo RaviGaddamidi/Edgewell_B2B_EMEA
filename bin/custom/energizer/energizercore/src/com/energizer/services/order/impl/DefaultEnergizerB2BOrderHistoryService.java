@@ -6,6 +6,7 @@ package com.energizer.services.order.impl;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.core.enums.OrderStatus;
 import de.hybris.platform.core.model.order.OrderModel;
 
 import javax.annotation.Resource;
@@ -33,10 +34,11 @@ public class DefaultEnergizerB2BOrderHistoryService implements EnergizerB2BOrder
 	 * B2BUnitModel)
 	 */
 	@Override
-	public SearchPageData<OrderModel> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData)
+	public SearchPageData<OrderModel> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData,
+			final OrderStatus[] orderStatuses)
 	{
 
-		final SearchPageData<OrderModel> ordersHistoryList = orderDAO.getOrdersForB2BUnit(unitId, pageableData);
+		final SearchPageData<OrderModel> ordersHistoryList = orderDAO.getOrdersForB2BUnit(unitId, pageableData, orderStatuses);
 
 		return ordersHistoryList;
 
