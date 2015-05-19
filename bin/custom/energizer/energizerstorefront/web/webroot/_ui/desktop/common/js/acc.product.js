@@ -14,7 +14,7 @@ ACC.product = {
 	bindToAddToCartForm: function ()
 	{
 		var addToCartForm = $('.add_to_cart_form');
-		addToCartForm.ajaxForm({success: ACC.product.displayAddToCartPopup});
+		addToCartForm.ajaxForm({url:addToCartForm.attr("action_data"),success: ACC.product.displayAddToCartPopup});
 	},
 
 	
