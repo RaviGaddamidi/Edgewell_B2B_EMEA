@@ -26,9 +26,9 @@
 	
 	<div class="column accountContentPane clearfix">
 		<div class="headline"><spring:theme code="text.account.profile.updatePasswordForm" text="Update Password"/></div>
-		<div class="required right"><spring:theme code="form.required" text="Fields marked * are required"/></div>
+		
 		<div class="description"><spring:theme code="text.account.profile.updatePassword" text="Please use this form to update your account password"/></div>
-	
+		<div class="required"><spring:theme code="form.required" text="Fields marked * are required"/></div>
 		<form:form action="update-password" method="post" commandName="updatePasswordForm" autocomplete="off">
 			
 				<formElement:formPasswordBox idKey="profile.currentPassword" labelKey="profile.currentPassword" path="currentPassword" inputCSS="text password" mandatory="true"/>
