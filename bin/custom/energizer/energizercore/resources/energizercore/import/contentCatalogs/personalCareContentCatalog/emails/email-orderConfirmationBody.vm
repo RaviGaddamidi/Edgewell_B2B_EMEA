@@ -23,22 +23,22 @@
 		</tr>
 		<tr>
 			<td align="center" valign="top">
-				<table width="610" border="6" align="center" cellpadding="0" cellspacing="0" bordercolor="#ebedee">
+				<table width="90" border="6" align="center" cellpadding="0" cellspacing="0" bordercolor="#ebedee">
 					<tr>
 						<td align="center" valign="top" bgcolor="#FFFFFF">
-							<table width="570" cellpadding="0" cellspacing="0" border="0" align="center">
+							<table width="80" cellpadding="0" cellspacing="0" border="0" align="center">
 								<tr>
 									<td valign="middle">&nbsp;</td>
 								</tr>
 								<tr>
 									<td valign="middle">
 										${ctx.cmsSlotContents.SiteLogo}
-										<img src="${ctx.themeResourceUrl}/images/header_01.png" alt="" width="229" height="72" border="0" align="right" title="" />
+										
 									</td>
 								</tr>
 								<tr>
 									<td height="30" align="right" valign="middle" bgcolor="#51585c">
-										<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.secureBaseUrl}/my-account"><font color="#FFFFFF">${ctx.messages.myAccount}</font></a> | <a href="${ctx.baseUrl}/store-finder"><font color="#FFFFFF">${ctx.messages.storeFinder}</font></a> &nbsp;&nbsp;</font>
+										
 									</td>
 								</tr>
 								<tr>
@@ -58,10 +58,14 @@
 												<td>
 													<table width="100%" cellpadding="0" cellspacing="0">
 														<tr>
-															<td width="50%">&nbsp;</td>
-															<td width="17%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.quantity}</b></font></td>
+															<td width="25%">&nbsp;</td>
+															<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.customerMaterialId}</b></font></td>
+															<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.erpMaterialId}</b></font></td>
+															<td width="15%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.quantity}</b></font></td>
 															<td width="17%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.itemPrice}</b></font></td>
+															<td width="12%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.UOM}</b></font></td>
 															<td width="16%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.total}</b></font></td>
+															
 														</tr>
 														#foreach( $entry in ${ctx.order.entries} )
 														<!--<tr>
@@ -125,9 +129,14 @@
 																	</tr>
 																</table>
 															</td>
+															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.customerMaterialId</font></p></td>
+															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.erpMaterialID</font></p></td>
 															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.quantity</font></p></td>
 															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.basePrice.formattedValue</font></p></td>
+															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.uom</font></p></td>
 															<td valign="middle"><p><font color="#414a4f" size="3" face="Arial, Helvetica, sans-serif"><b>#if($entry.totalPrice.value > 0) $entry.totalPrice.formattedValue #else ${ctx.messages.free} #end</b></font></p></td>
+															
+															
 														</tr>
 														#end
 													</table>
@@ -151,28 +160,15 @@
 										</table>
 										#end
 										<br/>
-										#if(${ctx.order.costCenter})
+										
+										
 										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
 											<tr>
 												<td>
 													<table>
 														<tr>
-															<td width="60%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.costCenter}:</b></font></td>
-															<td width="20%">&nbsp;</td>
-															<td valign="top"><p><font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.order.costCenter.code}</b></font></p></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-										</table>
-										#end
-										<br/>
-										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
-											<tr>
-												<td>
-													<table>
-														<tr>
-															<td width="40%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.deliveryMethod}</b></font></td>
+															
+															
 															<td width="10%">&nbsp;</td>
 															<td width="50%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.deliveryAddress}</b></font></td>
 														</tr>
@@ -182,14 +178,7 @@
 															<td>&nbsp;</td>
 														</tr>
 														<tr>
-															<td>
-																#if(${ctx.order.deliveryCost.value} > 0)
-																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.order.deliveryMode.name}</font></p>
-																#else
-																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.freeDelivery}</font></p>
-																#end
-																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('deliveryETA', ${ctx.order.deliveryMode.description})}</font></p>
-															</td>
+															
 															<td>&nbsp;</td>
 															<td><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">
 																${ctx.order.deliveryAddress.title} ${ctx.order.deliveryAddress.firstName} ${ctx.order.deliveryAddress.lastName}<br/>
@@ -273,8 +262,7 @@
 #set ($accountUrl = "${ctx.baseUrl}/my-account/orders")
 #set ($mailToUrl = "mailto:${ctx.messages.contactUsEmailAddress}")
 #set ($paragraphContactUs = ${ctx.messages.getMessage('paragraphContactUs', "#genHtmlLinkStartTag(${ctx.messages.contactUsPage})", "#genHtmlLinkEndTag()", "#genHtmlLink($mailToUrl '#666666' ${ctx.messages.contactUsEmailAddress})")})
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphAccountLocation', "#genHtmlLinkStartTag($accountUrl)", "#genHtmlLinkEndTag()")}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.paragraphCreateAccount}</font></p>
+										
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphDeliveryInfo', "#genHtmlLinkStartTag($orderInfoUrl)", "#genHtmlLinkEndTag()")}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
