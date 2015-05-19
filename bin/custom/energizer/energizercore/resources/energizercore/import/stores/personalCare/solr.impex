@@ -175,8 +175,8 @@ INSERT_UPDATE SolrSortField;sort(indexedType(identifier),code)[unique=true];fiel
 INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];priority;visible;displayName[lang=en];displayName[lang=es];facet[default=true];multiValue[default=false]
 ;$solrIndexedType; b2bunit ;100;false;Distributor;true;true
 ;$solrIndexedType; segment ;99;true;Category;Categoria;true;true
-;$solrIndexedType; family  ;98;true;Brand;Marca;true;true
-;$solrIndexedType; group   ;97;true;Sub-brand;Sub-marca;true;true
+;$solrIndexedType; family  ;97;true;Sub-brand;Sub-marca;true;true
+;$solrIndexedType; group   ;98;true;Brand;Marca;true;true
 #;$solrIndexedType; customerMaterialId;96;true;Customer Material Description;Group;false;true
 #;$solrIndexedType; customerMaterialDescription;95;true;Customer Material;Group;false;true
 ;$solrIndexedType; shippingPoint;94;true;Shipping Point;Shipping Point;true;true
