@@ -313,6 +313,18 @@ button.view-saved-payments {
 
 .form_field_error { color: #c60300; }
 
+/*new css fix*/
+.control-group label{
+width: 300px;
+}
+
+.required {
+	margin-top:15px;
+}
+#placeOrder .control-group label{
+	width:450px;
+}
+
 
 
 
