@@ -26,9 +26,9 @@
 	<nav:accountNav selected="profile" />
 	<div class="column accountContentPane clearfix">
 		<div class="headline"><spring:theme code="text.account.profile" text="Profile"/></div>
-		<div class="required right"><spring:theme code="form.required" text="Fields marked * are required"/></div>
-		<div class="description"><spring:theme code="text.account.profile.updateForm" text="Please use this form to update your personal details"/></div>
 		
+		<div class="description"><spring:theme code="text.account.profile.updateForm" text="Please use this form to update your personal details"/></div>
+		<div class="required"><spring:theme code="form.required" text="Fields marked * are required"/></div>
 		<form:form action="update-profile" method="post" commandName="updateProfileForm">
 			<formElement:formSelectBox idKey="profile.title" labelKey="profile.title" path="titleCode" mandatory="true" skipBlank="false" skipBlankMessageKey="form.select.empty" items="${titleData}"/>
 			<formElement:formInputBox idKey="profile.firstName" labelKey="profile.firstName" path="firstName" inputCSS="text" mandatory="true"/>
