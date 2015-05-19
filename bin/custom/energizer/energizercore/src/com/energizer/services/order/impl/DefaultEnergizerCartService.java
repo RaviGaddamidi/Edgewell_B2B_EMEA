@@ -194,8 +194,17 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	 * @param totalCartVolume
 	 * @return
 	 */
-	private ContainerData getPercentageContainerUtil(final BigDecimal totalCartWt, final BigDecimal totalCartVolume)
+	private ContainerData getPercentageContainerUtil(BigDecimal totalCartWt, BigDecimal totalCartVolume)
 	{
+
+		totalCartWt = totalCartWt.setScale(2, BigDecimal.ROUND_UP);
+		totalCartVolume = totalCartVolume.setScale(2, BigDecimal.ROUND_UP);
+		twentyFeetContainerVolume = twentyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
+		twentyFeetContainerWeight = twentyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
+		fourtyFeetContainerVolume = fourtyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
+		fourtyFeetContainerWeight = fourtyFeetContainerWeight.setScale(2, BigDecimal.ROUND_UP);
+
+
 		final ContainerData containerData = new ContainerData();
 		if (totalCartWt.compareTo(twentyFeetContainerWeight) == -1 && totalCartVolume.compareTo(twentyFeetContainerVolume) == -1)
 		{
