@@ -201,3 +201,8 @@ button.link {
     position: relative;
     top: -20px;	
 }
+button, input.button,a.button{
+	 background-color: #169e08;
+color: white;
+text-transform: uppercase;
+}

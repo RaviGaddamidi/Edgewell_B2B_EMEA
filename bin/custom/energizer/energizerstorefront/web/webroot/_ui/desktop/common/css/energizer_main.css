@@ -80,3 +80,9 @@ table.orderListTable th{color:#436eee;}
 .facet_block li {
 	padding-top: 10px;
 }
+.new_item_quick_order_form .button, table.orderListTable input[type="submit"], .new_item_quick_order_form input[type="submit"], #excelupload .positive button {
+	  
+	  background-color: #169e08;
+	  color: white;
+	  text-transform: uppercase;
+}
