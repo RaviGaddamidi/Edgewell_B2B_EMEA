@@ -324,7 +324,9 @@ width: 300px;
 #placeOrder .control-group label{
 	width:450px;
 }
-
+#placeOrderForm2 .control-group label{
+	width:354px;
+}
 
 
 

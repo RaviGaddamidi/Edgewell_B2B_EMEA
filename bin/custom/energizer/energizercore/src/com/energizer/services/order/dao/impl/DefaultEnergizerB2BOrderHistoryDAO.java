@@ -8,8 +8,10 @@ import de.hybris.platform.commerceservices.search.flexiblesearch.data.SortQueryD
 import de.hybris.platform.commerceservices.search.flexiblesearch.impl.DefaultPagedFlexibleSearchService;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.core.enums.OrderStatus;
 import de.hybris.platform.core.model.order.OrderModel;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +39,14 @@ public class DefaultEnergizerB2BOrderHistoryDAO implements EnergizerB2BOrderHist
 	 * B2BUnitModel)
 	 */
 	@Override
-	public SearchPageData<OrderModel> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData)
+	public SearchPageData<OrderModel> getOrdersForB2BUnit(final B2BUnitModel unitId, final PageableData pageableData,
+			final OrderStatus[] orderStatuses)
 	{
 		final Map queryParameters = new HashMap();
 		final List sortedResults;
 		queryParameters.put("name", unitId);
-		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk} } ORDER BY {o.code} DESC ";
+		queryParameters.put("statusList", Arrays.asList(orderStatuses));
+		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk} } WHERE {o:status} in (?statusList) AND {versionID} IS NULL ORDER BY {o.code} DESC ";
 		final SearchPageData<OrderModel> results = pagedFlexibleSearchService.search(query, queryParameters, pageableData);
 		return results;
 	}

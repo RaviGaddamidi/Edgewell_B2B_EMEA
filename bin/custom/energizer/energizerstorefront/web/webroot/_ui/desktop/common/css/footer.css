@@ -13,7 +13,7 @@
 .footer .links ul{
 	float:left;
 	width:192px;
-	
+	line-height: 25px;
 }
 
 
@@ -28,4 +28,10 @@
 
 .footer .copyright{
 	clear:both;
+}
+
+
+#content{
+	min-height: 600px;
+	position: relative;	
 }
