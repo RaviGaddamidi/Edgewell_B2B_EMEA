@@ -838,7 +838,7 @@ $('#checkoutPlaceOrder').click(function(){
 						else{
 							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
 							$('#globalMessages').html(html);
-							
+							$("html, body").animate({ scrollTop: 0 }, 50);
 							return false;
 						}
 					
@@ -846,7 +846,7 @@ $('#checkoutPlaceOrder').click(function(){
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
 					$('#globalMessages').html(html);
-					
+					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
 					}
 					
@@ -863,7 +863,7 @@ $('#checkoutPlaceOrder2').click(function(){
 						else{
 							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
 							$('#globalMessages').html(html);
-							
+							$("html, body").animate({ scrollTop: 0 }, 50);
 							return false;
 						}
 					
@@ -871,7 +871,7 @@ $('#checkoutPlaceOrder2').click(function(){
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
 					$('#globalMessages').html(html);
-					
+					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
 					}
 					
