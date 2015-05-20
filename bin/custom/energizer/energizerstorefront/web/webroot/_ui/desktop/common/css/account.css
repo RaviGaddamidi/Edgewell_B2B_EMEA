@@ -254,3 +254,6 @@ div.delivery_stages .headline{
 .accountContentPane .accountnavigationcollectioncomponent .accountNav{
 	  height: auto;
 }
+.accountContentPane .accountnavigationcollectioncomponent .accountNav .headline{
+	color: #0b4f04;
+}
