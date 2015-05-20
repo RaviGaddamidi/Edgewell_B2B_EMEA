@@ -39,7 +39,16 @@
 		</cms:pageSlot>
 
 		<div class="results">
-			<h1><c:if test="${not empty searchPageData.freeTextSearch}"><spring:theme code="search.page.searchText" arguments="${searchPageData.freeTextSearch}"/></c:if><c:if test="${empty searchPageData.freeTextSearch}"><c:set var="searchTerm" value=" "></c:set><spring:theme code="search.page.searchText" arguments="${searchTerm}"/></c:if></h1>
+			<h1>
+				<c:if test="${not empty searchPageData.freeTextSearch}">
+					<spring:theme code="search.page.searchText" arguments="${searchPageData.freeTextSearch}"/>
+				</c:if>
+			
+				<c:if test="${empty searchPageData.freeTextSearch}">
+					<c:set var="searchTerm" value=" "></c:set><spring:theme code="search.page.searchText.exceptTerm" />
+				</c:if>
+				 
+			</h1>
 		</div>
 		
 		<nav:searchSpellingSuggestion spellingSuggestion="${searchPageData.spellingSuggestion}" />
