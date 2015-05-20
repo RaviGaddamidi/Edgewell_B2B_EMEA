@@ -143,6 +143,8 @@ ACC.productorderform = {
 			$.tmpl(ACC.productorderform.$omsErrorMessageTemplate, {
 				errorMessage:  freshData['basket.page.viewFuture.unavailable']
 			}).appendTo(ACC.productorderform.$omsErrorMessageContainer);
+			
+			  $("html, body").animate({ scrollTop: 0 }, 50);
 		}
 		else {
 			$.each(skus, function(index, skuId) {

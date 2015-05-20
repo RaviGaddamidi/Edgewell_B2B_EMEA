@@ -182,11 +182,11 @@ INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemp
 
 # CMS components velocity templates
 INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
-;energizer-CMSImageComponent-template;java.util.Map
-;energizer-BannerComponent-template;java.util.Map
-;energizer-SimpleBannerComponent-template;java.util.Map
-;energizer-CMSLinkComponent-template;java.util.Map
-;energizer-CMSParagraphComponent-template;java.util.Map
+;houseHold-CMSImageComponent-template;java.util.Map
+;houseHold-BannerComponent-template;java.util.Map
+;houseHold-SimpleBannerComponent-template;java.util.Map
+;houseHold-CMSLinkComponent-template;java.util.Map
+;houseHold-CMSParagraphComponent-template;java.util.Map
 
 # Email velocity templates
 INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
@@ -236,11 +236,11 @@ $lang=en
 
 # CMS components velocity templates
 UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
-;energizer-BannerComponent-template;CMSBannerComponent Template;$emailResource/email-bannerComponentTemplate.vm;
-;energizer-CMSImageComponent-template;CMSImageComponent Template;$emailResource/email-cmsImageComponentTemplate.vm;
-;energizer-CMSLinkComponent-template;CMSLinkComponent Template;$emailResource/email-cmsLinkComponentTemplate.vm;
-;energizer-CMSParagraphComponent-template;CMSParagraphComponent Template;$emailResource/email-cmsParagraphComponentTemplate.vm;
-;energizer-SimpleBannerComponent-template;CMSSimpleBannerComponent Template;$emailResource/email-bannerComponentTemplate.vm;
+;houseHold-BannerComponent-template;CMSBannerComponent Template;$emailResource/email-bannerComponentTemplate.vm;
+;houseHold-CMSImageComponent-template;CMSImageComponent Template;$emailResource/email-cmsImageComponentTemplate.vm;
+;houseHold-CMSLinkComponent-template;CMSLinkComponent Template;$emailResource/email-cmsLinkComponentTemplate.vm;
+;houseHold-CMSParagraphComponent-template;CMSParagraphComponent Template;$emailResource/email-cmsParagraphComponentTemplate.vm;
+;houseHold-SimpleBannerComponent-template;CMSSimpleBannerComponent Template;$emailResource/email-bannerComponentTemplate.vm;
 
 # Email velocity templates
 UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
