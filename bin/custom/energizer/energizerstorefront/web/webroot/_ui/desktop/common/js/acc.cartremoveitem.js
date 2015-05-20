@@ -480,6 +480,15 @@ ACC.cartremoveitem = {
 				$('#orderTotals').remove();
 				$("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));		
 			}
+			
+			$('#weight_txt').val(totalProductWeightInPercent);
+			$('#volume_txt').val(totalProductVolumeInPercent);	
+			
+			var isContainerFullFlag = cartData.isContainerFull;						
+			$('#isContainerFull').val(isContainerFullFlag);								
+
+			ACC.cartremoveitem.fillThis();
+			
 		},
 		getCartData : function()
 		{
