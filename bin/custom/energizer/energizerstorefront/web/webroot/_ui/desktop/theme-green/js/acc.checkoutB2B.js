@@ -332,6 +332,27 @@ ACC.checkoutB2B = {
 			$.postJSON($('.summaryDeliveryAddress').data("set"), {addressId: addressId}, function(data){
 				document.leadTime=data.leadTime;
 			    document.getElementById("leadTimeId").innerHTML = document.leadTime;
+			    datePickerTextBox=$("#datepicker-2");
+			    if(data.requestedDeliveryDate!=null && data.requestedDeliveryDate>0)
+			    	{
+				    	leadTimeDate=new Date(data.requestedDeliveryDate);
+					    datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+					    monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+					    yearPart=leadTimeDate.getFullYear().toString();
+					    datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+			    	}
+			    else
+			    	{
+			    		if(document.leadTime!=null && document.leadTime>0)
+			    			{
+				    			leadTimeDate=new Date(new Date().getTime()+(86400000*document.leadTime));
+							    datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+							    monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+							    yearPart=leadTimeDate.getFullYear().toString();
+							    datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+			    			}
+			    	}
+			    
 				var reqDevdate=new Date(data.requestedDeliveryDate);
 				var curr_date = reqDevdate.getDate();
 				var curr_month = reqDevdate.getMonth();
