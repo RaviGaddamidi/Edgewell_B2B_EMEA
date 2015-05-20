@@ -167,11 +167,11 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private String uom = null;
 	private String rejectionReason = null;
 	private String rejectedStatus = "Yes";
-	private final Double itemTotalPrice = null;
-	private final Double lineItemTotalPrice = null;
-	private final Double itemTotalShipment = null;
-	private final Double itemTotalDiscount = null;
-	private final Double itemTax = null;
+	private Double itemTotalPrice = null;
+	private Double lineItemTotalPrice = null;
+	private Double itemTotalShipment = null;
+	private Double itemTotalDiscount = null;
+	private Double itemTax = null;
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
