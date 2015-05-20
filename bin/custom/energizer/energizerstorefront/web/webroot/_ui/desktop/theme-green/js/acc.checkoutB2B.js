@@ -331,7 +331,8 @@ ACC.checkoutB2B = {
 			var addressId = $(this).data('address');
 			$.postJSON($('.summaryDeliveryAddress').data("set"), {addressId: addressId}, function(data){
 				document.leadTime=data.leadTime;
-			    document.getElementById("leadTimeId").innerHTML = document.leadTime;
+				document.leadTime = document.leadTime +" days";
+				document.getElementById("leadTimeId").innerHTML = document.leadTime;
 			    datePickerTextBox=$("#datepicker-2");
 			    if(data.requestedDeliveryDate!=null && data.requestedDeliveryDate>0)
 			    	{
