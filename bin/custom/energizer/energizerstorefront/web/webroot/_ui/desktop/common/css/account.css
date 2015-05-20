@@ -242,3 +242,15 @@ div.delivery_stages .headline{
 .accountContentPane .headline{
 	padding: 0px;
 }
+.accountContentPane .control-group {
+	width:400px;
+}
+.control-group.error input{
+	width:250px;
+}
+.accountContentPane .control-group input{
+	width:250px;
+}
+.accountContentPane .accountnavigationcollectioncomponent .accountNav{
+	  height: auto;
+}
