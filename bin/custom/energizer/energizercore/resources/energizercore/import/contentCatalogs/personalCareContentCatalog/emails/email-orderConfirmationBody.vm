@@ -23,10 +23,10 @@
 		</tr>
 		<tr>
 			<td align="center" valign="top">
-				<table width="90" border="6" align="center" cellpadding="0" cellspacing="0" bordercolor="#ebedee">
+				<table width="90%" border="6" align="center" cellpadding="0" cellspacing="0" bordercolor="#ebedee">
 					<tr>
 						<td align="center" valign="top" bgcolor="#FFFFFF">
-							<table width="80" cellpadding="0" cellspacing="0" border="0" align="center">
+							<table width="80%" cellpadding="0" cellspacing="0" border="0" align="center">
 								<tr>
 									<td valign="middle">&nbsp;</td>
 								</tr>
@@ -181,8 +181,14 @@
 															
 															<td>&nbsp;</td>
 															<td><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">
+															#if(${ctx.order.deliveryAddress.title})
+																#if(${ctx.order.deliveryAddress.firstName})
+																	#if(${ctx.order.deliveryAddress.lastName})
 																${ctx.order.deliveryAddress.title} ${ctx.order.deliveryAddress.firstName} ${ctx.order.deliveryAddress.lastName}<br/>
 																${ctx.order.deliveryAddress.line1}<br/>
+																#end
+																#end
+																#end
 																#if(${ctx.order.deliveryAddress.line2}) ${ctx.order.deliveryAddress.line2}<br/>#end
 																${ctx.order.deliveryAddress.town}<br/>
 																${ctx.order.deliveryAddress.postalCode}<br/>
@@ -252,7 +258,7 @@
 																		<td valign="top"><p><font color="#666666" size="3" face="Arial, Helvetica, sans-serif"><b>${ctx.order.totalPrice.formattedValue}</b></font></p></td>
 																	</tr>
 																</table>
-															<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>
+															<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>-->
 															</td>
 														</tr>
 													</table>

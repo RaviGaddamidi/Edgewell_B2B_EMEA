@@ -350,10 +350,13 @@ ACC.cartremoveitem = {
                       {
                             var error = cartData.businesRuleErrors[i];
                             
-                            errors = errors + error + "<br/>";                                
+                            errors = errors + error + "<br/>";  
+                            
                       }
                       errorsDiv.html(errors); 
                       errorsDiv.addClass("alert negative");
+                      
+                      $("html, body").animate({ scrollTop: 0 }, 50);
                       //errorsDiv.fadeOut(3000);
                 }else{
                       businesRuleErrors
@@ -477,6 +480,15 @@ ACC.cartremoveitem = {
 				$('#orderTotals').remove();
 				$("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));		
 			}
+			
+			$('#weight_txt').val(totalProductWeightInPercent);
+			$('#volume_txt').val(totalProductVolumeInPercent);	
+			
+			var isContainerFullFlag = cartData.isContainerFull;						
+			$('#isContainerFull').val(isContainerFullFlag);								
+
+			ACC.cartremoveitem.fillThis();
+			
 		},
 		getCartData : function()
 		{

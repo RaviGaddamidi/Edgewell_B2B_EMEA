@@ -24,6 +24,12 @@ ACC.product = {
 		
 		ACC.common.$globalMessages.html(cartResult.cartGlobalMessagesHtml);
 		
+		var errLen =  cartResult.cartGlobalMessagesHtml;
+		if(errLen.length > 0)		
+		{
+			$("html, body").animate({ scrollTop: 0 }, 50);
+		}
+		
 		$('#addToCartLayer').remove();
 		
 		if (typeof ACC.minicart.refreshMiniCartCount == 'function')

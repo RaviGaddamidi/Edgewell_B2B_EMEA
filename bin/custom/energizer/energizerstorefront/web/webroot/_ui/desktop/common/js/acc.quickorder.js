@@ -104,6 +104,7 @@ ACC.quickorder = {
 			div=document.createElement("div");
 			$(div).attr("id",productCode+"msg").text(msg).addClass("alert").addClass("negative");
 			$("#globalMessages").append(div);
+			$("html, body").animate({ scrollTop: 0 }, 50);
 			}
 		else
 			{
