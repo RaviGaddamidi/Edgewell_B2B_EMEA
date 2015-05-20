@@ -851,6 +851,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	public String simulateOrder(final Model model, @Valid final PlaceOrderForm placeOrderForm, final BindingResult bindingResult)
 			throws CMSItemNotFoundException
 	{
+		final Long srartTime = System.currentTimeMillis();
+		LOG.info("Simulation invocation started " + srartTime);
 		try
 		{
 			CartData cartData = getCheckoutFlowFacade().getCheckoutCart();
@@ -895,6 +897,9 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			energizerB2BCheckoutFlowFacade.updateSessionCart(cartData);
 			cartData = getCheckoutFlowFacade().getCheckoutCart();
 			model.addAttribute("cartData1", cartData);
+			final Long endTime = System.currentTimeMillis();
+			LOG.info("Simulation invocation ended " + endTime);
+			LOG.info("Simulation total time in Sec" + (srartTime - endTime) / 1000);
 			return ControllerConstants.Views.Pages.SingleStepCheckout.SimulateCheckoutSummaryPage;
 		}
 		catch (final HttpClientErrorException clientException)

@@ -166,11 +166,12 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private Long orderEntryQty = null;
 	private String uom = null;
 	private String rejectionReason = null;
-	private Double itemTotalPrice = null;
-	private Double lineItemTotalPrice = null;
-	private Double itemTotalShipment = null;
-	private Double itemTotalDiscount = null;
-	private Double itemTax = null;
+	private String rejectedStatus = "Yes";
+	private final Double itemTotalPrice = null;
+	private final Double lineItemTotalPrice = null;
+	private final Double itemTotalShipment = null;
+	private final Double itemTotalDiscount = null;
+	private final Double itemTax = null;
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -440,6 +441,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 			}
 			energizerOrderEntry.setUnit(existUnit);
 			energizerOrderEntry.setRejectionReason(rejectionReason);
+			energizerOrderEntry.setRejectedStatus(rejectedStatus);
 			energizerOrderEntry.setItemTotalShipment(itemTotalShipment);
 
 			if (itemTotalPrice != null && itemTotalDiscount != null)
@@ -637,6 +639,10 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		if (!StringUtils.isEmpty(csvValuesMap.get(REJECTION_REASON)))
 		{
 			rejectionReason = csvValuesMap.get(REJECTION_REASON);
+			if (rejectionReason.equals("0"))
+			{
+				rejectedStatus = "No";
+			}
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TOTAL_PRICE)))
