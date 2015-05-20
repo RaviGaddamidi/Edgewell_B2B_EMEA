@@ -53,8 +53,8 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;QuickOrderPageLink;Quick Order
 ;;ExcelOrderPageLink;Excel Order
 ;;AboutUSLink;About US
-;;CopyRightLink;©2015 Energizer
-;;TrademarkLink;Trademark
+#;;CopyRightLink;©2015 Energizer
+#;;TrademarkLink;Trademark
 ;;TermsAndConditionsLink;Terms And Conditions
 ;;PrivacyPolicyLink;Privacy Policy
 ;;ContactUSLink;Contact US
