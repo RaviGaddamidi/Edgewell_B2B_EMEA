@@ -147,9 +147,16 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	@Override
 	public CartData simulateOrder(final CartData cartData) throws Exception
 	{
+		final Long startTime = System.currentTimeMillis();
+		LOG.info("Before marshall " + startTime);
 		final String orderSimulateXML = simulateOrderMarshall(cartData);
+		final Long marshallTime = System.currentTimeMillis();
+		LOG.info("Marshall took " + (startTime - marshallTime) / 1000 + " Sec");
 		final String restCallResponse = invokeRESTCall(orderSimulateXML, "simulate");
+		final Long unmarshallTime = System.currentTimeMillis();
+		LOG.info("REST Call took " + (marshallTime - unmarshallTime) / 1000 + " Sec");
 		final AbstractOrderData orderData = simulateOrderUnMarshall(restCallResponse, cartData);
+		LOG.info("UnMarshall took " + (unmarshallTime - System.currentTimeMillis()) / 1000 + " Sec");
 		return (CartData) orderData;
 	}
 
@@ -163,6 +170,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	public int createOrder(final OrderModel orderModel) throws Exception
 	{
 		String OrderCreationXML = "";
+		final Long startTime = System.currentTimeMillis();
+		LOG.info("Before create order marshall " + startTime);
 		try
 		{
 			OrderCreationXML = createOrderMarshall(orderModel);
@@ -171,17 +180,23 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		{
 			throw e;
 		}
+		final Long marshallTime = System.currentTimeMillis();
+		LOG.info("Create order Marshall took " + (startTime - marshallTime) / 1000 + " Sec");
 		final String restCallResponse = invokeRESTCall(OrderCreationXML, "createOrder");
 
+		final Long unmarshallTime = System.currentTimeMillis();
+		LOG.info("Create order REST Call took " + (marshallTime - unmarshallTime) / 1000 + " Sec");
 		try
 		{
 			simulateOrderforIDUnMarshall(restCallResponse, orderModel);
+			LOG.info("Create order UnMarshall took " + (unmarshallTime - System.currentTimeMillis()) / 1000 + " Sec");
 			return SUCCESS;
 		}
 		catch (final Exception e)
 		{
 			return FAILURE;
 		}
+
 	}
 
 	private String simulateOrderMarshall(final AbstractOrderData orderData) throws Exception

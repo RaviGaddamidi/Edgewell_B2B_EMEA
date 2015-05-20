@@ -22,3 +22,7 @@ body, table {font:10pt verdana;}
 .cnt_utlvolfill_cls{position:relative;top:50px;z-index:101;text-align:center;}
 .cnt_utlwilfill_cls{position:relative;top:50px;z-index:101;text-align:center;}
 .fixthis_row_cls{padding-bottom:45px;}
+
+.cnt_utl_cls{
+	text-transform: uppercase;
+}

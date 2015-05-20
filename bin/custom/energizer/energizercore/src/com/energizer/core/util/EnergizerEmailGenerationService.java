@@ -104,7 +104,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 		EmailMessageModel emailMessageModel;
 		if (emailSubject.indexOf("Order Confirmation") != -1)
 		{
-			final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(getSalesPersonEmailId(), "");
+			final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(getSalesPersonEmailId(),
+					getSalesPersonEmailId());
 			ccAddress.setEmailAddress(getSalesPersonEmailId());
 			ccAddress.setDisplayName(getDisplayName());
 			emailMessageModel = super.createEmailMessage(emailSubject, emailBody, emailContext);
@@ -135,7 +136,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 				for (int i = 0; i < emailList.size(); i++)
 				{
 					final String emailAddress = emailList.get(i);
-					final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(emailAddress, "");
+					final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(emailAddress, emailAddress);
 					ccAddress.setEmailAddress(emailAddress);
 					ccAddress.setDisplayName(getDisplayName());
 
@@ -158,7 +159,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 		else if (emailSubject.indexOf("Create Order in SAP failed for reference no") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
-			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(orderApprover.getEmail(), "");
+			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(orderApprover.getEmail(),
+					orderApprover.getEmail());
 			toEmails.add(toAddress);
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
