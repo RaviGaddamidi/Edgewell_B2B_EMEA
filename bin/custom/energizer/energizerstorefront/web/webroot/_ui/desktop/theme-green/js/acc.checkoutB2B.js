@@ -333,6 +333,27 @@ ACC.checkoutB2B = {
 				document.leadTime=data.leadTime;
 				document.leadTime = document.leadTime +" days";
 				document.getElementById("leadTimeId").innerHTML = document.leadTime;
+			    datePickerTextBox=$("#datepicker-2");
+			    if(data.requestedDeliveryDate!=null && data.requestedDeliveryDate>0)
+			    	{
+				    	leadTimeDate=new Date(data.requestedDeliveryDate);
+					    datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+					    monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+					    yearPart=leadTimeDate.getFullYear().toString();
+					    datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+			    	}
+			    else
+			    	{
+			    		if(document.leadTime!=null && document.leadTime>0)
+			    			{
+				    			leadTimeDate=new Date(new Date().getTime()+(86400000*document.leadTime));
+							    datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+							    monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+							    yearPart=leadTimeDate.getFullYear().toString();
+							    datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+			    			}
+			    	}
+			    
 				var reqDevdate=new Date(data.requestedDeliveryDate);
 				var curr_date = reqDevdate.getDate();
 				var curr_month = reqDevdate.getMonth();
@@ -817,7 +838,7 @@ $('#checkoutPlaceOrder').click(function(){
 						else{
 							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
 							$('#globalMessages').html(html);
-							
+							$("html, body").animate({ scrollTop: 0 }, 50);
 							return false;
 						}
 					
@@ -825,7 +846,7 @@ $('#checkoutPlaceOrder').click(function(){
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
 					$('#globalMessages').html(html);
-					
+					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
 					}
 					
@@ -842,7 +863,7 @@ $('#checkoutPlaceOrder2').click(function(){
 						else{
 							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
 							$('#globalMessages').html(html);
-							
+							$("html, body").animate({ scrollTop: 0 }, 50);
 							return false;
 						}
 					
@@ -850,7 +871,7 @@ $('#checkoutPlaceOrder2').click(function(){
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
 					$('#globalMessages').html(html);
-					
+					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
 					}
 					

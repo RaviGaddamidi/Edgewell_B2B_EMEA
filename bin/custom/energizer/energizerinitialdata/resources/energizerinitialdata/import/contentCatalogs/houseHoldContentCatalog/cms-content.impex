@@ -160,9 +160,9 @@ INSERT_UPDATE LanguageCurrencyComponent;$contentCV[unique=true];uid[unique=true]
 
 # Site Logo
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
-;;/images/banners/homepage/ENR_Battery.jpg;ENR_Battery.jpg;$siteResource/images/banners/homepage/ENR_Battery.jpg;image/jpg;Eveready
-;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Eveready
-;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Eveready
+;;/images/banners/homepage/ENR_Battery.jpg;ENR_Battery.jpg;$siteResource/images/banners/homepage/ENR_Battery.jpg;image/jpg;Energizer AA
+;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Energizer Portable Lighting
+;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Eveready Non-Rechargeable
 #;;/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;Powertools_468x418_Rotating_Image_EN_02.jpg;$siteResource/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;image/jpg;Energizer
 
 

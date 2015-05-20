@@ -56,6 +56,10 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 
 	private static final String LOGIN_URL = "/login";
 
+	private static final String TERMS_CONDITIONS = "/terms-and-conditions";
+
+	private static final String FAQ = "/faq";
+
 	private static final String LANGUAGE_URL = "/_s/language";
 
 	private static final String HOME_URL = "/";
@@ -123,7 +127,8 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 
 	protected boolean isNotLoginRequest(final HttpServletRequest request)
 	{
-		return !request.getRequestURI().contains(LOGIN_URL) && !request.getRequestURI().contains(LANGUAGE_URL);
+		return !request.getRequestURI().contains(LOGIN_URL) && !request.getRequestURI().contains(LANGUAGE_URL)
+				&& !request.getRequestURI().contains(TERMS_CONDITIONS) && !request.getRequestURI().contains(FAQ);
 	}
 
 }

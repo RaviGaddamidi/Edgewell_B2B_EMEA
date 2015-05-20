@@ -350,10 +350,13 @@ ACC.cartremoveitem = {
                       {
                             var error = cartData.businesRuleErrors[i];
                             
-                            errors = errors + error + "<br/>";                                
+                            errors = errors + error + "<br/>";  
+                            
                       }
                       errorsDiv.html(errors); 
                       errorsDiv.addClass("alert negative");
+                      
+                      $("html, body").animate({ scrollTop: 0 }, 50);
                       //errorsDiv.fadeOut(3000);
                 }else{
                       businesRuleErrors
