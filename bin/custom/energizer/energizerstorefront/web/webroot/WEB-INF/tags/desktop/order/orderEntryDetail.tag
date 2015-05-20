@@ -17,10 +17,11 @@
 		<a href="${productUrl}">
 			<product:productPrimaryImage product="${entry.product}" format="thumbnail"/>
 		</a>
+		<a href="${entry.product.purchasable ? productUrl : ''}">${entry.product.name}</a>
 	</td>
 	<td headers="header2" class="details">				
 		<ycommerce:testId code="orderDetails_productName_link">
-			<div class="itemName"><a href="${entry.product.purchasable ? productUrl : ''}">${entry.product.name}</a></div>
+			<!--<div class="itemName"><a href="${entry.product.purchasable ? productUrl : ''}">${entry.product.name}</a></div>-->
 		</ycommerce:testId>
 						
 		<c:forEach items="${entry.product.baseOptions}" var="option">
