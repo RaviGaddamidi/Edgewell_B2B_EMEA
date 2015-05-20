@@ -218,7 +218,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
 ;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
 ;;LegalLink;Legal Link;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
-;;FAQLink;FAQ Link;/faq;FAQLink;newWindow
+;;FAQLink;FAQ Link;"http://www.energizerholdings.com/en/pages/legal.aspx";FAQLink;newWindow
 
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
 ;;frequentlyAskedQuestionsPage;text/png;;;;;
