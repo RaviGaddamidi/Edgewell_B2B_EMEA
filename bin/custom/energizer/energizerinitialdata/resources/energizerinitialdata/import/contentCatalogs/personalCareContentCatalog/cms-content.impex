@@ -212,8 +212,8 @@ INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&c
 # Footer Component
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
 ;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
-;;CopyRightLink;CopyRight Link;"";CopyRightLink;sameWindow
-;;TrademarkLink;Trademark Link;"http://www.energizerholdings.com/en/Pages/default.aspx";TrademarkLink;sameWindow
+#;;CopyRightLink;CopyRight Link;"";CopyRightLink;sameWindow
+#;;TrademarkLink;Trademark Link;"http://www.energizerholdings.com/en/Pages/default.aspx";TrademarkLink;sameWindow
 ;;TermsAndConditionsLink;Terms And Conditions Link;"http://www.energizerholdings.com/en/pages/legal.aspx";TermsAndConditionsLink;newWindow
 ;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
 ;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
@@ -229,10 +229,15 @@ UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $
 
 INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);links(&componentRef);&nodeRef
 ;SiteRootNode;;SiteRootNode;root;;SiteRootNode;EnergizerNavNode;;Energizer Site;SiteRootNode;;EnergizerNavNode
-;FooterNavNode;;Footer Nav Node;EnergizerNavNode;AboutUSLink,,CopyRightLink,TrademarkLink,TermsAndConditionsLink,PrivacyPolicyLink,ContactUSLink,LegalLink,FAQLink;FooterNavNode
+;FooterNavNode;;Footer Nav Node;EnergizerNavNode;AboutUSLink,,TermsAndConditionsLink,PrivacyPolicyLink,ContactUSLink,LegalLink,FAQLink;FooterNavNode
 
 INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter;navigationNodes(&nodeRef);&componentRef
 ;;FooterComponent;2;FooterNavNode;FooterComponent
 
+
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang];&componentRef
+;;FooterParagraphComponent;"<br/>&copy;2015 Energizer &nbsp;&nbsp;&nbsp;Trademark:Energizer and certain graphic designs are trademarks of Energizer";FooterParagraphComponent
+
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;FooterSlot;FooterComponent
+;;FooterSlot;FooterComponent,FooterParagraphComponent

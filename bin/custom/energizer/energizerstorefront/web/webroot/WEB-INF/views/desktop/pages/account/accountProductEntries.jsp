@@ -75,16 +75,26 @@
 				<c:forEach items="${shipmentData}" var="shipmentDetails">
 
 					<tr>
-						<td headers="header1" ><ycommerce:testId
+						<td headers="header1" >
+						</td>
+								<c:set var="setShipmentKey" value="0"></c:set>
+								<c:forEach items="${shipmentDetails.value}" var="uploadDataList" varStatus="listLoop">
+								
+							<tr>
+							<c:if test="${setShipmentKey eq 0 and listLoop.index eq 0}">
+							<td headers="header2" ><ycommerce:testId
 								code="orderHistory_orderNumber_link">
 								<input type="radio" id='buttonStatus' name="shippingPoint" class="shippingPointRadioButton" value="${shipmentDetails.key}">
 								<c:out value="${shipmentDetails.key}" default="Not Available"
 									escapeXml="false"></c:out>	
 									</ycommerce:testId>
-						</td>
-								<c:forEach items="${shipmentDetails.value}" var="uploadDataList">
-							<tr>
-								<td headers="header2" > </td>
+									<c:set var="setShipmentKey" value="1"></c:set>
+									</td>
+							</c:if>
+							<c:if test="${setShipmentKey eq 1 and listLoop.index gt 0}">
+							<td headers="header2" >&nbsp;&nbsp;</td>
+							</c:if>
+								
 								<td headers="header3"><ycommerce:testId
 								code="orderHistory_orderNumber_link">
 								<c:out value="${uploadDataList.materialId}" default="Not Available"
