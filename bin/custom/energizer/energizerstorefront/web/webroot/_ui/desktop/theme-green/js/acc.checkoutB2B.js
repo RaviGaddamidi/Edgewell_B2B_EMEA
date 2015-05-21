@@ -829,11 +829,20 @@ document.assignLeadTimeToDatePicker = function() {
 $('#checkoutPlaceOrder').click(function(){
     
 	var poNumber = $("#PurchaseOrderNumber").val();
-					
+	var datepicker = $('#datepicker-2').val();	
+			
 					if(poNumber){
 						if($("#Terms1").prop('checked')){
+							if(datepicker){
+								return true;
+							}
+							else{
+								var html = "<div class='alert negative'>Please select delivery address.</div>";
+								$('#globalMessages').html(html);
+								$("html, body").animate({ scrollTop: 0 }, 50);
+								return false;
+							}
 							
-							return true;
 						}
 						else{
 							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
@@ -843,37 +852,50 @@ $('#checkoutPlaceOrder').click(function(){
 						}
 					
 					}else{
+						
 					
 					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
 					$('#globalMessages').html(html);
 					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
+						
 					}
 					
 	});
 $('#checkoutPlaceOrder2').click(function(){
     
 	var poNumber = $("#PurchaseOrderNumber").val();
+			var datepicker = $('#datepicker-2').val();	
+			
+			if(poNumber){
+				if($("#Terms1").prop('checked')){
+					if(datepicker){
+						return true;
+					}
+					else{
+						var html = "<div class='alert negative'>Please select delivery address.</div>";
+						$('#globalMessages').html(html);
+						$("html, body").animate({ scrollTop: 0 }, 50);
+						return false;
+					}
 					
-					if(poNumber){
-						if($("#Terms1").prop('checked')){
-							
-							return true;
-						}
-						else{
-							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
-							$('#globalMessages').html(html);
-							$("html, body").animate({ scrollTop: 0 }, 50);
-							return false;
-						}
-					
-					}else{
-					
-					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
+				}
+				else{
+					var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
 					$('#globalMessages').html(html);
 					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
-					}
+				}
+			
+			}else{
+				
+			
+			var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
+			$('#globalMessages').html(html);
+			$("html, body").animate({ scrollTop: 0 }, 50);
+			return false;
+				
+			}
 					
 	});
 $('#Terms1').click(function(){
@@ -892,6 +914,28 @@ $(document).on("click",'#Terms1PlaceOrder,#Terms2PlaceOrder', function (e){
 		$('#Terms1PlaceOrder,#Terms2PlaceOrder').attr('checked','checked')
 	}else{
 		$('#Terms1PlaceOrder,#Terms2PlaceOrder').removeAttr('checked')
+	}
+});
+$('#simulatePlaceOrderId1').click(function(){
+	if($("#Terms1PlaceOrder").prop('checked')){
+		return true;
+	}
+	else{
+		var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
+		$('#globalMessages').html(html);
+		$("html, body").animate({ scrollTop: 0 }, 50);
+		return false;
+	}
+});
+$('#simulatePlaceOrderId2').click(function(){
+	if($("#Terms1PlaceOrder").prop('checked')){
+		return true;
+	}
+	else{
+		var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
+		$('#globalMessages').html(html);
+		$("html, body").animate({ scrollTop: 0 }, 50);
+		return false;
 	}
 });
 
