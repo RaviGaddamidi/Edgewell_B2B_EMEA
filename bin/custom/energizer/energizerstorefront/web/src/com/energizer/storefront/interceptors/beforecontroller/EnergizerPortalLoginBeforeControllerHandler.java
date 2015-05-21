@@ -17,6 +17,7 @@ import de.hybris.platform.acceleratorservices.urlresolver.SiteBaseUrlResolutionS
 import de.hybris.platform.cms2.servicelayer.services.CMSSiteService;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.util.Config;
 
 import java.io.IOException;
 
@@ -56,9 +57,9 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 
 	private static final String LOGIN_URL = "/login";
 
-	private static final String TERMS_CONDITIONS = "/terms-and-conditions";
+	private static final String TERMS_CONDITIONS = "termsandconditions.page.url";
 
-	private static final String FAQ = "/faq";
+	private static final String FAQ = "faq.page.url";
 
 	private static final String LANGUAGE_URL = "/_s/language";
 
@@ -128,7 +129,8 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 	protected boolean isNotLoginRequest(final HttpServletRequest request)
 	{
 		return !request.getRequestURI().contains(LOGIN_URL) && !request.getRequestURI().contains(LANGUAGE_URL)
-				&& !request.getRequestURI().contains(TERMS_CONDITIONS) && !request.getRequestURI().contains(FAQ);
+				&& !request.getRequestURI().contains(Config.getParameter(TERMS_CONDITIONS))
+				&& !request.getRequestURI().contains(Config.getParameter(FAQ));
 	}
 
 }
