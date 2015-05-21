@@ -91,7 +91,7 @@
 					</div>
 				</div>
 		
-			<a class="button" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>
+			<a class="button continueShop-button" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
