@@ -210,3 +210,15 @@ table.volume-prices tbody td {
 .quickOrder_text_btw_txt {
 	margin-right: 22px;
 }
+.footer .links{
+	width: 100% !important;
+}
+.footer .links ul.right_col {
+	float: left;
+	margin-left: 23%;
+	width: auto !important;
+}
+.footer .links ul.left_col{
+	width: 167px;
+}
+

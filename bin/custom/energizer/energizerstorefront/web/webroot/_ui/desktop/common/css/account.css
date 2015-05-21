@@ -260,3 +260,9 @@ div.delivery_stages .headline{
 .accountContentPane .accountnavigationcollectioncomponent .accountNav .headline{
 	color: #0b4f04;
 }
+.b2BCustomerFormList .control-group.error input{
+	width: 100% !important;
+}
+.b2BCustomerFormList .control-group select{
+	width: 100% !important;
+}

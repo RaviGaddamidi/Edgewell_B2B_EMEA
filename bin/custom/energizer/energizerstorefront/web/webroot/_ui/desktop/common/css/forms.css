@@ -327,6 +327,12 @@ width: 300px;
 #placeOrderForm2 .control-group label{
 	width:354px;
 }
+.control-group legend {
+	width: 87%;
+}
+.control-group select{
+	width: 250px;
+}
 .companyContentPane{width:500px !important;}
 #b2BCustomerForm{width:65%;}
 #b2BCustomerForm .control-group label,#b2BCustomerForm .control-group select,#b2BCustomerForm .control-group input{font-size:0.9em;width:99%;}
@@ -346,3 +352,10 @@ width: 300px;
 
 
 
+<<<<<<< .mine
+
+
+=======
+
+
+>>>>>>> .theirs

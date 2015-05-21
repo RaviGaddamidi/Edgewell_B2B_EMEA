@@ -456,7 +456,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected String createUser(final B2BCustomerForm b2BCustomerForm, final BindingResult bindingResult, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
-
+		model.addAttribute("action", "manageUsers");
 		emailValidator.validate(b2BCustomerForm, bindingResult);
 		userRoleValidator.validate(b2BCustomerForm, bindingResult);
 		if (bindingResult.hasErrors())

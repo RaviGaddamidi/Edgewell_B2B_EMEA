@@ -155,11 +155,16 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		final CSVFormat csvFormat = CSVFormat.EXCEL.withDelimiter(DELIMETER).withIgnoreSurroundingSpaces();
 		Iterable<CSVRecord> records = null;
+		Iterable<CSVRecord> recordsForLog = null;
 		reader = new FileReader(file);
+		final FileReader readerForLog = new FileReader(file);
 		try
 		{
 			setFileName(file.getName().toLowerCase());
 			records = csvFormat.withHeader().parse(reader);
+			recordsForLog = csvFormat.withHeader().parse(readerForLog);
+			logRecord(recordsForLog);
+			readerForLog.close();
 		}
 		catch (final IOException e)
 		{
@@ -324,6 +329,31 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			throw new Exception("Invalid Catalog Version ");
 		}
 		return catalogVersion;
+	}
+
+
+	public void logRecord(final Iterable<CSVRecord> recordsForLog)
+	{
+		//		final boolean isCronJobLoggerEnabled =  (configurationService.getConfiguration().getBoolean("isCronJobLoggerEnabled", false));		
+
+		//		if(isCronJobLoggerEnabled){
+		boolean printedHeader = false;
+		LOG.info("************************ CSV RECORDS ***********************************");
+		for (final CSVRecord record : recordsForLog)
+		{
+
+			final Map<String, String> csvValuesMap = record.toMap();
+			if (!printedHeader)
+			{
+				LOG.info(csvValuesMap.keySet());
+			}
+			printedHeader = true;
+			LOG.info(csvValuesMap.values());
+		}
+
+		LOG.info("***********************************************************************************");
+		//		}
+
 	}
 
 	/*
@@ -550,5 +580,8 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		this.masterDataStream = masterDataStream;
 	}
+
+
+
 
 }

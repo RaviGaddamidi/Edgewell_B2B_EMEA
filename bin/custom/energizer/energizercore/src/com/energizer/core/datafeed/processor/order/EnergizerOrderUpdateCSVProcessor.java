@@ -115,9 +115,9 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private static final String ITEM_TOTAL_SHIPMENT = "ItemTotalShipment";
 	private static final String ITEM_TOTAL_DISCOUNT = "ItemTotalDiscount";
 	private static final String ITEM_TAX = "ItemTax";
-	private static final String BDS_DOCID = "BDSDOCID";
-	private static final String BDS_CONTREP = "BDSCONTREP";
-	private static final String BDS_DOCUCLASS = "BDSDOCUCLASS";
+	private static final String BDS_DOCID = "BDSDocId";
+	private static final String BDS_CONTREP = "BDSContRep";
+	private static final String BDS_DOCUCLASS = "BDSDocuClass";
 
 	private static final String FROM_EMAIL_ADDRESS = Config.getParameter("fromEmailAddress.orderEmailSender");
 	private static final String FROM_EMAIL_DISPLAY_NAME = Config.getParameter("fromEmailDisplayName.orderEmailSender");
