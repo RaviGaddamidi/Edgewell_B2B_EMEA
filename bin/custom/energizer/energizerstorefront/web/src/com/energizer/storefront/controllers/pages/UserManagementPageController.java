@@ -203,6 +203,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	@RequireHardLogIn
 	public String createUser(final Model model) throws CMSItemNotFoundException
 	{
+		model.addAttribute("action", "manageUsers");
 		/**
 		 * @see energizerCompanyB2BCommerceFacade this is to validate the maximum users are present in the current unit of
 		 *      that logged in user.

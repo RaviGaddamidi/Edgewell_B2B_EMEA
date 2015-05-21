@@ -12,6 +12,6 @@ window.open('/my-account/invoice/invoicePdfDisplay?orderCode= ${orderData.code} 
 </script>
 
 <spring:url value="/my-account/invoice/${orderData.code}?inline=true" var="viewinvoiceUrl" />
-<a class="positive right pad_right re-order invoicePdf"  style="text-align:center;background-color: #169e08;  border-color: #169e08;color: #fff; font-weight: bold; text-transform: uppercase; border-color: #000;  height: 25px;padding-top:14px;width:123px;" href="javascript:openInvoicePDF('${orderData.code}')" ><spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a>
+<a class="positive right pad_right re-order invoicePdf"  style=" text-align:center;background-color: #169e08;  border-color: #169e08;color: #fff; font-weight: bold; text-transform: uppercase; border-color: #000;  height: 40px;" href="javascript:openInvoicePDF('${orderData.code}')" ><spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a>
 
 

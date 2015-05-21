@@ -57,7 +57,7 @@
 			
 			<div class="span-19 last left">
 		  		 <order:reorderButton order="${orderData}"/>
-				 <c:if test="${not empty orderData.documentID}"> 
+				 <c:if test="${not empty orderData.invoiceNumber}"> 
 				 	<order:viewInvoiceButton orderData="${orderData}"/>
 				</c:if> 
 			</div>

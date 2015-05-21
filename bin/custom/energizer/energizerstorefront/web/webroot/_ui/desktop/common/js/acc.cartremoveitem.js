@@ -496,18 +496,32 @@ ACC.cartremoveitem = {
 		var isContainerFull = $('#isContainerFull').val();
 		var getVolTxt = $("#volume_txt").val();
 		var getWeightTxt = $("#weight_txt").val();
+		var weightCont = $("#weight_cont").height(); 	
 		
 		if(isContainerFull == 'true')
 		{
-		 		$("#utl_vol").text(100);
-				 $("#utl_wt").text(100);
+			
 		
-		$("#weight_utilization").css('height', contHeight);		
-		$("#volume_utilization").css('height', contHeight); 
+			
+	 		$("#utl_vol").text(getVolTxt);
+			$("#utl_wt").text(getWeightTxt);
+			
+			if(getVolTxt < 100){
+				contHeight = (contHeight*getVolTxt)/100;
+			}
+			if(getWeightTxt <100){
+				weightCont = (weightCont*getWeightTxt)/100;
+			}
+			
 		
-			 $("#checkoutButton_top").attr("disabled", true);
-			 $("#checkoutButton_bottom").attr("disabled",true);		
-			 
+			$("#weight_utilization").css('height', weightCont);		
+			$("#volume_utilization").css('height', contHeight); 
+		
+			$("#checkoutButton_top").attr("disabled", true);
+			$("#checkoutButton_bottom").attr("disabled",true);	
+			
+			ACC.common.$globalMessages.html('<div id="businesRuleErrors" class="alert negative" style="display: block;">Dear Customer, You have exceeded the limit. Please adjust the cart.<br></div>'	);
+			$("html, body").animate({ scrollTop: 0 }, 50);
 		}	
 		
 		if(isContainerFull == 'false')
@@ -540,21 +554,22 @@ ACC.cartremoveitem = {
 				
 				if(isContainerFull == 'true')
 				{ 
-				 if(getWeightTxt >= 100)
-				  {				
-				 	$("#weight_utilization").css('height', contHeight);				 	
-				  }
-				 else {
-				 	$("#volume_utilization").css('height', contHeight); 
-				 } 	
-				
-				 //Show Full
-				 $("#utl_vol").text(100);
-				 $("#utl_wt").text(100);
+			 		$("#utl_vol").text(getVolTxt);
+					$("#utl_wt").text(getWeightTxt);
+					
+					if(getVolTxt < 100){
+						contHeight = (contHeight*getVolTxt)/100;
+					}
+					if(getWeightTxt <100){
+						weightCont = (weightCont*getWeightTxt)/100;
+					}
+									
+					$("#weight_utilization").css('height', weightCont);		
+					$("#volume_utilization").css('height', contHeight); 				
 				 
-				 //Disable checkout buttons
-				 $("#checkoutButton_top").attr("disabled", true);
-				 $("#checkoutButton_bottom").attr("disabled",true);				 
+					 //Disable checkout buttons
+					 $("#checkoutButton_top").attr("disabled", true);
+					 $("#checkoutButton_bottom").attr("disabled",true);				 
 				}
 				
 				if(isContainerFull == 'false')

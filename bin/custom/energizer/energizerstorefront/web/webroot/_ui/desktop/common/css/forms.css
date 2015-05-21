@@ -327,7 +327,12 @@ width: 300px;
 #placeOrderForm2 .control-group label{
 	width:354px;
 }
-
+.control-group legend {
+	width: 87%;
+}
+.control-group select{
+	width: 250px;
+}
 
 
 
