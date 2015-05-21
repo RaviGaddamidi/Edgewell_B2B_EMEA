@@ -78,7 +78,7 @@
 						<button class="approverDecisionButton positive left pad_right" type="button" id="approverDecisionApprove" data-decision="APPROVE">
 							<spring:theme code="text.account.orderApproval.approveButton.displayName"/>
 						</button>
-						<button class="approverDecisionButton positive right pad_right" type="button" id="approverDecisionReject" data-decision="REJECT">
+						<button class="approverDecisionButton positive pad_right" style="margin-left:121px" type="button" id="approverDecisionReject" data-decision="REJECT">
 							<spring:theme code="text.account.orderApproval.rejectButton.displayName"/>
 						</button>
 					</div>
