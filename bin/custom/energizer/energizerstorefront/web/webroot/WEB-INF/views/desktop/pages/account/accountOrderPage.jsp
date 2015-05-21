@@ -58,7 +58,7 @@
 			<div class="span-19 last orderFix-cls">
 		  		 <order:reorderButton order="${orderData}"/>
 		  		
-				 <c:if test="${not empty orderData.status && orderData.status == 'INVOICED' }"> 
+				 <c:if test="${not empty orderData.status && orderData.status == 'SHIPPED' }"> 
 				 	<order:viewInvoiceButton orderData="${orderData}"/>
 				</c:if> 
 			</div>
