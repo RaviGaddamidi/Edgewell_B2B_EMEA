@@ -133,18 +133,63 @@
 											</tr>
 										</table>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">Please find the below details for your reference</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.PONumber}${ctx.orderData.purchaseOrderNumber}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.DeliveryDate} ${ctx.orderData.requestedDeliveryDate}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalValue} ${ctx.orderData.totalPrice.formattedValue}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalTax} ${ctx.orderData.totalTax.formattedValue}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalShipment}${ctx.orderData.deliveryCost.formattedValue}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalDiscount}  ${ctx.orderData.totalDiscounts.formattedValue}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.containerId} ${ctx.orderData.containerId}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.sealNumber} ${ctx.orderData.sealNumber}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.vesselNumber} ${ctx.orderData.vesselNumber}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.invoicePDF}${ctx.orderData.invoicePDF}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.archiveId}  ${ctx.orderData.archiveID}</font></p>
 										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.PONumber}
+										#if(${ctx.orderData.purchaseOrderNumber})
+										${ctx.orderData.purchaseOrderNumber}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.DeliveryDate}
+										#if(${ctx.orderData.requestedDeliveryDate}) ${ctx.orderData.requestedDeliveryDate}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalValue} 
+										#if(${ctx.orderData.totalPrice.formattedValue})
+										${ctx.orderData.totalPrice.formattedValue}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalTax}
+										#if(${ctx.orderData.totalTax.formattedValue}) ${ctx.orderData.totalTax.formattedValue}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalShipment}
+										#if(${ctx.orderData.deliveryCost.formattedValue})${ctx.orderData.deliveryCost.formattedValue}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.totalDiscount} 
+										#if(${ctx.orderData.totalDiscounts.formattedValue}) ${ctx.orderData.totalDiscounts.formattedValue}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.containerId} 
+										#if(${ctx.orderData.containerId})${ctx.orderData.containerId}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.sealNumber}
+										#if(${ctx.orderData.sealNumber}) ${ctx.orderData.sealNumber}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.vesselNumber} 
+										#if(${ctx.orderData.vesselNumber})${ctx.orderData.vesselNumber}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.invoicePDF}
+										#if(${ctx.orderData.invoicePDF})${ctx.orderData.invoicePDF}
+										#end
+										</font></p>
+										
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.archiveId} 
+										#if(${ctx.orderData.archiveID}) ${ctx.orderData.archiveID}
+										#end
+										</font></p>
 										<!--products end-->
 										<br/>
 										#set ($mailToUrl = "mailto:${ctx.messages.contactUsEmailAddress}")
