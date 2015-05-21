@@ -32,7 +32,7 @@
 	<div id="placeOrder" class="clearfix">
 		<form:form action="${placeOrderUrl}" id="placeOrderForm1" commandName="placeOrderForm">
 			<formElement:formCheckbox idKey="Terms1PlaceOrder" labelKey="checkout.summary.placeOrder.readTermsAndConditions" inputCSS="checkbox-input" labelCSS="checkbox-label" path="termsCheck" mandatory="true" />
-			<button type="submit" class="positive right placeOrderButton">
+			<button type="submit" id="simulatePlaceOrderId1" class="positive right placeOrderButton">
 				<spring:theme code="simulateCheckout.summary.placeOrder" />
 			</button>
 		</form:form>
@@ -51,7 +51,7 @@
 	<div class="span-24">
 		<form:form action="${placeOrderUrl}" id="placeOrderForm2" commandName="placeOrderForm">
 			<formElement:formCheckbox idKey="Terms2PlaceOrder" labelKey="checkout.summary.placeOrder.readTermsAndConditions" inputCSS="checkbox-input" labelCSS="checkbox-label" path="termsCheck" mandatory="true" />
-			<button type="submit" class="positive right placeOrderButton" >
+			<button type="submit" id="simulatePlaceOrderId2" class="positive right placeOrderButton" >
 				<spring:theme code="simulateCheckout.summary.placeOrder" />
 			</button>
 		</form:form>
