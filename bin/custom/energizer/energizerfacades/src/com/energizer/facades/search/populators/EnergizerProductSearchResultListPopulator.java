@@ -106,7 +106,10 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 			if (null != energizerCMIRModel.getShippingPoint())
 			{
 				productData.setShippingPoint(energizerCMIRModel.getShippingPoint());
+				final String shippingPointName = energizerProductService.getShippingPointName(energizerCMIRModel.getShippingPoint());
+				productData.setShippingPointName(shippingPointName == null ? EMPTY : shippingPointName);
 			}
+
 		}
 		final EnergizerProductConversionFactorModel energizerProductConversionFactorModel = energizerProductService
 				.getEnergizerProductConversion(productCode, b2bUnit.getUid());
