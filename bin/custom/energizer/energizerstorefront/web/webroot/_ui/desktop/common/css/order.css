@@ -186,6 +186,14 @@
 
 .show_err_cls td{font-weight:bold !important;color:red !important;}
 
+.orderFix-cls{
+	position:relative;
+    width:230px;
+    float: right;
+    clear: both;
+}
+
+.orderList .orderListTable tbody td p{text-align:left;}
 
 
 

@@ -236,7 +236,10 @@ div.delivery_stages .headline{
 
 /* new css */
 .delivery_stages{margin:20px 0!important;}
-.approvereject_fixcls{margin-top:50px !important;}
+.approvereject_fixcls{
+	margin-top:50px !important;
+    clear:both;
+}
 /*css fix for Profile alignment */
 
 .accountContentPane .headline{

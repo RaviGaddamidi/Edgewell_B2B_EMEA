@@ -30,8 +30,8 @@
 	clear:both;
 }
 
-
-#content{
+/*the home page will always have banners. Minimum height is not needed*/
+/*#content{
 	min-height: 600px;
 	position: relative;	
-}
+}*/
