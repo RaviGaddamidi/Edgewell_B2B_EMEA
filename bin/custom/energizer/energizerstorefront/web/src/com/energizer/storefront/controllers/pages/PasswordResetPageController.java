@@ -111,7 +111,7 @@ public class PasswordResetPageController extends AbstractPageController
 			final Model model) throws CMSItemNotFoundException
 	{
 		model.addAttribute(forgottenPwdForm);
-		final String fotgottenPassExpValue = Config.getParameter(FORGOTTEN_PASSWORD_EXP_VALUE);
+		final String forgottenPassExpValue = Config.getParameter(FORGOTTEN_PASSWORD_EXP_VALUE);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
@@ -125,16 +125,16 @@ public class PasswordResetPageController extends AbstractPageController
 			try
 			{
 				getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
-				GlobalMessages.addMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+				GlobalMessages.addSingleMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ fotgottenPassExpValue });
+						{ forgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());
 			}
 			catch (final UnknownIdentifierException unknownIdentifierException)
 			{
-				GlobalMessages.addMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+				GlobalMessages.addSingleMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ fotgottenPassExpValue });
+						{ forgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());
 				LOG.warn("Email: " + forgottenPwdForm.getEmail() + " does not exist in the database.");
 			}

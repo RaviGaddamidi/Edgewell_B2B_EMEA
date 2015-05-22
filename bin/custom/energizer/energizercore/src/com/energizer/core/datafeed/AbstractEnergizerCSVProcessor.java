@@ -111,12 +111,16 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		{
 			lineNumber++;
 			message.append(messageSource.getMessage("text.error.message.email.template.section5", new Object[]
-			{ lineNumber, error.getMessage(), error.getLineNumber(), error.getColumnNumber().toString(),
-					error.getColumnName().toString() }, locale));
+			{ lineNumber, error.getMessage(), error.getLineNumber(), "", error.getColumnName().toString() }, locale));
 		}
 
 		message.append(messageSource.getMessage("text.error.message.email.template.section6", null, locale));
 		message.append("\n");
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(message.toString());
+		}
+		//LOG.debug(message.toString());
 	}
 
 	@Override
@@ -136,12 +140,15 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 				toAddressModels.add(emailAddress);
 			}
 			emailAddress = emailService.getOrCreateEmailAddressForEmail(
-					configurationService.getConfiguration().getString("cronjobs.from.email", "customerservice@energizer.com"),
-					"Customer Service");
+					configurationService.getConfiguration().getString("cronjobs.from.email",
+							Config.getParameter("fromEmailAddress.orderEmailSender")), "Customer Service");
+			synchronized (message)
+			{
+				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
+						Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
 
-			emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
-					Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
-			emailService.send(emailMessageModel);
+				emailService.send(emailMessageModel);
+			}
 			message.setLength(0);
 		}
 		catch (final Exception e)

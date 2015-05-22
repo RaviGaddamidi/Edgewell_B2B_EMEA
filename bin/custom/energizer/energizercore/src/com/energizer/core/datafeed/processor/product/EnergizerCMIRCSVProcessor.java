@@ -138,8 +138,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				}
 				else
 				{
-
-
 					//chec if b2bunit exists
 					final EnergizerB2BUnitModel energizerB2BUnitModel = getEnergizerB2BUnit(b2bUnitId);
 
@@ -220,8 +218,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						customerlistprice = ZERO;
 						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
 					}
-
-
 					if (!matchingPriceRowFound)
 					{
 						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
@@ -247,11 +243,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
 					}//else
-
-
-
-
-
 					succeedRecord++;
 					setRecordSucceeded(succeedRecord);
 
@@ -411,8 +402,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	}
 
 	/**
-	 * @param hasCustomerListPriceBusinessError
-	 *           the hasCustomerListPriceBusinessError to set
+	 * * @param hasCustomerListPriceBusinessError the hasCustomerListPriceBusinessError to set
 	 */
 	public void setHasCustomerListPriceBusinessError(final boolean hasCustomerListPriceBusinessError)
 	{

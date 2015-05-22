@@ -15,10 +15,29 @@ package com.energizer.storefront.controllers.util;
 
 import java.util.Collection;
 
+
 public class GlobalMessage
 {
 	private String code;
 	private Collection<Object> attributes;
+	private String attribute;
+
+	/**
+	 * @return the attribute
+	 */
+	public String getAttribute()
+	{
+		return attribute;
+	}
+
+	/**
+	 * @param attribute
+	 *           the attribute to set
+	 */
+	public void setAttribute(final String attribute)
+	{
+		this.attribute = attribute;
+	}
 
 	public String getCode()
 	{
