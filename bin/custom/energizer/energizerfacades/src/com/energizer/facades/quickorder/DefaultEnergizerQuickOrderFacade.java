@@ -338,7 +338,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	private boolean validateCMIRforOrderEntry(final EnergizerCMIRModel cmir)
 	{
-		return cmir.getOrderingUnit() != null;
+		return cmir.getOrderingUnit() != null && cmir.getUom() != null && !cmir.getUom().isEmpty();
 	}
 
 	public CartData getCurrentSessionCart()
