@@ -507,15 +507,21 @@ ACC.cartremoveitem = {
 			$("#utl_wt").text(getWeightTxt);
 			
 			if(getVolTxt < 100){
-			contHeight = (contHeight*getVolTxt)/100;
-			}else{
-				$("#volume_utilization").css('background-color', '#FF5757'); 	
+				contHeight = (contHeight*getVolTxt)/100;
+				$("#volume_utilization").css('background-color', '#33cc33'); 	
 			}
+			else{
+				$("#volume_utilization").css('background-color', '#FF5757'); 	
+			}					
+			
 			if(getWeightTxt <100){
 				weightCont = (weightCont*getWeightTxt)/100;
-			}else{
-				$("#weight_utilization").css('background-color', '#FF5757');	
+				$("#weight_utilization").css('background-color', '#33cc33'); 	
 			}
+			else{
+				$("#weight_utilization").css('background-color', '#FF5757'); 	
+			}					
+			
 				
 		
 			$("#weight_utilization").css('height', weightCont);		
@@ -530,14 +536,16 @@ ACC.cartremoveitem = {
 		
 		if(isContainerFull == 'false')
 		{ 
-				if(getVolTxt == 100)
-				  {				
-				 	$("#volume_utilization").css('height', contHeight); 		 	
-				  }
-				  if(getWeightTxt == 100)
-				  {
-				  $("#weight_utilization").css('height', contHeight);		
-				  }
+			 $("#volume_utilization").css('background-color', '#33cc33'); 
+			 $("#weight_utilization").css('background-color', '#33cc33'); 
+			if(getVolTxt == 100)
+			  {				
+			 	$("#volume_utilization").css('height', contHeight); 		 	
+			  }
+			  if(getWeightTxt == 100)
+			  {
+			  $("#weight_utilization").css('height', contHeight);		
+			  }
 		}
 				
 		},
@@ -563,14 +571,19 @@ ACC.cartremoveitem = {
 					
 					if(getVolTxt < 100){
 						contHeight = (contHeight*getVolTxt)/100;
-					}else{
-						$("#volume_utilization").css('background-color', '#FF5757'); 	
+						$("#volume_utilization").css('background-color', '#33cc33'); 	
 					}
+					else{
+						$("#volume_utilization").css('background-color', '#FF5757'); 	
+					}					
 					if(getWeightTxt <100){
 						weightCont = (weightCont*getWeightTxt)/100;
-					}else{
-						$("#weight_utilization").css('background-color', '#FF5757');	
+						$("#weight_utilization").css('background-color', '#33cc33'); 	
 					}
+					else{
+						$("#weight_utilization").css('background-color', '#FF5757'); 	
+					}					
+					
 									
 					$("#weight_utilization").css('height', weightCont);		
 					$("#volume_utilization").css('height', contHeight); 				
@@ -583,7 +596,9 @@ ACC.cartremoveitem = {
 				if(isContainerFull == 'false')
 				{
 				 $("#checkoutButton_top").attr("disabled", false);				 
-				 $("#checkoutButton_bottom").attr("disabled",false);					 
+				 $("#checkoutButton_bottom").attr("disabled",false);
+				 $("#volume_utilization").css('background-color', '#33cc33'); 
+				 $("#weight_utilization").css('background-color', '#33cc33'); 
 				 
 				 $("#utl_vol").text(getVolTxt);
 				 $("#utl_wt").text(getWeightTxt);

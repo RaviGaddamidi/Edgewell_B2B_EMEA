@@ -32,6 +32,10 @@ public class EnergizerOrderEntryPopulator extends OrderEntryPopulator
 		{
 			entry.setBasePrice(createPrice(orderEntry, orderEntry.getBasePrice()));
 		}
+		if (orderEntry.getAdjustedItemPrice() != null)
+		{
+			entry.setAdjustedItemPrice(createPrice(orderEntry, orderEntry.getAdjustedItemPrice().doubleValue()));
+		}
 		if (orderEntry.getTotalPrice() != null)
 		{
 			entry.setTotalPrice(createPrice(orderEntry, orderEntry.getTotalPrice()));

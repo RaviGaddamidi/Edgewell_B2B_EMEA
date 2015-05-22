@@ -46,7 +46,7 @@ public class DefaultEnergizerB2BOrderHistoryDAO implements EnergizerB2BOrderHist
 		final List sortedResults;
 		queryParameters.put("name", unitId);
 		queryParameters.put("statusList", Arrays.asList(orderStatuses));
-		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk} } WHERE {o:status} in (?statusList) AND {versionID} IS NULL ORDER BY {o.code} DESC ";
+		final String query = "SELECT {o.pk}, {o.creationtime}, {o.code} FROM { Order AS o JOIN B2BUnit AS u ON {o.Unit}= {u.pk} } WHERE {o:status} in (?statusList) AND {versionID} IS NULL ORDER BY {o.creationtime} DESC ";
 		final SearchPageData<OrderModel> results = pagedFlexibleSearchService.search(query, queryParameters, pageableData);
 		return results;
 	}

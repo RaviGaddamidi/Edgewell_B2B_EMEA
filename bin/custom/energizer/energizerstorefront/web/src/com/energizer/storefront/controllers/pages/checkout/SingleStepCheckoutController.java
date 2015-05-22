@@ -826,6 +826,14 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		try
 		{
 			orderData = getCheckoutFlowFacade().placeOrder();
+			if (orderData == null)
+			{
+				LOG.info("Therre is no cart model in session, returing back to cart page");
+				GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+				//placeOrderForm.setNegotiateQuote(true);
+				model.addAttribute(placeOrderForm);
+				return checkoutSummary(model);
+			}
 		}
 		catch (final Exception e)
 		{
