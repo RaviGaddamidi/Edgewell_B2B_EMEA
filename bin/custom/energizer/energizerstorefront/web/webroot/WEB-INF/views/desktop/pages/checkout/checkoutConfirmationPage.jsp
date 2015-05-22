@@ -5,6 +5,7 @@
 <%@ taglib prefix="checkout" tagdir="/WEB-INF/tags/desktop/checkout" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="order" tagdir="/WEB-INF/tags/desktop/order" %>
+<%@ taglib prefix="orderConfirmation" tagdir="/WEB-INF/tags/desktop/order" %>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 <%@ taglib prefix="theme" tagdir="/WEB-INF/tags/shared/theme" %>
 <%@ taglib prefix="product" tagdir="/WEB-INF/tags/desktop/product" %>
@@ -37,7 +38,7 @@
 			<order:deliveryMethodItem order="${orderData}"/>
 			<order:deliveryAddressItem order="${orderData}"/>
 		</div>
-		<order:orderDetailsItem order="${orderData}" />
+		<orderConfirmation:orderDetailsItem order="${orderData}" />
 		<div class="span-16">&nbsp;
 			<order:receivedPromotions order="${orderData}"/>
 		</div>

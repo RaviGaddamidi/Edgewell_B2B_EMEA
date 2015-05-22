@@ -56,6 +56,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -153,6 +154,9 @@ public class AccountPageController extends AbstractSearchPageController
 
 	private static final Logger LOG = Logger.getLogger(AccountPageController.class);
 
+	@Value("${orderHistoryPageSize}")
+	private int PAGE_SIZE;
+
 	@Resource(name = "b2bOrderFacade")
 	private B2BOrderFacade orderFacade;
 
@@ -241,7 +245,7 @@ public class AccountPageController extends AbstractSearchPageController
 		validStates.remove(OrderStatus.APPROVED_QUOTE);
 		validStates.remove(OrderStatus.REJECTED_QUOTE);
 		// Handle paged search results 
-		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
+		final PageableData pageableData = createPageableData(page, PAGE_SIZE, sortCode, showMode);
 		final OrderStatus[] orderStatuses = validStates.toArray(new OrderStatus[validStates.size()]);
 		final EnergizerB2BUnitModel energizerB2BUnitModel = energizerCompanyB2BCommerceFacade
 				.getEnergizerB2BUnitModelForLoggedInUser();
