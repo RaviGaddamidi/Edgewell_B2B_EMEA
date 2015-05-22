@@ -347,7 +347,15 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 		if (cartData != null && cartData.getEntries() != null && cartData.getEntries().size() > 0)
 		{
 			final OrderEntryData cartOrderEntry = cartData.getEntries().get(0);
-			cartData.setShippingPoint(cartOrderEntry.getProduct().getShippingPoint());
+			if (cartOrderEntry.getProduct().getShippingPoint() != null)
+			{
+				final String shippingPointName = energizerProductService.getShippingPointName(cartOrderEntry.getProduct()
+						.getShippingPoint());
+				//this would only reflect for quick order page.
+				cartData.setShippingPoint((shippingPointName == null) ? "" : shippingPointName);
+			}
+
+
 		}
 		return cartData;
 	}
