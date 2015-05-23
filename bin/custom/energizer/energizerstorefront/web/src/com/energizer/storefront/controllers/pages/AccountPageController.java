@@ -207,10 +207,8 @@ public class AccountPageController extends AbstractSearchPageController
 	public List<String> getApproverComments()
 	{
 		final List<String> approverComments = new ArrayList<String>();
-		approverComments.add("Order placed successfully");
-		approverComments.add("Order placed is not valid");
-		approverComments.add("Invalid Order");
-		approverComments.add("Out Of Stock");
+		approverComments.add("Order Not Valid");
+
 		return approverComments;
 	}
 
