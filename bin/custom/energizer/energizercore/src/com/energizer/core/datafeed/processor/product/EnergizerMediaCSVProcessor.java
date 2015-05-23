@@ -114,11 +114,12 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(EnergizerCoreConstants.ERPMATERIAL_ID);
 					error.setColumnName(columnNames);
-					error.setMessage(EnergizerCoreConstants.ERPMATERIAL_ID + " column should be jpeg/jpg");
+					error.setMessage("Product " + EnergizerCoreConstants.ERPMATERIAL_ID + " DOES NOT EXIST");
 					getBusinessFeedErrors().add(error);
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+					continue;
 				}
 			}
 		}
