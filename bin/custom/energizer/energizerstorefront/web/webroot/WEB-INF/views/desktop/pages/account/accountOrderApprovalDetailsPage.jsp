@@ -56,17 +56,8 @@
 				<c:choose>
 				<c:when test="${orderApprovalData.approvalDecisionRequired}">
 				<div class="span-19 delivery_stages">
-				<div class="headline">
-					<spring:theme code="text.account.orderApprovalDetails.comments.label" text="Comments"/>
-				</div>
-				<div class="item_container">
-					<div class="your_cart">
-					<form:select name="comments" path="comments" cssStyle="width:290px;height:30px;">
-						<option value="0"> </option>  
-					<form:options items="${comments}" />
-					</form:select>
-					</div>
-				</div>
+				
+				
 			</div> 
 			
 			
@@ -81,6 +72,17 @@
 						<button class="approverDecisionButton positive pad_right" style="margin-left:121px" type="button" id="approverDecisionReject" data-decision="REJECT">
 							<spring:theme code="text.account.orderApproval.rejectButton.displayName"/>
 						</button>
+						
+						<spring:theme code="text.account.orderApprovalDetails.comments.label" text="REJECTION COMMENTS"/>
+				        </br>
+						<div class="item_container">
+						<div class="your_cart">
+						<form:select name="comments" path="comments" cssStyle="width:290px;height:30px;">
+							<option value="0"> </option>  
+						<form:options items="${comments}" />
+						</form:select>
+						</div>
+					</div>
 					</div>
 					
 				</c:when>
