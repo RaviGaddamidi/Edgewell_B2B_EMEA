@@ -175,7 +175,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		}
 		getTechnicalFeedErrors().addAll(techFeedErrorRecords);
 		getBusinessFeedErrors().addAll(businessFeedErrorRecords);
-		businessFeedErrorRecords.clear();
+		techFeedErrorRecords.clear();
 		businessFeedErrorRecords.clear();
 		return getCsvFeedErrorRecords();
 	}

@@ -122,7 +122,7 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 
 		getTechnicalFeedErrors().addAll(techFeedErrorRecords);
 		getBusinessFeedErrors().addAll(businessFeedErrorRecords);
-		businessFeedErrorRecords.clear();
+		techFeedErrorRecords.clear();
 		businessFeedErrorRecords.clear();
 		return getCsvFeedErrorRecords();
 	}
