@@ -9,6 +9,7 @@ ACC.approval = {
 		comments = "";
 		
 	}
+	if(desictionCode == "REJECT"){
 	if(comments){
 		
 		$("#approvalDecisionForm").submit();
@@ -19,6 +20,11 @@ ACC.approval = {
 		$('#globalMessages').html(html);
 		
 		return false;
+	}
+	}
+	else{
+	 $("#approvalDecisionForm").submit();
+		return true;
 	}
 		
 	},
