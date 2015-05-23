@@ -25,8 +25,8 @@
 							<th><spring:theme code="text.account.orderHistoryEntry.date" text="Date" /></th>
 							<th><spring:theme code="text.account.orderHistoryEntry.user" text="User" /></th>
 							<th><spring:theme code="text.account.orderHistoryEntry.email" text="Email" /></th>
-							<th><spring:theme code="text.account.orderHistoryEntry.comment" text="Comment" />
-							</th>
+							<%-- <th><spring:theme code="text.account.orderHistoryEntry.comment" text="Comment" />
+							</th> --%>
 							<th><spring:theme code="text.account.orderHistoryEntry.status" text="Status" />
 							</th>
 							<c:if test="${isQuoteNegotiation eq true}">
@@ -43,7 +43,7 @@
 								<td>${orderHistoryEntryData.timeStamp}</td>
 								<td>${orderHistoryEntryData.ownerData.name}</td>
 								<td>${orderHistoryEntryData.ownerData.uid}</td>
-								<td>
+								<%-- <td>
 									<c:choose>
 										<c:when test="${empty orderHistoryEntryData.description}">
 											<spring:theme code="text.notAvailable" text="NA" />
@@ -52,7 +52,7 @@
 											${orderHistoryEntryData.description}
 										</c:otherwise>
 									</c:choose>
-								</td>
+								</td> --%>
 								<td width="20%">
 									<c:if test="${not empty orderHistoryEntryData.previousOrderVersionData.statusDisplay}">
 										<spring:theme code="text.account.order.status.display.${orderHistoryEntryData.previousOrderVersionData.statusDisplay}"/>
