@@ -91,27 +91,34 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 					getBusinessFeedErrors().clear();
 					continue;
 				}
-
 				try
 				{
 					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
 							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+					if (null != existEnergizerProd)
+					{
+						addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
+						succeedRecord++;
+						setRecordSucceeded(succeedRecord);
+						LOG.info("****************** ProductMediaModel updated successfully ****************** ");
+					}
 				}
 				catch (final Exception e)
 				{
+					long recordFailed = getRecordFailed();
+					EnergizerCSVFeedError error = null;
 					LOG.info("existEnergizerProd DOES NOT EXIST");
-				}
-
-				if (null != existEnergizerProd)
-				{
-					addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
-					succeedRecord++;
-					setRecordSucceeded(succeedRecord);
-					LOG.info("****************** ProductMediaModel updated successfully ****************** ");
-				}
-				else
-				{
-					LOG.info("ProductMediaModel can not be empty");
+					final List<String> columnNames = new ArrayList<String>();
+					error = new EnergizerCSVFeedError();
+					error.setUserType(BUSINESS_USER);
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(EnergizerCoreConstants.ERPMATERIAL_ID);
+					error.setColumnName(columnNames);
+					error.setMessage(EnergizerCoreConstants.ERPMATERIAL_ID + " column should be jpeg/jpg");
+					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
 			}
 		}

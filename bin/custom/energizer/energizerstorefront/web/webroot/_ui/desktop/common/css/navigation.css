@@ -110,6 +110,8 @@
 
 .nav_column .item li.nav_selected {
     background-color: #E3E3E3;
+    padding-top:inherit;
+    padding-bottom: 10px;
 }
 
 .facet_block li{
