@@ -187,6 +187,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
 					continue;
 				}
 				if (!readCSVRecord(record))
@@ -242,6 +244,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		{
 			LOG.error("EnergizerOrderUpdateCSVProcessor ", e);
 		}
+		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+		getTechnicalFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 
