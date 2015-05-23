@@ -9,6 +9,7 @@
 <%@ taglib prefix="theme" tagdir="/WEB-INF/tags/shared/theme" %>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 <%@ taglib prefix="order" tagdir="/WEB-INF/tags/desktop/order"%>
+<%@ taglib prefix="orderConfirmation" tagdir="/WEB-INF/tags/desktop/orderConfirmation" %>
 
 <div class="orderList">
 	<div class="headline"><spring:theme code="basket.page.title.yourDeliveryItems" text="Your Delivery Items"/></div>
@@ -23,10 +24,10 @@
 				
 				<th id="header5"><spring:theme code="basket.page.unitPrice" text="Item Price"/></th>
 				<th id="header6"><spring:theme code="text.total" text="Total"/></th>
-				<th id="header7"><spring:theme code="text.adjustedquantity" text="Adjusted Quantity"/></th>
+				<%-- <th id="header7"><spring:theme code="text.adjustedquantity" text="Adjusted Quantity"/></th>
 				<th id="header8"><spring:theme code="text.adjustedprice" text="Adjusted Price"/></th>
 				<th id="header9"><spring:theme code="text.adjustedtotal" text="Adjusted Total"/></th>
-				<th id="header10"><spring:theme code="text.rejectedStatus" text="Rejected"/></th>
+				<th id="header10"><spring:theme code="text.rejectedStatus" text="Rejected"/></th> --%>
 				
 				
 			</tr>
@@ -34,12 +35,12 @@
 		<tbody>
 		<c:forEach items="${order.entries}" var="entry">
 			<c:if test="${empty entry.entries}" >
-					<order:orderEntryDetail order="${order}" entry="${entry}"/>
+					<orderConfirmation:orderEntryDetail order="${order}" entry="${entry}"/>
 			</c:if>	
 			
 			<c:if test="${not empty entry.entries}" >
 				<c:forEach items="${entry.entries}" var="subEntry">
-					 <order:orderEntryDetail order="${order}" entry="${subEntry}"/> 
+					 <orderConfirmation:orderEntryDetail order="${order}" entry="${subEntry}"/> 
 				</c:forEach>
 			</c:if>	
 		</c:forEach>

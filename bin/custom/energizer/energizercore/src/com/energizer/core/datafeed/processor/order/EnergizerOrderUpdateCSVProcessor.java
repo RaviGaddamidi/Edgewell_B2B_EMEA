@@ -630,6 +630,10 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 			{
 				rejectedStatus = "No";
 			}
+			else
+			{
+				rejectedStatus = "Yes";
+			}
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TOTAL_PRICE)))
