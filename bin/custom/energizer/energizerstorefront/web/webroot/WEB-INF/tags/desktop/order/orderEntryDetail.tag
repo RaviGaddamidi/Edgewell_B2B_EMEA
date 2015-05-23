@@ -99,7 +99,7 @@
 		<ycommerce:testId code="orderDetails_productItemPrice_label">
 			<c:choose>
 				<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
-					<format:price priceData="${entry.basePrice}" displayFreeForZero="false"/>
+					<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="false"/>
 				</c:when>
 				<c:otherwise>
 					<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="false"/>
@@ -115,7 +115,7 @@
 	<ycommerce:testId code="orderDetails_productItemPrice_label">
 		<c:choose>
 			<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
-				<format:price priceData="${entry.basePrice}" displayFreeForZero="flase"/>
+				<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
 			</c:when>
 			<c:otherwise>
 				<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="false"/>

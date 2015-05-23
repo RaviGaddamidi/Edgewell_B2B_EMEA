@@ -45,6 +45,7 @@ import de.hybris.platform.order.InvalidCartException;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -967,7 +968,10 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		for (final AbstractOrderEntryModel entryModel : cartModel.getEntries())
 		{
-
+			entryModel.setAdjustedItemPrice(new BigDecimal("0.00"));
+			entryModel.setAdjustedLinePrice(new BigDecimal("0.00"));
+			entryModel.setAdjustedQty(0);
+			energizerB2BCheckoutFlowFacade.saveEntry(entryModel);
 			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
 			if (ShippingValidationErros.size() > 0)
