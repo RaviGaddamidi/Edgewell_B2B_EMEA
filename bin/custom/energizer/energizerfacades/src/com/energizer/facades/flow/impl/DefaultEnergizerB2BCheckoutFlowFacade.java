@@ -522,4 +522,13 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		return cartService.getSessionCart();
 	}
 
+	/**
+	 * @param entryModel
+	 */
+	public void saveEntry(final AbstractOrderEntryModel entryModel)
+	{
+		// YTODO Auto-generated method stub
+		modelService.save(entryModel);
+	}
+
 }

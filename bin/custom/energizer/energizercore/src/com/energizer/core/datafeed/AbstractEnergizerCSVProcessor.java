@@ -82,7 +82,11 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	I18NService i18nService;
 	@Resource
 	private ConfigurationService configurationService;
-	public List<EnergizerCSVFeedError> csvFeedErrorRecords = new ArrayList<>();
+	public List<EnergizerCSVFeedError> csvFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+
+	public List<EnergizerCSVFeedError> techFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+	public List<EnergizerCSVFeedError> businessFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+
 	public List<EnergizerCSVFeedError> technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 	public List<EnergizerCSVFeedError> businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 	private DataInputStream masterDataStream;
@@ -111,12 +115,16 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		{
 			lineNumber++;
 			message.append(messageSource.getMessage("text.error.message.email.template.section5", new Object[]
-			{ lineNumber, error.getMessage(), error.getLineNumber(), error.getColumnNumber().toString(),
-					error.getColumnName().toString() }, locale));
+			{ lineNumber, error.getMessage(), error.getLineNumber(), "", error.getColumnName().toString() }, locale));
 		}
 
 		message.append(messageSource.getMessage("text.error.message.email.template.section6", null, locale));
 		message.append("\n");
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug(message.toString());
+		}
+		//LOG.debug(message.toString());
 	}
 
 	@Override
@@ -136,12 +144,15 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 				toAddressModels.add(emailAddress);
 			}
 			emailAddress = emailService.getOrCreateEmailAddressForEmail(
-					configurationService.getConfiguration().getString("cronjobs.from.email", "customerservice@energizer.com"),
-					"Customer Service");
+					configurationService.getConfiguration().getString("cronjobs.from.email",
+							Config.getParameter("fromEmailAddress.orderEmailSender")), "Customer Service");
+			synchronized (message)
+			{
+				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
+						Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
 
-			emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
-					Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
-			emailService.send(emailMessageModel);
+				emailService.send(emailMessageModel);
+			}
 			message.setLength(0);
 		}
 		catch (final Exception e)
@@ -581,7 +592,38 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		this.masterDataStream = masterDataStream;
 	}
 
+	/**
+	 * @return the techFeedErrorRecords
+	 */
+	public List<EnergizerCSVFeedError> getTechFeedErrorRecords()
+	{
+		return techFeedErrorRecords;
+	}
 
+	/**
+	 * @param techFeedErrorRecords
+	 *           the techFeedErrorRecords to set
+	 */
+	public void setTechFeedErrorRecords(final List<EnergizerCSVFeedError> techFeedErrorRecords)
+	{
+		this.techFeedErrorRecords = techFeedErrorRecords;
+	}
 
+	/**
+	 * @return the businessFeedErrorRecords
+	 */
+	public List<EnergizerCSVFeedError> getBusinessFeedErrorRecords()
+	{
+		return businessFeedErrorRecords;
+	}
+
+	/**
+	 * @param businessFeedErrorRecords
+	 *           the businessFeedErrorRecords to set
+	 */
+	public void setBusinessFeedErrorRecords(final List<EnergizerCSVFeedError> businessFeedErrorRecords)
+	{
+		this.businessFeedErrorRecords = businessFeedErrorRecords;
+	}
 
 }

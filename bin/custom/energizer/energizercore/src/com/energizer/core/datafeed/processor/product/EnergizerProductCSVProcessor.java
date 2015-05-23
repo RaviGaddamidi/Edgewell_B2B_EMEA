@@ -71,20 +71,20 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
-
-				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					techFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getTechnicalFeedErrors().clear();
 					continue;
 				}
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					businessFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
 					continue;
 				}
 				LOG.info("|| Start add or updating  EnergizerProductModel ******************** ");
@@ -119,6 +119,11 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			LOG.error(" Error to addUpdateProductDetails for EnergizerProductModel   ||  " + e);
 		}
+
+		getTechnicalFeedErrors().addAll(techFeedErrorRecords);
+		getBusinessFeedErrors().addAll(businessFeedErrorRecords);
+		techFeedErrorRecords.clear();
+		businessFeedErrorRecords.clear();
 		return getCsvFeedErrorRecords();
 	}
 

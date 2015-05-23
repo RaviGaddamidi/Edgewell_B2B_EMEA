@@ -679,6 +679,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						}
 					}
 				}
+				orderEntryModel.setRejectedStatus("No");
 				modelService.save(orderEntryModel);
 			}
 			orderModel.setStatus(OrderStatus.PENDING);

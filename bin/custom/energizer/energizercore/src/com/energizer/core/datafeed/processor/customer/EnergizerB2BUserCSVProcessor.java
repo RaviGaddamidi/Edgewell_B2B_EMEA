@@ -155,6 +155,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 						columnNumbers.add(6);
 						error.setColumnNumber(columnNumbers);
 						getBusinessFeedErrors().add(error);
+						setBusRecordError(getBusinessFeedErrors().size());
 						recordFailed++;
 						setBusRecordError(recordFailed);
 					}

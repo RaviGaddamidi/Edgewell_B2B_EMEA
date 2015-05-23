@@ -37,6 +37,7 @@ import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.commercefacades.user.data.CountryData;
 import de.hybris.platform.commercefacades.user.data.TitleData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
+import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
@@ -45,6 +46,7 @@ import de.hybris.platform.order.InvalidCartException;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -826,6 +828,14 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		try
 		{
 			orderData = getCheckoutFlowFacade().placeOrder();
+			if (orderData == null)
+			{
+				LOG.info("Therre is no cart model in session, returing back to cart page");
+				GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
+				//placeOrderForm.setNegotiateQuote(true);
+				model.addAttribute(placeOrderForm);
+				return checkoutSummary(model);
+			}
 		}
 		catch (final Exception e)
 		{
@@ -959,7 +969,11 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		for (final AbstractOrderEntryModel entryModel : cartModel.getEntries())
 		{
-
+			entryModel.setAdjustedItemPrice(new BigDecimal("0.00"));
+			entryModel.setAdjustedLinePrice(new BigDecimal("0.00"));
+			entryModel.setAdjustedQty(0);
+			entryModel.setRejectedStatus("No");
+			energizerB2BCheckoutFlowFacade.saveEntry(entryModel);
 			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
 			if (ShippingValidationErros.size() > 0)

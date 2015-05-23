@@ -109,7 +109,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private static final String ERP_MATERIAL_ID = "ERPMaterialID";
 	private static final String ORDER_ENTRY_QTY = "OrderEntryQty";
 	private static final String UOM = "UOM";
-	private static final String REJECTION_REASON = "RejectionReason";
+	private static final String REJECTION_REASON = "Rejectionreason";
 	private static final String ITEM_TOTAL_PRICE = "ItemTotalPrice";
 	private static final String LINE_ITEM_TOTAL_PRICE = "LineItemTotalPrice";
 	private static final String ITEM_TOTAL_SHIPMENT = "ItemTotalShipment";
@@ -187,6 +187,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
 					continue;
 				}
 				if (!readCSVRecord(record))
@@ -242,6 +244,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		{
 			LOG.error("EnergizerOrderUpdateCSVProcessor ", e);
 		}
+		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+		getTechnicalFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 
@@ -265,7 +269,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				final String orderCreatorEmail = b2bOrderCreator.getEmail();
 				final EmailAddressModel fromEmail = getEmailService().getOrCreateEmailAddressForEmail(FROM_EMAIL_ADDRESS,
 						FROM_EMAIL_DISPLAY_NAME);
-				EmailAddressModel toEmail = getEmailService().getOrCreateEmailAddressForEmail(orderCreatorEmail, "");
+				EmailAddressModel toEmail = getEmailService().getOrCreateEmailAddressForEmail(orderCreatorEmail, orderCreatorEmail);
 				final List<EmailAddressModel> toAddress = new ArrayList<EmailAddressModel>();
 				toAddress.add(toEmail);
 				final List<EmailAddressModel> orderApproversEmailList = new ArrayList<EmailAddressModel>();
@@ -275,7 +279,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					{
 						if (b2bOrderApprover.getActive() && !StringUtils.isEmpty(b2bOrderApprover.getEmail()))
 						{
-							toEmail = getEmailService().getOrCreateEmailAddressForEmail(b2bOrderApprover.getEmail(), "");
+							toEmail = getEmailService().getOrCreateEmailAddressForEmail(b2bOrderApprover.getEmail(),
+									b2bOrderApprover.getEmail());
 							orderApproversEmailList.add(toEmail);
 						}
 					}
@@ -391,26 +396,11 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				energizerOrderEntry.setTotalPrice(lineItemTotalPrice);
 				if (!customerUOM.equalsIgnoreCase(uom))
 				{
-					// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
-					// and they are always bigger than incoming UOM(sales uom)
-					finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
-					energizerOrderEntry.setAdjustedQty(new Integer(0));
-					energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
-					// update the value with incoming value
-					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
-					//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
-					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
-					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier);
+					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier * finalConversionFactor);
 				}
 				else
 				{
-					//clear the previous value before updating 
-					energizerOrderEntry.setAdjustedQty(new Integer(0));
-					energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
-					// update the value with incoming value
-					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue());
 					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier);
-					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
 				}
 			}
 			else
@@ -426,7 +416,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
 					//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
 					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
-					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier);
+					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier
+							* finalConversionFactor));
 				}
 				else
 				{
@@ -435,7 +426,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
 					// update the value with incoming value
 					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue());
-					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier);
+					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
 					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
 				}
 			}
@@ -639,9 +630,13 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		if (!StringUtils.isEmpty(csvValuesMap.get(REJECTION_REASON)))
 		{
 			rejectionReason = csvValuesMap.get(REJECTION_REASON);
-			if (rejectionReason.equals("0"))
+			if (rejectionReason.trim().equals("0"))
 			{
 				rejectedStatus = "No";
+			}
+			else
+			{
+				rejectedStatus = "Yes";
 			}
 		}
 

@@ -67,10 +67,10 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 	private static final Logger LOG = Logger.getLogger(EnergizerMediaCSVProcessor.class);
 	private final String PRD_IMG_QUALIFIER = "300Wx300H";
 	private final String PRD_THUMB_QUALIFIER = "96Wx96H";
-	private static String THUMB = "_thumb";
-	private static String PICS = "_pic";
-	private static final String JPEG = "JPEG";
-	private static final String JPG = "JPG";
+	private static final String aTHUMB = "_thumb";
+	private static final String aPICS = "_pic";
+	private static final String JPEG = "jpeg";
+	private static final String JPG = "jpg";
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -82,45 +82,53 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
-				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
 					continue;
 				}
-
-
 				try
 				{
 					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
 							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+					if (null != existEnergizerProd)
+					{
+						addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
+						succeedRecord++;
+						setRecordSucceeded(succeedRecord);
+						LOG.info("****************** ProductMediaModel updated successfully ****************** ");
+					}
 				}
 				catch (final Exception e)
 				{
+					long recordFailed = getRecordFailed();
+					EnergizerCSVFeedError error = null;
 					LOG.info("existEnergizerProd DOES NOT EXIST");
+					final List<String> columnNames = new ArrayList<String>();
+					error = new EnergizerCSVFeedError();
+					error.setUserType(BUSINESS_USER);
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(EnergizerCoreConstants.ERPMATERIAL_ID);
+					error.setColumnName(columnNames);
+					error.setMessage("Product " + EnergizerCoreConstants.ERPMATERIAL_ID + " DOES NOT EXIST");
+					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+					continue;
 				}
-
-				if (null != existEnergizerProd)
-				{
-					addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
-					LOG.info("****************** ProductMediaModel updated successfully ****************** ");
-				}
-				else
-				{
-					LOG.info("ProductMediaModel can not be empty");
-				}
-				succeedRecord++;
-				setRecordSucceeded(succeedRecord);
 			}
 		}
 		catch (final Exception e)
 		{
 			LOG.error("Error in adding or updating  ProductMediaModel" + e.getMessage());
 		}
+		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+		getTechnicalFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 
@@ -143,9 +151,9 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerProd.setCatalogVersion(catalogVersion);
 		energizerProd.setApprovalStatus(ArticleApprovalStatus.APPROVED);
 
-		final MediaModel mediaThumbnail = createUploadProductMedia(thumnailPath, productMaterialId.concat(THUMB),
+		final MediaModel mediaThumbnail = createUploadProductMedia(thumnailPath, productMaterialId.concat(aTHUMB),
 				PRD_THUMB_QUALIFIER, catalogVersion, productMaterialId);
-		final MediaModel mediaPicture = createUploadProductMedia(displayImagePath, productMaterialId.concat(PICS),
+		final MediaModel mediaPicture = createUploadProductMedia(displayImagePath, productMaterialId.concat(aPICS),
 				PRD_IMG_QUALIFIER, catalogVersion, productMaterialId);
 
 		energizerProd.setThumbnail(mediaThumbnail);
@@ -237,18 +245,18 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
 			final String value = record.toMap().get(columnHeader);
+			final String extension = value.substring(value.lastIndexOf(".") + 1, value.length()).toLowerCase();
+			final boolean isJPEG = extension.equalsIgnoreCase(JPEG);
+			final boolean isJPG = extension.equalsIgnoreCase(JPG);
 			if (value.isEmpty())
 			{
 				final List<String> columnNames = new ArrayList<String>();
-				final List<Integer> columnNumbers = new ArrayList<Integer>();
 				error = new EnergizerCSVFeedError();
 				error.setUserType(BUSINESS_USER);
 				error.setLineNumber(record.getRecordNumber());
 				columnNames.add(columnHeader);
 				error.setColumnName(columnNames);
 				error.setMessage(columnHeader + " column should not be empty");
-				columnNumbers.add(columnNumber);
-				error.setColumnNumber(columnNumbers);
 				getBusinessFeedErrors().add(error);
 				setBusRecordError(getBusinessFeedErrors().size());
 				recordFailed++;
@@ -256,20 +264,16 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 			}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISPLAY_IMAGE_PATH))
 			{
-				final String extension = value.substring(value.lastIndexOf(".") + 1, value.length());
 
-				if (!(extension.equalsIgnoreCase(JPEG) || extension.equalsIgnoreCase(JPG)))
+				if (!isJPG)
 				{
 					final List<String> columnNames = new ArrayList<String>();
-					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setUserType(BUSINESS_USER);
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
 					error.setColumnName(columnNames);
 					error.setMessage(columnHeader + " column should be jpeg/jpg");
-					columnNumbers.add(columnNumber);
-					error.setColumnNumber(columnNumbers);
 					getBusinessFeedErrors().add(error);
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
@@ -279,21 +283,19 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.THUMBNAIIL_PATH))
 			{
-				final String extension = value.substring(value.lastIndexOf(".") + 1, value.length());
-
-				if (!(extension.equalsIgnoreCase(JPEG) || extension.equalsIgnoreCase(JPG)))
+				if (!isJPG)
 				{
 					final List<String> columnNames = new ArrayList<String>();
-					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
 					error.setUserType(BUSINESS_USER);
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
 					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be jpeg/jpg");
-					columnNumbers.add(columnNumber);
-					error.setColumnNumber(columnNumbers);
+					error.setMessage(columnHeader + " column should be jpeg/jpg.");
 					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
 			}
 		}

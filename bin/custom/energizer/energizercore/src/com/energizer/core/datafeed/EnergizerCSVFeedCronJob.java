@@ -51,6 +51,8 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 	public PerformResult perform(final EnergizerCronJobModel cronjob)
 	{
 		List<EnergizerCSVFeedError> errors = new ArrayList<EnergizerCSVFeedError>();
+		List<EnergizerCSVFeedError> techfeedErrors = new ArrayList<EnergizerCSVFeedError>();
+		List<EnergizerCSVFeedError> busfeedErrors = new ArrayList<EnergizerCSVFeedError>();
 		PerformResult performResult = null;
 		final List<String> emailAddress = new ArrayList<String>();
 		final String type = cronjob.getType();
@@ -96,14 +98,14 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				{
 					cronjob.setBusinessEmailAddress(emailAddress);
 				}
-				final List<EnergizerCSVFeedError> techfeedErrors = energizerCSVProcessor.getTechnicalFeedErrors();
+				techfeedErrors = energizerCSVProcessor.getTechnicalFeedErrors();
 				if (!techfeedErrors.isEmpty())
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getTechRecordError());
 					energizerCSVProcessor.mailErrors(cronjob, techfeedErrors, cronjob.getTechnicalEmailAddress(), emailAttachmentList);
 					//					energizerCSVProcessor.cleanup(type, file, cronjob, techfeedErrors);
 				}
-				final List<EnergizerCSVFeedError> busfeedErrors = energizerCSVProcessor.getBusinessFeedErrors();
+				busfeedErrors = energizerCSVProcessor.getBusinessFeedErrors();
 				if (!busfeedErrors.isEmpty())
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getBusRecordError());
@@ -119,16 +121,22 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				if ((techfeedErrors != null && techfeedErrors.size() > 0) || (busfeedErrors != null && busfeedErrors.size() > 0))
 				{
 					energizerCSVProcessor.cleanup(type, file, cronjob, true);
+					techfeedErrors.clear();
+					busfeedErrors.clear();
 				}
 				else
 				{
 					energizerCSVProcessor.cleanup(type, file, cronjob, false);
+					techfeedErrors.clear();
+					busfeedErrors.clear();
 				}
 
 			}
 			catch (final FileNotFoundException e)
 			{
 				LOG.error("File Not found", e);
+				techfeedErrors.clear();
+				busfeedErrors.clear();
 				exceptionOccured = true;
 			}
 			if (exceptionOccured)

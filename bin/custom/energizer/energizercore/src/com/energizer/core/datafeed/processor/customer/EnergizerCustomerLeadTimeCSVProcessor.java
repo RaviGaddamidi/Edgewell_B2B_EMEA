@@ -84,6 +84,8 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
 					continue;
 				}
 				final Map<String, String> csvValuesMap = record.toMap();
@@ -128,6 +130,8 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 		{
 			LOG.error("EnergizerCustomerLeadTimeCSVProcessor ", e);
 		}
+		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+		getTechnicalFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 

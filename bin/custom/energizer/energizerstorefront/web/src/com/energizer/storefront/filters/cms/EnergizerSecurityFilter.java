@@ -26,6 +26,12 @@ import org.apache.log4j.Logger;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
+/**
+ * This filter addressess the security concerns as follows: cross site reference leakage, cache control, clickjacking
+ * 
+ * @author kaushik.ganguly
+ * 
+ */
 public class EnergizerSecurityFilter extends OncePerRequestFilter implements CMSFilter
 {
 	@SuppressWarnings("unused")

@@ -78,6 +78,29 @@ public class GlobalMessages
 		}
 	}
 
+	public static void addSingleMessage(final Model model, final String messageHolder, final String messageKey,
+			final Object[] attributes)
+	{
+		final GlobalMessage message = new GlobalMessage();
+		message.setCode(messageKey);
+		message.setAttributes(attributes != null ? Arrays.asList(attributes) : Collections.emptyList());
+		for (final Object object : message.getAttributes())
+		{
+			message.setAttribute(object.toString());
+		}
+		final Map<String, Object> modelMap = model.asMap();
+		if (modelMap.containsKey(messageHolder))
+		{
+			final List<GlobalMessage> messages = new ArrayList<GlobalMessage>((List<GlobalMessage>) modelMap.get(messageHolder));
+			messages.add(message);
+			model.addAttribute(messageHolder, messages);
+		}
+		else
+		{
+			model.addAttribute(messageHolder, Collections.singletonList(message));
+		}
+	}
+
 	public static void addFlashMessage(final RedirectAttributes model, final String messageHolder, final String messageKey)
 	{
 		addFlashMessage(model, messageHolder, messageKey, null);

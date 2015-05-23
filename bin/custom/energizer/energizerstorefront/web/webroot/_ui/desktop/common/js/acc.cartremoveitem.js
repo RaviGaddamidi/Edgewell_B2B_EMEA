@@ -501,18 +501,27 @@ ACC.cartremoveitem = {
 		if(isContainerFull == 'true')
 		{
 			
-		
-			
-	 		$("#utl_vol").text(getVolTxt);
-			$("#utl_wt").text(getWeightTxt);
-			
 			if(getVolTxt < 100){
 				contHeight = (contHeight*getVolTxt)/100;
+				$("#volume_utilization").css('background-color', '#33cc33'); 
+				$("#utl_vol").text(getVolTxt);
 			}
+			else{
+				$("#volume_utilization").css('background-color', '#FF5757'); 	
+				$("#utl_vol").text(100);
+			}					
+			
 			if(getWeightTxt <100){
 				weightCont = (weightCont*getWeightTxt)/100;
+				$("#weight_utilization").css('background-color', '#33cc33'); 	
+				$("#utl_wt").text(getWeightTxt);
 			}
+			else{
+				$("#weight_utilization").css('background-color', '#FF5757'); 	
+				$("#utl_wt").text(100);
+			}					
 			
+				
 		
 			$("#weight_utilization").css('height', weightCont);		
 			$("#volume_utilization").css('height', contHeight); 
@@ -526,14 +535,16 @@ ACC.cartremoveitem = {
 		
 		if(isContainerFull == 'false')
 		{ 
-				if(getVolTxt == 100)
-				  {				
-				 	$("#volume_utilization").css('height', contHeight); 		 	
-				  }
-				  if(getWeightTxt == 100)
-				  {
-				  $("#weight_utilization").css('height', contHeight);		
-				  }
+			 $("#volume_utilization").css('background-color', '#33cc33'); 
+			 $("#weight_utilization").css('background-color', '#33cc33'); 
+			if(getVolTxt == 100)
+			  {				
+			 	$("#volume_utilization").css('height', contHeight); 		 	
+			  }
+			  if(getWeightTxt == 100)
+			  {
+			  $("#weight_utilization").css('height', contHeight);		
+			  }
 		}
 				
 		},
@@ -554,15 +565,26 @@ ACC.cartremoveitem = {
 				
 				if(isContainerFull == 'true')
 				{ 
-			 		$("#utl_vol").text(getVolTxt);
-					$("#utl_wt").text(getWeightTxt);
-					
+
 					if(getVolTxt < 100){
 						contHeight = (contHeight*getVolTxt)/100;
+						$("#volume_utilization").css('background-color', '#33cc33'); 
+						$("#utl_vol").text(getVolTxt);
 					}
+					else{
+						$("#volume_utilization").css('background-color', '#FF5757'); 	
+						$("#utl_vol").text(100);
+					}					
 					if(getWeightTxt <100){
 						weightCont = (weightCont*getWeightTxt)/100;
+						$("#weight_utilization").css('background-color', '#33cc33'); 
+						$("#utl_wt").text(getWeightTxt);
 					}
+					else{
+						$("#weight_utilization").css('background-color', '#FF5757'); 	
+						$("#utl_wt").text(100);
+					}					
+					
 									
 					$("#weight_utilization").css('height', weightCont);		
 					$("#volume_utilization").css('height', contHeight); 				
@@ -575,7 +597,9 @@ ACC.cartremoveitem = {
 				if(isContainerFull == 'false')
 				{
 				 $("#checkoutButton_top").attr("disabled", false);				 
-				 $("#checkoutButton_bottom").attr("disabled",false);					 
+				 $("#checkoutButton_bottom").attr("disabled",false);
+				 $("#volume_utilization").css('background-color', '#33cc33'); 
+				 $("#weight_utilization").css('background-color', '#33cc33'); 
 				 
 				 $("#utl_vol").text(getVolTxt);
 				 $("#utl_wt").text(getWeightTxt);

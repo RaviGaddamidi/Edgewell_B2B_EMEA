@@ -775,6 +775,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="adjustedItemPrice" type="java.math.BigDecimal">
+						<description>Energizer Shipped Qty will be updated by SAP</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 					<attribute qualifier="adjustedLinePrice" type="java.math.BigDecimal">
 						<description>Total price of OrderEntry will be updated by SAP</description>
 						<modifiers />

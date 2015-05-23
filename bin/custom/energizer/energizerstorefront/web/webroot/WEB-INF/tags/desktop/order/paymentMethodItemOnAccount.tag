@@ -14,6 +14,6 @@
 	<ul>
 		<li><spring:theme code="checkout.orderConfirmation.orderPlacedBy"/>&nbsp;<spring:theme code="text.company.user.${order.b2bCustomerData.titleCode}.name" text="N/A"/>&nbsp;${fn:escapeXml(order.b2bCustomerData.firstName)}&nbsp;${fn:escapeXml(order.b2bCustomerData.lastName)}</li>
 		<li><spring:theme code="checkout.orderConfirmation.purchaseOrderNumber"/>&nbsp;${order.purchaseOrderNumber}</li>
-		<li><spring:theme code="checkout.orderConfirmation.paymentType.costcenter"/>&nbsp;${order.costCenter.code}</li>
+		<%-- <li><spring:theme code="checkout.orderConfirmation.paymentType.costcenter"/>&nbsp;${order.costCenter.code}</li> --%>
 	</ul>
 </div>
