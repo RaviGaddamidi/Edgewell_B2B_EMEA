@@ -37,9 +37,9 @@
 				<td><spring:theme code="text.account.orderApprovalDetails.parentBusinessUnit" text="Parent Business Unit" />:${orderApprovalData.b2bOrderData.costCenter.unit.name}</td>
 			</tr>
 			<c:if test="${orderApprovalData.b2bOrderData.paymentType.code eq 'ACCOUNT'}">
-				<tr>
+				<%-- <tr>
 					<td><spring:theme code="text.account.orderApprovalDetails.costCenter" text="Cost Center" />:${orderApprovalData.b2bOrderData.costCenter.code}</td>
-				</tr>
+				</tr> --%>
 				<tr>
 					<td><spring:theme code="text.account.orderApproval.orderStatus" text="Order Status" />:<spring:theme code="text.account.order.status.display.${orderApprovalData.b2bOrderData.status}"/></td>
 				</tr>

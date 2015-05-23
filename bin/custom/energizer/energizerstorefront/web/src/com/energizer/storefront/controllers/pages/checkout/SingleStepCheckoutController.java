@@ -37,6 +37,7 @@ import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.commercefacades.user.data.CountryData;
 import de.hybris.platform.commercefacades.user.data.TitleData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
+import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
@@ -971,6 +972,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			entryModel.setAdjustedItemPrice(new BigDecimal("0.00"));
 			entryModel.setAdjustedLinePrice(new BigDecimal("0.00"));
 			entryModel.setAdjustedQty(0);
+			entryModel.setRejectedStatus("No");
 			energizerB2BCheckoutFlowFacade.saveEntry(entryModel);
 			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
