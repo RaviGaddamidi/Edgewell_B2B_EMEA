@@ -89,6 +89,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+					getTechnicalFeedErrors().clear();
 					continue;
 				}
 				EnergizerB2BUnitModel b2bUnit = null;
@@ -194,6 +196,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			LOG.error("EnergizerCustomerCSVProcessor:Exception in saving EnergizerCustomer", e);
 		}
+		getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+		getBusinessFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 

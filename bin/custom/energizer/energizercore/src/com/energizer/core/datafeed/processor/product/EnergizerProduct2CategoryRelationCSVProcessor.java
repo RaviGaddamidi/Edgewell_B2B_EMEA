@@ -71,6 +71,8 @@ public class EnergizerProduct2CategoryRelationCSVProcessor extends AbstractEnerg
 			if (!getTechnicalFeedErrors().isEmpty())
 			{
 				csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+				getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+				getTechnicalFeedErrors().clear();
 				continue;
 			}
 			final List<EnergizerProductModel> products = energizerProductService.getEnergizerProductListForSapCatgy(csvValuesMap
@@ -91,7 +93,8 @@ public class EnergizerProduct2CategoryRelationCSVProcessor extends AbstractEnerg
 				}
 			}
 		}
-
+		getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+		getBusinessFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}
 

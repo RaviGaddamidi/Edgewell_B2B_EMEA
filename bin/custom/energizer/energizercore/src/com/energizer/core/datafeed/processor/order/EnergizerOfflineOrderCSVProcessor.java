@@ -181,6 +181,8 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+					getTechnicalFeedErrors().clear();
 					continue;
 				}
 				if (!readCSVRecord(record))
@@ -249,7 +251,9 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 			LOG.error("EnergizerOfflineOrderCSVProcessor ", e);
 		}
-		return errors;
+		getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+		getBusinessFeedErrors().clear();
+		return getCsvFeedErrorRecords();
 	}
 
 	private void prepareEmail()

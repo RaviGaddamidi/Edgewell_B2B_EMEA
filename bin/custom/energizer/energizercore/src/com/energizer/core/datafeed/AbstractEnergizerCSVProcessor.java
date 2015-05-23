@@ -82,7 +82,11 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	I18NService i18nService;
 	@Resource
 	private ConfigurationService configurationService;
-	public List<EnergizerCSVFeedError> csvFeedErrorRecords = new ArrayList<>();
+	public List<EnergizerCSVFeedError> csvFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+
+	public List<EnergizerCSVFeedError> techFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+	public List<EnergizerCSVFeedError> businessFeedErrorRecords = new ArrayList<EnergizerCSVFeedError>();
+
 	public List<EnergizerCSVFeedError> technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 	public List<EnergizerCSVFeedError> businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 	private DataInputStream masterDataStream;
@@ -588,7 +592,38 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		this.masterDataStream = masterDataStream;
 	}
 
+	/**
+	 * @return the techFeedErrorRecords
+	 */
+	public List<EnergizerCSVFeedError> getTechFeedErrorRecords()
+	{
+		return techFeedErrorRecords;
+	}
 
+	/**
+	 * @param techFeedErrorRecords
+	 *           the techFeedErrorRecords to set
+	 */
+	public void setTechFeedErrorRecords(final List<EnergizerCSVFeedError> techFeedErrorRecords)
+	{
+		this.techFeedErrorRecords = techFeedErrorRecords;
+	}
 
+	/**
+	 * @return the businessFeedErrorRecords
+	 */
+	public List<EnergizerCSVFeedError> getBusinessFeedErrorRecords()
+	{
+		return businessFeedErrorRecords;
+	}
+
+	/**
+	 * @param businessFeedErrorRecords
+	 *           the businessFeedErrorRecords to set
+	 */
+	public void setBusinessFeedErrorRecords(final List<EnergizerCSVFeedError> businessFeedErrorRecords)
+	{
+		this.businessFeedErrorRecords = businessFeedErrorRecords;
+	}
 
 }

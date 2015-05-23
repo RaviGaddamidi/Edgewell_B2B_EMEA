@@ -98,22 +98,19 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				LOG.info(" CSV Record number: " + record.getRecordNumber());
 				LOG.info(" CSV Record: " + record.toMap());
 
-				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty() && hasCustomerTechnicalError)
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+					getTechnicalFeedErrors().clear();
 					continue;
 				}
-
-				if (!getBusinessFeedErrors().isEmpty() && hasCustomerBusinessError)
-				{
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					continue;
-				}
+				/*
+				 * if (!getBusinessFeedErrors().isEmpty() && hasCustomerBusinessError) {
+				 * csvFeedErrorRecords.addAll(getBusinessFeedErrors()); continue; }
+				 */
 				LOG.info(" ENERGIZER_ACCOUNT_ID : " + csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID) + " "
 						+ csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID));
 
@@ -253,7 +250,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			LOG.error("Error in adding or updating  Energizer Product Model  ||  " + e.getMessage());
 		}
-
+		getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+		getBusinessFeedErrors().clear();
 		return getCsvFeedErrorRecords();
 	}//process
 
@@ -354,7 +352,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
-					error.setUserType(BUSINESS_USER);
+					error.setUserType(TECHNICAL_USER);
 					error.setErrorCode("CMIR2001");
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
@@ -362,8 +360,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					error.setMessage(columnHeader + " column should be numeric and greater than 0");
 					columnNumbers.add(columnNumber);
 					error.setColumnNumber(columnNumbers);
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
 

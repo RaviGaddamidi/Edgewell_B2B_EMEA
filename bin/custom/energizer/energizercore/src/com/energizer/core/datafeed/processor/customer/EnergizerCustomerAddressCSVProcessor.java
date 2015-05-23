@@ -95,9 +95,6 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 			for (final CSVRecord record : records)
 			{
 
-				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 				final Map<String, String> csvValuesMap = record.toMap();
 				String erpAddressId = "";
 				if (null != csvValuesMap.get(SP_CUSTOMER_ID).trim())
@@ -109,6 +106,8 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+					getTechnicalFeedErrors().clear();
 					continue;
 				}
 				AddressModel energizerAddress = modelService.create(AddressModel.class);
@@ -212,12 +211,13 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 			LOG.info("EnergizerCustomerAddressCSVProcessor:process:Start");
 		}
 		catch (final Exception e)
-
 		{
-
 			LOG.error("EnergizerCustomerAddressCSVProcessor:Exception in saving EnergizerCustomerAddress", e);
 		}
-		return errors;
+
+		getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+		getBusinessFeedErrors().clear();
+		return getCsvFeedErrorRecords();
 	}
 
 	/**
