@@ -10,11 +10,13 @@ import de.hybris.platform.commercefacades.search.converters.populator.SearchResu
 import de.hybris.platform.commerceservices.search.resultdata.SearchResultValueData;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -26,6 +28,7 @@ import org.apache.commons.collections.CollectionUtils;
 public class EnergizerSearchResultProductPopulator extends SearchResultProductPopulator
 {
 
+	private static final Logger LOG = Logger.getLogger(EnergizerSearchResultProductPopulator.class);
 
 	private ProductService productService;
 
@@ -91,28 +94,33 @@ public class EnergizerSearchResultProductPopulator extends SearchResultProductPo
 	protected void addImageDataEnergizer(final SearchResultValueData source, final String imageFormat,
 			final List<ImageData> images, final String productCode)
 	{
-		final ProductModel product = productService.getProductForCode(productCode);
-		final ImageData imageData = createImageData();
-		imageData.setImageType(ImageDataType.PRIMARY);
-		imageData.setFormat(imageFormat);
-		if (imageFormat.equals("thumbnail"))
+		try
 		{
-			if (product.getThumbnail() != null && product.getThumbnail().getURL() != null)
+			final ProductModel product = productService.getProductForCode(productCode);
+			final ImageData imageData = createImageData();
+			imageData.setImageType(ImageDataType.PRIMARY);
+			imageData.setFormat(imageFormat);
+			if (imageFormat.equals("thumbnail"))
 			{
-				imageData.setUrl(product.getThumbnail().getURL());
-				images.add(imageData);
+				if (product.getThumbnail() != null && product.getThumbnail().getURL() != null)
+				{
+					imageData.setUrl(product.getThumbnail().getURL());
+					images.add(imageData);
+				}
 			}
-
+			else
+			{
+				if (product.getPicture() != null && product.getPicture().getURL() != null)
+				{
+					imageData.setUrl(product.getPicture().getURL());
+					images.add(imageData);
+				}
+			}
 		}
-		else
+		catch (final UnknownIdentifierException exception)
 		{
-			if (product.getPicture() != null && product.getPicture().getURL() != null)
-			{
-				imageData.setUrl(product.getPicture().getURL());
-				images.add(imageData);
-			}
+			LOG.error("Product  is not available, Hence removed from solr result.", exception);
 		}
-
 	}
 
 
