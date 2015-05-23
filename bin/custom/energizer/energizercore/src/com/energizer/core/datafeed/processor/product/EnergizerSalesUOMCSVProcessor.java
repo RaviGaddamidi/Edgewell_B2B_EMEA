@@ -365,23 +365,17 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					recordFailed++;
 					setRecordFailed(recordFailed);
 				}
-				if (isMOQZeroValue)
-				{
-					final List<String> columnNames = new ArrayList<String>();
-					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					error = new EnergizerCSVFeedError();
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(columnHeader);
-					columnNumbers.add(columnNumber);
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be a valid numeric");
-					error.setColumnNumber(columnNumbers);
-					error.setUserType(BUSINESS_USER);
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
-				}
+				/*
+				 * quantity cannot be 0, This has been commented and fixed in card page.
+				 * 
+				 * if (isMOQZeroValue) { final List<String> columnNames = new ArrayList<String>(); final List<Integer>
+				 * columnNumbers = new ArrayList<Integer>(); error = new EnergizerCSVFeedError();
+				 * error.setLineNumber(record.getRecordNumber()); columnNames.add(columnHeader);
+				 * columnNumbers.add(columnNumber); error.setColumnName(columnNames); error.setMessage(columnHeader +
+				 * " column should be a valid numeric"); error.setColumnNumber(columnNumbers);
+				 * error.setUserType(BUSINESS_USER); getBusinessFeedErrors().add(error);
+				 * setBusRecordError(getBusinessFeedErrors().size()); recordFailed++; setRecordFailed(recordFailed); }
+				 */
 			}
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.UOM))
