@@ -58,9 +58,10 @@
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.instructionsShoppingUrl}: <a href="${ctx.baseUrl}"><font color="#666666">${ctx.baseUrl}</font></a> <br>
 										${ctx.messages.getMessage('instructionsAccountUrl', "#genHtmlLinkStartTag($secureAccountUrl)", "#genHtmlLinkEndTag()")}<br>
 										${ctx.messages.getMessage('instructionsForgottenPswdUrl', "#genHtmlLinkStartTag($securePswdResetUrl)", "#genHtmlLinkEndTag()")}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$instructionsContactUs</font></p>
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$instructionsContactUs</font></p>-->
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.signature}</font></p>
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.note}</font></p>
 									</td>
 								</tr>
 								<tr>

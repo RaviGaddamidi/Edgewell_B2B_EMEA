@@ -102,7 +102,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final AbstractEmailContext<BusinessProcessModel> emailContext)
 	{
 		EmailMessageModel emailMessageModel;
-		if (emailSubject.indexOf("Order Confirmation") != -1)
+		if (emailSubject.indexOf("approved") != -1)
 		{
 			final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(getSalesPersonEmailId(),
 					getSalesPersonEmailId());
@@ -124,7 +124,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					emailContext.getFromEmail(), emailSubject, emailBody, null);
 
 		}//order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Order Pending For Approval") != -1)
+		else if (emailSubject.indexOf("Energizer Order Pending Approval") != -1)
 		{
 			final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
 			if (null != emailList && emailList.size() > 0)
@@ -156,7 +156,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 						new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(), emailSubject, emailBody, null);
 			}//end of if loop
 		}//end of order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Create Order in SAP failed for reference no") != -1)
+		else if (emailSubject.indexOf("Energizer Order Approval Failed for reference no") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(orderApprover.getEmail(),
