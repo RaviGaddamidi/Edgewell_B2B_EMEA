@@ -140,9 +140,10 @@
 										#if (${ctx.consignment.trackingID})
 											<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('track', ${ctx.consignment.trackingID})}</font></p>
 										#end
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>-->
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.signature}</font></p>
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.note}</font></p>
 									</td>
 								</tr>
 								<tr>
