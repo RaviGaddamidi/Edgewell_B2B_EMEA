@@ -967,7 +967,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		// validate for stock and availability
 		//final List<? extends CommerceCartModification> cartModifications = getCheckoutFlowFacade().validateSessionCart();
 		final CartModel cartModel = energizerB2BCheckoutFlowFacade.getSessionCart();
-
+		energizerB2BCheckoutFlowFacade.setCurrentUser(cartModel);
 		List<BusinessRuleError> OrderValidationErros = new ArrayList<BusinessRuleError>();
 		List<BusinessRuleError> ShippingValidationErros = new ArrayList<BusinessRuleError>();
 
