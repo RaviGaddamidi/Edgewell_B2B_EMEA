@@ -124,8 +124,7 @@
 		alert('Please Enter Valid Purchase Order Number');
 		return false;
 	 }	 
- }
- 
+ } 
  
  function validateExpectedDeliveryDate()
  {
