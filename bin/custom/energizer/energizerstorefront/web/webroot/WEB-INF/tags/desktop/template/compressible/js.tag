@@ -126,6 +126,7 @@
 	 }	 
  }
  
+ 
  function validateExpectedDeliveryDate()
  {
  	 var selectedDate = document.getElementById("datepicker-2").value;	 
