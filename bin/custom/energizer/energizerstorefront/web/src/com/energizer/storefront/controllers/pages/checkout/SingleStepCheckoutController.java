@@ -37,7 +37,6 @@ import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.commercefacades.user.data.CountryData;
 import de.hybris.platform.commercefacades.user.data.TitleData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
-import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
@@ -866,6 +865,11 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		try
 		{
 			CartData cartData = getCheckoutFlowFacade().getCheckoutCart();
+			//no items in the cart, then redirect to "Card" page. also when back button is pressed.
+			if (!hasItemsInCart())
+			{
+				return FORWARD_PREFIX + "/cart"; // no items in the cart
+			}
 			cartData.setRequestedDeliveryDate(energizerB2BCheckoutFlowFacade.getCheckoutCart().getRequestedDeliveryDate());
 
 			final boolean termsChecked = placeOrderForm.isTermsCheck();
@@ -963,7 +967,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		// validate for stock and availability
 		//final List<? extends CommerceCartModification> cartModifications = getCheckoutFlowFacade().validateSessionCart();
 		final CartModel cartModel = energizerB2BCheckoutFlowFacade.getSessionCart();
-
+		energizerB2BCheckoutFlowFacade.setCurrentUser(cartModel);
 		List<BusinessRuleError> OrderValidationErros = new ArrayList<BusinessRuleError>();
 		List<BusinessRuleError> ShippingValidationErros = new ArrayList<BusinessRuleError>();
 

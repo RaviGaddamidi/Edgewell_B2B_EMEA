@@ -24,6 +24,7 @@ import de.hybris.platform.product.PriceService;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.model.ModelService;
+import de.hybris.platform.servicelayer.user.UserService;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -87,6 +88,10 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	@Resource(name = "priceService")
 	PriceService priceService;
+
+	@Resource(name = "userService")
+	UserService userService;
+
 
 	@Resource
 	private B2BOrderService b2bOrderService;
@@ -531,4 +536,13 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		modelService.save(entryModel);
 	}
 
+	/**
+	 * @param cartModel
+	 */
+	public void setCurrentUser(final CartModel cartModel)
+	{
+		// YTODO Auto-generated method stub
+		cartModel.setUser(userService.getCurrentUser());
+		modelService.save(cartModel);
+	}
 }

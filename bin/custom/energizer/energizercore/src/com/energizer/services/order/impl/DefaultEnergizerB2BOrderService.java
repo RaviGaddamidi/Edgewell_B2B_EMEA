@@ -151,12 +151,12 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		LOG.info("Before marshall " + startTime);
 		final String orderSimulateXML = simulateOrderMarshall(cartData);
 		final Long marshallTime = System.currentTimeMillis();
-		LOG.info("Marshall took " + (startTime - marshallTime) / 1000 + " Sec");
+		LOG.info("Marshall took " + (marshallTime - startTime) + " milliseconds");
 		final String restCallResponse = invokeRESTCall(orderSimulateXML, "simulate");
 		final Long unmarshallTime = System.currentTimeMillis();
-		LOG.info("REST Call took " + (marshallTime - unmarshallTime) / 1000 + " Sec");
+		LOG.info("REST Call took " + (unmarshallTime - marshallTime) + " milliseconds");
 		final AbstractOrderData orderData = simulateOrderUnMarshall(restCallResponse, cartData);
-		LOG.info("UnMarshall took " + (unmarshallTime - System.currentTimeMillis()) / 1000 + " Sec");
+		LOG.info("UnMarshall took " + (System.currentTimeMillis() - unmarshallTime) + " milliseconds");
 		return (CartData) orderData;
 	}
 
@@ -181,15 +181,15 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			throw e;
 		}
 		final Long marshallTime = System.currentTimeMillis();
-		LOG.info("Create order Marshall took " + (startTime - marshallTime) / 1000 + " Sec");
+		LOG.info("Create order Marshall took " + (marshallTime - startTime) + " milliseconds");
 		final String restCallResponse = invokeRESTCall(OrderCreationXML, "createOrder");
 
 		final Long unmarshallTime = System.currentTimeMillis();
-		LOG.info("Create order REST Call took " + (marshallTime - unmarshallTime) / 1000 + " Sec");
+		LOG.info("Create order REST Call took " + (unmarshallTime - marshallTime) + " milliseconds");
 		try
 		{
 			simulateOrderforIDUnMarshall(restCallResponse, orderModel);
-			LOG.info("Create order UnMarshall took " + (unmarshallTime - System.currentTimeMillis()) / 1000 + " Sec");
+			LOG.info("Create order UnMarshall took " + (System.currentTimeMillis() - unmarshallTime) + " milliseconds");
 			return SUCCESS;
 		}
 		catch (final Exception e)
@@ -281,7 +281,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 							}
 							else
 							{
-								LOG.info("Could not find the conversion faction in cases");
+								LOG.info("Could not find the conversion factor in cases(CS)" + material);
+								throw new Exception("No converion found in Cases for material " + material);
 							}
 							quantity = quantityInInt.longValue() * quantity;
 							uom = "CS";
@@ -290,7 +291,16 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						{
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
-							final Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							if (conversionMultiplierForCase != null)
+							{
+								quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							}
+							else
+							{
+								LOG.info("Could not find the conversion factor in cases(CS)" + material);
+								throw new Exception("No converion found in Cases for material " + material);
+							}
 							quantity = quantityinInt.longValue() * quantity;
 							uom = "CS";
 						}
@@ -453,7 +463,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 							}
 							else
 							{
-								LOG.info("Could not find the conversion faction in cases");
+								LOG.info("Could not find the conversion factor in cases(CS)" + material);
+								throw new Exception("No converion found in Cases for material " + material);
 							}
 							quantity = quantityInInt.longValue() * quantity;
 							uom = "CS";
@@ -462,7 +473,16 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						{
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
-							final Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							if (conversionMultiplierForCase != null)
+							{
+								quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							}
+							else
+							{
+								LOG.info("Could not find the conversion factor in cases(CS)" + material);
+								throw new Exception("No converion found in Cases for material " + material);
+							}
 							quantity = quantityinInt.longValue() * quantity;
 							uom = "CS";
 						}
@@ -545,9 +565,10 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 		catch (final HttpClientErrorException clientException)
 		{
-			final String supportEmail = configurationService.getConfiguration().getString("energizer.customer.support.email",
-					"test@test.com");
+			String supportEmail = Config.getString("energizer.customer.support.to.email", "test@test.com");
 			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+			supportEmail = Config.getString("energizer.customer.support.from.email", "test@test.com");
+			final EmailAddressModel fromAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
 			final StringBuilder emailBody = new StringBuilder();
 			final StringBuilder emailSubject = new StringBuilder();
 			if (option.equalsIgnoreCase("simulate"))
