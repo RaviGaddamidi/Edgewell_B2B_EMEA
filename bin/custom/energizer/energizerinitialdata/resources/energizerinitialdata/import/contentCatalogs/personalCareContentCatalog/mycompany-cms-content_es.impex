@@ -92,3 +92,23 @@ UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[la
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
 
 UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang]
+
+
+$contentCatalog=houseHoldContentCatalog
+$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Online'])
+$siteResource=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/contentCatalogs/$contentCatalog
+
+$lang=es
+
+#  Header Link Componenet #
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+ ;;LogoutLink;"Desconectarse / Salir"
+ ;;MyAccountLink;"Mi Cuenta"
+ ;;MyCompanyLink;"Mi Empresa"
+ ;;QuickOrderPageLink;"Orden rápida"
+ ;;ExcelOrderPageLink;"Orden en Excel"
+ ;;TermsAndConditionsLink;"Términos y Condiciones"
+ ;;AboutUSLink;"Acerca de nosotros"
+ ;;PrivacyPolicyLink;"Política de privacidad"
+ ;;LegalLink;"Legal"
+ ;;ContactUSLink;"Contáctenos"

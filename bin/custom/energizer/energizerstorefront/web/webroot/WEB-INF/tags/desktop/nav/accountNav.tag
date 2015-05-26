@@ -76,7 +76,7 @@
 					<li class='${selected eq 'excelfileupload' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/excelfileupload" var="encodedUrl" />
 						<ycommerce:testId code="myAccount_orders_navLink">
-							<a href="${encodedUrl}"><spring:theme code="text.account.profile.FileUpload" text="Excel Order"/></a>
+							<a href="${encodedUrl}"><spring:theme code="text.account.excelUpload.FileUpload" /></a>
 						</ycommerce:testId>
 					</li>
 					

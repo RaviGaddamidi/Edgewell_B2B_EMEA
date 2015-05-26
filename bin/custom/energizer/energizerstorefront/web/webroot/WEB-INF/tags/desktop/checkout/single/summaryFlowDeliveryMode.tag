@@ -76,8 +76,8 @@
 	</script>
 	
 	<div class="headline">3.<span id="deliverySectionNum" class="number"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/></div>
-	Estimated Lead Time : <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
-	Expected Delivery Date :
+	<spring:theme code="basket.your.shopping.estimatedleadtime"/> <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
+	<spring:theme code="product.product.details.future.date"/>
 	<div id="deliveryDateId">
 	<c:if test="${not empty cartData.requestedDeliveryDate }">
     	 ${DateTimeUtil.displayDate(cartData.requestedDeliveryDate)}
