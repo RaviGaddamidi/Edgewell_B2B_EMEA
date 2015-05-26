@@ -8,7 +8,6 @@ import de.hybris.platform.acceleratorservices.model.email.EmailAddressModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailMessageModel;
 import de.hybris.platform.commercefacades.order.data.AbstractOrderData;
 import de.hybris.platform.commercefacades.order.data.CartData;
-import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.data.PriceData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
@@ -648,7 +647,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	{
 		final JAXBContext jaxbContext;
 		final ZSD_BAPI_SALESORDER_SIMULATEResponse unmarshalledSimulateObject = null;
-		final OrderData orderData = null;
+		final CartData orderData = null;
 		try
 		{
 			jaxbContext = JAXBContext.newInstance(com.energizer.core.createorder.jaxb.xsd.objects.ObjectFactory.class);
