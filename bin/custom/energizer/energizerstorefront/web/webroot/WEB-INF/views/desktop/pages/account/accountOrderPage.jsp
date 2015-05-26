@@ -27,8 +27,15 @@
 		<div class="headline">Order Details</div>
 		<div class="span-19">
 			<div class="span-7 spacing_cls">
+				<c:choose>
+					<c:when test="${empty order.erpOrderCreator}">
+						<spring:theme code="text.account.orderHistory.orderNumber" /> : <spring:theme code="Not Applicable" /></br> 
+					</c:when>
+					<c:otherwise>
+						<spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
+					</c:otherwise>
+				 </c:choose>
 				
-				<spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
 				<c:if test="${not empty orderData.erpOrderNumber}">
 				<spring:theme code="text.account.orderHistory.SAPorderNumber" /> : ${orderData.erpOrderNumber}<br />
 				</c:if>

@@ -50,13 +50,20 @@
 						<tr>
 							<td headers="header1">
 								<ycommerce:testId code="orderHistory_ReferenceNumber_link">
-									 <a href="${myAccountOrderDetailsUrl}">${order.code}</a> 
+									<c:choose>
+										<c:when test="${empty order.erpOrderCreator}">
+											<a href="${myAccountOrderDetailsUrl}">${order.code}</a>
+										</c:when>
+										<c:otherwise>
+											<p><spring:theme code="Not Applicable" /></p> 
+										</c:otherwise>
+									 </c:choose>
 									
 								</ycommerce:testId>
 							</td>
 							<td headers="header2">
 								<ycommerce:testId code="orderHistory_orderNumber_link">
-									${order.referenceNumber}
+									<a href="${myAccountOrderDetailsUrl}">${order.referenceNumber}</a>
 								</ycommerce:testId>
 							</td>
 												
