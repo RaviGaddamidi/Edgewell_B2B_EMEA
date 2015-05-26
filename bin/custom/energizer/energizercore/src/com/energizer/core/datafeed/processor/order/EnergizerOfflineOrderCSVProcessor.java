@@ -309,10 +309,10 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				{
 					baseSite = site;
 					energizerOrderModel.setSite(baseSite);
-					// only one store per site maintained
-					energizerOrderModel.setStore(baseSite.getStores().get(0));
 				}
 			}
+			// only one store per site maintained
+			energizerOrderModel.setStore(baseSite.getStores().get(0));
 
 			if (energizerB2BUnitModel != null)
 			{
