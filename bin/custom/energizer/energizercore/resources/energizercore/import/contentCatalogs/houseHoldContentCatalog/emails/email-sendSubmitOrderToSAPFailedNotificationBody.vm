@@ -58,11 +58,11 @@
 													<table width="100%" cellpadding="0" cellspacing="0">
 														<tr>
 															<td width="25%">&nbsp;</td>
-															<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.customerMaterialId}</b></font></td>
-															<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.erpMaterialId}</b></font></td>
+															<!--<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.customerMaterialId}</b></font></td>-->
+															<!--<td width="18%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.erpMaterialId}</b></font></td>-->
 															<td width="15%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.quantity}</b></font></td>
 															<td width="17%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.itemPrice}</b></font></td>
-															<td width="12%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.UOM}</b></font></td>
+															<!--<td width="12%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.UOM}</b></font></td>-->
 															<td width="16%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.total}</b></font></td>
 															
 															
@@ -131,11 +131,11 @@
 																	</tr>
 																</table>
 															</td>
-															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.customerMaterialId</font></p></td>
-															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.erpMaterialID</font></p></td>
+														<!--	<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.customerMaterialId</font></p></td>-->
+															<!--<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.erpMaterialID</font></p></td>-->
 															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.quantity</font></p></td>
 															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.basePrice.formattedValue</font></p></td>
-															<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.uom</font></p></td>
+															<!--<td valign="middle"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.product.uom</font></p></td>-->
 															<td valign="middle"><p><font color="#414a4f" size="3" face="Arial, Helvetica, sans-serif"><b>#if($entry.totalPrice.value > 0) $entry.totalPrice.formattedValue #else ${ctx.messages.free} #end</b></font></p></td>
 															
 															
@@ -147,7 +147,7 @@
 										</table>
 										<br/>
 										#if ($!ctx.order.purchaseOrderNumber)
-										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
+										<!--<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
 											<tr>
 												<td>
 													<table>
@@ -159,14 +159,14 @@
 													</table>
 												</td>
 											</tr>
-										</table>
+										</table>-->
 										#end
 										<br/>
 										
 										
 										
 									
-										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
+										<!--<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
 											<tr>
 												<td>
 													<table>
@@ -201,9 +201,9 @@
 													</table>
 												</td>
 											</tr>
-										</table>
+										</table>-->
 										<br/>
-										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
+										<!--<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
 											<tr>
 												<td valign="top">
 													<table width="100%">
@@ -224,7 +224,7 @@
 														<tr>
 															<td valign="top">
 																#if(${ctx.order.paymentInfo})
-																	<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paymentCardType', ${ctx.order.paymentInfo.cardType})}</font></p>-->
+																	<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paymentCardType', ${ctx.order.paymentInfo.cardType})}</font></p>
 																	<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.billingAddress}</b></font></p>
 																	<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">
 																		${ctx.messages.billingAddress}:<br/>
@@ -245,7 +245,7 @@
 																		<td valign="top" width="10%">&nbsp;</td>
 																		<td valign="top" width="45%"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.order.subTotal.formattedValue}</b></font></p></td>
 																	</tr>
-																	<!--<tr>
+																	<tr>
 																		<td valign="top"><p><font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.savings}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
 																		<td valign="top"><p><font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.order.totalDiscounts.formattedValue}</b></font></p></td>
@@ -253,30 +253,31 @@
 																	<tr>
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.delivery}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
-																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>#if(${ctx.order.deliveryCost.value} > 0) ${ctx.order.deliveryCost.formattedValue} #else ${ctx.messages.free} #end</b></font></p></td>
-																	</tr>-->
+																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>#if(${ctx.order.deliveryCost.value} > 0) ${ctx.order.deliveryCost.formattedValue} #else${ctx.messages.free} #end</b></font></p></td>
+																	</tr>
 																	<tr>
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.total}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
 																		<td valign="top"><p><font color="#666666" size="3" face="Arial, Helvetica, sans-serif"><b>${ctx.order.totalPrice.formattedValue}</b></font></p></td>
 																	</tr>
 																</table>
-															<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>-->
+															<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>
 															</td>
 														</tr>
 													</table>
 												</td>
 											</tr>
-										</table>
+										</table>-->
 #set ($accountUrl = "${ctx.baseUrl}/my-account/orders")
 #set ($deliveryInfoUrl = "${ctx.baseUrl}/my-account/order/${ctx.order.code}")
 #set ($mailToUrl = "mailto:${ctx.messages.contactUsEmailAddress}")
 #set ($paragraphContactUs = ${ctx.messages.getMessage('paragraphContactUs', "#genHtmlLinkStartTag(${ctx.messages.contactUsPage})", "#genHtmlLinkEndTag()", "#genHtmlLink($mailToUrl '#666666' ${ctx.messages.contactUsEmailAddress})")})
 										
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphDeliveryInfo', "#genHtmlLinkStartTag($deliveryInfoUrl)", "#genHtmlLinkEndTag()")}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphDeliveryInfo', "#genHtmlLinkStartTag($deliveryInfoUrl)", "#genHtmlLinkEndTag()")}</font></p>-->
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>-->
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.signature}</font></p>
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.note}</font></p>
 									</td>
 								</tr>
 								<tr>
