@@ -22,7 +22,7 @@ ACC.productlisting = {
 
 	scrollingHandler: function(direction) {
 		if (direction === "down") {
-			ACC.productlisting.triggerLoadMoreResults();
+			/* ACC.productlisting.triggerLoadMoreResults(); */
 		}
 	},
 
