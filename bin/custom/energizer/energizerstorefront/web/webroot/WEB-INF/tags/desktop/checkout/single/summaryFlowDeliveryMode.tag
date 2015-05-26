@@ -84,7 +84,7 @@
 	</c:if>
 	</div>     
 	<!-- <div class="contentSection"></div> -->
-	<input type="text" id="datepicker-2"  placeholder="mm-dd-yy" style="width: 152px;margin-top: 10px;" onchange="validateExpectedDeliveryDate();"/>
+	<input type="text" id="datepicker-2"  placeholder="mm-dd-yy" style="width: 152px;margin-top: 10px;"/>
 	
 	<%-- <div style="display:none">
 		<div id="summaryDeliveryModeOverlay" class="summaryOverlay ">

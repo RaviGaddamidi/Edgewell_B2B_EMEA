@@ -829,48 +829,70 @@ document.assignLeadTimeToDatePicker = function() {
 $('#checkoutPlaceOrder').click(function(){
     
 	var poNumber = $("#PurchaseOrderNumber").val();
-	var datepicker = $('#datepicker-2').val();	
-			
-					if(poNumber){
-						if($("#Terms1").prop('checked')){
-							if(datepicker){
-								return true;
-							}
-							else{
-								var html = "<div class='alert negative'>Please select delivery address.</div>";
-								$('#globalMessages').html(html);
-								$("html, body").animate({ scrollTop: 0 }, 50);
-								return false;
-							}
-							
-						}
-						else{
-							var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
-							$('#globalMessages').html(html);
-							$("html, body").animate({ scrollTop: 0 }, 50);
-							return false;
-						}
+	var selectedDate = $('#datepicker-2').val();	
+	
+	if(poNumber){
+		if($("#Terms1").prop('checked')){
+			if(selectedDate){
+				if(isDate(selectedDate)){
+					var html = "";
+					$('#globalMessages').html(html);
+				return true;
+				}else
+				 {
 					
-					}else{
-						
-					
-					var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
+					var html = "<div class='alert negative'>Expected delivery date is not valid. Enter a valid date.</div>";
 					$('#globalMessages').html(html);
 					$("html, body").animate({ scrollTop: 0 }, 50);
 					return false;
-						
-					}
+				 }
+			}
+			else{
+				var html = "<div class='alert negative'>Please select delivery address.</div>";
+				$('#globalMessages').html(html);
+				$("html, body").animate({ scrollTop: 0 }, 50);
+				return false;
+			}
+			
+		}
+		else{
+			var html = "<div class='alert negative'>Please accept our terms & conditions before submitting your order.</div>";
+			$('#globalMessages').html(html);
+			$("html, body").animate({ scrollTop: 0 }, 50);
+			return false;
+		}
+	
+	}else{
+		
+	
+	var html = "<div class='alert negative'>Purchase Order Number is Manadatory</div>";
+	$('#globalMessages').html(html);
+	$("html, body").animate({ scrollTop: 0 }, 50);
+	return false;
+		
+	}
 					
 	});
 $('#checkoutPlaceOrder2').click(function(){
     
 	var poNumber = $("#PurchaseOrderNumber").val();
-			var datepicker = $('#datepicker-2').val();	
+			var selectedDate = $('#datepicker-2').val();	
 			
 			if(poNumber){
 				if($("#Terms1").prop('checked')){
-					if(datepicker){
+					if(selectedDate){
+						if(isDate(selectedDate)){
+							var html = "";
+							$('#globalMessages').html(html);
 						return true;
+						}else
+						 {
+							
+							var html = "<div class='alert negative'>Expected delivery date is not valid. Enter a valid date.</div>";
+							$('#globalMessages').html(html);
+							$("html, body").animate({ scrollTop: 0 }, 50);
+							return false;
+						 }
 					}
 					else{
 						var html = "<div class='alert negative'>Please select delivery address.</div>";
@@ -898,6 +920,38 @@ $('#checkoutPlaceOrder2').click(function(){
 			}
 					
 	});
+function isDate(txtDate)
+{
+	
+   var currVal = txtDate;
+   if(currVal == '')
+       return false;
+
+   var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/; //Declare Regex
+   var dtArray = currVal.match(rxDatePattern); // 
+
+   if (dtArray == null) 
+       return false;
+
+   //Checks for mm/dd/yyyy format.
+   dtMonth = dtArray[1];
+   dtDay= dtArray[3];
+   dtYear = dtArray[5];        
+
+   if (dtMonth < 1 || dtMonth > 12) 
+       return false;
+   else if (dtDay < 1 || dtDay> 31) 
+       return false;
+   else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
+       return false;
+   else if (dtMonth == 2) 
+   {
+       var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+       if (dtDay> 29 || (dtDay ==29 && !isleap)) 
+               return false;
+   }
+   return true;
+}
 $('#Terms1').click(function(){
 	if($("#Terms1").prop('checked')){
 	$('#globalMessages').html("");
