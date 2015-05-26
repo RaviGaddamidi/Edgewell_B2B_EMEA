@@ -58,12 +58,12 @@
 					
 						<div class="cntutil_wrapper_cls">
 							 
-									<div class="cnt_utl_cls">Container Utilization</div>
+									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/></div>
 				                      	<div id="volume_cont">
 				                      	<div class="divider_20"><span class="span_cls">40ft</span></div>
 				                      	<div class="divider_40"><span class="span_cls">20ft</span></div>
 				                    	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
-				                    	<div class="cnt_utllbl_cls">Volume</div>
+				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
 				                        <div style="height: 69px;" id="volume_utilization"></div>                                                                           
 				                    </div>                                                   
 							
@@ -71,7 +71,7 @@
 							
 									<div id="weight_cont">
 				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.totalProductWeightInPercent}</span>%</div>
-				                       <div class="cnt_utllbl_cls">Weight</div>                                                                             
+				                       <div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.weight"/></div>                                                                             
 				       				   <div style="height: 135px;" id="weight_utilization"></div>
 				                    </div>
 							
