@@ -34,9 +34,16 @@ public class DefaultEnergizerInvoiceFacade implements EnergizerInvoiceFacade
 	public byte[] getPDFInvoiceAsBytes(final String orderNumber)
 	{
 		final OrderData orderData = orderFacade.getOrderDetailsForCode(orderNumber);
-		return (invoiceService.getPDFInvoiceAsBytes(orderData));
-
+		try
+		{
+			return (invoiceService.getPDFInvoiceAsBytes(orderData));
+		}
+		catch (final Exception e)
+		{
+			// YTODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
-
 
 }

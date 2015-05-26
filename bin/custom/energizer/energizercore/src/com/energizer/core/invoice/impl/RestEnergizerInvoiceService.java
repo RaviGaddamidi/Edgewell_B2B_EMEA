@@ -9,6 +9,7 @@ import de.hybris.platform.servicelayer.config.ConfigurationService;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Resource;
@@ -57,12 +58,15 @@ public class RestEnergizerInvoiceService implements EnergizerInvoiceService
 	 * @see com.energizer.core.invoice.EnergizerInvoiceService#getPDFInvoiceAsBytes()
 	 */
 	@Override
-	public byte[] getPDFInvoiceAsBytes(final OrderData orderData)
+	public byte[] getPDFInvoiceAsBytes(final OrderData orderData) throws Exception
 	{
 		final String parsedXML = invoiceMarshal(orderData);
 		final String restCallResponse = invokeRESTCall(parsedXML, "invoicePdf");
 		final String invoiceURL = unMarshelResponse(restCallResponse);
-		return getPDFFromFilePath(invoiceURL);
+		LOG.info("Before decoding the pdf url" + invoiceURL + "\n");
+		final String decodedURL = URLDecoder.decode(invoiceURL, "UTF-8");
+		LOG.info("After decoding the pdf url" + decodedURL);
+		return getPDFFromFilePath(decodedURL);
 	}
 
 	/**
@@ -145,7 +149,7 @@ public class RestEnergizerInvoiceService implements EnergizerInvoiceService
 		}
 		catch (final Exception ex)
 		{
-			LOG.error(ex.getMessage());
+			LOG.error(" ERROR invoking opentext PDF url ", ex);
 			retVal = null;
 		}
 		return retVal;
