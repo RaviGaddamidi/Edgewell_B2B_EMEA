@@ -28,16 +28,16 @@
   	<c:url value="/my-cart/excelFileToUpload" var="encodedUrl"  scope="page" />
     <form:form  method="POST" action="${encodedUrl}" enctype="multipart/form-data">
    
-       <div style="width:600px;float:left;">
+       <div style="width:50%;float:left;">
 	       	<span style="float:left;position:relative;top:15px;margin-right:10px;">
 	       		<spring:theme code="text.account.excelFileToUpload"/>  
 	       	</span>
-	       	<input type="file" class="button" name="file">
+	       	<input style="background:none;width:220px; color:#000" type="file" class="button" name="file">
        </div> 
-       <div style="width:275px;float:left;"> 
-	       	<input type="submit" class="button" value="<spring:theme code='text.account.click.upload'/>" > 
+       <div style="width:50%;float:left;"> 
+	       	<input type="submit" class="button"  value="<spring:theme code='text.account.click.upload'/>" > 
 	       	<span style="float:right;position:relative;top:15px;margin-right:10px;">
-	       	<spring:theme code="text.account.click.excelFileUpload"/>	   
+	       <%-- 	<spring:theme code="text.account.click.excelFileUpload"/>	  --%>  
 	       	</span>
        	</div>
    	</form:form>	

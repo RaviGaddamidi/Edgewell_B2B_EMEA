@@ -55,7 +55,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	public static final String ProcessedWithNoErrors = "ProcessedWithNoErrors";
 	public static final String ErrorFiles = "ErrorFiles";
 	public static final String fileSeperator = "\\";
-	public static StringBuilder message = new StringBuilder(512);
+	public final StringBuilder message = new StringBuilder(512);
 	public static final String COMMA = ",";
 
 	private static String CATALOG_NAME = "";
@@ -96,7 +96,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	private ReloadableResourceBundleMessageSource messageSource;
 
 	@Override
-	public void logErrors(final EnergizerCronJobModel cronjob, final List<EnergizerCSVFeedError> errors)
+	public synchronized void logErrors(final EnergizerCronJobModel cronjob, final List<EnergizerCSVFeedError> errors)
 	{
 		final Locale locale = i18nService.getCurrentLocale();
 		LOG.info("Before sending email/cron job errors: " + errors);
@@ -115,7 +115,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		{
 			lineNumber++;
 			message.append(messageSource.getMessage("text.error.message.email.template.section5", new Object[]
-			{ lineNumber, error.getMessage(), error.getLineNumber(), "", error.getColumnName().toString() }, locale));
+			{ lineNumber, error.getMessage(), /* error.getLineNumber() */"", "", error.getColumnName().toString() }, locale));
 		}
 
 		message.append(messageSource.getMessage("text.error.message.email.template.section6", null, locale));
@@ -150,13 +150,13 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			{
 				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
 						Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
-
 				emailService.send(emailMessageModel);
 			}
 			message.setLength(0);
 		}
 		catch (final Exception e)
 		{
+			message.setLength(0);
 			LOG.error("Exception in Mail Errors", e);
 		}
 	}
@@ -624,6 +624,28 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	public void setBusinessFeedErrorRecords(final List<EnergizerCSVFeedError> businessFeedErrorRecords)
 	{
 		this.businessFeedErrorRecords = businessFeedErrorRecords;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.core.datafeed.EnergizerCSVProcessor#flush()
+	 */
+	@Override
+	public void flush()
+	{
+		csvFeedErrorRecords.clear();
+		techFeedErrorRecords.clear();
+		businessFeedErrorRecords.clear();
+		technicalFeedErrors.clear();
+		businessFeedErrors.clear();
+		message.setLength(0);
+		//Set 0 when email is triggered
+		setTotalRecords(0);
+		setRecordFailed(0);
+		setRecordSucceeded(0);
+		setBusRecordError(0);
+		setTechRecordError(0);
 	}
 
 }

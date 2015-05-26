@@ -125,14 +125,14 @@ public class PasswordResetPageController extends AbstractPageController
 			try
 			{
 				getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
-				GlobalMessages.addSingleMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
 						"account.confirmation.forgotten.password.link.sent", new Object[]
 						{ forgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());
 			}
 			catch (final UnknownIdentifierException unknownIdentifierException)
 			{
-				GlobalMessages.addSingleMessage(model, GlobalMessages.CONF_MESSAGES_HOLDER,
+				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
 						"account.confirmation.forgotten.password.link.sent", new Object[]
 						{ forgottenPassExpValue });
 				model.addAttribute(new ForgottenPwdForm());

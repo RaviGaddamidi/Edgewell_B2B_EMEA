@@ -83,10 +83,9 @@
 		</c:choose>
 	</div>
 	
-	
 	 <div class="description"><spring:theme code="text.company.manageusers.details.subtitle" /></div>
-
-		<table class="table_budget orderListTable">
+	
+		<table class="table_budget user-details-cls">
 			<tr>
 				<td>
 					<spring:theme code="text.company.user.email" text="Email:  "/>

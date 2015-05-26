@@ -36,6 +36,8 @@ public interface EnergizerCSVProcessor
 
 	public void cleanup(final String type, final File file, final EnergizerCronJobModel cronjob, boolean errors);
 
+	public void flush();
+
 	/**
 	 * @return the recordErrors
 	 */

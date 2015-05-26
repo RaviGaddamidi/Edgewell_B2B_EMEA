@@ -74,6 +74,7 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 		{
 			emailAddress.add(cronjob.getEmailAddress());
 		}
+		energizerCSVProcessor.flush(); /* This is to flush the buffer of existing errorList and message as well */
 		for (final File file : files)
 		{
 			Iterable<CSVRecord> csvRecords;
@@ -102,41 +103,30 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				if (!techfeedErrors.isEmpty())
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getTechRecordError());
-					energizerCSVProcessor.mailErrors(cronjob, techfeedErrors, cronjob.getTechnicalEmailAddress(), emailAttachmentList);
-					//					energizerCSVProcessor.cleanup(type, file, cronjob, techfeedErrors);
+					energizerCSVProcessor.mailErrors(cronjob, techfeedErrors, cronjob.getTechnicalEmailAddress(), null);
 				}
 				busfeedErrors = energizerCSVProcessor.getBusinessFeedErrors();
 				if (!busfeedErrors.isEmpty())
 				{
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getBusRecordError());
-					energizerCSVProcessor.mailErrors(cronjob, busfeedErrors, cronjob.getBusinessEmailAddress(), emailAttachmentList);
-					//					energizerCSVProcessor.cleanup(type, file, cronjob, busfeedErrors);
+					energizerCSVProcessor.mailErrors(cronjob, busfeedErrors, cronjob.getBusinessEmailAddress(), null);
 				}
-				energizerCSVProcessor.setTotalRecords(0);
-				energizerCSVProcessor.setRecordFailed(0);
-				energizerCSVProcessor.setRecordSucceeded(0);
-				energizerCSVProcessor.setBusRecordError(0);
-				energizerCSVProcessor.setTechRecordError(0);
 				emailAttachmentList.clear();
 				if ((techfeedErrors != null && techfeedErrors.size() > 0) || (busfeedErrors != null && busfeedErrors.size() > 0))
 				{
 					energizerCSVProcessor.cleanup(type, file, cronjob, true);
-					techfeedErrors.clear();
-					busfeedErrors.clear();
+					energizerCSVProcessor.flush();
 				}
 				else
 				{
 					energizerCSVProcessor.cleanup(type, file, cronjob, false);
-					techfeedErrors.clear();
-					busfeedErrors.clear();
+					energizerCSVProcessor.flush();
 				}
-
 			}
 			catch (final FileNotFoundException e)
 			{
 				LOG.error("File Not found", e);
-				techfeedErrors.clear();
-				busfeedErrors.clear();
+				energizerCSVProcessor.flush();
 				exceptionOccured = true;
 			}
 			if (exceptionOccured)
@@ -147,7 +137,7 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 			{
 				performResult = new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
 			}
-
+			energizerCSVProcessor.flush();
 		}
 		return performResult;
 	}

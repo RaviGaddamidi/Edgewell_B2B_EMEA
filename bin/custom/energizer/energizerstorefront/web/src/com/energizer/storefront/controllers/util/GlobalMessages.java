@@ -32,7 +32,7 @@ public class GlobalMessages
 	public static final String INFO_MESSAGES_HOLDER = "accInfoMsgs";
 	public static final String ERROR_MESSAGES_HOLDER = "accErrorMsgs";
 	public static final String BUSINESS_RULE_MESSAGES = "businessRuleError";
-
+	public static final String FORGOT_PWD_CONF_MESSAGES = "forgotPwdConfMsgs";
 
 	public static void addConfMessage(final Model model, final String messageKey)
 	{
@@ -54,6 +54,12 @@ public class GlobalMessages
 		addMessage(model, BUSINESS_RULE_MESSAGES, messageKey, null);
 	}
 
+	public static void addForgotPwdConfMessage(final Model model, final String messageHolder, final String messageKey,
+			final Object[] attributes)
+	{
+		addMessage(model, FORGOT_PWD_CONF_MESSAGES, messageKey, attributes);
+	}
+
 	public static boolean hasErrorMessage(final Model model)
 	{
 		return model.containsAttribute(ERROR_MESSAGES_HOLDER);
@@ -65,29 +71,6 @@ public class GlobalMessages
 		message.setCode(messageKey);
 		message.setAttributes(attributes != null ? Arrays.asList(attributes) : Collections.emptyList());
 
-		final Map<String, Object> modelMap = model.asMap();
-		if (modelMap.containsKey(messageHolder))
-		{
-			final List<GlobalMessage> messages = new ArrayList<GlobalMessage>((List<GlobalMessage>) modelMap.get(messageHolder));
-			messages.add(message);
-			model.addAttribute(messageHolder, messages);
-		}
-		else
-		{
-			model.addAttribute(messageHolder, Collections.singletonList(message));
-		}
-	}
-
-	public static void addSingleMessage(final Model model, final String messageHolder, final String messageKey,
-			final Object[] attributes)
-	{
-		final GlobalMessage message = new GlobalMessage();
-		message.setCode(messageKey);
-		message.setAttributes(attributes != null ? Arrays.asList(attributes) : Collections.emptyList());
-		for (final Object object : message.getAttributes())
-		{
-			message.setAttribute(object.toString());
-		}
 		final Map<String, Object> modelMap = model.asMap();
 		if (modelMap.containsKey(messageHolder))
 		{

@@ -910,17 +910,22 @@ span.future_tooltip a:hover .tooltip_table {
 }
 
 
-
-
-
 .control-group fieldset input[type="checkbox"]{
 	float: left;
 }
 
-
-
-
-
 #cboxLoadedContent form.add_to_cart_order_form{
 	padding: 20px;
+}
+table.user-details-cls {
+	padding: 20px 0;
+}
+table.user-details-cls td:last-child{
+	padding-left: 150px;
+}
+table.user-details-cls td:last-child a{
+	text-decoration: underline;
+}
+table.user-details-cls td:first-child{
+	font-weight: bold;
 }

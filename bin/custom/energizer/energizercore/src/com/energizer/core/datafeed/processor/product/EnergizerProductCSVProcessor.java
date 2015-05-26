@@ -226,9 +226,10 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 	 * @param record
 	 * @return
 	 */
-	private EnergizerCSVFeedError validate(final CSVRecord record)
+	private void validate(final CSVRecord record)
 	{
-		EnergizerCSVFeedError error = null;
+		EnergizerCSVFeedError techError = null;
+		EnergizerCSVFeedError busError = null;
 		final Map<String, String> map = record.toMap();
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
@@ -238,21 +239,24 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			long recordFailed = getRecordFailed();
 			setTotalRecords(record.getRecordNumber());
 			final String value = map.get(columnHeader).trim();
-			if (!columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LIST_PRICE))
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.PRODUCT_GROUP)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LIST_PRICE_CURRENCY)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID))
 			{
 				if (value.isEmpty())
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					error = new EnergizerCSVFeedError();
-					error.setLineNumber(record.getRecordNumber());
+					techError = new EnergizerCSVFeedError();
+					techError.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
-					error.setUserType(TECHNICAL_USER);
-					error.setColumnName(columnNames);
+					techError.setUserType(TECHNICAL_USER);
+					techError.setColumnName(columnNames);
 					columnNumbers.add(columnNumber);
-					error.setMessage(columnHeader + " column should not be empty");
-					error.setColumnNumber(columnNumbers);
-					getTechnicalFeedErrors().add(error);
+					techError.setMessage(columnHeader + " column should not be empty");
+					techError.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(techError);
 					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
@@ -262,23 +266,22 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			{
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
-					error = new EnergizerCSVFeedError();
+					busError = new EnergizerCSVFeedError();
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					error.setUserType(BUSINESS_USER);
+					busError.setUserType(BUSINESS_USER);
 					columnNames.add(columnHeader);
-					error.setLineNumber(record.getRecordNumber());
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be numeric");
+					busError.setLineNumber(record.getRecordNumber());
+					busError.setColumnName(columnNames);
+					busError.setMessage(columnHeader + " column should be numeric");
 					columnNumbers.add(columnNumber);
-					error.setColumnNumber(columnNumbers);
-					getBusinessFeedErrors().add(error);
+					busError.setColumnNumber(columnNumbers);
+					getBusinessFeedErrors().add(busError);
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
 				}
 			}
 		}
-		return error;
 	}
 }

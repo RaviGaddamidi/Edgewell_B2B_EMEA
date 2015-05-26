@@ -12,7 +12,13 @@
 			</div>
 		</c:forEach>
 </c:if>
-
+<c:if test="${not empty forgotPwdConfMsgs}">
+		<c:forEach items="${forgotPwdConfMsgs}" var="msg">
+			<div id="forgotPwdConfMsgs" class="alert positive">
+				<spring:theme code="${fn:escapeXml(msg.code)}" arguments="${fn:escapeXml(msg.attributes)}"/>
+			</div>
+		</c:forEach>
+</c:if>
 <%-- Warning messages --%>
 <c:if test="${not empty accInfoMsgs}">
 		<c:forEach items="${accInfoMsgs}" var="msg">
