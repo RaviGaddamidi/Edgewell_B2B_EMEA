@@ -356,7 +356,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 					energizerOrderModel.setRequestedDeliveryDate(reqDeliveryDate);
 					energizerOrderModel.setPurchaseOrderNumber(poNo);
 					energizerOrderModel.setTotalPrice(totalValue);
-					energizerOrderModel.setSubtotal(totalValue - (totalShipment - totalDiscount - totalTax));
+					energizerOrderModel.setSubtotal(totalValue - (totalShipment + totalDiscount + totalTax));
 					energizerOrderModel.setDeliveryCost(totalShipment);
 					energizerOrderModel.setTotalDiscounts(totalDiscount);
 					energizerOrderModel.setTotalTax(totalTax);
