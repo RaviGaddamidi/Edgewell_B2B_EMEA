@@ -15,7 +15,7 @@ window.open('/my-account/invoice/invoicePdfDisplay?orderCode= ${orderData.code} 
 <a class="positive right pad_right re-order invoicePdf"  
 style=" text-align:center ; background-color: #169e08;  padding-top:14px; width:95px; 
 border-color: #169e08; color: #fff; font-weight: bold; text-transform: uppercase; border-color: #000;  
-height: 26px;" href="javascript:openInvoicePDF('${orderData.code}')" >
+height: 26px;padding-left: 10px;padding-right: 10px;" href="javascript:openInvoicePDF('${orderData.code}')" >
 <spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a>
 
 

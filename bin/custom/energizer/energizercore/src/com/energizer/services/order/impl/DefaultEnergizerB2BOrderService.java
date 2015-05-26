@@ -596,7 +596,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	}
 
 
-	private AbstractOrderData simulateOrderUnMarshall(final String responce, final AbstractOrderData orderData) throws Exception
+	private AbstractOrderData simulateOrderUnMarshall(final String responce, final CartData orderData) throws Exception
 	{
 		// YTODO Auto-generated method stub
 		final JAXBContext jaxbContext;
@@ -737,7 +737,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 
 	private void sendEmailonError(final ZSD_BAPI_SALESORDER_SIMULATEResponse unmarshalledSimulateObject,
 			final ZSD_BAPI_SALESORDER_CREATEResponse unmarshalledOrdCreationObject, final OrderModel orderModel,
-			final AbstractOrderData orderData)
+			final CartData orderData)
 	{
 		// todo -- handle messagetable and order-incomplete data coming from SAP
 		String supportEmail = Config.getString("energizer.customer.support.to.email", "test@test.com");
@@ -757,7 +757,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		{
 			emailBody.append("Hybris Ref No :" + orderData.getCode());
 			emailBody.append("\n");
-			emailBody.append("user :" + orderData.getUser().getUid());
+			emailBody.append("user :" + orderData.getUser());
 		}
 		emailBody.append("\n");
 		emailBody.append("Date :" + new Date().toString());
