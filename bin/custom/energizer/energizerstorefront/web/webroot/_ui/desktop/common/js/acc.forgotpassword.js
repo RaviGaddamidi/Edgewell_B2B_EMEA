@@ -67,7 +67,4 @@ ACC.forgotpassword = {
 
 $(document).ready(function() {
 	ACC.forgotpassword.bindAll();
-	var getString = $('#forgotPwdConfMsgs').html();
-	getString = getString.replace(/[^.,a-z0-9\s]/gi, '');
-	$('#forgotPwdConfMsgs').html(getString);
 });
