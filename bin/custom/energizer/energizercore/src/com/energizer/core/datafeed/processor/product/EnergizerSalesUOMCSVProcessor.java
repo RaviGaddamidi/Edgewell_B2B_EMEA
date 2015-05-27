@@ -272,6 +272,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	 * @param moq
 	 * @param salesUOMs
 	 */
+	@SuppressWarnings("unused")
 	private void addUpdateSalesAreaUOM(final String salesOrganisation, final String distributionChannel, final String division,
 			final String segmentId, final String familyID, final String uom, final String moq,
 			final List<EnergizerSalesAreaUOMModel> salesUOMs)
@@ -310,7 +311,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
-
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : record.toMap().keySet())
@@ -347,7 +347,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
 			{
 				final boolean isValidMOQ = (NumberUtils.isNumber(value));
-				final boolean isMOQZeroValue = (value.equals("0")) ? true : false;
 				if (!isValidMOQ)
 				{
 					final List<String> columnNames = new ArrayList<String>();
