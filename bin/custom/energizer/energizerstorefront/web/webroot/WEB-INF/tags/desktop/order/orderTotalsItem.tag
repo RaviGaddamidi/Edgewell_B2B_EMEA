@@ -53,12 +53,14 @@
 		</tr> --%>
 		
 		
-		<!--<c:if test="${order.net}" >
+		<c:if test="${order.net}" >
 			<tr>
+			<c:if test="${order.totalTax.value > 0}" >
 				<td><spring:theme code="text.account.order.netTax" text="Tax:"/></td>
 				<td><format:price priceData="${order.totalTax}"/></td>
+				</c:if>
 			</tr>
-		</c:if>-->
+		</c:if>
 
 	</tbody>
 	
