@@ -29,6 +29,7 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 	private static final String PRODUCT_NOT_FOUND = "uom.business.rule.productnotfound";
 	private static final String UOM_NOT_VALID = "uom.business.rule.uomnotvalid";
 	private static final String MOQ_NOT_VALID = "uom.business.rule.moqnotvalid";
+	private static final String MOQ_NOT_EXIST = "basket.page.moq.notexists";
 
 	@Override
 	public void validate(final OrderEntryData orderEntryData)
@@ -85,7 +86,15 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 					addError(error);
 				}
 
-				if (orderEntryData.getQuantity() == null || orderEntryData.getQuantity().intValue() % cmir.getOrderingUnit() != 0)
+				if (cmir.getOrderingUnit() == 0)
+				{
+					final BusinessRuleError error = new BusinessRuleError();
+					error.setMessage(productCode + " " + Localization.getLocalizedString(MOQ_NOT_EXIST));
+					addError(error);
+
+				}
+				else if (orderEntryData.getQuantity() == null
+						|| orderEntryData.getQuantity().intValue() % cmir.getOrderingUnit() != 0)
 				{
 					final BusinessRuleError error = new BusinessRuleError();
 					error.setMessage(productCode + " " + Localization.getLocalizedString(MOQ_NOT_VALID) + cmir.getOrderingUnit() + " "
