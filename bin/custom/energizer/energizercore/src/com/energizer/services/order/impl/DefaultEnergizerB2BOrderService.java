@@ -581,7 +581,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 				emailBody.append("Creating order in SAP failed because of bad format of xml <br/>");
 			}
 			//emailBody.append(requestXML);
-			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, toAddress, "",
+			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
 					emailSubject.toString(), emailBody.toString() + "<br/>" + requestXML, null);
 			LOG.error("Failed to simulate order \n " + requestXML);
 			emailService.send(message);
