@@ -139,7 +139,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					final BigDecimal unitVolume = new BigDecimal(coversionFactor.getPackageVolume().getMeasurement());
 					if (unitVolume.compareTo(ZERO) != 0)
 					{
-						lineItemTotvolume = unitVolume.multiply(baseUom).multiply(itemQuantity);
+						//						lineItemTotvolume = unitVolume.multiply(baseUom).multiply(itemQuantity);
+						lineItemTotvolume = unitVolume.multiply(itemQuantity);
 					}
 					final String volumeUnit = coversionFactor.getPackageVolume().getMeasuringUnits();
 					totalCartVolume = totalCartVolume.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit,
@@ -152,7 +153,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					final BigDecimal unitWeight = new BigDecimal(coversionFactor.getPackageWeight().getMeasurement());
 					if (unitWeight.compareTo(ZERO) != 0)
 					{
-						lineItemTotWt = unitWeight.multiply(baseUom).multiply(itemQuantity);
+						//						lineItemTotWt = unitWeight.multiply(baseUom).multiply(itemQuantity);
+						lineItemTotWt = unitWeight.multiply(itemQuantity);
 					}
 					final String weightUnit = coversionFactor.getPackageWeight().getMeasuringUnits();
 					totalCartWt = totalCartWt.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, lineItemTotWt));
