@@ -39,7 +39,7 @@
 				<tr>
 						<th bordercolor="solid black" id="header1">
 						<spring:theme
-						code="text.account.excelUpload.orderShipmentPoint" text="Select Shipping Point" />
+						code="text.account.excelUpload.orderShipmentPoint" text="Shipping Point" />
 						</th>
 						
 						<%-- <th id="header2"><spring:theme
