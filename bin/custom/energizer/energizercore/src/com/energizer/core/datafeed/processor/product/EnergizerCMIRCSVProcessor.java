@@ -100,7 +100,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
-				if (!getTechnicalFeedErrors().isEmpty() && hasCustomerTechnicalError)
+				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
@@ -313,41 +313,38 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
 			final String value = record.toMap().get(columnHeader);
-			if (value.isEmpty())
+			//			CMIRPartnerID, , , MaterialList price,
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SHIPMENT_POINT_NO)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LANGUAGE)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION))
 			{
-				hasCustomerTechnicalError = false;
-				long recordFailed = getRecordFailed();
-				final List<String> columnNames = new ArrayList<String>();
-				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				error = new EnergizerCSVFeedError();
-				error.setUserType(TECHNICAL_USER);
-				error.setLineNumber(record.getRecordNumber());
-				columnNames.add(columnHeader);
-				error.setColumnName(columnNames);
-				error.setErrorCode("CMIR1001");
-				error.setMessage(columnHeader + " column should not be empty");
-				columnNumbers.add(columnNumber);
-				error.setColumnNumber(columnNumbers);
-				getTechnicalFeedErrors().add(error);
-				setTechRecordError(getTechnicalFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
-
-				if ((columnHeader.equalsIgnoreCase("CustomerListPrice") || columnHeader
-						.equalsIgnoreCase("CustomerListprice currency")))
+				if (value.isEmpty())
 				{
-					hasCustomerListPriceTechnicalError = true;
-				}
-				else
-				{
-					hasCustomerTechnicalError = true;
+					long recordFailed = getRecordFailed();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error = new EnergizerCSVFeedError();
+					error.setUserType(TECHNICAL_USER);
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					error.setColumnName(columnNames);
+					error.setErrorCode("CMIR1001");
+					error.setMessage(columnHeader + " column should not be empty");
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
 			}
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE))
+			if (!value.isEmpty() && columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE))
 			{
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
-					hasCustomerBusinessError = false;
 					long recordFailed = getRecordFailed();
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -364,15 +361,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
-
-					if (columnHeader.equalsIgnoreCase("CustomerListPrice"))
-					{
-						hasCustomerListPriceBusinessError = true;
-					}
-					else
-					{
-						hasCustomerBusinessError = true;
-					}
 				}
 			}
 		}

@@ -115,7 +115,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		{
 			lineNumber++;
 			message.append(messageSource.getMessage("text.error.message.email.template.section5", new Object[]
-			{ lineNumber, error.getMessage(), /* error.getLineNumber() */"", "", error.getColumnName().toString() }, locale));
+			{ lineNumber, error.getMessage(), error.getLineNumber(), "", error.getColumnName().toString() }, locale));
 		}
 
 		message.append(messageSource.getMessage("text.error.message.email.template.section6", null, locale));
@@ -640,12 +640,6 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		technicalFeedErrors.clear();
 		businessFeedErrors.clear();
 		message.setLength(0);
-		//Set 0 when email is triggered
-		setTotalRecords(0);
-		setRecordFailed(0);
-		setRecordSucceeded(0);
-		setBusRecordError(0);
-		setTechRecordError(0);
 	}
 
 }

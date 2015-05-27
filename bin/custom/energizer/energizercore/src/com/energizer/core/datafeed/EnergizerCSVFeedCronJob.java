@@ -111,6 +111,11 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 					energizerCSVProcessor.setRecordFailed(energizerCSVProcessor.getBusRecordError());
 					energizerCSVProcessor.mailErrors(cronjob, busfeedErrors, cronjob.getBusinessEmailAddress(), emailAttachmentList);
 				}
+				energizerCSVProcessor.setTotalRecords(0);
+				energizerCSVProcessor.setRecordFailed(0);
+				energizerCSVProcessor.setRecordSucceeded(0);
+				energizerCSVProcessor.setBusRecordError(0);
+				energizerCSVProcessor.setTechRecordError(0);
 				emailAttachmentList.clear();
 				if ((techfeedErrors != null && techfeedErrors.size() > 0) || (busfeedErrors != null && busfeedErrors.size() > 0))
 				{
