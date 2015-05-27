@@ -62,7 +62,7 @@
 </cms:pageSlot>
 
 	<div class="headline"><spring:theme code="text.company.${action}.userDetails.title" text="User Details" arguments="${customerData.uid}"/></div>
-	<div class="right">
+	<div class="right" style="width:195px">
 		<a href="${editUserUrl}"  class="button edit"><spring:theme code="text.company.manageUser.button.edit" text="Edit"/></a>
 		<c:choose>
 			<c:when test="${customerData.active}">
