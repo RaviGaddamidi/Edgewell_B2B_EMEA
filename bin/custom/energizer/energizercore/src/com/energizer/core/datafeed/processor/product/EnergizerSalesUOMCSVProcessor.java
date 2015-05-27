@@ -69,7 +69,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "energizerSalesUOMService")
 	private EnergizerSalesUOMService energizerSalesUOMService;
 
-	List<String> packgingUnits;
+	private List<String> packgingUnits;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerSalesUOMCSVProcessor.class);
 
