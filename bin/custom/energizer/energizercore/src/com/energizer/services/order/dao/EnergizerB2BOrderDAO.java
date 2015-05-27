@@ -18,5 +18,5 @@ public interface EnergizerB2BOrderDAO
 	List<EnergizerB2BUnitLeadTimeModel> getLeadTimeData(EnergizerB2BUnitModel b2bUnitModel, String shippingPointId,
 			String soldToAddressId);
 
-	List<String> getsoldToAddressIds(EnergizerB2BUnitModel b2bUnitModel);
+	List<String> getsoldToAddressIds(EnergizerB2BUnitModel b2bUnitModel, String shippingPointId);
 }

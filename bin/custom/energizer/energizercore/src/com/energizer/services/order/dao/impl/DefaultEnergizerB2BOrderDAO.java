@@ -59,18 +59,19 @@ public class DefaultEnergizerB2BOrderDAO implements EnergizerB2BOrderDAO
 	 * @see com.energizer.services.order.dao.EnergizerB2BOrderDAO#getDeliveryAddress(java.lang.String)
 	 */
 	@Override
-	public List<String> getsoldToAddressIds(final EnergizerB2BUnitModel b2bUnitModel)
+	public List<String> getsoldToAddressIds(final EnergizerB2BUnitModel b2bUnitModel, final String shippingPointId)
 	{
 		final List<String> soldToAddressIds = new ArrayList<String>();
 		List<String> soldToIds = new ArrayList<String>();
 
 		productQuery = "SELECT { " + EnergizerB2BUnitLeadTimeModel.SOLDTOADDRESSID + " } " + " FROM { "
 				+ EnergizerB2BUnitLeadTimeModel._TYPECODE + "}" + "  WHERE { " + EnergizerB2BUnitLeadTimeModel.B2BUNITID
-				+ "}=?b2bUnit";
+				+ "}=?b2bUnit " + " AND {" + EnergizerB2BUnitLeadTimeModel.SHIPPINGPOINTID + "}=?shippingPointId";
 
 		query = new FlexibleSearchQuery(productQuery);
 		query.setResultClassList(Collections.singletonList(String.class));
 		query.addQueryParameter("b2bUnit", b2bUnitModel);
+		query.addQueryParameter("shippingPointId", shippingPointId);
 
 		soldToIds = flexibleSearchService.<String> search(query).getResult();
 		for (final String soldToId : soldToIds)

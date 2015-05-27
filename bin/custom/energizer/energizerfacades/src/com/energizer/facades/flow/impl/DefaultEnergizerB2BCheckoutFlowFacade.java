@@ -146,10 +146,10 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getsoldToAddressIds()
 	 */
 	@Override
-	public List<String> getsoldToAddressIds()
+	public List<String> getsoldToAddressIds(final String shippingPointId)
 	{
 		b2bUnitModel = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
-		final List<String> shippingIds = energizerB2BOrderService.getsoldToAddressIds(b2bUnitModel);
+		final List<String> shippingIds = energizerB2BOrderService.getsoldToAddressIds(b2bUnitModel, shippingPointId);
 		return shippingIds;
 	}
 

@@ -29,9 +29,10 @@ public interface EnergizerB2BOrderService
 
 	/**
 	 * @param b2bUnitModel
+	 * @param shippingPointId
 	 * @return List<String>
 	 */
-	List<String> getsoldToAddressIds(EnergizerB2BUnitModel b2bUnitModel);
+	List<String> getsoldToAddressIds(EnergizerB2BUnitModel b2bUnitModel, String shippingPointId);
 
 	/**
 	 * @param cartData
