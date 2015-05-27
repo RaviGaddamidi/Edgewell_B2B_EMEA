@@ -13,7 +13,7 @@
 
 <div class="orderList">
 	<div class="headline"><spring:theme code="text.account.order.approval.title" /></div>
-	<table class="orderListTable">
+	<table class="orderListTable orderListApprovTbl-cls">
 		<thead>
 			<tr>
 				<th><spring:theme code="text.account.order.permission.title" /></th>
@@ -30,6 +30,7 @@
 					<td>${b2bPermissionResult.approver}</td>
 					<td>${b2bPermissionResult.statusDisplay}</td>
 					<td>
+					<p>
 						<c:choose>
 						   <c:when test="${not empty b2bPermissionResult.approverNotes}">
 						   		${b2bPermissionResult.approverNotes}
@@ -38,6 +39,7 @@
 								<span><spring:theme code="text.notAvailable"/></span>
 							</c:otherwise>
 						</c:choose>
+					</p>
 					</td>
 				</tr>
 			</c:forEach>

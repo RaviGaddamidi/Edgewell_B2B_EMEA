@@ -77,10 +77,11 @@
 				        </br>
 						<div class="item_container">
 						<div class="your_cart">
-						<form:select name="comments" path="comments" cssStyle="width:290px;height:30px;">
+						<form:input cssClass="textarea" path="comments" maxlength ="250" cssStyle="width:290px;height:30px;"/>
+						<!--<form:select name="comments" path="comments" cssStyle="width:290px;height:30px;">
 							<option value="0"> </option>  
 						<form:options items="${comments}" />
-						</form:select>
+						</form:select>-->
 						</div>
 					</div>
 					</div>

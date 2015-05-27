@@ -12,7 +12,7 @@
  <jsp:useBean id="DateTimeUtil"  class="com.energizer.storefront.util.EnergizerDateTimeUtil" /> 
 
 
-<div class="orderBox address">
+<div class="orderBox address obShippinFixCls">
 	<div class="headline"><spring:theme code="text.account.orderHistory.shippingDetaiils" text="Shipping Details"/></div>
 	
 		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.shippingDetaiils"/>&nbsp;: </p>	
