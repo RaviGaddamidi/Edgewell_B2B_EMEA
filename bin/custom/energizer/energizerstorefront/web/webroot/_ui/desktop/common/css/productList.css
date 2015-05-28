@@ -83,6 +83,12 @@
 .productListItem button.pickupInStoreButton, .productListItem button.addToCartButton {
 	height: 27px;
 }
+.productList .productListItem .head
+{
+font-size: 1.1em !important;
+font-weight: bold !important;
+}
+
 
 
 
