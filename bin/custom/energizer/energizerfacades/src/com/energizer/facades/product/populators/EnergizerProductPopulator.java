@@ -15,6 +15,7 @@ import de.hybris.platform.servicelayer.dto.converter.ConversionException;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -145,7 +146,7 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 					else
 					{
 						productData.setCustomerProductPrice(energizerPriceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO)
-								: BigDecimal.valueOf(energizerPriceRowModel.getPrice() * baseUOM));
+								: BigDecimal.valueOf(energizerPriceRowModel.getPrice() * baseUOM).setScale(2, RoundingMode.CEILING));
 						productData.setCustomerPriceCurrency(energizerPriceRowModel.getCurrency().getSymbol() == null ? EMPTY
 								: energizerPriceRowModel.getCurrency().getSymbol());
 						foundCmirPrice = true;
@@ -163,8 +164,8 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 				{
 					continue;
 				}
-				productData.setCustomerProductPrice(priceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO) : BigDecimal
-						.valueOf(priceRowModel.getPrice() * baseUOM));
+				productData.setCustomerProductPrice(priceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO) : BigDecimal.valueOf(
+						priceRowModel.getPrice() * baseUOM).setScale(2, RoundingMode.CEILING));
 				productData.setCustomerPriceCurrency(priceRowModel.getCurrency().getSymbol() == null ? EMPTY : priceRowModel
 						.getCurrency().getSymbol());
 			}
