@@ -193,7 +193,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
 						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
 						{
-							LOG.info("Product price product :" + enrPriceRowModel.getProduct().getCode());
+							//LOG.info("Product price product :" + enrPriceRowModel.getProduct().getCode());
 							if (!(enrPriceRowModel instanceof EnergizerPriceRowModel))
 							{
 								LOG.info("Not an energizer price row");
@@ -203,6 +203,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 							if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
 							{
+								LOG.info("Same energizer price row");
 								matchingPriceRowFound = true;
 								priceRowModel = enrPriceRow;
 								break;
@@ -210,19 +211,20 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						}
 					}
 
+					if (!matchingPriceRowFound)
+					{
+						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
+						priceRowModel.setB2bUnit(energizerB2BUnitModel);
+
+						tmpPriceRowModelList.add(priceRowModel);
+					}
+
 					if (customerlistprice.isEmpty() && currency.isEmpty())
 					{
 						customerlistprice = ZERO;
 						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
 					}
-					if (!matchingPriceRowFound)
-					{
-						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
-						priceRowModel.setB2bUnit(energizerB2BUnitModel);
-						priceRowModel.setProduct(energizerProduct);
 
-						tmpPriceRowModelList.add(priceRowModel);
-					}
 					//this.addUpdateENRPriceRowRecord(priceRowModel, csvValuesMap);
 
 					if (priceRowModel != null && priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() != null
