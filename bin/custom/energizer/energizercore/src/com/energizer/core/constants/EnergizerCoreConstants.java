@@ -37,9 +37,9 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	// Constants for  EnergizerCMIRCSVProcessor
 	public static final String ENERGIZER_ACCOUNT_ID = "EnergizerAccountID";
 	public static final String CUSTOMER_MATERIAL_ID = "CustomerMaterialID";
-	public static final String CUSTOMER_MATERIAL_DESCRIPTION = "CustomerMaterial Description";
+	public static final String CUSTOMER_MATERIAL_DESCRIPTION = "CustomerMaterialDescription";
 	public static final String SHIPMENT_POINT_NO = "ShipmentPointNumber";
-	public static final String CUSTOMER_LIST_PRICE_CURRENCY = "CustomerListprice currency";
+	public static final String CUSTOMER_LIST_PRICE_CURRENCY = "CustomerListpricecurrency";
 	public static final String CUSTOMER_LIST_PRICE = "CustomerListPrice";
 
 	// Constants for  EnergizerProductConversionCSVProcessor

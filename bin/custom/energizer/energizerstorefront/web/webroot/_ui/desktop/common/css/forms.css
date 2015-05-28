@@ -344,12 +344,14 @@ width: 300px;
 
 #updateProfileForm .control-group select{width:250px;}
 
+.companyRoles-cls .control-group.error fieldset label{
+	position: relative;
+	top: -15px;
+}
 
-
-
-
-
-
-
-
-
+#b2BCustomerForm .companyRoles-cls .control-group.error fieldset div{
+	width: 145%;
+}
+#b2BCustomerForm .companyRoles-cls .control-group.error .help-inline{
+	margin: 20px 0;
+}

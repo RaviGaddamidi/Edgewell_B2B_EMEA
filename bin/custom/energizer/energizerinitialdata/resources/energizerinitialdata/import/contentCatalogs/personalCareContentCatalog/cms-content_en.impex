@@ -27,7 +27,7 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;Infant_Care_Link;Infant Care
 ;;Infant_Playtex_Link;Playtex
 ;;Shaving_Link;Shaving
-;;Shick_Link;Shick
+;;Schick_Link;Schick
 ;;Edge_Link;Edge
 ;;Skintimate_Link;Skintimate
 ;;Skin_Care_Link;Skin Care

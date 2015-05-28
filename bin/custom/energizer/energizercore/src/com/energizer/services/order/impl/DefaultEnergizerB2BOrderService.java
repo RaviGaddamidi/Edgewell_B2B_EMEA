@@ -131,9 +131,9 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	 * @see com.energizer.services.order.EnergizerB2BOrderService#getDeliveryAddress(java.lang.String)
 	 */
 	@Override
-	public List<String> getsoldToAddressIds(final EnergizerB2BUnitModel b2bUnitModel)
+	public List<String> getsoldToAddressIds(final EnergizerB2BUnitModel b2bUnitModel, final String shippingPointId)
 	{
-		return energizerB2BOrderDAO.getsoldToAddressIds(b2bUnitModel);
+		return energizerB2BOrderDAO.getsoldToAddressIds(b2bUnitModel, shippingPointId);
 	}
 
 	/*

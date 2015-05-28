@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/header.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/miniCart.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/siteSearch.css"/>
-<link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/navigation.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/navigation1.2.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/breadcrumb.css"/>
 <link rel="stylesheet" type="text/css" media="all" href="${commonResourcePath}/css/energizer_main.css"/>
 <%-- Container Utilization Css  --%>

@@ -27,7 +27,7 @@ public interface EnergizerB2BCheckoutFlowFacade
 
 	public int getLeadTimeData(String shippingPointId, String soldToAddressId);
 
-	public List<String> getsoldToAddressIds();
+	public List<String> getsoldToAddressIds(String shippingPointId);
 
 	public List<AddressData> getEnergizerDeliveryAddresses();
 

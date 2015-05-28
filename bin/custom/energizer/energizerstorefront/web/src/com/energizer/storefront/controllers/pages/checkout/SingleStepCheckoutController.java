@@ -321,8 +321,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	{
 		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
 		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses();
-
-		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds();
+		//final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
+		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
 
 		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
 		for (final String soldToAddressId : soldToAddressIds)

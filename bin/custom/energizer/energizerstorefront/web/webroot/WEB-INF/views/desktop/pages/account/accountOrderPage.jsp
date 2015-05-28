@@ -28,11 +28,11 @@
 		<div class="span-19">
 			<div class="span-7 spacing_cls">
 				<c:choose>
-					<c:when test="${empty order.erpOrderCreator}">
-						<spring:theme code="text.account.orderHistory.orderNumber" /> : <spring:theme code="Not Applicable" /></br> 
+					<c:when test="${empty orderData.erpOrderCreator}">
+						 <spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
 					</c:when>
 					<c:otherwise>
-						<spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
+						<spring:theme code="text.account.orderHistory.orderNumber" /> : <spring:theme code="Not Applicable" /></br>
 					</c:otherwise>
 				 </c:choose>
 				

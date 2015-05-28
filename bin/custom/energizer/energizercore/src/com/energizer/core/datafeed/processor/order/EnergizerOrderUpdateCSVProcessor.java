@@ -388,6 +388,9 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					salesUOMMultiplier = convertion.getConversionMultiplier();
 				}
 			}
+			finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
+			LOG.info("customerUOM " + customerUOM + " incoming UOM " + uom + " customerUOMMultiplier " + customerUOMMultiplier
+					+ " salesUOMMultiplier " + salesUOMMultiplier + " finalConversionFactor " + finalConversionFactor);
 			if (energizerOrderEntry == null)
 			{
 				energizerOrderEntry = modelService.create(OrderEntryModel.class);
@@ -397,7 +400,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				energizerOrderEntry.setTotalPrice(lineItemTotalPrice);
 				if (!customerUOM.equalsIgnoreCase(uom))
 				{
-					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier * finalConversionFactor);
+					energizerOrderEntry.setBasePrice(itemTotalPrice * customerUOMMultiplier);
 				}
 				else
 				{
@@ -417,8 +420,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
 					//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
 					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
-					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier
-							* finalConversionFactor));
+					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
 				}
 				else
 				{

@@ -472,6 +472,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 			 * " " + ERP_MATERIAL_ID + " " + erpMaterialID + " and B2B unit " + energizerOrderModel.getB2bUnit().getUid());
 			 * } else {
 			 */
+
 			energizerOrderEntry = energizerOrderService.getExistingOrderItem(energizerOrderModel, existEnergizerProduct);
 			// e.g customerUOM = Pallet, uom from SAP order update = cases
 			for (final EnergizerProductConversionFactorModel convertion : existEnergizerProduct.getProductConversionFactors())
@@ -485,16 +486,20 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 					salesUOMMultiplier = convertion.getConversionMultiplier();
 				}
 			}
+			finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
+			LOG.info("customerUOM " + customerUOM + " incoming UOM " + uom + " customerUOMMultiplier " + customerUOMMultiplier
+					+ " salesUOMMultiplier " + salesUOMMultiplier + " finalConversionFactor " + finalConversionFactor);
+
 			if (energizerOrderEntry == null)
 			{
 				energizerOrderEntry = modelService.create(OrderEntryModel.class);
 				energizerOrderEntry.setOrder(energizerOrderModel);
 				energizerOrderEntry.setProduct(existEnergizerProduct);
-				energizerOrderEntry.setQuantity(orderEntryQty);
+				energizerOrderEntry.setQuantity((orderEntryQty / finalConversionFactor));
 				energizerOrderEntry.setTotalPrice(totalPrice);
 				if (!customerUOM.equalsIgnoreCase(uom))
 				{
-					energizerOrderEntry.setBasePrice(unitPrice * customerUOMMultiplier * finalConversionFactor);
+					energizerOrderEntry.setBasePrice(unitPrice * customerUOMMultiplier);
 				}
 				else
 				{
@@ -507,15 +512,13 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				{
 					// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
 					// and they are always bigger than incoming UOM(sales uom)
-					finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
 					energizerOrderEntry.setAdjustedQty(new Integer(0));
 					energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
 					// update the value with incoming value
 					energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
 					//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
 					energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(totalPrice));
-					energizerOrderEntry
-							.setAdjustedItemPrice(new BigDecimal(unitPrice * customerUOMMultiplier * finalConversionFactor));
+					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(unitPrice * customerUOMMultiplier));
 				}
 				else
 				{

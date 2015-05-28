@@ -202,7 +202,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		totalCartWt = totalCartWt.setScale(2, BigDecimal.ROUND_UP);
 		totalCartVolume = totalCartVolume.setScale(2, BigDecimal.ROUND_UP);
 		twentyFeetContainerVolume = twentyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
-		twentyFeetContainerWeight = twentyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
+		twentyFeetContainerWeight = twentyFeetContainerWeight.setScale(2, BigDecimal.ROUND_UP);
 		fourtyFeetContainerVolume = fourtyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
 		fourtyFeetContainerWeight = fourtyFeetContainerWeight.setScale(2, BigDecimal.ROUND_UP);
 
@@ -211,9 +211,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		if (totalCartWt.compareTo(twentyFeetContainerWeight) == -1 && totalCartVolume.compareTo(twentyFeetContainerVolume) == -1)
 		{
 			containerData.setContainerType("twentyFeetContainer");
-			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(twentyFeetContainerVolume, 2,
+			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(fourtyFeetContainerVolume, 2,
 					RoundingMode.HALF_EVEN).doubleValue();
-			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(twentyFeetContainerWeight, 2,
+			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(fourtyFeetContainerWeight, 2,
 					RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
 			containerData.setPercentVolumeUses(volumePercentage);

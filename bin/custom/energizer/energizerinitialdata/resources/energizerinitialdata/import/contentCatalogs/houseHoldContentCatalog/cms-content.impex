@@ -145,7 +145,7 @@ INSERT_UPDATE HeaderNavigationComponent;$contentCV[unique=true];uid[unique=true]
 
 # CMS Mini Cart Component
 INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;totalDisplay(code);shownProductCount;lightboxBannerComponent(&componentRef)
-;;MiniCart;Mini Cart;MiniCart;TOTAL;3;
+;;MiniCart;Mini Cart;MiniCart;TOTAL;3
 
 
 # CMS SearchBox Components
@@ -211,6 +211,9 @@ INSERT_UPDATE AddToCartAction;$contentCV[unique=true];uid[unique=true];url;name;
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(uid,$contentCV)
 ;;AddToCartSlot;AddToCart
 
+# CMS Mini Cart Component
+INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;totalDisplay(code);shownProductCount;lightboxBannerComponent(&componentRef);restrictions(uid,$contentCV)
+;;MiniCart;Mini Cart;MiniCart;TOTAL;3;;CustomerGroupRestriction
 
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='ProductDetailsPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
 ;;AddToCart-ProductDetails;AddToCart;;AddToCartSlot;true
