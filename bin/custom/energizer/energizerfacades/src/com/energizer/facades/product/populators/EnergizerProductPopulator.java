@@ -90,8 +90,16 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 					loggedInUserB2bUnit.getUid());
 			energizerProductConversionFactorModel = energizerProductService.getEnergizerProductConversion(
 					energizerProductModel.getCode(), loggedInUserB2bUnit.getUid());
-			productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
-					.getCustomerMaterialId());
+			if (energizerCMIRModel != null)
+			{
+				productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
+						.getCustomerMaterialId());
+			}
+			else
+			{
+				productData.setCustomerMaterialId("");
+			}
+
 			productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY
 					: energizerCMIRModel.getCustomerMaterialDescription());
 			productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
