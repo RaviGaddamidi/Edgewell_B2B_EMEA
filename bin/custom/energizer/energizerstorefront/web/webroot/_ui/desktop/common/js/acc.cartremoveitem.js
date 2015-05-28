@@ -545,6 +545,8 @@ ACC.cartremoveitem = {
 			  {
 			  $("#weight_utilization").css('height', contHeight);		
 			  }
+			  
+			  ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'	);
 		}
 				
 		},
@@ -611,6 +613,8 @@ ACC.cartremoveitem = {
 				  {
 				  $("#weight_utilization").css('height', contHeight);		
 				  }
+				  
+				  ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'	);
 				 				
 				}
 				
