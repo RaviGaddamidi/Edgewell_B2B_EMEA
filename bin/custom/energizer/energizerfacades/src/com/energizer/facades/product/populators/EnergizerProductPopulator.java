@@ -98,15 +98,20 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 			{
 				productData.setCustomerMaterialId("");
 			}
+			String shippingPointId = "";
+			String shippingPointName = "";
+			if (energizerCMIRModel != null)
+			{
+				productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY
+						: energizerCMIRModel.getCustomerMaterialDescription());
+				productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
+				productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
 
-			productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY
-					: energizerCMIRModel.getCustomerMaterialDescription());
-			productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
-			productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
+				shippingPointId = energizerCMIRModel.getShippingPoint();
+				shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
+				productData.setShippingPoint(shippingPointId);
+			}
 
-			final String shippingPointId = energizerCMIRModel.getShippingPoint();
-			final String shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
-			productData.setShippingPoint(shippingPointId);
 			productData.setShippingPointName(shippingPointName == null ? EMPTY : shippingPointName);
 
 			if (energizerProductConversionFactorModel != null)
