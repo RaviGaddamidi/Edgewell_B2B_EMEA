@@ -50,7 +50,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree;Stayfree_Link
 ;;Ob_Link;Ob Link;c/Feminine Care-o.b.;Ob_Link
 ;;Infant_Playtex_Link;Playtex Link;c/Infant Care-Playtex;Infant_Playtex_Link
-;;Shick_Link;Shick Link;c/Shaving-Shick;Shick_Link
+;;Schick_Link;Schick Link;c/Shaving-Schick;Schick_Link
 ;;Edge_Link;Edge Link;c/Shaving-Edge;Edge_Link
 ;;Skintimate_Link;Skintimate Link;c/Shaving-Skintimate;Skintimate_Link
 ;;SkinCare_Playtex_Link;Playtex Link;c/Skin Care-Playtex;SkinCare_Playtex_Link
@@ -58,6 +58,37 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Wet_Ones_Link;Wet Ones Link;c/Skin Care-Wet Ones;Wet_Ones_Link
 ;;Banana_Boat_Link;Banana Boat Link;c/Sun Care-Banana Boat;Banana_Boat_Link
 ;;Hawaiian_Tropic_Link;Hawaiian Tropic Link;c/Sun Care-Hawaiian Tropic;Hawaiian_Tropic_Link
+
+
+#########################  Third Level Category Link Start ##########################
+;;Shaving_Schick_Hydro_Link;Hydro Link;c/Shaving-Schick-Hydro;Shaving_Schick_Hydro_Link
+;;Shaving_Schick_DoubleEdge_Link;Double Edge Link;c/Shaving-Schick-Double Edge;Shaving_Schick_DoubleEdge_Link
+;;Shaving_Schick_Other_Link;Other Link;c/Shaving-Schick-Other;Shaving_Schick_Other_Link
+;;Shaving_Schick_Quattro_Link;Quattro Link;c/Shaving-Schick-Quattro;Shaving_Schick_Quattro_Link
+;;Shaving_Schick_Exacta2SlimTwin_Link;Exacta 2Slim Twin Link;c/Shaving-Schick-Exacta2Slim Twin;Shaving_Schick_Exacta2SlimTwin_Link
+;;Shaving_Schick_Xtreme3_Link;Xtreme 3 Link;c/Shaving-Schick-Xtreme 3;Shaving_Schick_Xtreme3_Link
+;;Shaving_Schick_Protect_Link;Protect Link;c/Shaving-Schick-Protect;Shaving_Schick_Protect_Link
+;;Shaving_Schick_Intuition_Link;Intuition Link;c/Shaving-Schick-Intuition;Shaving_Schick_Intuition_Link
+;;Shaving_Schick_LadyProtect_Link;Lady Protect Link;c/Shaving-Schick-Lady Protect;Shaving_Schick_LadyProtect_Link
+;;Shaving_Edge_Edge_Link;Edge Link;c/Shaving-Edge-Edge;Shaving_Edge_Edge_Link
+;;Shaving_Skintimate_Skintimate_Link;Skintimate Link;c/Shaving-Skintimate-Skintimate;Shaving_Skintimate_Skintimate_Link
+;;FeminineCare_Carefree_Carefree_Link;Carefree Link;c/Feminine Care-Carefree-Carefree;FeminineCare_Carefree_Carefree_Link
+;;FeminineCare_Playtex_GentleGlide_Link;Gentle Glide Link;c/Feminine Care-Playtex-Gentle Glide;FeminineCare_Playtex_GentleGlide_Link
+;;FeminineCare_Playtex_Sport_Link;Sport Link;c/Feminine Care-Playtex-Sport;FeminineCare_Playtex_Sport_Link
+;;FeminineCare_Stayfree_Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree-Stayfree;FeminineCare_Stayfree_Stayfree_Link
+;;FeminineCare_o.b._o.b._Link;o.b. Link;c/Feminine Care-o.b.-o.b.;FeminineCare_o.b._o.b._Link
+;;InfantCare_Playtex_Dropins_Link;Dropins Link;c/Infant Care-Playtex-Dropins;InfantCare_Playtex_Dropins_Link
+;;InfantCare_Playtex_VentAire_Link;VentAire Link;c/Infant Care-Playtex-VentAire;InfantCare_Playtex_VentAire_Link
+;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-DropinsVentAire;InfantCare_Playtex_DropinsVentAire_Link
+;;InfantCare_Playtex_CupsMealtime_Link;Cups & Mealtime Link;c/Infant Care-Playtex-Cups & Mealtime;InfantCare_Playtex_CupsMealtime_Link
+;;InfantCare_Playtex_DiaperGenie_Link;Diaper Genie Link;c/Infant Care-Playtex-Diaper Genie;InfantCare_Playtex_DiaperGenie_Link
+;;InfantCare_Playtex_Accessories_Link;Accessories Link;c/Infant Care-Playtex-Accessories;InfantCare_Playtex_Accessories_Link
+;;InfantCare_Playtex_Binky_Link;Binky Link;c/Infant Care-Playtex-Binky;InfantCare_Playtex_Binky_Link
+;;InfantCare_Playtex_Holder_Link;Holder Link;c/Infant Care-Playtex-Holder;InfantCare_Playtex_Holder_Link
+;;InfantCare_Playtex_OrthoPro_Link;Ortho Pro Link;c/Infant Care-Playtex-Ortho Pro;InfantCare_Playtex_OrthoPro_Link
+;;SkinCare_Playtex_Playtex_Link;Playtex Link;c/Skin Care-Playtex-Playtex;SkinCare_Playtex_Playtex_Link
+
+#########################  Third Level Category Link End ##########################
 
 
 # CMS Navigation Nodes #
@@ -83,7 +114,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;Stayfree_Nav_Node;;Stayfree;Feminine_Care_Nav_Node; ;Stayfree_Link;Stayfree_Nav_Node
 ;Ob_Nav_Node;;Ob;Feminine_Care_Nav_Node; ;Ob_Link;Ob_Nav_Node
 ;Infant_Playtex_Nav_Node;;Playtex;Infant_Care_Nav_Node; ;Infant_Playtex_Link;Infant_Playtex_Nav_Node
-;Shick_Nav_Node;;Shick;Shaving_Nav_Node; ;Shick_Link;Shick_Nav_Node
+;Schick_Nav_Node;;Schick;Shaving_Nav_Node; ;Schick_Link;Schick_Nav_Node
 ;Edge_Nav_Node;;Edge;Shaving_Nav_Node; ;Edge_Link;Edge_Nav_Node
 ;Skintimate_Nav_Node;;Skintimate;Shaving_Nav_Node; ;Skintimate_Link;Skintimate_Nav_Node
 ;Personal_Cleansing_Clothes_Nav_Node;;Personal Cleansing Clothes;Skin_Care_Nav_Node; ;Personal_Cleansing_Clothes_Link;Personal_Cleansing_Clothes_Nav_Node
@@ -93,6 +124,35 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;Hawaiian_Tropic_Nav_Node;;Hawaiian Tropic;Sun_Care_Nav_Node; ;Hawaiian_Tropic_Link;Hawaiian_Tropic_Nav_Node
 
 
+#########################  Third Level Category Navigation end##########################
+;Shaving_Schick_Hydro_Nav_Node;;Hydro;Schick_Nav_Node; ;Shaving_Schick_Hydro_Link;Shaving_Schick_Hydro_Nav_Node
+;Shaving_Schick_DoubleEdge_Nav_Node;;DoubleEdge;Schick_Nav_Node; ;Shaving_Schick_DoubleEdge_Link;Shaving_Schick_DoubleEdge_Nav_Node
+;Shaving_Schick_Other_Nav_Node;;Other;Schick_Nav_Node; ;Shaving_Schick_Other_Link;Shaving_Schick_Other_Nav_Node
+;Shaving_Schick_Quattro_Nav_Node;;Quattro;Schick_Nav_Node; ;Shaving_Schick_Quattro_Link;Shaving_Schick_Quattro_Nav_Node
+;Shaving_Schick_Exacta2SlimTwin_Nav_Node;;Exacta 2/SlimTwin;Schick_Nav_Node; ;Shaving_Schick_Exacta2SlimTwin_Link;Shaving_Schick_Exacta2SlimTwin_Nav_Node
+;Shaving_Schick_Xtreme3_Nav_Node;;Xtreme3;Schick_Nav_Node; ;Shaving_Schick_Xtreme3_Link;Shaving_Schick_Xtreme3_Nav_Node
+;Shaving_Schick_Protect_Nav_Node;;Protect;Schick_Nav_Node; ;Shaving_Schick_Protect_Link;Shaving_Schick_Protect_Nav_Node
+;Shaving_Schick_Intuition_Nav_Node;;Intuition;Schick_Nav_Node; ;Shaving_Schick_Intuition_Link;Shaving_Schick_Intuition_Nav_Node
+;Shaving_Schick_LadyProtect_Nav_Node;;Lady Protect;Schick_Nav_Node; ;Shaving_Schick_LadyProtect_Link;Shaving_Schick_LadyProtect_Nav_Node
+;Shaving_Edge_Edge_Nav_Node;;Edge;Edge_Nav_Node; ;Shaving_Edge_Edge_Link;Shaving_Edge_Edge_Nav_Node
+;Shaving_Skintimate_Skintimate_Nav_Node;;Skintimate;Skintimate_Nav_Node; ;Shaving_Skintimate_Skintimate_Link;Shaving_Skintimate_Skintimate_Nav_Node
+;FeminineCare_Carefree_Carefree_Nav_Node;;Carefree;Carefree_Nav_Node; ;FeminineCare_Carefree_Carefree_Link;FeminineCare_Carefree_Carefree_Nav_Node
+;FeminineCare_Playtex_GentleGlide_Nav_Node;;Carefree;Playtex_Nav_Node; ;FeminineCare_Playtex_GentleGlide_Link;FeminineCare_Playtex_GentleGlide_Nav_Node
+;FeminineCare_Playtex_Sport_Nav_Node;;Sport;Playtex_Nav_Node; ;FeminineCare_Playtex_Sport_Link;FeminineCare_Playtex_Sport_Nav_Node
+;FeminineCare_Stayfree_Stayfree_Nav_Node;;Sport;Stayfree_Nav_Node; ;FeminineCare_Stayfree_Stayfree_Link;FeminineCare_Stayfree_Stayfree_Nav_Node
+;FeminineCare_o.b._o.b._Nav_Node;;o.b.;Ob_Nav_Node; ;FeminineCare_o.b._o.b._Link;FeminineCare_o.b._o.b._Nav_Node
+;InfantCare_Playtex_Dropins_Nav_Node;;Dropins;Infant_Playtex_Nav_Node; ;FeminineCare_o.b._o.b._Link;InfantCare_Playtex_Dropins_Nav_Node
+;InfantCare_Playtex_VentAire_Nav_Node;;VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_VentAire_Link;InfantCare_Playtex_VentAire_Nav_Node
+;InfantCare_Playtex_DropinsVentAire_Nav_Node;;Dropins VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_DropinsVentAire_Link;InfantCare_Playtex_DropinsVentAire_Nav_Node
+;InfantCare_Playtex_CupsMealtime_Nav_Node;;CupsMealtime;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_CupsMealtime_Link;InfantCare_Playtex_CupsMealtime_Nav_Node
+;InfantCare_Playtex_DiaperGenie_Nav_Node;;DiaperGenie;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_DiaperGenie_Link;InfantCare_Playtex_DiaperGenie_Nav_Node
+;InfantCare_Playtex_Accessories_Nav_Node;;Accessories;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Accessories_Link;InfantCare_Playtex_Accessories_Nav_Node
+;InfantCare_Playtex_Binky_Nav_Node;;Binky;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Binky_Link;InfantCare_Playtex_Binky_Nav_Node
+;InfantCare_Playtex_Holder_Nav_Node;;Holder;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Holder_Link;InfantCare_Playtex_Holder_Nav_Node
+;InfantCare_Playtex_OrthoPro_Nav_Node;;OrthoPro;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_OrthoPro_Link;InfantCare_Playtex_OrthoPro_Nav_Node
+;SkinCare_Playtex_Playtex_Nav_Node;;Playtex;SkinCare_Playtex_Nav_Node; ;SkinCare_Playtex_Playtex_Link;SkinCare_Playtex_Playtex_Nav_Node
+
+#########################  Third Level Category Navigation end ##########################
 
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&linkRef;&componentRef;target(code)[default='sameWindow']
 ;;UserLoginLink;User Login Link;/login;UserLoginLink;UserLoginLink
