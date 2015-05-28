@@ -155,7 +155,6 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 				}
 			}
 		}
-
 		if (!foundCmirPrice)
 		{
 			for (final Iterator iterator = rowPrices.iterator(); iterator.hasNext();)

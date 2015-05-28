@@ -153,7 +153,6 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 				}
 			}
 		}
-
 		if (!foundCmirPrice)
 		{
 			for (final Iterator iterator = rowPrices.iterator(); iterator.hasNext();)
