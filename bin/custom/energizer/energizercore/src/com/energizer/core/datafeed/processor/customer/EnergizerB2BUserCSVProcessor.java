@@ -57,7 +57,6 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	private DefaultCompanyB2BCommerceService companyB2BCommerceService;
 	@Resource
 	private B2BCommerceUnitService b2bCommerceUnitService;
-
 	@Resource
 	private B2BUnitService<B2BUnitModel, B2BCustomerModel> b2bUnitService;
 	@Resource
@@ -105,7 +104,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 			}
 			try
 			{
-				b2bCustomerModel = b2bCommerceUnitService.getCustomerForUid(csvValuesMap.get(EMAIL_ID).trim());
+				b2bCustomerModel = userService.getUserForUID(csvValuesMap.get(EMAIL_ID).trim().toLowerCase(),
+						EnergizerB2BCustomerModel.class);
 				updateB2BCustomer(csvValuesMap, b2bCustomerModel);
 				succeedRecord++;
 				setRecordSucceeded(succeedRecord);
@@ -139,6 +139,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 						setBusRecordError(getBusinessFeedErrors().size());
 						recordFailed++;
 						setBusRecordError(recordFailed);
+						continue;
 					}
 					if (identifierException instanceof B2BUnitUnknownIdentifierException)
 					{
@@ -151,13 +152,14 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 						columnNames.add(DEFAULT_B2B_UNIT);
 						error.setColumnName(columnNames);
 						error.setUserType(BUSINESS_USER);
-						error.setMessage("Invalid B2BUnit");
+						error.setMessage("Invalid B2BUnit Specified");
 						columnNumbers.add(6);
 						error.setColumnNumber(columnNumbers);
 						getBusinessFeedErrors().add(error);
 						setBusRecordError(getBusinessFeedErrors().size());
 						recordFailed++;
 						setBusRecordError(recordFailed);
+						continue;
 					}
 				}
 			}
@@ -169,26 +171,36 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 
 	private void updateB2BCustomer(final Map<String, String> csvValuesMap, final EnergizerB2BCustomerModel b2bCustomerModel)
 	{
-		b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
-		//		b2bCustomerModel.setOriginalUid(csvValuesMap.get(EMAIL_ID).trim());
-		//		b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
-		b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
-		b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
-		b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
 
-		//	Added validation for groups fields
-		final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>(b2bCustomerModel.getGroups());
-		for (final String group : csvValuesMap.get(GROUPS).split(";"))
+		final EnergizerB2BUnitModel b2bUnitModel = (EnergizerB2BUnitModel) b2bUnitService.getUnitForUid(csvValuesMap.get(
+				DEFAULT_B2B_UNIT).trim());
+		if (null != b2bUnitModel)
 		{
-			final UserGroupModel userGroupModel = userService.getUserGroupForUID(group);
-			if (!customerGroups.contains(userGroupModel))
+			//			b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
+			//		b2bCustomerModel.setOriginalUid(csvValuesMap.get(EMAIL_ID).trim());
+			//		b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
+			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
+			b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
+			b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
+
+			//	Added validation for groups fields
+			final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>(b2bCustomerModel.getGroups());
+			for (final String group : csvValuesMap.get(GROUPS).split(";"))
 			{
-				customerGroups.add(userGroupModel);
+				final UserGroupModel userGroupModel = userService.getUserGroupForUID(group);
+				if (!customerGroups.contains(userGroupModel))
+				{
+					customerGroups.add(userGroupModel);
+				}
 			}
+			b2bCustomerModel.setGroups(customerGroups);
+			modelService.saveAll(b2bCustomerModel);
+			LOG.info("EnergizerB2BUser updated" + b2bCustomerModel.getUid() + " & Email ID" + b2bCustomerModel.getEmail());
 		}
-		b2bCustomerModel.setGroups(customerGroups);
-		modelService.save(b2bCustomerModel);
-		LOG.info("EnergizerB2BUser updated");
+		else
+		{
+			throw new B2BUnitUnknownIdentifierException("Invalid Unit Specified");
+		}
 	}
 
 	private void createB2BCustomer(final Map<String, String> csvValuesMap, final CSVRecord record,
@@ -199,8 +211,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 				DEFAULT_B2B_UNIT).trim());
 		if (null != b2bUnitModel)
 		{
-			b2bCustomerModel.setUid(csvValuesMap.get(EMAIL_ID).trim());
-			b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim());
+			b2bCustomerModel.setUid(csvValuesMap.get(EMAIL_ID).trim().toLowerCase());
+			b2bCustomerModel.setEmail(csvValuesMap.get(EMAIL_ID).trim().toLowerCase());
 			b2bCustomerModel.setOriginalUid(b2bCustomerModel.getUid());
 			b2bCustomerModel.setCustomerID(b2bCustomerModel.getUid());
 			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
@@ -220,17 +232,17 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 				}
 				catch (final UnknownIdentifierException b2bGroupUnknownIdentifierException)
 				{
-					throw new B2BGroupUnknownIdentifierException("Invalid User group");
+					throw new B2BGroupUnknownIdentifierException("Invalid User group specified");
 				}
 			}
 			b2bCustomerModel.setGroups(customerGroups);
 			b2bCustomerModel.setDefaultB2BUnit(b2bUnitModel);
-			modelService.save(b2bCustomerModel);
-			LOG.info("Created user with userID " + csvValuesMap.get(EMAIL_ID).trim());
+			modelService.saveAll(b2bCustomerModel);
+			LOG.info("Created user with userID " + b2bCustomerModel.getUid() + " & Email ID" + b2bCustomerModel.getEmail());
 		}
 		else
 		{
-			throw new B2BUnitUnknownIdentifierException("Invalid Unit");
+			throw new B2BUnitUnknownIdentifierException("Invalid Unit Specified");
 		}
 	}
 
@@ -279,7 +291,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 					columnNames.add(GROUPS);
 					error.setColumnName(columnNames);
 					error.setUserType(BUSINESS_USER);
-					error.setMessage("Invalid groups");
+					error.setMessage("Invalid group specified");
 					columnNumbers.add(7);
 					error.setColumnNumber(columnNumbers);
 					getBusinessFeedErrors().add(error);
@@ -299,7 +311,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 				columnNames.add(columnHeader);
 				error.setColumnName(columnNames);
 				error.setUserType(BUSINESS_USER);
-				error.setMessage(columnHeader + " column should be Y or N");
+				error.setMessage(columnHeader + " column should be Y (for Active) Or N (for InActive)");
 				columnNumbers.add(columnNumber);
 				error.setColumnNumber(columnNumbers);
 				getBusinessFeedErrors().add(error);

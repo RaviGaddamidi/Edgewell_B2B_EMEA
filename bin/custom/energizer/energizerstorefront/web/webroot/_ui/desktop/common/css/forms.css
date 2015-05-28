@@ -359,3 +359,7 @@ width: 300px;
 	padding-right: 0px !important; 
     width : 349px !important;
 }
+
+.control-group select.lang-selector{
+	width: 100px !important;
+}
