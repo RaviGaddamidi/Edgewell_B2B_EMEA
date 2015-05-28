@@ -555,6 +555,10 @@ button.place-order {
 	width: 235px;
 }
 
+#checkoutContentPanel .summarySection .contentSection .headline {
+	  
+	  margin: 0 0 26px 0 !important;
+	}
 
 
 

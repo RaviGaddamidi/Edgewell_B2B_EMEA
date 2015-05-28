@@ -11,12 +11,14 @@
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 
 <c:url value="${entry.product.url}" var="productUrl"/>
-	<c:if test="${entry.rejectedStatus == 'Yes'}">
+<c:choose>
+	<c:when test="${entry.rejectedStatus == 'Yes'}">
 		<tr class="item item_order_cls show_err_cls">
-	</c:if>
-	<c:if test="${entry.rejectedStatus == 'No'}">
+	</c:when>
+	<c:otherwise>
 		<tr class="item item_order_cls">
-	</c:if>
+	</c:otherwise>
+	</c:choose>
 	
 	<td headers="header2" class="thumb">
 		<a href="${productUrl}">
