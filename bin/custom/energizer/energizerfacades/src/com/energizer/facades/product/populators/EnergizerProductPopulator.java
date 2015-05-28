@@ -15,6 +15,7 @@ import de.hybris.platform.servicelayer.dto.converter.ConversionException;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -74,7 +75,6 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 		productData.setDescription(energizerProductModel.getDescription() == null ? EMPTY : energizerProductModel.getDescription());
 		productData.setErpMaterialID(energizerProductModel.getCode() == null ? EMPTY : energizerProductModel.getCode());
 
-
 		//Setting the segment,family , group
 		productData.setSegmentName(energizerProductModel.getSegmentCode() == null ? EMPTY : energizerProductModel.getSegmentCode());
 		productData.setFamilyName(energizerProductModel.getFamilyCode() == null ? EMPTY : energizerProductModel.getFamilyCode());
@@ -89,16 +89,29 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 					loggedInUserB2bUnit.getUid());
 			energizerProductConversionFactorModel = energizerProductService.getEnergizerProductConversion(
 					energizerProductModel.getCode(), loggedInUserB2bUnit.getUid());
-			productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
-					.getCustomerMaterialId());
-			productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY
-					: energizerCMIRModel.getCustomerMaterialDescription());
-			productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
-			productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
+			if (energizerCMIRModel != null)
+			{
+				productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
+						.getCustomerMaterialId());
+			}
+			else
+			{
+				productData.setCustomerMaterialId("");
+			}
+			String shippingPointId = "";
+			String shippingPointName = "";
+			if (energizerCMIRModel != null)
+			{
+				productData.setCustomerProductName(energizerCMIRModel.getCustomerMaterialDescription() == null ? EMPTY
+						: energizerCMIRModel.getCustomerMaterialDescription());
+				productData.setMoq(energizerCMIRModel.getOrderingUnit() == null ? ZERO : energizerCMIRModel.getOrderingUnit());
+				productData.setUom(energizerCMIRModel.getUom() == null ? EMPTY : energizerCMIRModel.getUom());
 
-			final String shippingPointId = energizerCMIRModel.getShippingPoint();
-			final String shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
-			productData.setShippingPoint(shippingPointId);
+				shippingPointId = energizerCMIRModel.getShippingPoint();
+				shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
+				productData.setShippingPoint(shippingPointId);
+			}
+
 			productData.setShippingPointName(shippingPointName == null ? EMPTY : shippingPointName);
 
 			if (energizerProductConversionFactorModel != null)
@@ -145,7 +158,7 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 					else
 					{
 						productData.setCustomerProductPrice(energizerPriceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO)
-								: BigDecimal.valueOf(energizerPriceRowModel.getPrice() * baseUOM));
+								: BigDecimal.valueOf(energizerPriceRowModel.getPrice() * baseUOM).setScale(2, RoundingMode.CEILING));
 						productData.setCustomerPriceCurrency(energizerPriceRowModel.getCurrency().getSymbol() == null ? EMPTY
 								: energizerPriceRowModel.getCurrency().getSymbol());
 						foundCmirPrice = true;
@@ -163,8 +176,8 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 				{
 					continue;
 				}
-				productData.setCustomerProductPrice(priceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO) : BigDecimal
-						.valueOf(priceRowModel.getPrice() * baseUOM));
+				productData.setCustomerProductPrice(priceRowModel.getPrice() == null ? BigDecimal.valueOf(ZERO) : BigDecimal.valueOf(
+						priceRowModel.getPrice() * baseUOM).setScale(2, RoundingMode.CEILING));
 				productData.setCustomerPriceCurrency(priceRowModel.getCurrency().getSymbol() == null ? EMPTY : priceRowModel
 						.getCurrency().getSymbol());
 			}
