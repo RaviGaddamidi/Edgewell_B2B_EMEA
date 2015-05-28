@@ -75,7 +75,6 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 		productData.setDescription(energizerProductModel.getDescription() == null ? EMPTY : energizerProductModel.getDescription());
 		productData.setErpMaterialID(energizerProductModel.getCode() == null ? EMPTY : energizerProductModel.getCode());
 
-
 		//Setting the segment,family , group
 		productData.setSegmentName(energizerProductModel.getSegmentCode() == null ? EMPTY : energizerProductModel.getSegmentCode());
 		productData.setFamilyName(energizerProductModel.getFamilyCode() == null ? EMPTY : energizerProductModel.getFamilyCode());
