@@ -357,4 +357,5 @@ width: 300px;
 }
 #placeOrderForm2 .control-label,#placeOrderForm .control-label, #placeOrderForm1 .control-label{
 	padding-right: 0px !important; 
+    width : 349px !important;
 }
