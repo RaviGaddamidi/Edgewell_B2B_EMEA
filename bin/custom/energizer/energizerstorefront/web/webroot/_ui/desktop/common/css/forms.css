@@ -363,3 +363,11 @@ width: 300px;
 .control-group select.lang-selector{
 	width: 100px !important;
 }
+
+#b2BCustomerForm .companyRoles-cls .control-group.error fieldset div {
+  width: 205%;
+}
+
+#b2BCustomerForm .control-group fieldset label{width:433px !important;}
+
+#b2BCustomerForm fieldset div{width:108%;}
