@@ -62,10 +62,6 @@ public class EnergizerProduct2CategoryRelationCSVProcessor extends AbstractEnerg
 		CSV_HEADERS = Config.getParameter(PRODUCT_CATEGORY_FEED_HEADERS_KEY).split(new Character(DELIMETER).toString());
 		for (final CSVRecord record : records)
 		{
-
-			super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-			super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 			final Map<String, String> csvValuesMap = record.toMap();
 			validate(record);
 			if (!getTechnicalFeedErrors().isEmpty())

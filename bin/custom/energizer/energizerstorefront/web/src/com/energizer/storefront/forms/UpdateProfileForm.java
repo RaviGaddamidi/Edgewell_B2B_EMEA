@@ -48,7 +48,7 @@ public class UpdateProfileForm
 	@NotNull(message = "{profile.firstName.invalid}")
 	@Size(min = 1, max = 25, message = "{profile.firstName.invalid}")
 	@NotBlank(message = "{profile.firstName.invalid}")
-	@Pattern(regexp = "[a-z-A-Z]*", message = "{profile.firstName.format.invalid}")
+	@Pattern(regexp = "[ a-z-A-Z]*", message = "{profile.firstName.format.invalid}")
 	public String getFirstName()
 	{
 		return firstName;
@@ -62,7 +62,7 @@ public class UpdateProfileForm
 	@NotNull(message = "{profile.lastName.invalid}")
 	@Size(min = 1, max = 25, message = "{profile.lastName.invalid}")
 	@NotBlank(message = "{profile.lastName.invalid}")
-	@Pattern(regexp = "[a-z-A-Z]*", message = "{profile.lastName.format.invalid}")
+	@Pattern(regexp = "[ a-z-A-Z]*", message = "{profile.lastName.format.invalid}")
 	public String getLastName()
 	{
 		return lastName;

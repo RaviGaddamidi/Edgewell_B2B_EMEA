@@ -76,7 +76,9 @@
     margin:0 0 0 10px;
 }
 
-
+#header .headerContent.secondRow .yCmsComponent + .yCmsComponent{
+	width:110px !important;
+}
 
 
 

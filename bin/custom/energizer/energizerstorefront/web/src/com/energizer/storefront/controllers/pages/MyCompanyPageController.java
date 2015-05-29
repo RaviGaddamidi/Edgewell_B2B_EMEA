@@ -131,7 +131,8 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected static final String EDIT_COSTCENTER_URL = "/my-company/organization-management/manage-costcenters/update";
 	protected static final String REDIRECT_TO_MANAGE_USERS = FORWARD_PREFIX + "/my-company/organization-management/manage-users/";
 	protected final static String DEFAULT_PASSWORD = "energizer.default.password";
-
+	protected final static String BKT_OPEN = "(";
+	protected final static String BKT_CLOSE = ")";
 	@Resource(name = "customerAccountService")
 	protected CustomerAccountService customerAccountService;
 
@@ -422,7 +423,9 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		if (!model.containsAttribute("b2BCustomerForm"))
 		{
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
-			b2bCustomerForm.setParentB2BUnit(companyB2BCommerceFacade.getParentUnit().getUid());
+			final String uid = companyB2BCommerceFacade.getParentUnit().getUid();
+			final String name = companyB2BCommerceFacade.getParentUnit().getName();
+			b2bCustomerForm.setParentB2BUnit(uid.concat(BKT_OPEN + name).concat(BKT_CLOSE));
 			// Add the b2bcustomergroup role by default
 			b2bCustomerForm.setRoles(Collections.singletonList("b2bcustomergroup"));
 			model.addAttribute(b2bCustomerForm);
@@ -535,7 +538,9 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			b2bCustomerForm.setFirstName(customerData.getFirstName());
 			b2bCustomerForm.setLastName(customerData.getLastName());
 			b2bCustomerForm.setEmail(customerData.getDisplayUid());
-			b2bCustomerForm.setParentB2BUnit(b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getUid());
+			final String name = b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getName();
+			final String uid = b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getUid();
+			b2bCustomerForm.setParentB2BUnit(uid.concat(BKT_OPEN + name).concat(BKT_CLOSE));
 			b2bCustomerForm.setActive(customerData.isActive());
 			b2bCustomerForm.setApproverGroups(customerData.getApproverGroups());
 			b2bCustomerForm.setApprovers(customerData.getApprovers());

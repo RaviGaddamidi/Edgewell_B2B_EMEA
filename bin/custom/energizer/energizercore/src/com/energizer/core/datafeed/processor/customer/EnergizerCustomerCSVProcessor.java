@@ -75,15 +75,12 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
 	{
+		EnergizerB2BUnitModel b2bUnit = null;
 		try
 		{
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
-
-				super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-				super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty())
@@ -93,7 +90,6 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 					getTechnicalFeedErrors().clear();
 					continue;
 				}
-				EnergizerB2BUnitModel b2bUnit = null;
 				try
 				{
 					b2bUnit = (EnergizerB2BUnitModel) companyB2BCommerceService.getUnitForUid(csvValuesMap.get(CUSTOMER_ID).trim());
@@ -124,7 +120,6 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 							energizeB2BUnit.setCurrencyPreference(currencyModel);
 							final LanguageModel languageModel = commonI18NService.getLanguage(csvValuesMap.get(DEFAULT_LANGUAGE).trim());
 							energizeB2BUnit.setLanguagePreference(languageModel.getIsocode());
-
 						}
 						catch (final Exception exception)
 						{
@@ -146,7 +141,6 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						}
 						LOG.info("Energizer B2BUnit created");
 					}
-
 				}
 				else
 				{
