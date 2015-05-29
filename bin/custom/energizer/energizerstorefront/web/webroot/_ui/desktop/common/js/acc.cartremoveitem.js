@@ -361,11 +361,13 @@ ACC.cartremoveitem = {
                 }else{
                       businesRuleErrors
                       $('#businesRuleErrors').fadeOut(1000);
+                      errorsDiv.removeClass("alert negative");
                 }
                 $('#validationErrors').fadeOut(5000);
 
 			}		
 		},
+			
 
 		refreshCartData: function(cartData, entryNum, productCode, quantity) 
 		{	
@@ -376,6 +378,7 @@ ACC.cartremoveitem = {
 			}
 			else
 			{	
+				
 				var form;	
 				var removeItem = false;
 				var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
@@ -478,7 +481,10 @@ ACC.cartremoveitem = {
 
 				$('#orderTotals').next().remove();
 				$('#orderTotals').remove();
-				$("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));		
+				$("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));	
+				
+				ACC.cartremoveitem.getErrors(cartData, entryNum, productCode, quantity);
+										
 			}
 			
 			$('#weight_txt').val(totalProductWeightInPercent);
@@ -545,8 +551,7 @@ ACC.cartremoveitem = {
 			  {
 			  $("#weight_utilization").css('height', contHeight);		
 			  }
-			  
-			  ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'	);
+
 		}
 				
 		},
