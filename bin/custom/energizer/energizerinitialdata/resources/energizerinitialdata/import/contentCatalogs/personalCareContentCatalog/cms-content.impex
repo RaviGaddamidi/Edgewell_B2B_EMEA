@@ -65,7 +65,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;Shaving_Schick_DoubleEdge_Link;Double Edge Link;c/Shaving-Schick-Double Edge;Shaving_Schick_DoubleEdge_Link
 ;;Shaving_Schick_Other_Link;Other Link;c/Shaving-Schick-Other;Shaving_Schick_Other_Link
 ;;Shaving_Schick_Quattro_Link;Quattro Link;c/Shaving-Schick-Quattro;Shaving_Schick_Quattro_Link
-;;Shaving_Schick_Exacta2SlimTwin_Link;Exacta 2Slim Twin Link;c/Shaving-Schick-Exacta2Slim Twin;Shaving_Schick_Exacta2SlimTwin_Link
+;;Shaving_Schick_Exacta2SlimTwin_Link;Exacta 2 Slim Twin Link;c/Shaving-Schick-Exacta 2 Slim Twin;Shaving_Schick_Exacta2SlimTwin_Link
 ;;Shaving_Schick_Xtreme3_Link;Xtreme 3 Link;c/Shaving-Schick-Xtreme 3;Shaving_Schick_Xtreme3_Link
 ;;Shaving_Schick_Protect_Link;Protect Link;c/Shaving-Schick-Protect;Shaving_Schick_Protect_Link
 ;;Shaving_Schick_Intuition_Link;Intuition Link;c/Shaving-Schick-Intuition;Shaving_Schick_Intuition_Link
@@ -79,7 +79,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;FeminineCare_o.b._o.b._Link;o.b. Link;c/Feminine Care-o.b.-o.b.;FeminineCare_o.b._o.b._Link
 ;;InfantCare_Playtex_Dropins_Link;Dropins Link;c/Infant Care-Playtex-Dropins;InfantCare_Playtex_Dropins_Link
 ;;InfantCare_Playtex_VentAire_Link;VentAire Link;c/Infant Care-Playtex-VentAire;InfantCare_Playtex_VentAire_Link
-;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-DropinsVentAire;InfantCare_Playtex_DropinsVentAire_Link
+;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-Dropins   VentAire;InfantCare_Playtex_DropinsVentAire_Link
 ;;InfantCare_Playtex_CupsMealtime_Link;Cups & Mealtime Link;c/Infant Care-Playtex-Cups & Mealtime;InfantCare_Playtex_CupsMealtime_Link
 ;;InfantCare_Playtex_DiaperGenie_Link;Diaper Genie Link;c/Infant Care-Playtex-Diaper Genie;InfantCare_Playtex_DiaperGenie_Link
 ;;InfantCare_Playtex_Accessories_Link;Accessories Link;c/Infant Care-Playtex-Accessories;InfantCare_Playtex_Accessories_Link
@@ -141,7 +141,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;FeminineCare_Playtex_Sport_Nav_Node;;Sport;Playtex_Nav_Node; ;FeminineCare_Playtex_Sport_Link;FeminineCare_Playtex_Sport_Nav_Node
 ;FeminineCare_Stayfree_Stayfree_Nav_Node;;Sport;Stayfree_Nav_Node; ;FeminineCare_Stayfree_Stayfree_Link;FeminineCare_Stayfree_Stayfree_Nav_Node
 ;FeminineCare_o.b._o.b._Nav_Node;;o.b.;Ob_Nav_Node; ;FeminineCare_o.b._o.b._Link;FeminineCare_o.b._o.b._Nav_Node
-;InfantCare_Playtex_Dropins_Nav_Node;;Dropins;Infant_Playtex_Nav_Node; ;FeminineCare_o.b._o.b._Link;InfantCare_Playtex_Dropins_Nav_Node
+;InfantCare_Playtex_Dropins_Nav_Node;;Dropins;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Dropins_Link;InfantCare_Playtex_Dropins_Nav_Node
 ;InfantCare_Playtex_VentAire_Nav_Node;;VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_VentAire_Link;InfantCare_Playtex_VentAire_Nav_Node
 ;InfantCare_Playtex_DropinsVentAire_Nav_Node;;Dropins VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_DropinsVentAire_Link;InfantCare_Playtex_DropinsVentAire_Nav_Node
 ;InfantCare_Playtex_CupsMealtime_Nav_Node;;CupsMealtime;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_CupsMealtime_Link;InfantCare_Playtex_CupsMealtime_Nav_Node
