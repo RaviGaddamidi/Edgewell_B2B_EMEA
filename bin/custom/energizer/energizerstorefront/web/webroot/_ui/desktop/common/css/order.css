@@ -201,5 +201,7 @@ table.orderListApprovTbl-cls td:last-child p{width:105px;word-wrap:break-word;}
 	position:relative;
 	left:41px;
 }
-
+.orderList .orderListTable tbody td p {
+	  text-align: center;
+}
 

@@ -18,8 +18,6 @@ import de.hybris.platform.commerceservices.order.CommerceCartRestorationExceptio
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.site.BaseSiteService;
-import com.energizer.storefront.constants.WebConstants;
-import com.energizer.storefront.security.cookie.CartRestoreCookieGenerator;
 
 import java.io.IOException;
 
@@ -32,6 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.energizer.storefront.constants.WebConstants;
+import com.energizer.storefront.security.cookie.CartRestoreCookieGenerator;
 
 
 /**
@@ -99,18 +100,27 @@ public class CartRestorationFilter extends OncePerRequestFilter
 		}
 		else
 		{
-			if ((!getCartFacade().hasSessionCart() && getSessionService().getAttribute(WebConstants.CART_RESTORATION) == null)
-					|| (getCartFacade().hasSessionCart() && !getBaseSiteService().getCurrentBaseSite().equals(
-							getBaseSiteService().getBaseSiteForUID(getCartFacade().getSessionCart().getSite()))))
+			try
 			{
-				try
+				if ((!getCartFacade().hasSessionCart() && getSessionService().getAttribute(WebConstants.CART_RESTORATION) == null)
+						|| (getCartFacade().hasSessionCart() && !getBaseSiteService().getCurrentBaseSite().equals(
+								getBaseSiteService().getBaseSiteForUID(getCartFacade().getSessionCart().getSite()))))
 				{
-					getSessionService().setAttribute(WebConstants.CART_RESTORATION, getCartFacade().restoreSavedCart(null));
+					try
+					{
+						getSessionService().setAttribute(WebConstants.CART_RESTORATION, getCartFacade().restoreSavedCart(null));
+					}
+					catch (final CommerceCartRestorationException e)
+					{
+						getSessionService().setAttribute(WebConstants.CART_RESTORATION, "basket.restoration.errorMsg");
+					}
 				}
-				catch (final CommerceCartRestorationException e)
-				{
-					getSessionService().setAttribute(WebConstants.CART_RESTORATION, "basket.restoration.errorMsg");
-				}
+			}
+			catch (final Exception e)
+			{
+				// YTODO Auto-generated catch block
+				e.printStackTrace();
+				getSessionService().setAttribute(WebConstants.CART_RESTORATION, "basket.restoration.errorMsg");
 			}
 		}
 
