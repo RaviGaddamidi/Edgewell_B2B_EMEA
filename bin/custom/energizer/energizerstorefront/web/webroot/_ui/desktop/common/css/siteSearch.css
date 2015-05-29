@@ -115,3 +115,7 @@
 	float:right;
 	font-weight:bold  !important;
 }
+
+/* new css */
+
+.ui-autocomplete .ui-menu-item .thumb img{max-height:75px;}

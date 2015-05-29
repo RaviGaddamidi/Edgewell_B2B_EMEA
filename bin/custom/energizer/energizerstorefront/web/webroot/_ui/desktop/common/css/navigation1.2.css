@@ -6,7 +6,7 @@
 	border-width:1px 0 ;
 
 	position:relative;
-	z-index:1000;
+	z-index:150;
 }
 
 #nav_main > ul > li  > a{
@@ -20,7 +20,7 @@ color:#436eee !important;
 #nav_main ul ul {
 	display: none;
 	box-shadow: 4px 4px 4px rgba(0,0,0,0.4);
-	z-index:1000;
+	z-index:150;
 }
 
 	#nav_main ul li:hover > ul {
@@ -39,7 +39,7 @@ color:#436eee !important;
 	list-style: none;
 	position: relative;
 	display: inline-table;
-	z-index:1000;
+	z-index:150;
 	
 }
 	#nav_main ul:after {
