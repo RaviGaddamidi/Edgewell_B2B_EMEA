@@ -91,4 +91,11 @@ color:#436eee !important;
 	#nav_main ul ul ul {
 		position: absolute; left: 100%; top:0;
 	}
+	
+	
+	.nav_column .item li.nav_selected {
+		background-color: #e3e3e3;
+	    padding-top:9px;
+        padding-bottom: 7px;
+	}
 		

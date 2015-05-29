@@ -109,10 +109,9 @@
 ********************************************************************/
 
 .nav_column .item li.nav_selected {
-    background-color: #E3E3E3;
-    padding-top:inherit;
-    padding-bottom: 0px;
-    padding-top: 10px;
+	background-color: #e3e3e3;
+    padding-top:9px;
+    padding-bottom: 7px;
 }
 .order-approval-cls {
 	position: relative;
