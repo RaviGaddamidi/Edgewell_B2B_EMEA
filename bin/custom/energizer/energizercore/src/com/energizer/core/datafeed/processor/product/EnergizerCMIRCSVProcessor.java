@@ -193,7 +193,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
 						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
 						{
-							//LOG.info("Product price product :" + enrPriceRowModel.getProduct().getCode());
+							LOG.info("Product price product :" + enrPriceRowModel.getPrice());
 							if (!(enrPriceRowModel instanceof EnergizerPriceRowModel))
 							{
 								LOG.info("Not an energizer price row");
@@ -203,7 +203,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 							if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
 							{
-								LOG.info("Same energizer price row");
+								LOG.info("SAME ENR PRICE ROW MODEL.....");
 								matchingPriceRowFound = true;
 								priceRowModel = enrPriceRow;
 								break;
@@ -215,13 +215,20 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					{
 						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
 						priceRowModel.setB2bUnit(energizerB2BUnitModel);
-
+						if (priceRowModel.getUnit() == null)
+						{
+							priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
+						}
+						priceRowModel.setProduct(energizerProduct);
 						tmpPriceRowModelList.add(priceRowModel);
 					}
 
-					if (customerlistprice.isEmpty() && currency.isEmpty())
+					if (customerlistprice == null || customerlistprice.isEmpty())
 					{
 						customerlistprice = ZERO;
+					}
+					if (currency == null || currency.isEmpty())
+					{
 						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
 					}
 
@@ -236,9 +243,12 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					else
 					{
 						priceRowModel.setCatalogVersion(catalogVersion);
-						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
 						priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
 						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
+						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
+						/*
+						 * if (priceRowModel.getProduct() == null) { priceRowModel.setProduct(energizerProduct); }
+						 */
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
 					}//else
