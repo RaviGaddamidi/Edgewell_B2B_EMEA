@@ -191,7 +191,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						tmpPriceRowModelList.addAll(energizerPriceRowModels);
 						LOG.info("The size of product price row models is :" + tmpPriceRowModelList.size());
 						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
-
 						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
 						{
 							LOG.info("Product price product :" + enrPriceRowModel.getPrice());
@@ -219,15 +218,12 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						{
 							priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
 						}
-
 						if (priceRowModel.getProduct() == null)
 						{
-							//priceRowModel.setProduct(energizerProduct);
-							LOG.info("Empty product model for ENR price row");
+							//priceRowModel.setProduct(energizerProduct);							
 						}
 						tmpPriceRowModelList.add(priceRowModel);
 					}
-
 					if (customerlistprice == null || customerlistprice.isEmpty())
 					{
 						customerlistprice = ZERO;
@@ -236,11 +232,10 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					{
 						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
 					}
-
 					if (priceRowModel != null && priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() != null
 							&& !priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode().equals(currency))
 					{
-						LOG.error("Energizer price row currency preference "
+						LOG.error("Energizer price row currency preference  "
 								+ priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() + " does not match with : " + currency);
 					}
 					else
@@ -249,16 +244,11 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
 						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
 						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
-
-						/*
-						 * if (priceRowModel.getProduct() == null) { //priceRowModel.setProduct(energizerProduct); }
-						 */
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
 					}//else
 					succeedRecord++;
 					setRecordSucceeded(succeedRecord);
-
 				}
 			} //for
 		}//try
