@@ -203,7 +203,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 							if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
 							{
-								LOG.info("SAME ENR PRICE ROW MODEL.....");
 								matchingPriceRowFound = true;
 								priceRowModel = enrPriceRow;
 								break;
