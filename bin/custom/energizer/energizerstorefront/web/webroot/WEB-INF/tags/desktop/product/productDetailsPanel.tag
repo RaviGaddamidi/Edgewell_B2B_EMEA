@@ -51,6 +51,7 @@
 			<spring:theme code="basket.page.shipFrom"/> : ${fn:escapeXml( product.shippingPoint)}  <br>
 			<spring:theme code="basket.page.moq"/> : ${fn:escapeXml(product.moq)}<br>
 			<spring:theme code="basket.page.uom"/> : ${fn:escapeXml(product.uom)}<br>
+			<spring:theme code="basket.page.baseuom.convertion"/> : ${fn:escapeXml(product.baseUOM)}<br>
 			<spring:theme code="basket.page.segmentName"/> : ${fn:escapeXml(product.segmentName)}<br>			
 			<spring:theme code="basket.page.familyName"/> : ${fn:escapeXml(product.familyName)}<br>
 			<spring:theme code="basket.page.groupName"/> : ${fn:escapeXml(product.groupName)}<br>				
