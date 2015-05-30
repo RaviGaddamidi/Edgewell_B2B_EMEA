@@ -236,8 +236,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						currency = energizerB2BUnitModel.getCurrencyPreference().getIsocode();
 					}
 
-					//this.addUpdateENRPriceRowRecord(priceRowModel, csvValuesMap);
-
 					if (priceRowModel != null && priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode() != null
 							&& !priceRowModel.getB2bUnit().getCurrencyPreference().getIsocode().equals(currency))
 					{
