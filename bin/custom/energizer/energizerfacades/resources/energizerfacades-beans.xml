@@ -33,6 +33,7 @@
 		<property name="shippingPointName" type="java.lang.String" />
 		<property name="moq" type="java.lang.Integer" />
 		<property name="uom" type="java.lang.String" />
+		<property name="baseUOM" type="java.lang.Integer" />
 		<property name="weight" type="java.lang.Double" />
 		<property name="weightUom" type="java.lang.String" />
 		<property name="volume" type="java.lang.Double" />
