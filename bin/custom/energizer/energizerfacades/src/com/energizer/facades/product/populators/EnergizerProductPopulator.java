@@ -121,6 +121,8 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 				if (null != alternateUOM && null != productData.getUom() && alternateUOM.equalsIgnoreCase(productData.getUom()))
 				{
 					baseUOM = (energizerProductConversionFactorModel.getConversionMultiplier()).intValue();
+
+					productData.setBaseUOM(baseUOM);
 					final MetricUnitModel volumeMetricUnit = energizerProductConversionFactorModel.getPackageVolume();
 					if (null != volumeMetricUnit)
 					{
