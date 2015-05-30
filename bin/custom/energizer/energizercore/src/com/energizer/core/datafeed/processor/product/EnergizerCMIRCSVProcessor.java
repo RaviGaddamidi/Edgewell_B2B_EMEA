@@ -219,7 +219,12 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						{
 							priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
 						}
-						priceRowModel.setProduct(energizerProduct);
+
+						if (priceRowModel.getProduct() == null)
+						{
+							//priceRowModel.setProduct(energizerProduct);
+							LOG.info("Empty product model for ENR price row");
+						}
 						tmpPriceRowModelList.add(priceRowModel);
 					}
 
@@ -246,9 +251,12 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
 						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
 						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
-						/*
-						 * if (priceRowModel.getProduct() == null) { priceRowModel.setProduct(energizerProduct); }
-						 */
+
+						if (priceRowModel.getProduct() == null)
+						{
+							//priceRowModel.setProduct(energizerProduct);
+							LOG.info("Empty product model for ENR price row while creating price row");
+						}
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
 					}//else
@@ -303,10 +311,13 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			final EnergizerProductModel energizerProduct)
 	{
 		if (enrPriceRow != null
-				&& enrPriceRow.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
+				&& enrPriceRow.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID))
+				&& (enrPriceRow.getProduct() == null || enrPriceRow.getProduct().getCode()
+						.equals(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID))))
 		{
-			// record exists, just update other attributes
-			LOG.info(" SAME PRICE ROW RECORD");
+			{
+				LOG.info(" SAME PRICE ROW RECORD");
+			}
 			return true;
 		}
 		return false;
