@@ -251,10 +251,9 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
 						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
 
-						if (priceRowModel.getProduct() == null)
-						{
-							//priceRowModel.setProduct(energizerProduct);							
-						}
+						/*
+						 * if (priceRowModel.getProduct() == null) { //priceRowModel.setProduct(energizerProduct); }
+						 */
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
 					}//else
