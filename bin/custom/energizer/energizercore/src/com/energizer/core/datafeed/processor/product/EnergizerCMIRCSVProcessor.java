@@ -191,6 +191,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						tmpPriceRowModelList.addAll(energizerPriceRowModels);
 						LOG.info("The size of product price row models is :" + tmpPriceRowModelList.size());
 						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
+
 						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
 						{
 							LOG.info("Product price product :" + enrPriceRowModel.getPrice());
