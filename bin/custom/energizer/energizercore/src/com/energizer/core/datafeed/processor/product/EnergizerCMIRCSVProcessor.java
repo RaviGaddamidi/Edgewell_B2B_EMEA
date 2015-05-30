@@ -253,8 +253,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 						if (priceRowModel.getProduct() == null)
 						{
-							//priceRowModel.setProduct(energizerProduct);
-							LOG.info("Empty product model for ENR price row while creating price row");
+							//priceRowModel.setProduct(energizerProduct);							
 						}
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.saveAll();
