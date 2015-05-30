@@ -173,7 +173,7 @@ INSERT_UPDATE SolrSortField;sort(indexedType(identifier),code)[unique=true];fiel
 
 
 INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[unique=true];priority;visible;displayName[lang=en];displayName[lang=es];facet[default=true];multiValue[default=false]
-;$solrIndexedType; b2bunit ;100;false;Distributor;true;true
+;$solrIndexedType; b2bunit ;100;false;Distributor;true;true;true
 ;$solrIndexedType; segment ;99;true;Product Category;Categoría del producto;true;true
 ;$solrIndexedType; family  ;98;true;Sub-brand/Segment;Sub-marca / segmento;true;true
 ;$solrIndexedType; group   ;97;true;Sub-brand/Segment;Sub-marca / segmento;true;true
