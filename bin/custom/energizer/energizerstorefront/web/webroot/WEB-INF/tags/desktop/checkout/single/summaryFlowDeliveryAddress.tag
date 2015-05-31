@@ -36,7 +36,7 @@
 	<script id="deliveryAddressSummaryTemplate" class="sectionTemplate" type="text/x-jquery-tmpl">
 	<div class="summaryDeliveryAddress">
 
-			<div class="headline">2.<span id="deliverySectionNum" class="number"></span><spring:theme code="checkout.summary.deliveryAddress.header" htmlEscape="false"/></div>
+			<div class="headline"></span><spring:theme code="checkout.summary.deliveryAddress.header" htmlEscape="false"/></div>
 				<ul>
 					{{if data.deliveryAddress}}
 						<li>{{= data.deliveryAddress.title}} {{= data.deliveryAddress.firstName}} {{= data.deliveryAddress.lastName}}</li>
