@@ -199,26 +199,13 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@Resource(name = "defaultB2BCommerceUnitService")
 	private B2BCommerceUnitService defaultB2BCommerceUnitService;
 
+	
 	@ModelAttribute("b2bUnits")
 	public List<SelectOption> getB2BUnits()
 	{
-
-		final Set<B2BUnitModel> units = (Set<B2BUnitModel>) defaultB2BCommerceUnitService.getAllUnitsOfOrganization();
-		final List<String> b2BUnitList = new ArrayList<String>(units.size());
-
-
-		for (final B2BUnitModel b2BUnitModel : units)
-		{
-			if (Boolean.TRUE.equals(b2BUnitModel.getActive()))
-			{
-				b2BUnitList.add(b2BUnitModel.getName());
-			}
-		}
-
-		return populateSelectBoxForString(b2BUnitList);
-
-
+		return populateSelectBoxForString(b2bCommerceUnitFacade.getAllActiveUnitsOfOrganization());
 	}
+
 
 	@ModelAttribute("b2bCostCenterCurrencies")
 	public List<SelectOption> getAllCostCenters()
