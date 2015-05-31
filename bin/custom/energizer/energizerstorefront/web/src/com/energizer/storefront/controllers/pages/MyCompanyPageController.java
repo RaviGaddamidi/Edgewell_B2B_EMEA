@@ -199,7 +199,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@Resource(name = "defaultB2BCommerceUnitService")
 	private B2BCommerceUnitService defaultB2BCommerceUnitService;
 
-	
+		 
 	@ModelAttribute("b2bUnits")
 	public List<SelectOption> getB2BUnits()
 	{
