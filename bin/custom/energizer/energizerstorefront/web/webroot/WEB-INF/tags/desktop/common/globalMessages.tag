@@ -15,7 +15,7 @@
 <c:if test="${not empty forgotPwdConfMsgs}">
 		<c:forEach items="${forgotPwdConfMsgs}" var="msg">
 			<div id="forgotPwdConfMsgs" class="alert positive">
-				<spring:theme code="${fn:escapeXml(msg.code)}" arguments="${fn:escapeXml(msg.attributes)}"/>
+				<spring:theme code="${fn:escapeXml(msg.code)}" arguments="${fn:escapeXml(msg.attributes[0])}"/>
 			</div>
 		</c:forEach>
 </c:if>
