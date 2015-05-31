@@ -16,6 +16,7 @@ package com.energizer.storefront.controllers.pages;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.enums.B2BPeriodRange;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
+import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceB2BUserGroupFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceBudgetFacade;
@@ -31,6 +32,7 @@ import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
 import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
@@ -56,6 +58,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +72,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -192,11 +196,28 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@SuppressWarnings("rawtypes")
 	@Resource(name = "defaultB2BUnitService")
 	private B2BUnitService defaultB2BUnitService;
+	@Resource(name = "defaultB2BCommerceUnitService")
+	private B2BCommerceUnitService defaultB2BCommerceUnitService;
 
 	@ModelAttribute("b2bUnits")
 	public List<SelectOption> getB2BUnits()
 	{
-		return populateSelectBoxForString(b2bCommerceUnitFacade.getAllActiveUnitsOfOrganization());
+
+		final Set<B2BUnitModel> units = (Set<B2BUnitModel>) defaultB2BCommerceUnitService.getAllUnitsOfOrganization();
+		final List<String> b2BUnitList = new ArrayList<String>(units.size());
+
+
+		for (final B2BUnitModel b2BUnitModel : units)
+		{
+			if (Boolean.TRUE.equals(b2BUnitModel.getActive()))
+			{
+				b2BUnitList.add(b2BUnitModel.getName());
+			}
+		}
+
+		return populateSelectBoxForString(b2BUnitList);
+
+
 	}
 
 	@ModelAttribute("b2bCostCenterCurrencies")
@@ -459,9 +480,21 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected String createUser(final B2BCustomerForm b2BCustomerForm, final BindingResult bindingResult, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
+		final Errors errors = null;
 		model.addAttribute("action", "manageUsers");
 		emailValidator.validate(b2BCustomerForm, bindingResult);
 		userRoleValidator.validate(b2BCustomerForm, bindingResult);
+
+		/*
+		 * if (b2BCustomerForm.getParentB2BUnit() == null) { bindingResult.rejectValue("uid",
+		 * "profile.text.b2BCustomerForm.b2buid"); errors.rejectValue("uid", "register.b2bunit.invalid");
+		 * //GlobalMessages.addErrorMessage(model, "form.global.error");
+		 * 
+		 * model.addAttribute("b2BCustomerForm", b2BCustomerForm); return editUser(b2BCustomerForm.getUid(), model);
+		 * 
+		 * }
+		 */
+
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -482,7 +515,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2bCustomerData.setFirstName(b2BCustomerForm.getFirstName());
 		b2bCustomerData.setLastName(b2BCustomerForm.getLastName());
 		b2bCustomerData.setEmail(b2BCustomerForm.getEmail());
-		b2bCustomerData.setDisplayUid(b2BCustomerForm.getEmail());
+		b2bCustomerData.setDisplayUid(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getName());
 		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData.setRoles(b2BCustomerForm.getRoles());
 		b2bCustomerData.setContactNumber(b2BCustomerForm.getContactNumber());
