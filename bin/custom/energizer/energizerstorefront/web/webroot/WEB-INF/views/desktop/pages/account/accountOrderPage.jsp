@@ -48,6 +48,14 @@
 					<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.orderStatus" /> : <spring:theme code="text.account.order.status.display.${orderData.status}" /></p>
 					<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.poNumber" /> : ${orderData.purchaseOrderNumber}</p>
 				</c:if>	
+				<c:choose>
+					<c:when test="${empty orderData.erpOrderCreator}">
+						 <spring:theme code="Order Type" /> : <p><spring:theme code="text.account.order.portal" /></p>
+					</c:when>
+					<c:otherwise>
+						<spring:theme code="Order Type" /> : <p><spring:theme code="text.account.order.offline" /></p>
+					</c:otherwise>
+				 </c:choose>
 			</div>	
 	
 			<div class="span-5">&nbsp;
