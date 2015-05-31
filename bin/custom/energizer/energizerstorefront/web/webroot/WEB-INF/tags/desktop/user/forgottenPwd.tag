@@ -9,6 +9,7 @@
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 <%@ taglib prefix="ycommerce" uri="http://hybris.com/tld/ycommercetags"%>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <cms:pageSlot position="SideContent" var="feature" element="div"
 	class="span-4 side-content-slot cms_disp-img_slot">
@@ -19,35 +20,39 @@
 
 <div class="span-20 last">
 	<div class="item_container_holder">
-		<div class="title_holder">
-			<h2>
-				<spring:theme code="forgottenPwd.title" />
-			</h2>
-		</div>
-
-		<div class="item_container">
-			<p>
-				<spring:theme code="forgottenPwd.description" />
-			</p>
-			<p class="required">
-				<spring:theme code="form.required" />
-			</p>
-			<form:form method="post" commandName="forgottenPwdForm">
-				<div class="form_field-elements">
-					<div class="form_field-input">
-						<formElement:formInputBox idKey="forgottenPwd.email"
-							labelKey="forgottenPwd.email" path="email" inputCSS="text"
-							mandatory="true" />
-						<button class="positive" type="submit">
-							<spring:theme code="forgottenPwd.submit" />
-						</button>
+	
+		<c:if test="${ empty forgotPwdConfMsgs}">
+			<div class="title_holder">
+				<h2>
+					<spring:theme code="forgottenPwd.title" />
+				</h2>
+			</div>
+			<div class="item_container">
+				<p>
+					<spring:theme code="forgottenPwd.description" />
+				</p>
+				<p class="required">
+					<spring:theme code="form.required" />
+				</p>
+				<form:form method="post" commandName="forgottenPwdForm">
+					<div class="form_field-elements">
+						<div class="form_field-input">
+							<formElement:formInputBox idKey="forgottenPwd.email"
+								labelKey="forgottenPwd.email" path="email" inputCSS="text"
+								mandatory="true" />
+							<button class="positive" type="submit">
+								<spring:theme code="forgottenPwd.submit" />
+							</button>
+						</div>
+						<ycommerce:testId code="User_Cancel_button">
+							<a href="${cancelUrl}" class="button forgotpasswordcancel"><spring:theme
+									code="b2bcustomer.cancel" text="Cancel" /></a>
+						</ycommerce:testId>
 					</div>
-					<ycommerce:testId code="User_Cancel_button">
-						<a href="${cancelUrl}" class="button forgotpasswordcancel"><spring:theme
-								code="b2bcustomer.cancel" text="Cancel" /></a>
-					</ycommerce:testId>
-				</div>
-			</form:form>
-		</div>
+				</form:form>
+			</div>
+		</c:if>
+		
+		
 	</div>
 </div>
