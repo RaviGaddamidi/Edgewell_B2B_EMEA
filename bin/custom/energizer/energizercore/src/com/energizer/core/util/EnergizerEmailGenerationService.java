@@ -152,8 +152,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 				toEmails.add(toAddress);
 				final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 						emailContext.getFromDisplayName());
-				return getEmailService().createEmailMessage(ccEmails, new ArrayList<EmailAddressModel>(),
-						new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(), emailSubject, emailBody, null);
+				return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
+						emailContext.getFromEmail(), emailSubject, emailBody, null);
 			}//end of if loop
 		}//end of order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Energizer Order Approval Failed for reference no") != -1)
