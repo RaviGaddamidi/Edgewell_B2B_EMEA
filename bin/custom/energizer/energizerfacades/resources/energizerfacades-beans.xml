@@ -64,6 +64,7 @@
 	<bean class="de.hybris.platform.commercefacades.order.data.OrderHistoryData">
 		<property name="referenceNumber" type="String"/>
 		<property name="erpOrderCreator" type="String"/>
+		<property name="b2bOrderData" type="de.hybris.platform.commercefacades.order.data.OrderData"/>
 	</bean>
 	
 </beans>

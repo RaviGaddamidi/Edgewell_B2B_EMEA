@@ -33,9 +33,10 @@
 			<table class="orderListTable">
 				<thead>
 					<tr>
-						<th id="header1"><spring:theme code="text.account.orderHistory.referenceNumber" text="Reference Number"/></th>
+						<th id="header1"><spring:theme code="text.account.orderHistory.referenceNumber" text="Reference No"/></th>
 						<th id="header2"><spring:theme code="text.account.orderHistory.sap.orderNumber" text="Order No"/></th>
-						<th id="header3"><spring:theme code="text.account.orderHistory.orderType" text="Order Type"/></th>
+						<%-- <th id="header3"><spring:theme code="text.account.orderHistory.orderType" text="Order Type"/></th> --%>
+						<th id="header2"><spring:theme code="text.account.order.purchase" text="Purchaser"/></th>
 						<th id="header4"><spring:theme code="text.account.orderHistory.approvalStatus" text="Approval Status"/></th>
 						<th id="header5"><spring:theme code="text.account.orderHistory.datePlaced" text="Date Placed"/></th>
 						<th id="header6"><spring:theme code="text.account.orderHistory.orderValue" text="Order Value"/></th>
@@ -55,7 +56,7 @@
 											<a href="${myAccountOrderDetailsUrl}">${order.code}</a>
 										</c:when>
 										<c:otherwise>
-											<p><spring:theme code="Not Applicable" /></p> 
+											<p><spring:theme code="text.account.orderHistory.notApplicable" text="Not Applicable" /></p> 
 										</c:otherwise>
 									 </c:choose>
 									
@@ -67,7 +68,7 @@
 								</ycommerce:testId>
 							</td>
 												
-							<td headers="header3"> 
+							<%-- <td headers="header3"> 
 								<ycommerce:testId code="orderHistory_orderType_label">
 									 <c:if test="${empty order.erpOrderCreator}">
 									   <p><spring:theme code="text.account.order.portal" /></p>
@@ -76,6 +77,9 @@
 									   <p><spring:theme code="text.account.order.offline" /></p>
 									</c:if>
 								</ycommerce:testId>
+							</td> --%>
+							<td headers="header2">
+								<p>${order.b2bOrderData.b2bCustomerData.name}</p>
 							</td>
 							<td headers="header4">
 								<ycommerce:testId code="orderHistory_orderStatus_label">

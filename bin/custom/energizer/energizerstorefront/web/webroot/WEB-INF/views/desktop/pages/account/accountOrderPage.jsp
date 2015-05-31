@@ -32,7 +32,7 @@
 						 <spring:theme code="text.account.orderHistory.orderNumber" /> : ${orderData.code}<br />
 					</c:when>
 					<c:otherwise>
-						<spring:theme code="text.account.orderHistory.orderNumber" /> : <spring:theme code="Not Applicable" /></br>
+						<spring:theme code="text.account.orderHistory.orderNumber" /> : <p><spring:theme code="text.account.orderHistory.notApplicable" text="Not Applicable" /></p></br>
 					</c:otherwise>
 				 </c:choose>
 				

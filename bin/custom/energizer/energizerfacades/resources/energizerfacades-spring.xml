@@ -507,6 +507,7 @@
 		class="com.energizer.facades.search.populators.EnergizerOrderHistoryPopulator">
 		<property name="enumerationService" ref="enumerationService"/>
 		<property name="priceDataFactory" ref="priceDataFactory"/>
+		<property name="orderConverter" ref="orderConverter"/>
 	</bean>
 	<alias name="energizerOrderHistoryConverter" alias="energizerOrderHistoryConverter"/>
 	<bean id="energizerOrderHistoryConverter" parent="abstractPopulatingConverter" >
