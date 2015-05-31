@@ -53,9 +53,9 @@
 #set ($instructionsContactUs = ${ctx.messages.getMessage('instructionsContactUs', "#genHtmlLinkStartTag(${ctx.messages.contactUsPage})", "#genHtmlLinkEndTag()", "#genHtmlLink($mailToUrl '#666666' ${ctx.messages.contactUsEmailAddress})")})
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.getMessage('salutation', ${ctx.title},${ctx.displayName})}</b>,</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.thankYouForRegistering}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.registeredEmailInfo}: ${ctx.email}.</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.instructionsShoppingUrl}: <a href="${ctx.baseUrl}"><font color="#666666">${ctx.baseUrl}</font></a> <br>
-										${ctx.messages.getMessage('instructionsAccountUrl', "#genHtmlLinkStartTag($secureAccountUrl)", "#genHtmlLinkEndTag()")}<br>
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.registeredEmailInfo}: ${ctx.email}.</font></p>-->
+										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.instructionsShoppingUrl}: <a href="${ctx.baseUrl}"><font color="#666666">${ctx.baseUrl}</font></a> <br>-->
+										<!--${ctx.messages.getMessage('instructionsAccountUrl', "#genHtmlLinkStartTag($secureAccountUrl)", "#genHtmlLinkEndTag()")}<br>-->
 										${ctx.messages.getMessage('instructionsForgottenPswdUrl', "#genHtmlLinkStartTag($securePswdResetUrl)", "#genHtmlLinkEndTag()")}</font></p>
 										<!-- <p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$instructionsContactUs</font></p> -->
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
