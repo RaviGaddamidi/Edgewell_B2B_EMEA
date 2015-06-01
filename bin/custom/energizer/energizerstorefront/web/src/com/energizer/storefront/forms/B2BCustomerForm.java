@@ -29,6 +29,7 @@ public class B2BCustomerForm extends UpdateProfileForm
 	private boolean active;
 	private String uid;
 	private String parentB2BUnit;
+	private String parentB2BUnitIDName;
 	private String parentB2BUnitName;
 	private Collection<String> roles = new ArrayList<String>();
 	private Collection<CustomerData> approvers;
@@ -36,6 +37,23 @@ public class B2BCustomerForm extends UpdateProfileForm
 	private Collection<B2BUserGroupData> permissionGroups;
 	private Collection<B2BPermissionData> permissions;
 	private String email;
+
+	/**
+	 * @return the parentB2BUnitIDName
+	 */
+	public String getParentB2BUnitIDName()
+	{
+		return parentB2BUnitIDName;
+	}
+
+	/**
+	 * @param parentB2BUnitIDName
+	 *           the parentB2BUnitIDName to set
+	 */
+	public void setParentB2BUnitIDName(final String parentB2BUnitIDName)
+	{
+		this.parentB2BUnitIDName = parentB2BUnitIDName;
+	}
 
 	public String getUid()
 	{

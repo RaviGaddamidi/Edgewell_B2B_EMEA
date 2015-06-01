@@ -132,7 +132,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 						columnNames.add(GROUPS);
 						error.setColumnName(columnNames);
 						error.setUserType(BUSINESS_USER);
-						error.setMessage("Invalid group");
+						error.setMessage("Invalid group Specified");
 						columnNumbers.add(7);
 						error.setColumnNumber(columnNumbers);
 						getBusinessFeedErrors().add(error);
@@ -181,7 +181,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 			//		b2bCustomerModel.setCustomerID(csvValuesMap.get(EMAIL_ID).trim());
 			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
 			b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
-			b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
+			final boolean activeStatus = csvValuesMap.get(ACTIVE).trim().equalsIgnoreCase("Y") ? true : false;
+			b2bCustomerModel.setActive(activeStatus);
 
 			//	Added validation for groups fields
 			final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>(b2bCustomerModel.getGroups());
@@ -217,7 +218,8 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 			b2bCustomerModel.setCustomerID(b2bCustomerModel.getUid());
 			b2bCustomerModel.setName(csvValuesMap.get(USER_NAME).trim());
 			b2bCustomerModel.setContactNumber(csvValuesMap.get(CONTACT_NUMBER).trim());
-			b2bCustomerModel.setActive(new Boolean(csvValuesMap.get(ACTIVE).trim()));
+			final boolean activeStatus = csvValuesMap.get(ACTIVE).trim().equalsIgnoreCase("Y") ? true : false;
+			b2bCustomerModel.setActive(activeStatus);
 			//   Added validation for groups fields
 			final Set<PrincipalGroupModel> customerGroups = new HashSet<PrincipalGroupModel>();
 			for (final String group : csvValuesMap.get(GROUPS).split(";"))
