@@ -6,4 +6,4 @@
 $lang=es
 
 UPDATE CMSSite;uid[unique=true];name[lang=$lang];locale[lang=$lang]
- ;houseHold;"HouseHold Site";es;
+ ;energizer;"HouseHold Site";es;
