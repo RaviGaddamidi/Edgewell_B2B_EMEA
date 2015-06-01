@@ -73,9 +73,9 @@
 															<td width="15%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.quantity}</b></font></td>
 															<td width="15%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.itemPrice}</b></font></td>
 															<td width="16%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.total}</b></font></td>
-															<td width="20%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedQty}</b></font></td>
-															<td width="18%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedPrice}</b></font></td>
-															<td width="17%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedTotalPrice}</b></font></td>
+															<!--<td width="20%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedQty}</b></font></td>-->
+															<!--<td width="18%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedPrice}</b></font></td>-->
+															<!--<td width="17%" height="40px"><font color="#333" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.adjustedTotalPrice}</b></font></td>-->
 														</tr>
 														#foreach( $entry in ${ctx.orderData.entries} )
 														
@@ -123,9 +123,9 @@
 															<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.quantity</font></p></td>
 															<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$entry.basePrice.formattedValue</font></p></td> 
 															<td valign="top"><p><font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif">#if($entry.totalPrice.value > 0) $entry.totalPrice.formattedValue #else ${ctx.messages.free} #end</font></p></td> 
-															<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!entry.adjustedQty) $entry.adjustedQty #else 0 #end </font></p></td>
-															<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!entry.adjustedLinePrice.formattedValue) $entry.adjustedLinePrice.formattedValue #else 0 #end </font></p></td>
-															<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!{ctx.orderData.adjustedTotalPrice.formattedValue}) ${ctx.orderData.adjustedTotalPrice.formattedValue}  #else 0 #end </font></p></td>
+															<!--<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!entry.adjustedQty) $entry.adjustedQty #else 0 #end </font></p></td>-->
+															<!--<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!entry.adjustedLinePrice.formattedValue) $entry.adjustedLinePrice.formattedValue #else 0 #end </font></p></td>-->
+															<!--<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">#if ($!{ctx.orderData.adjustedTotalPrice.formattedValue}) ${ctx.orderData.adjustedTotalPrice.formattedValue}  #else 0 #end </font></p></td>-->
 														</tr>
 														#end
 													</table>
