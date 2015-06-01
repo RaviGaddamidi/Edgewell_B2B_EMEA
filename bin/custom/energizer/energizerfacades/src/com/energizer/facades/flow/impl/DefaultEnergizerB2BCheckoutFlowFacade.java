@@ -18,7 +18,9 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.core.model.user.AddressModel;
+import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.order.CartService;
+import de.hybris.platform.order.InvalidCartException;
 import de.hybris.platform.order.OrderService;
 import de.hybris.platform.product.PriceService;
 import de.hybris.platform.product.ProductService;
@@ -544,5 +546,53 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		// YTODO Auto-generated method stub
 		cartModel.setUser(userService.getCurrentUser());
 		modelService.save(cartModel);
+	}
+
+	@Override
+	public OrderData placeOrder() throws InvalidCartException
+	{
+		final CartModel cartModel = getCart();
+		if (cartModel != null)
+		{
+			final UserModel currentUser = getCurrentUserForCheckout();
+			if (cartModel.getUser().equals(currentUser) || getCheckoutCustomerStrategy().isAnonymousCheckout())
+			{
+				beforePlaceOrder(cartModel);
+				cartModel.getTotalPrice();
+				final OrderModel orderModel = placeOrder(cartModel);
+
+				afterPlaceOrder(cartModel, orderModel);
+
+				// Convert the order to an order data
+				if (orderModel != null)
+				{
+					orderModel.getAdjustedTotalPrice();
+					orderModel.getTotalPrice();
+					return getOrderConverter().convert(orderModel);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	protected void afterPlaceOrder(final CartModel cartModel, final OrderModel orderModel)
+	{
+		cartModel.getTotalPrice();
+		if (orderModel != null)
+		{
+			orderModel.getTotalPrice();
+			// Remove cart
+			getCartService().removeSessionCart();
+
+			getModelService().refresh(orderModel);
+
+			orderModel.setTotalPrice(cartModel.getTotalPrice());
+			orderModel.setSubtotal(cartModel.getSubtotal());
+			modelService.save(orderModel);
+
+
+		}
 	}
 }
