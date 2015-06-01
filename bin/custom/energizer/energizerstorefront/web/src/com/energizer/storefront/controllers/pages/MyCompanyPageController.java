@@ -31,6 +31,7 @@ import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
 import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
@@ -69,6 +70,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -131,8 +133,6 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected static final String EDIT_COSTCENTER_URL = "/my-company/organization-management/manage-costcenters/update";
 	protected static final String REDIRECT_TO_MANAGE_USERS = FORWARD_PREFIX + "/my-company/organization-management/manage-users/";
 	protected final static String DEFAULT_PASSWORD = "energizer.default.password";
-	protected final static String BKT_OPEN = "(";
-	protected final static String BKT_CLOSE = ")";
 	@Resource(name = "customerAccountService")
 	protected CustomerAccountService customerAccountService;
 
@@ -192,12 +192,16 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@SuppressWarnings("rawtypes")
 	@Resource(name = "defaultB2BUnitService")
 	private B2BUnitService defaultB2BUnitService;
+	@Resource(name = "defaultB2BCommerceUnitService")
+	private B2BCommerceUnitService defaultB2BCommerceUnitService;
+
 
 	@ModelAttribute("b2bUnits")
 	public List<SelectOption> getB2BUnits()
 	{
 		return populateSelectBoxForString(b2bCommerceUnitFacade.getAllActiveUnitsOfOrganization());
 	}
+
 
 	@ModelAttribute("b2bCostCenterCurrencies")
 	public List<SelectOption> getAllCostCenters()
@@ -423,9 +427,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		if (!model.containsAttribute("b2BCustomerForm"))
 		{
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
-			final String uid = companyB2BCommerceFacade.getParentUnit().getUid();
-			final String name = companyB2BCommerceFacade.getParentUnit().getName();
-			b2bCustomerForm.setParentB2BUnit(uid.concat(BKT_OPEN + name).concat(BKT_CLOSE));
+			b2bCustomerForm.setParentB2BUnit(companyB2BCommerceFacade.getParentUnit().getUid());
 			// Add the b2bcustomergroup role by default
 			b2bCustomerForm.setRoles(Collections.singletonList("b2bcustomergroup"));
 			model.addAttribute(b2bCustomerForm);
@@ -459,9 +461,21 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected String createUser(final B2BCustomerForm b2BCustomerForm, final BindingResult bindingResult, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
+		final Errors errors = null;
 		model.addAttribute("action", "manageUsers");
 		emailValidator.validate(b2BCustomerForm, bindingResult);
 		userRoleValidator.validate(b2BCustomerForm, bindingResult);
+
+		/*
+		 * if (b2BCustomerForm.getParentB2BUnit() == null) { bindingResult.rejectValue("uid",
+		 * "profile.text.b2BCustomerForm.b2buid"); errors.rejectValue("uid", "register.b2bunit.invalid");
+		 * //GlobalMessages.addErrorMessage(model, "form.global.error");
+		 * 
+		 * model.addAttribute("b2BCustomerForm", b2BCustomerForm); return editUser(b2BCustomerForm.getUid(), model);
+		 * 
+		 * }
+		 */
+
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -482,7 +496,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2bCustomerData.setFirstName(b2BCustomerForm.getFirstName());
 		b2bCustomerData.setLastName(b2BCustomerForm.getLastName());
 		b2bCustomerData.setEmail(b2BCustomerForm.getEmail());
-		b2bCustomerData.setDisplayUid(b2BCustomerForm.getEmail());
+		b2bCustomerData.setDisplayUid(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getName());
 		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData.setRoles(b2BCustomerForm.getRoles());
 		b2bCustomerData.setContactNumber(b2BCustomerForm.getContactNumber());
@@ -538,9 +552,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			b2bCustomerForm.setFirstName(customerData.getFirstName());
 			b2bCustomerForm.setLastName(customerData.getLastName());
 			b2bCustomerForm.setEmail(customerData.getDisplayUid());
-			final String name = b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getName();
-			final String uid = b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getUid();
-			b2bCustomerForm.setParentB2BUnit(uid.concat(BKT_OPEN + name).concat(BKT_CLOSE));
+			b2bCustomerForm.setParentB2BUnit(b2bCommerceUserFacade.getParentUnitForCustomer(customerData.getUid()).getUid());
 			b2bCustomerForm.setActive(customerData.isActive());
 			b2bCustomerForm.setApproverGroups(customerData.getApproverGroups());
 			b2bCustomerForm.setApprovers(customerData.getApprovers());

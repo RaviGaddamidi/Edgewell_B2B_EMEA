@@ -38,9 +38,9 @@
 					<cms:component component="${comp}"/>
 				</cms:pageSlot>
 
-				<div class="item_container">
+<%-- 				<div class="item_container">
 					<nav:searchSpellingSuggestion spellingSuggestion="${searchPageData.spellingSuggestion}" />
-				</div>
+				</div> --%>
 			</div>
 
 			<cms:pageSlot position="BottomContent" var="comp" element="div" class="span-20 cms_disp-img_slot right last">

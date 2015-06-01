@@ -3,6 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:url value="/" var="homeUrl"/>
 <ul class="clearfix">
@@ -12,20 +13,24 @@
 
 	<c:forEach items="${breadcrumbs}" var="breadcrumb" varStatus="status">
 	<li class="separator">&gt;</li>
-		<li <c:if test="${not empty breadcrumb.linkClass}">class="${breadcrumb.linkClass}"</c:if>>
-
-			<c:choose>
-				<c:when test="${breadcrumb.url eq '#'}">
-					<a href="#" onclick="return false;" <c:if test="${status.last}">class="last"</c:if>>${breadcrumb.name}</a>
-				</c:when>
-
-				<c:otherwise>
-					<c:url value="${breadcrumb.url}" var="breadcrumbUrl"/>
-					<a href="${breadcrumbUrl}" <c:if test="${status.last}">class="last"</c:if>>${breadcrumb.name}</a>
-				</c:otherwise>
-
-			</c:choose>
-		</li>
+		<c:choose>
+			<c:when test="${fn:containsIgnoreCase(breadcrumb.url, 'search?text')}">
+				<li><a><c:out value="${breadcrumb.name }"/></a></li>
+			</c:when>	
+			<c:otherwise>
+				<li <c:if test="${not empty breadcrumb.linkClass}">class="${breadcrumb.linkClass}"</c:if>>
+					<c:choose>
+						<c:when test="${breadcrumb.url eq '#'}">
+							<a href="#" onclick="return false;" <c:if test="${status.last}">class="last"</c:if>>${breadcrumb.name}</a>
+						</c:when>
+						<c:otherwise>
+							<c:url value="${breadcrumb.url}" var="breadcrumbUrl"/>
+							<a href="${breadcrumbUrl}" <c:if test="${status.last}">class="last"</c:if>>${breadcrumb.name}</a>
+						</c:otherwise>
+					</c:choose>
+				</li>
+			</c:otherwise>
+		</c:choose>
 
 	</c:forEach>
 </ul>

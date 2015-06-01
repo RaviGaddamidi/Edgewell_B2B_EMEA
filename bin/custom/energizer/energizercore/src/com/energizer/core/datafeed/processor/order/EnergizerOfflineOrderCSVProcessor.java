@@ -510,14 +510,15 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				energizerOrderEntry = modelService.create(OrderEntryModel.class);
 				energizerOrderEntry.setOrder(energizerOrderModel);
 				energizerOrderEntry.setProduct(existEnergizerProduct);
-				energizerOrderEntry.setQuantity((orderEntryQty / finalConversionFactor));
 				energizerOrderEntry.setTotalPrice(totalPrice);
 				if (!customerUOM.equalsIgnoreCase(uom))
 				{
+					energizerOrderEntry.setQuantity((orderEntryQty / finalConversionFactor));
 					energizerOrderEntry.setBasePrice(unitPrice * customerUOMMultiplier);
 				}
 				else
 				{
+					energizerOrderEntry.setQuantity((orderEntryQty));
 					energizerOrderEntry.setBasePrice(unitPrice * customerUOMMultiplier);
 				}
 			}

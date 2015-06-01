@@ -51,7 +51,7 @@
 			</h1>
 		</div>
 		
-		<nav:searchSpellingSuggestion spellingSuggestion="${searchPageData.spellingSuggestion}" />
+<%-- 		<nav:searchSpellingSuggestion spellingSuggestion="${searchPageData.spellingSuggestion}" /> --%>
 		
 		<nav:pagination top="true"  supportShowPaged="false" 
 									 supportShowAll="false" 
