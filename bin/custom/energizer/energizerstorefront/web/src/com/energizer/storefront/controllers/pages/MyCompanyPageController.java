@@ -461,21 +461,9 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected String createUser(final B2BCustomerForm b2BCustomerForm, final BindingResult bindingResult, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
-		final Errors errors = null;
 		model.addAttribute("action", "manageUsers");
 		emailValidator.validate(b2BCustomerForm, bindingResult);
 		userRoleValidator.validate(b2BCustomerForm, bindingResult);
-
-		/*
-		 * if (b2BCustomerForm.getParentB2BUnit() == null) { bindingResult.rejectValue("uid",
-		 * "profile.text.b2BCustomerForm.b2buid"); errors.rejectValue("uid", "register.b2bunit.invalid");
-		 * //GlobalMessages.addErrorMessage(model, "form.global.error");
-		 * 
-		 * model.addAttribute("b2BCustomerForm", b2BCustomerForm); return editUser(b2BCustomerForm.getUid(), model);
-		 * 
-		 * }
-		 */
-
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -496,7 +484,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2bCustomerData.setFirstName(b2BCustomerForm.getFirstName());
 		b2bCustomerData.setLastName(b2BCustomerForm.getLastName());
 		b2bCustomerData.setEmail(b2BCustomerForm.getEmail());
-		b2bCustomerData.setDisplayUid(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getName());
+		b2bCustomerData.setDisplayUid(b2BCustomerForm.getEmail());
 		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData.setRoles(b2BCustomerForm.getRoles());
 		b2bCustomerData.setContactNumber(b2BCustomerForm.getContactNumber());
