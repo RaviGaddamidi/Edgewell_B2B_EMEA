@@ -336,6 +336,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				}
 			}
 		}
+
 		return energizerAddresses;
 	}
 
@@ -826,12 +827,15 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		final OrderData orderData;
 		try
 		{
-			orderData = getCheckoutFlowFacade().placeOrder();
+			orderData = energizerB2BCheckoutFlowFacade.placeOrder();
+
 			if (orderData == null)
 			{
+
 				LOG.info("Therre is no cart model in session, returing back to cart page");
 				GlobalMessages.addErrorMessage(model, "checkout.placeOrder.failed");
 				//placeOrderForm.setNegotiateQuote(true);
+
 				model.addAttribute(placeOrderForm);
 				return checkoutSummary(model);
 			}
@@ -843,6 +847,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			model.addAttribute(placeOrderForm);
 			return checkoutSummary(model);
 		}
+
 
 		if (placeOrderForm.isNegotiateQuote())
 		{
@@ -908,6 +913,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 			storeCmsPageInModel(model, getContentPageForLabelOrId(SINGLE_STEP_SIMULATE_CHECKOUT_SUMMARY_CMS_PAGE));
 			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(SINGLE_STEP_SIMULATE_CHECKOUT_SUMMARY_CMS_PAGE));
+
 			energizerB2BCheckoutFlowFacade.updateSessionCart(cartData);
 			cartData = getCheckoutFlowFacade().getCheckoutCart();
 			model.addAttribute("cartData1", cartData);
