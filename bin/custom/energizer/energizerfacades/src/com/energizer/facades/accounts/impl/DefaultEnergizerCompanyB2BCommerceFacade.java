@@ -106,7 +106,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		if (null != energizerModel.getMaxUserLimit())
 		{
 
-			validateFlag = (defaultB2BUnitService.getB2BCustomers(energizerModel).size() > energizerModel.getMaxUserLimit()) ? true
+			validateFlag = ((defaultB2BUnitService.getB2BCustomers(energizerModel).size() - 1) > energizerModel.getMaxUserLimit()) ? true
 					: false;
 		}
 		return validateFlag;

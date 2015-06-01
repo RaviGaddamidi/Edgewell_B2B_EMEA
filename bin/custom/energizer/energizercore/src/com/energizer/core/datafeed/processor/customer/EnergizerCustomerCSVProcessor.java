@@ -50,7 +50,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	private CommonI18NService commonI18NService;
 
-	private static final String MAX_USER_LIMIT = "MaxUserLimit";
+	private static final String MAX_USER_LIMIT = "b2b.MaxUserLimit";
 	private static final String MAX_USER_LIMIT_COUNT = "10";
 	private static final String CUSTOMER_ID = "CustomerID";
 	private final String SALES_ORG = "SalesOrg";
@@ -78,6 +78,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		EnergizerB2BUnitModel b2bUnit = null;
 		try
 		{
+			final int maxUserLimit = Integer.parseInt(Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT));
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
@@ -103,7 +104,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 					if (!csvValuesMap.get(CUSTOMER_ID).trim().isEmpty())
 					{
 						final EnergizerB2BUnitModel energizeB2BUnit = modelService.create(EnergizerB2BUnitModel.class);
-						energizeB2BUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim());
+						energizeB2BUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim() + "--" + csvValuesMap.get(CUSTOMER_NAME).trim());
 						energizeB2BUnit.setSalesOrganisation(csvValuesMap.get(SALES_ORG).trim());
 						energizeB2BUnit.setDistributionChannel(csvValuesMap.get(DISTRIBUTION_CHANNEL).trim());
 						energizeB2BUnit.setDivision(csvValuesMap.get(DIVISION).trim());
@@ -126,7 +127,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 							LOG.error("Currency Model or Language Model Not Found!", exception);
 						}
 						energizeB2BUnit.setLocName(csvValuesMap.get(CUSTOMER_NAME).trim());
-						energizeB2BUnit.setMaxUserLimit(Integer.parseInt(Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT)));
+						energizeB2BUnit.setMaxUserLimit(maxUserLimit);
 						energizeB2BUnit.setBuyerSpecificID(csvValuesMap.get(CUSTOMER_ID).trim());
 						energizeB2BUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
 						try
@@ -147,7 +148,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 					//update model and save
 					if (!csvValuesMap.get(CUSTOMER_ID).trim().isEmpty())
 					{
-						b2bUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim());
+						//						b2bUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim() + "-" + csvValuesMap.get(CUSTOMER_NAME).trim());
 						b2bUnit.setSalesOrganisation(csvValuesMap.get(SALES_ORG).trim());
 						b2bUnit.setDistributionChannel(csvValuesMap.get(DISTRIBUTION_CHANNEL).trim());
 						b2bUnit.setDivision(csvValuesMap.get(DIVISION).trim());
@@ -169,7 +170,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						{
 							LOG.info("Currency Model or Language Model Not Found!");
 						}
-						b2bUnit.setMaxUserLimit(Integer.parseInt(Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT)));
+						b2bUnit.setMaxUserLimit(maxUserLimit);
 						b2bUnit.setLocname(csvValuesMap.get(CUSTOMER_NAME).trim());
 						try
 						{
@@ -230,6 +231,4 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 			}
 		}
 	}
-
-
 }
