@@ -6,6 +6,7 @@ package com.energizer.core.datafeed.processor.product;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
 import de.hybris.platform.category.model.CategoryModel;
+import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.model.ModelService;
@@ -143,32 +144,34 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				try
 				{
 					energizerCategory = categoryService.getCategoryForCode(catalogVersion, segmentId);
-					LOG.info("The category is : " + energizerCategory.getCode() + " " + energizerCategory.getName());
+					if (energizerCategory == null)
+					{
+						LOG.error(segmentId + " category does  not exist ");
+						continue;
+					}
 				}
 				catch (final Exception exception)
 				{
 					LOG.error("Error in retreiving the category " + exception);
 				}
-				if (energizerCategory == null)
-				{
-					LOG.error(segmentId + "category does  not exist ");
-					continue;
-				}
+
+				LOG.info("The category is : " + energizerCategory.getCode() + " " + energizerCategory.getName());
 				try
 				{
 					subCategories = energizerCategory.getAllSubcategories();
-
-					if (!subCategories.isEmpty() && subCategories != null)
+					if (subCategories == null || subCategories.isEmpty())
 					{
-						for (final CategoryModel subCategory : subCategories)
+						LOG.error("No Subcategories found for " + segmentId + "Category");
+						continue;
+					}
+					for (final CategoryModel subCategory : subCategories)
+					{
+						LOG.info("energizer Sub Category" + subCategory.getCode());
+						if (subCategory.getCode().equalsIgnoreCase(familyID))
 						{
 							LOG.info("energizer Sub Category" + subCategory.getCode());
-							if (subCategory.getCode().equalsIgnoreCase(familyID))
-							{
-								LOG.info("energizer Sub Category" + subCategory.getCode());
-								energizerSubCategory = (EnergizerCategoryModel) subCategory;
-								break;
-							}
+							energizerSubCategory = (EnergizerCategoryModel) subCategory;
+							break;
 						}
 					}
 				}
@@ -176,46 +179,67 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				{
 					LOG.error("Error in retreiving the subcategories" + exception);
 				}
-				if (subCategories == null)
+
+				if (energizerSubCategory == null)
 				{
 					LOG.error("No Subcategories found for " + segmentId + "Category");
 					continue;
 				}
 
 				final List<ProductModel> products = productService.getProductsForCategory(energizerSubCategory);
+				if (products == null || products.isEmpty())
+				{
+					LOG.info("No Products found for the sub-category : " + energizerSubCategory);
+				}
 
 				if (customerId.isEmpty())
 				{
 					final List<EnergizerB2BUnitModel> b2bUnitModels = energizerB2BUnitService.getB2BUnitForSalesArea(
 							salesOrganisation, distributionChannel, division);
 
+					if (b2bUnitModels == null || b2bUnitModels.isEmpty())
+					{
+						LOG.info("No B2BUnits found for the sales org : " + salesOrganisation + " distributionChannel : "
+								+ distributionChannel + " and division : " + division);
+						continue;
+					}
+
 					for (final EnergizerB2BUnitModel energizerB2BUnitModel : b2bUnitModels)
 					{
-						LOG.info("The sales area of energizerB2BUnitModel is :" + energizerB2BUnitModel.getDivision());
+						LOG.info("The sales area of energizerB2BUnitModel is :" + energizerB2BUnitModel.getSalesOrganisation());
 
 						for (final ProductModel product : products)
 						{
+							if (product == null)
+							{
+								continue;
+							}
 							if (product instanceof EnergizerProductModel)
 							{
 								energizerProduct = (EnergizerProductModel) product;
 
 								cmirList = energizerProduct.getProductCMIR();
+								if (cmirList == null || cmirList.isEmpty())
+								{
+									LOG.info("No CMIR records found for the product : " + energizerProduct.getCode());
+									continue;
+								}
 
 								LOG.info("The number of customers associated with this product is:" + cmirList.size());
 
-								if (!cmirList.isEmpty())
+								//if (!cmirList.isEmpty())
+								//{
+								for (final EnergizerCMIRModel energizerCMIR : cmirList)
 								{
-									for (final EnergizerCMIRModel energizerCMIR : cmirList)
+									if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerB2BUnitModel.getUid()))
 									{
-										if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerB2BUnitModel.getUid()))
-										{
-											energizerCMIR.setUom(uom);
-											energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
-											modelService.saveAll();
-											break;
-										}
+										energizerCMIR.setUom(uom);
+										energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
+										modelService.saveAll();
+										break;
 									}
 								}
+								//}
 							}
 						}
 					}
@@ -224,6 +248,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				{
 					for (final ProductModel product : products)
 					{
+						if (product == null)
+						{
+							continue;
+						}
 						if (product instanceof EnergizerProductModel)
 						{
 							LOG.info("The details about the product is :" + product.getCode() + product.getDescription());
@@ -231,6 +259,11 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 							energizerProduct = (EnergizerProductModel) product;
 
 							cmirList = energizerProduct.getProductCMIR();
+							if (cmirList == null || cmirList.isEmpty())
+							{
+								LOG.info("No CMIR records found for the product : " + energizerProduct.getCode());
+								continue;
+							}
 
 							LOG.info("The number of customers associated with this product is:" + cmirList.size());
 
@@ -319,8 +352,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			long recordFailed = getRecordFailed();
 			final String value = map.get(columnHeader).trim();
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_ID)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SALES_ORG)
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SALES_ORG)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISTRIBUTION_CHANNEL)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DIVISION)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SEGMENT_ID)
@@ -365,7 +397,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setRecordFailed(recordFailed);
 				}
 				/*
-				 * quantity cannot be 0, This has been commented and fixed in card page.
+				 * quantity cannot be 0, This has been commented and fixed in cart page.
 				 * 
 				 * if (isMOQZeroValue) { final List<String> columnNames = new ArrayList<String>(); final List<Integer>
 				 * columnNumbers = new ArrayList<Integer>(); error = new EnergizerCSVFeedError();
