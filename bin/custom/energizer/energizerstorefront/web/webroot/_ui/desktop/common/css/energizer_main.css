@@ -86,3 +86,7 @@ table.orderListTable th{color:#436eee;}
 	  color: white;
 	  text-transform: uppercase;
 }
+.show_prd_cls td{
+	font-weight:bold !important;
+    color:blue !important;
+}
