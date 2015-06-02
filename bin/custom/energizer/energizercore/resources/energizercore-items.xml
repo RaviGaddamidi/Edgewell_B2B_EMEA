@@ -195,7 +195,7 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					<attribute qualifier="maxUserLimit" type="java.lang.Integer">
+					<attribute qualifier="maxUserLimit" type="java.lang.String">
 						<description>Maximum User limit for the the customer account</description>
 						<modifiers />
 						<persistence type="property" />
@@ -799,6 +799,11 @@
 					</attribute>
 					
 					<attribute qualifier="itemTotalShipment" type="java.lang.Double">
+						<description>Item Total Shipment</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="isNewEntry" type="java.lang.String">
 						<description>Item Total Shipment</description>
 						<modifiers />
 						<persistence type="property" />

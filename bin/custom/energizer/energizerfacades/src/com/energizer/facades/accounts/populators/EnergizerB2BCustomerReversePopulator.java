@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.energizer.core.model.EnergizerB2BCustomerModel;
@@ -123,30 +122,33 @@ public class EnergizerB2BCustomerReversePopulator implements Populator<CustomerD
 	@Override
 	public void populate(final CustomerData source, final EnergizerB2BCustomerModel target) throws ConversionException
 	{
-		target.setEmail(source.getEmail());
-		target.setName(getCustomerNameStrategy().getName(source.getFirstName(), source.getLastName()));
-		target.setContactNumber(source.getContactNumber());
-		final B2BUnitModel defaultUnit = getCompanyB2BCommerceService().getUnitForUid(source.getUnit().getUid());
-		final B2BUnitModel oldDefaultUnit = getB2bUnitService().getParent(target);
-		target.setDefaultB2BUnit(defaultUnit);
+		if (null != source)
+		{
+			target.setEmail(source.getEmail());
+			target.setName(getCustomerNameStrategy().getName(source.getFirstName(), source.getLastName()));
+			target.setContactNumber(source.getContactNumber());
+			final B2BUnitModel defaultUnit = getCompanyB2BCommerceService().getUnitForUid(source.getUnit().getUid());
+			final B2BUnitModel oldDefaultUnit = getB2bUnitService().getParent(target);
+			target.setDefaultB2BUnit(defaultUnit);
 
-		final Set<PrincipalGroupModel> groups = new HashSet<PrincipalGroupModel>(target.getGroups());
-		if (oldDefaultUnit != null && groups.contains(oldDefaultUnit))
-		{
-			groups.remove(oldDefaultUnit);
+			final Set<PrincipalGroupModel> groups = new HashSet<PrincipalGroupModel>(target.getGroups());
+			if (oldDefaultUnit != null && groups.contains(oldDefaultUnit))
+			{
+				groups.remove(oldDefaultUnit);
+			}
+			groups.add(defaultUnit);
+			target.setGroups(groups);
+			updateUserGroups(getUserGroups(), source.getRoles(), target);
+			if (StringUtils.isNotBlank(source.getTitleCode()))
+			{
+				target.setTitle(getUserService().getTitleForCode(source.getTitleCode()));
+			}
+			else
+			{
+				target.setTitle(null);
+			}
+			setUid(source, target);
 		}
-		groups.add(defaultUnit);
-		target.setGroups(groups);
-		updateUserGroups(getUserGroups(), source.getRoles(), target);
-		if (StringUtils.isNotBlank(source.getTitleCode()))
-		{
-			target.setTitle(getUserService().getTitleForCode(source.getTitleCode()));
-		}
-		else
-		{
-			target.setTitle(null);
-		}
-		setUid(source, target);
 	}
 
 	protected void setUid(final CustomerData source, final EnergizerB2BCustomerModel target)

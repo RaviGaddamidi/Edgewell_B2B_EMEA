@@ -9,6 +9,7 @@ import de.hybris.platform.acceleratorservices.model.email.EmailAddressModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailMessageModel;
 import de.hybris.platform.acceleratorservices.process.email.context.AbstractEmailContext;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
+import de.hybris.platform.b2b.model.B2BPermissionResultModel;
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
@@ -49,6 +50,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	private B2BCustomerModel orderApprover;
 
 	private List<String> emailList;
+
+	private List<String> emailCCList;
 	@Resource
 	ModelService modelService;
 
@@ -80,19 +83,43 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			setSalesPersonEmailId(salesPersonEmailId);
 			setDisplayName(displayName);
 			emailList = new ArrayList<String>();
+			emailCCList = new ArrayList<String>();
 			b2bCustomerModels = new HashSet<B2BCustomerModel>();
 			b2bCustomerModels = order.getB2bUnit().getApprovers();
+
+
+			final List<B2BPermissionResultModel> b2bPermissionResultModels = (List<B2BPermissionResultModel>) order
+					.getPermissionResults();
+			for (final B2BPermissionResultModel b2bPermissionResultModel : b2bPermissionResultModels)
+			{
+				if (emailList.size() > 0)
+				{
+					for (final String email : emailList)
+					{
+						if (!email.equalsIgnoreCase(b2bPermissionResultModel.getApprover().getEmail()))
+						{
+							emailList.add(b2bPermissionResultModel.getApprover().getEmail());
+						}
+					}
+				}
+				else
+				{
+					emailList.add(b2bPermissionResultModel.getApprover().getEmail());
+				}
+
+			}
+
 			b2bCustomerModelList = new ArrayList<B2BCustomerModel>();
 			orderApprover = ((OrderProcessModel) businessProcessModel).getOrder().getOrderApprover();
 			b2bCustomerModelList.addAll(b2bCustomerModels);
-
 			if (null != b2bCustomerModelList && b2bCustomerModelList.size() > 0)
 			{
 				for (int i = 0; i < b2bCustomerModelList.size(); i++)
 				{
-					emailList.add(b2bCustomerModelList.get(i).getEmail());
+					emailCCList.add(b2bCustomerModelList.get(i).getEmail());
 				}
 			}
+
 		}
 		return super.generate(businessProcessModel, emailPageModel);
 	}
@@ -126,7 +153,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 		}//order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Energizer Order Pending Approval") != -1)
 		{
-			final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
+			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			if (null != emailList && emailList.size() > 0)
 			{
 				// get the list of approver emails and search for the same in the EmailAddress table by flexiblesearchquery, 
@@ -136,20 +163,32 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 				for (int i = 0; i < emailList.size(); i++)
 				{
 					final String emailAddress = emailList.get(i);
-					final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(emailAddress, emailAddress);
-					ccAddress.setEmailAddress(emailAddress);
-					ccAddress.setDisplayName(getDisplayName());
+					final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(emailAddress, emailAddress);
+					toAddress.setEmailAddress(emailAddress);
+					toAddress.setDisplayName(getDisplayName());
 
-					if (null != ccAddress)
+					if (null != toAddress)
 					{
-						ccEmails.add(ccAddress);
+						toEmails.add(toAddress);
 					}
 				}//end of for loop
 				 //emailList = null;
-				final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
-				final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getToEmail(),
-						emailContext.getToDisplayName());
-				toEmails.add(toAddress);
+				final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
+				if (null != emailCCList && emailCCList.size() > 0)
+				{
+					for (int i = 0; i < emailCCList.size(); i++)
+					{
+						final String emailAddress = emailCCList.get(i);
+						final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(
+								emailContext.getToEmail(), emailContext.getToDisplayName());
+						ccAddress.setEmailAddress(emailAddress);
+						ccAddress.setDisplayName(getDisplayName());
+						if (null != ccAddress)
+						{
+							ccEmails.add(ccAddress);
+						}
+					}
+				}
 				final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 						emailContext.getFromDisplayName());
 				return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,

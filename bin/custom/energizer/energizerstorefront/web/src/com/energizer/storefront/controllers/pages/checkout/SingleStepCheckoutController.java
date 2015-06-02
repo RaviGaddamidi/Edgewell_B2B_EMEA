@@ -374,10 +374,18 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			//final String shippingPointId = cartFacade.getSessionCart().getShippingPoint();
 			final String shippingPoint = getShippingPoint();
 			final String soldToAddressId = addressData.getErpAddressId();
+			final int defaultLeadTime = Integer.parseInt(Config.getParameter("defaultLeadTime"));
 			if (shippingPoint != null && soldToAddressId != null)
 			{
 				leadTime = energizerB2BCheckoutFlowFacade.getLeadTimeData(shippingPoint, soldToAddressId);
-				energizerB2BCheckoutFlowFacade.setLeadTime(leadTime);
+				if (leadTime > 0)
+				{
+					energizerB2BCheckoutFlowFacade.setLeadTime(leadTime);
+				}
+				else
+				{
+					energizerB2BCheckoutFlowFacade.setLeadTime(defaultLeadTime);
+				}
 			}
 		}
 		return energizerB2BCheckoutFlowFacade.getCheckoutCart();

@@ -30,6 +30,8 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
@@ -44,6 +46,8 @@ import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopu
  */
 public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFacade implements EnergizerCompanyB2BCommerceFacade
 {
+	private static final Logger LOG = Logger.getLogger(DefaultEnergizerCompanyB2BCommerceFacade.class);
+
 	@Resource(name = "userService")
 	private UserService userService;
 
@@ -105,9 +109,13 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		boolean validateFlag = false;
 		if (null != energizerModel.getMaxUserLimit())
 		{
-
-			validateFlag = ((defaultB2BUnitService.getB2BCustomers(energizerModel).size() - 1) > energizerModel.getMaxUserLimit()) ? true
-					: false;
+			final int b2bUnitLimit = NumberUtils.toInt(energizerModel.getMaxUserLimit());
+			LOG.info("B2B Unit Count is " + b2bUnitLimit);
+			final int totalCustomers = defaultB2BUnitService.getB2BCustomers(energizerModel).size();
+			LOG.info("B2B Unit Size is " + totalCustomers);
+			final int totalCustomer = defaultB2BUnitService.getB2BCustomers(energizerModel).size() - 1;
+			LOG.info("B2B Unit size after is " + totalCustomer);
+			validateFlag = (totalCustomers == b2bUnitLimit) ? true : false;
 		}
 		return validateFlag;
 	}
@@ -188,8 +196,11 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		{
 			energizerB2BCustomerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(customerData.getUid());
 		}
-		energizerCustomerReversePopulator.populate(customerData, energizerB2BCustomerModel);
-		companyB2BCommerceService.saveModel(energizerB2BCustomerModel);
+		if (null != customerData && null != energizerB2BCustomerModel)
+		{
+			energizerCustomerReversePopulator.populate(customerData, energizerB2BCustomerModel);
+			companyB2BCommerceService.saveModel(energizerB2BCustomerModel);
+		}
 	}
 
 	@Override

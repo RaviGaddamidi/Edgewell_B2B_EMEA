@@ -29,31 +29,12 @@ public class B2BCustomerForm extends UpdateProfileForm
 	private boolean active;
 	private String uid;
 	private String parentB2BUnit;
-	private String parentB2BUnitIDName;
-	private String parentB2BUnitName;
 	private Collection<String> roles = new ArrayList<String>();
 	private Collection<CustomerData> approvers;
 	private Collection<B2BUserGroupData> approverGroups;
 	private Collection<B2BUserGroupData> permissionGroups;
 	private Collection<B2BPermissionData> permissions;
 	private String email;
-
-	/**
-	 * @return the parentB2BUnitIDName
-	 */
-	public String getParentB2BUnitIDName()
-	{
-		return parentB2BUnitIDName;
-	}
-
-	/**
-	 * @param parentB2BUnitIDName
-	 *           the parentB2BUnitIDName to set
-	 */
-	public void setParentB2BUnitIDName(final String parentB2BUnitIDName)
-	{
-		this.parentB2BUnitIDName = parentB2BUnitIDName;
-	}
 
 	public String getUid()
 	{
@@ -133,23 +114,6 @@ public class B2BCustomerForm extends UpdateProfileForm
 	public void setParentB2BUnit(final String parentB2BUnit)
 	{
 		this.parentB2BUnit = parentB2BUnit;
-	}
-
-	/**
-	 * @return the parentB2BUnitName
-	 */
-	public String getParentB2BUnitName()
-	{
-		return parentB2BUnitName;
-	}
-
-	/**
-	 * @param parentB2BUnitName
-	 *           the parentB2BUnitName to set
-	 */
-	public void setParentB2BUnitName(final String parentB2BUnitName)
-	{
-		this.parentB2BUnitName = parentB2BUnitName;
 	}
 
 	public String getEmail()

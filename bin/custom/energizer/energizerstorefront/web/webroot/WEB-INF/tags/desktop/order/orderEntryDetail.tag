@@ -15,10 +15,17 @@
 	<c:when test="${entry.rejectedStatus == 'Yes'}">
 		<tr class="item item_order_cls show_err_cls">
 	</c:when>
-	<c:otherwise>
-		<tr class="item item_order_cls">
-	</c:otherwise>
-	</c:choose>
+<c:otherwise>
+	     <c:choose>
+	       <c:when test="${entry.isNewEntry == 'Y' }">
+	      <tr class="item item_order_cls show_prd_cls">
+	       </c:when>
+	       <c:otherwise>
+		     <tr class="item item_order_cls">
+		   </c:otherwise>
+		 </c:choose>
+</c:otherwise>
+</c:choose>
 	
 	<td headers="header2" class="thumb">
 		<a href="${productUrl}">

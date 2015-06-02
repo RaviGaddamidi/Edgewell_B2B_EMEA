@@ -78,7 +78,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		EnergizerB2BUnitModel b2bUnit = null;
 		try
 		{
-			final int maxUserLimit = Integer.parseInt(Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT));
+			final String maxUserLimit = Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT);
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
