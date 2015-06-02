@@ -695,12 +695,13 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 								final Double entryTotla = baseUomPrice * baseUomQuantity;
 								orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
 								orderEntryModel.setTotalPrice(entryTotla);
+								orderEntryModel.setRejectedStatus("No");
+								modelService.save(orderEntryModel);
 							}
 						}
 					}
 				}
-				orderEntryModel.setRejectedStatus("No");
-				modelService.save(orderEntryModel);
+
 			}
 			orderModel.setStatus(OrderStatus.PENDING);
 			modelService.save(orderModel);
