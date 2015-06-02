@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -101,7 +102,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacadeTest
 	public void validateUserCountTest()
 	{
 		final EnergizerB2BUnitModel b2BUnitModel = new EnergizerB2BUnitModel();
-		Mockito.when(defaultB2BUnitService.getB2BCustomers(b2BUnitModel).size() == b2BUnitModel.getMaxUserLimit()).thenReturn(true);
+		Mockito.when(
+				defaultB2BUnitService.getB2BCustomers(b2BUnitModel).size() == NumberUtils.toInt(b2BUnitModel.getMaxUserLimit()))
+				.thenReturn(true);
 	}
 
 	@Test

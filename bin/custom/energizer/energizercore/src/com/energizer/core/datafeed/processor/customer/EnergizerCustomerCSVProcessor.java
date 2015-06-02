@@ -78,7 +78,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		EnergizerB2BUnitModel b2bUnit = null;
 		try
 		{
-			final int maxUserLimit = Integer.parseInt(Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT));
+			final String maxUserLimit = Config.getString(MAX_USER_LIMIT, MAX_USER_LIMIT_COUNT);
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
@@ -104,7 +104,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 					if (!csvValuesMap.get(CUSTOMER_ID).trim().isEmpty())
 					{
 						final EnergizerB2BUnitModel energizeB2BUnit = modelService.create(EnergizerB2BUnitModel.class);
-						energizeB2BUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim() + "--" + csvValuesMap.get(CUSTOMER_NAME).trim());
+						energizeB2BUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim());
 						energizeB2BUnit.setSalesOrganisation(csvValuesMap.get(SALES_ORG).trim());
 						energizeB2BUnit.setDistributionChannel(csvValuesMap.get(DISTRIBUTION_CHANNEL).trim());
 						energizeB2BUnit.setDivision(csvValuesMap.get(DIVISION).trim());
@@ -148,7 +148,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 					//update model and save
 					if (!csvValuesMap.get(CUSTOMER_ID).trim().isEmpty())
 					{
-						//						b2bUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim() + "-" + csvValuesMap.get(CUSTOMER_NAME).trim());
+						//						b2bUnit.setUid(csvValuesMap.get(CUSTOMER_ID).trim());
 						b2bUnit.setSalesOrganisation(csvValuesMap.get(SALES_ORG).trim());
 						b2bUnit.setDistributionChannel(csvValuesMap.get(DISTRIBUTION_CHANNEL).trim());
 						b2bUnit.setDivision(csvValuesMap.get(DIVISION).trim());

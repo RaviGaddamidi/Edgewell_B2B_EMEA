@@ -4,9 +4,11 @@
 package com.energizer.core.datafeed.processor.customer;
 
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
 import com.energizer.core.datafeed.EnergizerCSVFeedError;
@@ -64,6 +67,10 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	String shippingPointNo = "";
 	String shipTo = "";
 	Integer leadTimeInDays = 0;
+	private static final long DEFAULT_LEAD_TIME = 30;
+	private static final String DEFAULT_LEAD_TIME_VALUE = "default.lead.time.value";
+	@Autowired
+	private ConfigurationService configurationService;
 
 	/*
 	 * (non-Javadoc)
@@ -74,6 +81,8 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
 	{
+		final int defaultLeadTime = configurationService.getConfiguration()
+				.getBigInteger(DEFAULT_LEAD_TIME_VALUE, BigInteger.valueOf(DEFAULT_LEAD_TIME)).intValue();
 		try
 		{
 			LOG.info("EnergizerCustomerLeadTimeCSVProcessor:process:Start");
@@ -92,8 +101,11 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 				energizerAccountID = csvValuesMap.get(ENERGIZER_ACCOUNT_ID).trim();
 				shippingPointNo = csvValuesMap.get(SHIPPING_POINT_NO).trim();
 				shipTo = csvValuesMap.get(SHIP_TO).trim();
-				leadTimeInDays = Integer.parseInt(csvValuesMap.get(LEAD_TIME_IN_DAYS).trim());
-				energizerAccountID = csvValuesMap.get(ENERGIZER_ACCOUNT_ID).trim();
+				//set the default LeadTimeInDays to 30 Days as it is configured
+				if (csvValuesMap.get(LEAD_TIME_IN_DAYS).isEmpty())
+				{
+					leadTimeInDays = defaultLeadTime;
+				}
 				final EnergizerB2BUnitModel energizerB2BUnitModel = isEnergizerAccountExist(energizerAccountID);
 				if (energizerB2BUnitModel != null)
 				{
@@ -225,32 +237,41 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 		{
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
-			final String value = record.toMap().get(columnHeader);
-			if (value.isEmpty())
+			String value = record.toMap().get(columnHeader);
+			if (columnHeader.equalsIgnoreCase(ENERGIZER_ACCOUNT_ID) || columnHeader.equalsIgnoreCase(SHIP_TO)
+					|| columnHeader.equalsIgnoreCase(SHIPPING_POINT_NO))
 			{
-				final List<String> columnNames = new ArrayList<String>();
-				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				long recordFailed = getRecordFailed();
-				error = new EnergizerCSVFeedError();
-				error.setLineNumber(record.getRecordNumber());
-				columnNames.add(columnHeader);
-				error.setColumnName(columnNames);
-				error.setMessage(columnHeader + " column should not be empty");
-				columnNumbers.add(columnNumber);
-				error.setUserType(BUSINESS_USER);
-				error.setColumnNumber(columnNumbers);
-				getBusinessFeedErrors().add(error);
-				setBusRecordError(getBusinessFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
+				if (value.isEmpty())
+				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					long recordFailed = getRecordFailed();
+					error = new EnergizerCSVFeedError();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					error.setColumnName(columnNames);
+					error.setMessage(columnHeader + " column should not be empty");
+					columnNumbers.add(columnNumber);
+					error.setUserType(BUSINESS_USER);
+					error.setColumnNumber(columnNumbers);
+					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+				}
 			}
 			if (columnHeader.equalsIgnoreCase(LEAD_TIME_IN_DAYS))
 			{
+				//set the default LeadTimeInDays to 30 Days as it is configured,
+				//then set LeadTimeValue as 30 in order to skip the below validation
+				if (value.isEmpty())
+				{
+					value = configurationService.getConfiguration().getProperty(DEFAULT_LEAD_TIME_VALUE).toString();
+				}
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
-
 					long recordFailed = getRecordFailed();
 					error = new EnergizerCSVFeedError();
 					error.setUserType(BUSINESS_USER);

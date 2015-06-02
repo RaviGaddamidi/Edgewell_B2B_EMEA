@@ -6,4 +6,4 @@
 $lang=es
 
 UPDATE CMSSite;uid[unique=true];name[lang=$lang];locale[lang=$lang]
- ;personalCare;"PersonalCare Product Site";es;
+ ;edgewell;"PersonalCare Product Site";es;
