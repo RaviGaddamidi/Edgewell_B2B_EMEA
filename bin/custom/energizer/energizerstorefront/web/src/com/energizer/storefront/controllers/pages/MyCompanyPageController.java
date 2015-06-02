@@ -70,7 +70,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -428,6 +427,8 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		{
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
 			b2bCustomerForm.setParentB2BUnit(companyB2BCommerceFacade.getParentUnit().getUid());
+			//			b2bCustomerForm.setParentB2BUnitID(companyB2BCommerceFacade.getParentUnit().getUid());
+			//			b2bCustomerForm.setParentB2BUnitName(companyB2BCommerceFacade.getParentUnit().getName());
 			// Add the b2bcustomergroup role by default
 			b2bCustomerForm.setRoles(Collections.singletonList("b2bcustomergroup"));
 			model.addAttribute(b2bCustomerForm);
@@ -636,8 +637,11 @@ public class MyCompanyPageController extends AbstractSearchPageController
 
 		try
 		{
-			energizerCompanyB2BCommerceFacade.updateCustomer(b2bCustomerData);
-			b2bCustomerData.setUid(b2BCustomerForm.getEmail().toLowerCase());
+			if (null != b2bCustomerData)
+			{
+				energizerCompanyB2BCommerceFacade.updateCustomer(b2bCustomerData);
+				b2bCustomerData.setUid(b2BCustomerForm.getEmail().toLowerCase());
+			}
 			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.user.edited");
 		}
 		catch (final DuplicateUidException e)

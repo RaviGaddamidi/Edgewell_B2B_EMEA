@@ -46,7 +46,7 @@
      	<property name="orderBlock" type="boolean"/>
      	<property name="currencyPreference" type="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
      	<property name="minimumOrderValue" type="java.math.BigDecimal"/>
-     	<property name="maxUserLimit" type="Integer"/>
+     	<property name="maxUserLimit" type="String"/>
      	<property name="salesPersonEmailId" type="String"/>
      	<property name="languagePreference" type="String"/>
      	<property name="division" type="String"/>    
