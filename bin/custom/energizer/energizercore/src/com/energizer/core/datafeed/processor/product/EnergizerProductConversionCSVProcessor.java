@@ -288,6 +288,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					setRecordFailed(recordFailed);
 				}
 			}
+
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM))
 			{
