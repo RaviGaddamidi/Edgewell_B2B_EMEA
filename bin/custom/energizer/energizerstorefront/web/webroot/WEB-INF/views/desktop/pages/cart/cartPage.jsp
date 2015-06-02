@@ -25,14 +25,17 @@
 	<div id="breadcrumb" class="breadcrumb">
 		<breadcrumb:breadcrumb breadcrumbs="${breadcrumbs}"/>
 	</div>
+	
+	<div id="businesRuleErrors">
+	</div>
+	
 	<div id="globalMessages">
 		<common:globalMessages/>
 	</div>
 	
 	<cart:cartRestoration/>
 	<cart:cartValidation/>
-	<div id="businesRuleErrors">
-	</div>
+
 	
 	<cms:pageSlot position="TopContent" var="feature" element="div" class="span-24">
 		<cms:component component="${feature}"/>
