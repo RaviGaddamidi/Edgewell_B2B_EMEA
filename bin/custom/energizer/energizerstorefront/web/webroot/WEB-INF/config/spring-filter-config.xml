@@ -48,11 +48,12 @@
 
 		<!-- btg filters -->
 		<!-- Remove these filters to disable BTG integration. Also remove the BtgSegmentBeforeViewHandler -->
-		<ref bean="refererHeaderBtgFilter"/>
+<!-- 		<ref bean="refererHeaderBtgFilter"/>
 		<ref bean="requestParamsBtgFilter"/>
 		<ref bean="productVisitedBtgFilter"/>
 		<ref bean="categoryVisitedBtgFilter"/>
-		<ref bean="btgSegmentFilter"/>	
+		<ref bean="btgSegmentFilter"/> 
+	-->	
 	</util:list>
 
 	<bean id="storefrontTenantFilterChain" class="de.hybris.platform.servicelayer.web.PlatformFilterChain" >
@@ -121,7 +122,7 @@
 	</bean>
 
 	<!-- BTG filters -->
-	<bean id="abstractBtgFilter" class="com.energizer.storefront.filters.btg.AbstractBtgFilter" abstract="true" >
+<!-- 	<bean id="abstractBtgFilter" class="com.energizer.storefront.filters.btg.AbstractBtgFilter" abstract="true" >
 		<property name="eventService" ref="eventService"/>
 	</bean>
 
@@ -135,7 +136,7 @@
 
 	<bean id="categoryVisitedBtgFilter" class="com.energizer.storefront.filters.btg.CategoryVisitedBtgFilter" parent="abstractBtgFilter">
 		<property name="pkResolvingStrategy" ref="categoryPkResolvingStrategy"/>
-	</bean>
+	</bean> -->
 
 	<bean id="btgSegmentFilter" class="com.energizer.storefront.filters.btg.BTGSegmentFilter" >
 		<property name="btgSegmentStrategy" ref="btgSegmentStrategy"/>
