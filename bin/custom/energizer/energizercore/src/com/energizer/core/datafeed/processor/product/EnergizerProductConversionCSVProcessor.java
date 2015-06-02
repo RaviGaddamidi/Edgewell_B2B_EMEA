@@ -292,26 +292,26 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM))
 			{
-				if (uomValue.equalsIgnoreCase(EnergizerCoreConstants.EA) || uomValue.equalsIgnoreCase(EnergizerCoreConstants.CASE))
+				//if (uomValue.equalsIgnoreCase(EnergizerCoreConstants.EA) || uomValue.equalsIgnoreCase(EnergizerCoreConstants.CASE))
+				//{
+				if (!NumberUtils.isNumber(value) || new BigDecimal(value).compareTo(BigDecimal.ZERO) == 0)
 				{
-					if (!NumberUtils.isNumber(value) || new BigDecimal(value).compareTo(BigDecimal.ZERO) == 0)
-					{
-						final List<String> columnNamesB = new ArrayList<String>();
-						final List<Integer> columnNumbersB = new ArrayList<Integer>();
-						error = new EnergizerCSVFeedError();
-						error.setUserType(BUSINESS_USER);
-						error.setLineNumber(record.getRecordNumber());
-						columnNamesB.add(columnHeader);
-						error.setColumnName(columnNamesB);
-						error.setMessage(columnHeader + " column should be numeric and greater than 0");
-						columnNumbersB.add(columnNumber);
-						error.setColumnNumber(columnNumbersB);
-						getBusinessFeedErrors().add(error);
-						setBusRecordError(getBusinessFeedErrors().size());
-						recordFailed++;
-						setRecordFailed(recordFailed);
-					}
+					final List<String> columnNamesB = new ArrayList<String>();
+					final List<Integer> columnNumbersB = new ArrayList<Integer>();
+					error = new EnergizerCSVFeedError();
+					error.setUserType(BUSINESS_USER);
+					error.setLineNumber(record.getRecordNumber());
+					columnNamesB.add(columnHeader);
+					error.setColumnName(columnNamesB);
+					error.setMessage(columnHeader + " column should be numeric and greater than 0");
+					columnNumbersB.add(columnNumber);
+					error.setColumnNumber(columnNumbersB);
+					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
+				//}
 			}
 		}
 	}
