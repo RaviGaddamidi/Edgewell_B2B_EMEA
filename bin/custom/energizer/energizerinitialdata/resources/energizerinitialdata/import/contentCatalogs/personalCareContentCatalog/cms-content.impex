@@ -216,9 +216,9 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 
 # Site Logo Component
 INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang];external
-;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.schicklatinoamerica.com/?genero=hombre;/images/banners/homepage/banners 950px x600px Q4.jpg;true
-;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.schicklatinoamerica.com/?genero=hombre;/images/banners/homepage/banners 950px x600px X3.jpg;true
-;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.bananaboatlatinoamerica.com/;/images/banners/homepage/BB  950px x 600px BB.jpg;true
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.playtexlatinoamerica.com/;/images/banners/homepage/banners 950px x600px Q4.jpg;true
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px X3.jpg;true
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/BB  950px x 600px BB.jpg;true
 
 
 INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
@@ -271,13 +271,13 @@ INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&c
 
 # Footer Component
 INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
-;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/company/about-us/Pages/default.aspx";AboutUSLink;newWindow
+;;AboutUSLink;About US Link;"http://www.energizerholdings.com/en/Pages/default.aspx";AboutUSLink;newWindow
 #;;CopyRightLink;CopyRight Link;"";CopyRightLink;sameWindow
 #;;TrademarkLink;Trademark Link;"http://www.energizerholdings.com/en/Pages/default.aspx";TrademarkLink;sameWindow
-;;TermsAndConditionsLink;Terms And Conditions Link;"http://www.energizerholdings.com/en/pages/legal.aspx";TermsAndConditionsLink;newWindow
-;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizerholdings.com/en/pages/privacypolicy.aspx";PrivacyPolicyLink;newWindow
+;;TermsAndConditionsLink;Terms And Conditions Link;"http://www.energizer.com/energizer-legal-statement";TermsAndConditionsLink;newWindow
+;;PrivacyPolicyLink;Privacy Policy Link;"http://www.energizer.com/privacy-policy";PrivacyPolicyLink;newWindow
 ;;ContactUSLink;Contact US Link;"http://www.energizerholdings.com/en/pages/contactus.aspx";ContactUSLink;newWindow
-;;LegalLink;Legal Link;"http://www.energizerholdings.com/en/pages/legal.aspx";LegalLink;newWindow
+;;LegalLink;Legal Link;"http://www.energizer.com/energizer-legal-statement";LegalLink;newWindow
 ;;FAQLink;FAQ Link;"http://www.energizerholdings.com/en/pages/legal.aspx";FAQLink;newWindow
 
 #INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
