@@ -91,36 +91,68 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 					getBusinessFeedErrors().clear();
 					continue;
 				}
+				LOG.info("Processing product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
 				try
 				{
 					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
 							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
-					if (null != existEnergizerProd)
-					{
-						addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
-						succeedRecord++;
-						setRecordSucceeded(succeedRecord);
-						LOG.info("****************** ProductMediaModel updated successfully ****************** ");
-					}
 				}
 				catch (final Exception e)
 				{
 					long recordFailed = getRecordFailed();
 					EnergizerCSVFeedError error = null;
-					LOG.info("existEnergizerProd DOES NOT EXIST");
+					LOG.info("Product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " DOES NOT EXIST");
 					final List<String> columnNames = new ArrayList<String>();
 					error = new EnergizerCSVFeedError();
 					error.setUserType(BUSINESS_USER);
 					error.setLineNumber(record.getRecordNumber());
 					columnNames.add(EnergizerCoreConstants.ERPMATERIAL_ID);
 					error.setColumnName(columnNames);
-					error.setMessage("Product " + EnergizerCoreConstants.ERPMATERIAL_ID + " DOES NOT EXIST");
+					error.setMessage("Product " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " does not exist.");
 					getBusinessFeedErrors().add(error);
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+
+					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+					getBusinessFeedErrors().clear();
+
 					continue;
 				}
+				if (null != existEnergizerProd)
+				{
+					try
+					{
+						addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
+					}
+					catch (final Exception e)
+					{
+						long recordFailed = getRecordFailed();
+						EnergizerCSVFeedError error = null;
+						LOG.info("Image File does not exist for product " + existEnergizerProd.getCode());
+						final List<String> columnNames = new ArrayList<String>();
+						error = new EnergizerCSVFeedError();
+						error.setUserType(BUSINESS_USER);
+						error.setLineNumber(record.getRecordNumber());
+						columnNames.add(EnergizerCoreConstants.DISPLAY_IMAGE_PATH);
+						error.setColumnName(columnNames);
+						error.setMessage("Display image path not found for product " + existEnergizerProd.getCode());
+						getBusinessFeedErrors().add(error);
+						setBusRecordError(getBusinessFeedErrors().size());
+						recordFailed++;
+						setRecordFailed(recordFailed);
+
+						csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+						getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+						getBusinessFeedErrors().clear();
+
+						continue;
+					}
+				}
+				succeedRecord++;
+				setRecordSucceeded(succeedRecord);
+				LOG.info("****************** ProductMediaModel updated successfully ****************** ");
 			}
 		}
 		catch (final Exception e)
