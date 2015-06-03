@@ -58,7 +58,7 @@
 								<tr>
 									<td align="left" valign="top">
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.getMessage('salutation', ${ctx.orderData.user.uid})}</b>,</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.thankYouForOrder}</font></p>
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('thankYouForOrder',"#genHtmlLinkStartTag($orderInfoUrl)","#genHtmlBoldFont(${ctx.orderData.erpOrderNumber})", "#genHtmlLinkEndTag()")}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('shippedItems', "#genHtmlLinkStartTag($orderInfoUrl)", "#genHtmlBoldFont(${ctx.orderData.erpOrderNumber})", "#genHtmlLinkEndTag()")}</font></p>
 										<br/>
 										<!--products start-->
