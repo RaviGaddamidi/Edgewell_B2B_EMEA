@@ -991,6 +991,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			entryModel.setAdjustedLinePrice(new BigDecimal("0.00"));
 			entryModel.setAdjustedQty(0);
 			entryModel.setRejectedStatus("No");
+			entryModel.setIsNewEntry("N");
 			energizerB2BCheckoutFlowFacade.saveEntry(entryModel);
 			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
