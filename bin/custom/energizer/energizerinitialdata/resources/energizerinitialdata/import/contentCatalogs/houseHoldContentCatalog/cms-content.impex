@@ -145,7 +145,7 @@ INSERT_UPDATE HeaderNavigationComponent;$contentCV[unique=true];uid[unique=true]
 
 # CMS Mini Cart Component
 INSERT_UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;totalDisplay(code);shownProductCount;lightboxBannerComponent(&componentRef)
-;;MiniCart;Mini Cart;MiniCart;TOTAL;3
+;;MiniCart;Mini Cart;MiniCart;TOTAL;4
 
 
 # CMS SearchBox Components
@@ -163,18 +163,22 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 ;;/images/banners/homepage/ENR_Battery.jpg;ENR_Battery.jpg;$siteResource/images/banners/homepage/ENR_Battery.jpg;image/jpg;Energizer AA
 ;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Energizer Portable Lighting
 ;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Eveready Non-Rechargeable
+;;/images/banners/homepage/EVR_Lights.jpg;EVR_Lights.jpg;$siteResource/images/banners/homepage/EVR_Lights.jpg;image/jpg;Eveready Portable Lighting
 #;;/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;Powertools_468x418_Rotating_Image_EN_02.jpg;$siteResource/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;image/jpg;Energizer
 
 
 # Site Logo Component
 INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang];external
-;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;;/images/banners/homepage/ENR_Battery.jpg;true
-;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;;/images/banners/homepage/ENR_Lights.jpg;true
-;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;;/images/banners/homepage/EVR_Battery.jpg;true
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;c/Energizer Batteries;/images/banners/homepage/ENR_Battery.jpg;true
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;c/Lighting Products;/images/banners/homepage/ENR_Lights.jpg;true
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;c/Eveready Batteries;/images/banners/homepage/EVR_Battery.jpg;true
+;;HomePageBannerComponent44;Homepage banner component44;HomePageBannerComponent44;c/Lighting Products;/images/banners/homepage/EVR_Lights.jpg;true
+
+
 
 
 INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
-;;rotatingbanner;rotatingbanner;rotatingbanner;HomePageBannerComponent11,HomePageBannerComponent22,HomePageBannerComponent33
+;;rotatingbanner;rotatingbanner;rotatingbanner;HomePageBannerComponent11,HomePageBannerComponent22,HomePageBannerComponent33,HomePageBannerComponent44
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
 ;;Section1Slot-EnergizerHomePageBanner;rotatingbanner
