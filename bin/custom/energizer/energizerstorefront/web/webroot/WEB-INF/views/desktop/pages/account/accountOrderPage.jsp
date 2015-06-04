@@ -50,10 +50,10 @@
 				</c:if>	
 				<c:choose>
 					<c:when test="${empty orderData.erpOrderCreator}">
-						 <spring:theme code="Order Type" /> : <p><spring:theme code="text.account.order.portal" /></p>
+					<p class="reduce_space_cls"> <spring:theme code="Order Type" /> : <spring:theme code="text.account.order.portal" /></p>
 					</c:when>
 					<c:otherwise>
-						<spring:theme code="Order Type" /> : <p><spring:theme code="text.account.order.offline" /></p>
+					 <p class="reduce_space_cls"><spring:theme code="Order Type" /> :<spring:theme code="text.account.order.offline" /></p>
 					</c:otherwise>
 				 </c:choose>
 			</div>	
