@@ -218,9 +218,8 @@ public class UserManagementPageController extends MyCompanyPageController
 			model.addAttribute("breadcrumbs", breadcrumbs);
 			model.addAttribute("metaRobots", "no-index,no-follow");
 			model.addAttribute("action", "manageUsers");
-			GlobalMessages.addMessage(model, GlobalMessages.ERROR_MESSAGES_HOLDER, "text.manageuser.create.maximumusers",
-					new Object[]
-					{ b2bModel.getMaxUserLimit() });
+			GlobalMessages.b2bUnitMaxUserConfMsgs(model, "text.manageuser.create.maximumusers", new Object[]
+			{ b2bModel.getMaxUserLimit() });
 			return REDIRECT_TO_MANAGE_USERS;
 		}
 		return super.createUser(model);
@@ -334,8 +333,8 @@ public class UserManagementPageController extends MyCompanyPageController
 			return updatePassword(customerResetPasswordForm.getUid(), model);
 		}
 
-		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder
-				.createManageUserDetailsBreadcrumb(customerResetPasswordForm.getUid());
+		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserDetailsBreadcrumb(customerResetPasswordForm
+				.getUid());
 		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-users/restpassword?user=%s",
 				urlEncode(customerResetPasswordForm.getUid())), getMessageSource().getMessage(
 				"text.company.manageusers.restpassword.breadcrumb", new Object[]
