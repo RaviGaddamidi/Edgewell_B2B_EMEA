@@ -50,7 +50,7 @@
 								</tr>
 								<tr>
 									<td align="left" valign="top">
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.getMessage('salutation', ${ctx.title},${ctx.displayName})}</b>,</font></p>
+									    <p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.salutation}</b>,</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('thankYouForOrder', "#genHtmlBoldFont(${ctx.order.code})", "#genHtmlBoldFont(${ctx.order.totalPrice.formattedValue})")}</font></p>
 										<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
 											<tr>
