@@ -33,6 +33,8 @@ public class GlobalMessages
 	public static final String ERROR_MESSAGES_HOLDER = "accErrorMsgs";
 	public static final String BUSINESS_RULE_MESSAGES = "businessRuleError";
 	public static final String FORGOT_PWD_CONF_MESSAGES = "forgotPwdConfMsgs";
+	public static final String B2BUNIT_MAZUSER_CONF_MESSAGE = "b2bUnitMaxUserConfMsgs";
+
 
 	public static void addConfMessage(final Model model, final String messageKey)
 	{
@@ -58,6 +60,11 @@ public class GlobalMessages
 			final Object[] attributes)
 	{
 		addMessage(model, FORGOT_PWD_CONF_MESSAGES, messageKey, attributes);
+	}
+
+	public static void b2bUnitMaxUserConfMsgs(final Model model, final String messageKey, final Object[] attributes)
+	{
+		addMessage(model, B2BUNIT_MAZUSER_CONF_MESSAGE, messageKey, attributes);
 	}
 
 	public static boolean hasErrorMessage(final Model model)

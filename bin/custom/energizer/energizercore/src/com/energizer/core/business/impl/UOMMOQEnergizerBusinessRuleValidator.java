@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import com.energizer.business.BusinessRuleError;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.services.product.EnergizerProductService;
 
@@ -30,6 +31,7 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 	private static final String UOM_NOT_VALID = "uom.business.rule.uomnotvalid";
 	private static final String MOQ_NOT_VALID = "uom.business.rule.moqnotvalid";
 	private static final String MOQ_NOT_EXIST = "basket.page.moq.notexists";
+	private static final String CONVERSION_NOT_VALID = "product.business.rule.convesrion.notvalid";
 
 	@Override
 	public void validate(final OrderEntryData orderEntryData)
@@ -37,6 +39,7 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 		//final List<BusinessRuleError> orderEntryDataErrorList = new ArrayList<BusinessRuleError>();
 		String productCode = null;
 		EnergizerCMIRModel cmir = null;
+		EnergizerProductConversionFactorModel energizerProductConversionFactorModel = null;
 		final boolean isCustomerMaterialId = false;
 		if (hasErrors())
 		{
@@ -70,6 +73,11 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 						.getB2BUnitForLoggedInUser().getUid());
 			}
 
+			energizerProductConversionFactorModel = energizerProductService.getEnergizerProductConversion(productCode,
+					energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getUid());
+
+
+
 			if (cmir == null)
 			{
 				final BusinessRuleError error = new BusinessRuleError();
@@ -100,6 +108,35 @@ public class UOMMOQEnergizerBusinessRuleValidator extends AbstractEnergizerOrder
 					error.setMessage(productCode + " " + Localization.getLocalizedString(MOQ_NOT_VALID) + cmir.getOrderingUnit() + " "
 							+ cmir.getUom());
 					addError(error);
+				}
+
+			}
+
+			final String cmirUOM = cmir.getUom();
+
+			if (energizerProductConversionFactorModel == null)
+			{
+
+				final BusinessRuleError error = new BusinessRuleError();
+				error.setMessage(productCode + " " + Localization.getLocalizedString(" Product does not have Conversion for ")
+						+ cmirUOM);
+				addError(error);
+
+			}
+			else
+			{
+				final String alternateUOM = energizerProductConversionFactorModel.getAlternateUOM(); // EACH / CASE/ PALLET / LAYER
+
+				if (null != alternateUOM && null != cmirUOM && alternateUOM.equalsIgnoreCase(cmirUOM))
+				{
+
+				}
+				else
+				{
+					final BusinessRuleError error = new BusinessRuleError();
+					error.setMessage(productCode + " " + Localization.getLocalizedString(PRODUCT_NOT_FOUND) + cmirUOM);
+					addError(error);
+
 				}
 
 			}

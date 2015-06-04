@@ -128,9 +128,11 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 
 	protected boolean isNotLoginRequest(final HttpServletRequest request)
 	{
-		return !request.getRequestURI().contains(LOGIN_URL) && !request.getRequestURI().contains(LANGUAGE_URL)
-				&& !request.getRequestURI().contains(Config.getParameter(TERMS_CONDITIONS))
-				&& !request.getRequestURI().contains(Config.getParameter(FAQ));
+		final boolean loginUrlFlag = !request.getRequestURI().contains(LOGIN_URL);
+		final boolean languageUrlFlag = !request.getRequestURI().contains(LANGUAGE_URL);
+		final boolean tncFlag = !request.getRequestURI().contains(Config.getParameter(TERMS_CONDITIONS));
+		final boolean fagFlag = !request.getRequestURI().contains(Config.getParameter(FAQ));
+		return loginUrlFlag && languageUrlFlag && tncFlag && fagFlag;
 	}
 
 }

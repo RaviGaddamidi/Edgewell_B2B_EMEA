@@ -78,7 +78,7 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 
 	// uom constants
 	public static final String EA = "EA";
-	public static final String INTERPACK = "PK";
+	public static final String INTERPACK = "IP";
 	public static final String CASE = "CS";
 	public static final String LAYER = "LAY";
 	public static final String PALLET = "PAL";

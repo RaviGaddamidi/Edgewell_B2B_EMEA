@@ -115,7 +115,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 			LOG.info("B2B Unit Size is " + totalCustomers);
 			final int totalCustomer = defaultB2BUnitService.getB2BCustomers(energizerModel).size() - 1;
 			LOG.info("B2B Unit size after is " + totalCustomer);
-			validateFlag = (totalCustomers == b2bUnitLimit) ? true : false;
+			validateFlag = (totalCustomers >= b2bUnitLimit) ? true : false;
 		}
 		return validateFlag;
 	}

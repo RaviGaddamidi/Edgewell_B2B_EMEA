@@ -929,3 +929,10 @@ table.user-details-cls td:last-child a{
 table.user-details-cls td:first-child{
 	font-weight: bold;
 }
+.create-permission-cls .control-group input[type="text"]{width:250px;}
+.table_permission_cls table.table_budget td:last-child {
+	text-align: left;
+}
+.table_permission_cls table.table_budget td:first-child {
+	font-weight: bold;
+}

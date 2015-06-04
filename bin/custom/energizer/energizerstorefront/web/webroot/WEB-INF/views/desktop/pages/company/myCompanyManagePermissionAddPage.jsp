@@ -29,11 +29,13 @@
 		<common:globalMessages />
 	</div>
 	<nav:myCompanyNav selected="managePermissions" />
-	<div class="column companyContentPane clearfix">
-		<cms:pageSlot position="TopContent" var="feature" element="div" class="span-20 wide-content-slot cms_disp-img_slot">
-			<cms:component component="${feature}"/>
-		</cms:pageSlot>		
-		<div class="headline"><spring:theme code="text.company.managePermissions.add.page.title" text="Create Permission" /></div>
-		<company:b2bPermissionForm cancelUrl="${cancelUrl}" saveUrl="${savePermissionDetailsUrl}" b2BPermissionForm="${b2BPermissionForm}"/>
-	</div>
+	<div class="create-permission-cls">
+		<div class="column companyContentPane clearfix">
+			<cms:pageSlot position="TopContent" var="feature" element="div" class="span-20 wide-content-slot cms_disp-img_slot">
+				<cms:component component="${feature}"/>
+			</cms:pageSlot>		
+			<div class="headline"><spring:theme code="text.company.managePermissions.add.page.title" text="Create Permission" /></div>
+			<company:b2bPermissionForm cancelUrl="${cancelUrl}" saveUrl="${savePermissionDetailsUrl}" b2BPermissionForm="${b2BPermissionForm}"/>
+		</div>
+  </div>
 </template:page>
