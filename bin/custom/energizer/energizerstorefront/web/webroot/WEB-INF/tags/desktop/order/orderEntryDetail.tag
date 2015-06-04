@@ -26,9 +26,9 @@
 		 </c:choose>
 </c:otherwise>
 </c:choose>
-	
+
 	<td headers="header2" class="thumb">
-		<a href="${productUrl}">
+		<a class="orderImageFix" href="${productUrl}">
 			<product:productPrimaryImage product="${entry.product}" format="thumbnail"/>
 		</a>
 		<a href="${entry.product.purchasable ? productUrl : ''}">${entry.product.name}</a>

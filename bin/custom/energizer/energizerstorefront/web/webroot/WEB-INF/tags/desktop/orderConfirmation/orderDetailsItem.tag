@@ -33,6 +33,7 @@
 			</tr>
 		</thead>
 		<tbody>
+		
 		<c:forEach items="${order.entries}" var="entry">
 			<c:if test="${empty entry.entries}" >
 					<orderConfirmation:orderEntryDetail order="${order}" entry="${entry}"/>
@@ -40,6 +41,7 @@
 			
 			<c:if test="${not empty entry.entries}" >
 				<c:forEach items="${entry.entries}" var="subEntry">
+				
 					 <orderConfirmation:orderEntryDetail order="${order}" entry="${subEntry}"/> 
 				</c:forEach>
 			</c:if>	

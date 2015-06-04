@@ -205,3 +205,12 @@ table.orderListApprovTbl-cls td:last-child p{width:105px;word-wrap:break-word;}
 	  text-align: center;
 }*/
 
+.orderList .orderListTable tbody td a {
+    text-decoration: underline;
+    border: 0px solid;
+}
+.orderList .orderListTable tbody td a.orderImageFix {
+    text-decoration: none;
+    border: 0px solid;
+}
+
