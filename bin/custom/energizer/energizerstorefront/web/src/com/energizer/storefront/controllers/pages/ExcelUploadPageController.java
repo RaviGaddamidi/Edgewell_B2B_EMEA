@@ -50,6 +50,7 @@ import com.energizer.core.product.data.EnergizerFileUploadData;
 import com.energizer.facades.order.EnergizerExcelUploadFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
 import com.energizer.services.order.EnergizerCartService;
+import com.energizer.services.product.EnergizerProductService;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
@@ -105,16 +106,21 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	@Resource
 	EnergizerCartService energizerCartService;
 
+	@Resource
+	EnergizerProductService energizerProductService;
+
 	@Value("${excelFileSize}")
 	private String excelFileSize;
 
 	Map<String, List<EnergizerFileUploadData>> shipmentMap = new HashMap<String, List<EnergizerFileUploadData>>();
+	Map<String, String> shipmentNameMap = new HashMap<String, String>();
 
 	@RequestMapping(value = "/excelFileToUpload", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String uploadExcelFile(final Model model, @RequestParam("file") final CommonsMultipartFile file)
 			throws CMSItemNotFoundException
 	{
+
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PRODUCT_ENTRIES_PAGE));
 		model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.excelFileUpload"));
@@ -217,6 +223,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 					else
 					{
 						final String shipmentPointId = (energizerCMIRModel.getShippingPoint());
+						shipmentNameMap.put(shipmentPointId, energizerProductService.getShippingPointName(shipmentPointId));
 						if (shipmentMap.containsKey(shipmentPointId))
 						{
 							final List<EnergizerFileUploadData> tempList = shipmentMap.get(shipmentPointId);
@@ -227,10 +234,13 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 							final List<EnergizerFileUploadData> uploadDataCMIRList = new ArrayList<EnergizerFileUploadData>();
 							uploadDataCMIRList.add(energizerCMIRModel);
 							shipmentMap.put(shipmentPointId, uploadDataCMIRList);
+
 						}
 					}
 				}
 				model.addAttribute("shipmentData", shipmentMap);
+				model.addAttribute("shipmentName", shipmentNameMap);
+
 			}
 			catch (final FileNotFoundException fne)
 			{
@@ -286,6 +296,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 						energizerFileUploadData.getCustomerMaterialId(), cmir);
 
 				model.addAttribute("shipmentData", shipmentMap);
+				model.addAttribute("shipmentName", shipmentNameMap);
+
 
 				if (orderEntry != null)
 				{

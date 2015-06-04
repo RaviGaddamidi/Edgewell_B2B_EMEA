@@ -37,7 +37,7 @@
 		<table  cellspacing="10" cellpadding="10" border="1">
 			<thead>
 				<tr>
-						<th bordercolor="solid black" id="header1">
+						<th bordercolor="solid black" id="header1" style="text-align:left;">
 						<spring:theme
 						code="text.account.excelUpload.orderShipmentPoint" text="Shipping Point" />
 						</th>
@@ -45,26 +45,34 @@
 						<%-- <th id="header2"><spring:theme
 						code="text.account.excelUpload.productData" text="Product Data" />
 						 --%>
+						 
 									
-										<th id="header3" >
+									<!--	<th id="header3" >
 										<spring:theme
-										code="text.account.excelUpload.materialId" text="Material Id" />
-										</th>
+						code="text.account.excelUpload.orderShipmentPointName" text="Shipping Point Name" />
+										
+										</th> -->
 								
 										<th id="header4">
 										<spring:theme
-										code="text.account.excelUpload.customerMaterialId" text="Customer Material Id" />
+										code="text.account.excelUpload.materialId" text="Material Id" />
 										</th>
 						
 										<th id="header5">
 										<spring:theme
-										code="text.account.excelUpload.uom" text="UOM" />
+										code="text.account.excelUpload.customerMaterialId" text="Customer Material Id" />
 										</th>
 						
 										<th id="header6">
 										<spring:theme
-										code="text.account.excelUpload.quantity" text="Quantity" />
+										code="text.account.excelUpload.uom" text="UOM" />
 										</th>
+										<th id="header7">
+										<spring:theme
+										code="text.account.excelUpload.quantity" text="Quantity" />
+						              </th>
+										
+										
 
 					</tr>
 			
@@ -82,18 +90,31 @@
 								
 							<tr>
 							<c:if test="${setShipmentKey eq 0 and listLoop.index eq 0}">
-							<td headers="header2" ><ycommerce:testId
+							<td headers="header2" style="text-align:left;"><ycommerce:testId
 								code="orderHistory_orderNumber_link">
 								<input type="radio" id='buttonStatus' name="shippingPoint" class="shippingPointRadioButton" value="${shipmentDetails.key}">
 								<c:out value="${shipmentDetails.key}" default="Not Available"
-									escapeXml="false"></c:out>	
+									escapeXml="false"></c:out>&nbsp-
 									</ycommerce:testId>
 									<c:set var="setShipmentKey" value="1"></c:set>
+									
+									<c:forEach items="${shipmentName}" var="shipmentNameDetails">
+								<c:set var="setShipmentNameKey" value="0"></c:set>
+							    <c:if test="${shipmentDetails.key eq shipmentNameDetails.key}">
+							  <c:out value="${shipmentNameDetails.value}" default="Not Available"
+									escapeXml="false"></c:out>
+									</c:if>
+									
+								</c:forEach> 
+									
 									</td>
 							</c:if>
+						
 							<c:if test="${setShipmentKey eq 1 and listLoop.index gt 0}">
 							<td headers="header2" >&nbsp;&nbsp;</td>
 							</c:if>
+								
+								
 								
 								<td headers="header3"><ycommerce:testId
 								code="orderHistory_orderNumber_link">
@@ -114,11 +135,14 @@
 								code="orderHistory_orderDate_label">
 								<%-- <c:out value="${uploadDataList.quantity}" default="Not Available"
 									escapeXml="false"></c:out> --%>
-									
+										
 								<input type="hidden" name="productCode" value="${uploadDataList.materialId}"/>
 								<input type="text" name="qty" size="4" class="excelOrderModifiedQuantity" value="${uploadDataList.quantity}"  />
 								<input type="hidden" name="moq" class="minorderQuantity" value="${uploadDataList.orderingUnit}" />	
 								</ycommerce:testId></td>
+								
+													
+									
 						</tr>
 							</c:forEach>
 					</tr>
