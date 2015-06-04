@@ -56,17 +56,17 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	protected FlexibleSearchService flexibleSearchService;
 
 	@Resource
-	DefaultEnergizerCustomerLeadTimeFacade defaultEnergizerCustomerLeadTimeFacade;
+	private DefaultEnergizerCustomerLeadTimeFacade defaultEnergizerCustomerLeadTimeFacade;
 	private static final Logger LOG = Logger.getLogger(EnergizerCustomerLeadTimeCSVProcessor.class);
 
 	private static String ENERGIZER_ACCOUNT_ID = "EnergizerAccountID";
 	private static String SHIPPING_POINT_NO = "ShippingPointNo";
 	private static String SHIP_TO = "ShipTo";
 	private static String LEAD_TIME_IN_DAYS = "LeadTimeInDays";
-	String energizerAccountID = "";
-	String shippingPointNo = "";
-	String shipTo = "";
-	Integer leadTimeInDays = 0;
+	private static String energizerAccountID = "";
+	private static String shippingPointNo = "";
+	private static String shipTo = "";
+	private static Integer leadTimeInDays = 0;
 	private static final long DEFAULT_LEAD_TIME = 30;
 	private static final String DEFAULT_LEAD_TIME_VALUE = "default.lead.time.value";
 	@Autowired

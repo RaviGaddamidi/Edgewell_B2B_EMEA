@@ -128,7 +128,7 @@
 				<td>
 					<spring:theme code="text.company.user.parentBusinessUnit" text="Parent Business Unit:  "/>
 				</td>
-				<td><%-- This link is commented as per demo discussion, by Selva
+				<td><%-- This link is commented as per demo discussion with SS and Suriya, by Selva
 				<a href="${unitDetailsUrl}">${customerData.unit.name}</a> --%>${customerData.unit.name}</td>
 			</tr>
 			<tr>
@@ -153,7 +153,7 @@
 					<table class="orderListTable">
 						<thead>
 						<tr>
-							<th id="roles">
+							<th id="roles" style="text-align: left;">
 								<spring:theme code="text.company.manageUser.roles" text="Roles"/>
 							</th>
 						</tr>
@@ -245,9 +245,8 @@
 						</c:forEach>
 						</tbody>
 					</table>
-	<%-- 
-	As per demo discussion, this sections are commented.
-	
+ 
+	<!-- As per demo discussion with SS and suriya, the below sections are commented. -->
 	<div class="headline"><spring:theme code="text.company.manageUser.permission.title" text="Permissions"/></div>
 	<div class="right">
 		<a href="${permissionsUrl}" class="button edit"><spring:theme code="text.edit" text="Edit"/></a>
@@ -345,7 +344,7 @@
 						</c:forEach>
 						</tbody>
 					</table>
-		
+		<%-- 
 	<div class="headline"><spring:theme code="text.company.manageUser.usergroups.title" text="User Groups"/></div>
 	<div class="right"><a href="${usergroupsUrl}" class="button edit"><spring:theme code="text.edit" text="Edit"/></a></div>
 	<div class="description"><spring:theme code="text.company.manageusers.usergroups.subtitle" /></div>
@@ -446,7 +445,7 @@
 							</tr>
 						</c:forEach>
 						</tbody>
-					</table>
+					</table> --%>
 	
-</div> --%>
+</div> 
 </template:page>

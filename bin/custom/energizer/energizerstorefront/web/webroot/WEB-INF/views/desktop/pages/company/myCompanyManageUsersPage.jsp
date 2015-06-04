@@ -53,7 +53,7 @@
 									<spring:theme code="text.company.column.parentUnit.name" text="Parent Unit"/>
 								</th>
 								<th id="header4">
-									<spring:theme code="text.company.manageUser.user.costCenter" text="Cost center"/>
+								<spring:theme code="text.company.manageUser.user.costCenter" text="Cost center"/>
 								</th>
 								<th id="header5">
 									<spring:theme code="text.company.status.title" text="Status"/>
