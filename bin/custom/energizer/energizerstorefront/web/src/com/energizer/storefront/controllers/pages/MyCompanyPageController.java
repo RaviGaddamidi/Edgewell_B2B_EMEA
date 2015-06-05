@@ -92,6 +92,7 @@ import com.energizer.storefront.forms.validation.B2BBudgetFormValidator;
 import com.energizer.storefront.forms.validation.B2BPermissionFormValidator;
 import com.energizer.storefront.userform.validator.EmailValidator;
 import com.energizer.storefront.userform.validator.UserRoleValidator;
+import com.energizer.storefront.util.XSSFilterUtil;
 
 
 /**
@@ -481,14 +482,14 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			return ControllerConstants.Views.Pages.MyCompany.MyCompanyManageUserAddEditFormPage;
 		}
 		final CustomerData b2bCustomerData = new CustomerData();
-		b2bCustomerData.setTitleCode(b2BCustomerForm.getTitleCode());
-		b2bCustomerData.setFirstName(b2BCustomerForm.getFirstName());
-		b2bCustomerData.setLastName(b2BCustomerForm.getLastName());
-		b2bCustomerData.setEmail(b2BCustomerForm.getEmail());
-		b2bCustomerData.setDisplayUid(b2BCustomerForm.getEmail());
+		b2bCustomerData.setTitleCode(XSSFilterUtil.filter(b2BCustomerForm.getTitleCode()));
+		b2bCustomerData.setFirstName(XSSFilterUtil.filter(b2BCustomerForm.getFirstName()));
+		b2bCustomerData.setLastName(XSSFilterUtil.filter(b2BCustomerForm.getLastName()));
+		b2bCustomerData.setEmail(XSSFilterUtil.filter(b2BCustomerForm.getEmail()));
+		b2bCustomerData.setDisplayUid(XSSFilterUtil.filter(b2BCustomerForm.getEmail()));
 		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData.setRoles(b2BCustomerForm.getRoles());
-		b2bCustomerData.setContactNumber(b2BCustomerForm.getContactNumber());
+		b2bCustomerData.setContactNumber(XSSFilterUtil.filter(b2BCustomerForm.getContactNumber()));
 		model.addAttribute(b2BCustomerForm);
 		model.addAttribute("titleData", getUserFacade().getTitles());
 		/**

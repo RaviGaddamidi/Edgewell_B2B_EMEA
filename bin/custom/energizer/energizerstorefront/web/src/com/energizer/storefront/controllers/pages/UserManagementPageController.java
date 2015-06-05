@@ -60,6 +60,7 @@ import com.energizer.storefront.controllers.util.GlobalMessages;
 import com.energizer.storefront.forms.B2BCustomerForm;
 import com.energizer.storefront.forms.B2BPermissionForm;
 import com.energizer.storefront.forms.CustomerResetPasswordForm;
+import com.energizer.storefront.util.XSSFilterUtil;
 
 
 /**
@@ -290,7 +291,7 @@ public class UserManagementPageController extends MyCompanyPageController
 		if (!model.containsAttribute("customerResetPasswordForm"))
 		{
 			final CustomerResetPasswordForm customerResetPasswordForm = new CustomerResetPasswordForm();
-			customerResetPasswordForm.setUid(user);
+			customerResetPasswordForm.setUid(XSSFilterUtil.filter(user));
 			model.addAttribute("customerResetPasswordForm", customerResetPasswordForm);
 		}
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
@@ -314,7 +315,7 @@ public class UserManagementPageController extends MyCompanyPageController
 		{
 			model.addAttribute(customerResetPasswordForm);
 			GlobalMessages.addErrorMessage(model, "form.global.error");
-			return updatePassword(customerResetPasswordForm.getUid(), model);
+			return updatePassword(XSSFilterUtil.filter(customerResetPasswordForm.getUid()), model);
 		}
 
 		if (customerResetPasswordForm.getNewPassword().equals(customerResetPasswordForm.getCheckNewPassword()))
