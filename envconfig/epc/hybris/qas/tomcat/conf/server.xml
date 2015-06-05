@@ -52,8 +52,6 @@
 
     <Connector port="${tomcat.http.port}"
     				maxHttpHeaderSize="8192"
-			   proxyName="energizer.local.com"
-			   proxyPort="80"
                maxThreads="${tomcat.maxthreads}"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
@@ -65,8 +63,8 @@
 
     <Connector port="${tomcat.ssl.port}"
     				maxHttpHeaderSize="8192"
-			   proxyName="energizer.local.com"
-			   proxyPort="443"
+			   proxyName="qa.edgewell.com"
+			   proxyPort="63322"
                maxThreads="150"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
