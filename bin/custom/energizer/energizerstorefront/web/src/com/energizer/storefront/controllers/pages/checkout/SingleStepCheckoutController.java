@@ -602,6 +602,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	public CartData setPurchaseOrderNumber(@RequestParam(value = "purchaseOrderNumber") final String purchaseOrderNumber)
 	{
 		getCheckoutFlowFacade().setPurchaseOrderNumber(purchaseOrderNumber);
+		LOG.info("Purchase order no set in cart " + purchaseOrderNumber);
 		final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
 
 		return cartData;

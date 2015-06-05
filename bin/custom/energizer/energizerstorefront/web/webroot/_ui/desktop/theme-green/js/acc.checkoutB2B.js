@@ -833,11 +833,15 @@ document.assignLeadTimeToDatePicker = function() {
 };
 
 $('#checkoutPlaceOrder').click(function(){
-    
+	     
       var poNumber = $("#PurchaseOrderNumber").val();
       var selectedDate = $('#datepicker-2').val();    
-      
+      var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
       if(poNumber){
+    	  if(poNumberPattern.test(poNumber)){
+    		$.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
+                  ACC.checkoutB2B.refresh(data);            
+            });
             if($("#Terms1").prop('checked')){
                   if(selectedDate){
                         if(isDate(selectedDate)){
@@ -854,7 +858,7 @@ $('#checkoutPlaceOrder').click(function(){
                         }
                   }
                   else{
-                        var html = "<div class='alert negative'>Please select delivery address.</div>";
+                        var html = "<div class='alert negative'>Please select delivery address and date</div>";
                         $('#globalMessages').html(html);
                         $("html, body").animate({ scrollTop: 0 }, 50);
                         return false;
@@ -866,7 +870,13 @@ $('#checkoutPlaceOrder').click(function(){
                   $('#globalMessages').html(html);
                   $("html, body").animate({ scrollTop: 0 }, 50);
                   return false;
-            }
+            }//end
+    	  }else{
+    		  var html = "<div class='alert negative'>Purchase Order Number is not valid.</div>";
+              $('#globalMessages').html(html);
+              $("html, body").animate({ scrollTop: 0 }, 50);
+              return false; 
+    	  }
       
       }else{
             
@@ -883,8 +893,12 @@ $('#checkoutPlaceOrder2').click(function(){
     
       var poNumber = $("#PurchaseOrderNumber").val();
                   var selectedDate = $('#datepicker-2').val();    
-                  
+                  var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
                   if(poNumber){
+                	  if(poNumberPattern.test(poNumber)){
+                		$.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
+                              ACC.checkoutB2B.refresh(data);            
+                        });
                         if($("#Terms1").prop('checked')){
                               if(selectedDate){
                                     if(isDate(selectedDate)){
@@ -913,8 +927,13 @@ $('#checkoutPlaceOrder2').click(function(){
                               $('#globalMessages').html(html);
                               $("html, body").animate({ scrollTop: 0 }, 50);
                               return false;
-                        }
-                  
+                        }//end
+                	  }else{
+                		  var html = "<div class='alert negative'>Purchase Order Number is not valid.</div>";
+                          $('#globalMessages').html(html);
+                          $("html, body").animate({ scrollTop: 0 }, 50);
+                          return false; 
+                	  }
                   }else{
                         
                   
