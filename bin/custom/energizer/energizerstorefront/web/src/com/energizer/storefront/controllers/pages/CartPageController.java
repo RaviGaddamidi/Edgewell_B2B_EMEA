@@ -274,7 +274,7 @@ public class CartPageController extends AbstractPageController
 		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
 		if (cartData.isIsContainerFull())
 		{
-			
+
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_EXCEEDED));
 		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
@@ -319,9 +319,13 @@ public class CartPageController extends AbstractPageController
 		final String continueUrl = (String) getSessionService().getAttribute(WebConstants.CONTINUE_URL);
 		model.addAttribute(CONTINUE_URL, (continueUrl != null && !continueUrl.isEmpty()) ? continueUrl : ROOT);
 
-		final CartRestorationData restorationData = (CartRestorationData) sessionService
-				.getAttribute(WebConstants.CART_RESTORATION);
-		model.addAttribute("restorationData", restorationData);
+		if (sessionService.getAttribute(WebConstants.CART_RESTORATION) instanceof CartRestorationData)
+		{
+			final CartRestorationData restorationData = (CartRestorationData) sessionService
+					.getAttribute(WebConstants.CART_RESTORATION);
+			model.addAttribute("restorationData", restorationData);
+
+		}
 
 		createProductList(model);
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
