@@ -838,15 +838,16 @@ $('#checkoutPlaceOrder').click(function(){
       var selectedDate = $('#datepicker-2').val();    
       var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
       if(poNumber){
-    	  if(poNumberPattern.test(poNumber)){
-    		$.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
-                  ACC.checkoutB2B.refresh(data);            
-            });
+    	 if(poNumberPattern.test(poNumber)){
+    		
             if($("#Terms1").prop('checked')){
                   if(selectedDate){
                         if(isDate(selectedDate)){
                               var html = "";
                               $('#globalMessages').html(html);
+                              $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
+                                  ACC.checkoutB2B.refresh(data);            
+                            });
                         return true;
                         }else
                         {
@@ -858,7 +859,7 @@ $('#checkoutPlaceOrder').click(function(){
                         }
                   }
                   else{
-                        var html = "<div class='alert negative'>Please select delivery address and date</div>";
+                        var html = "<div class='alert negative'>Please select delivery address and Date</div>";
                         $('#globalMessages').html(html);
                         $("html, body").animate({ scrollTop: 0 }, 50);
                         return false;
@@ -896,14 +897,15 @@ $('#checkoutPlaceOrder2').click(function(){
                   var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
                   if(poNumber){
                 	  if(poNumberPattern.test(poNumber)){
-                		$.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
-                              ACC.checkoutB2B.refresh(data);            
-                        });
+                		
                         if($("#Terms1").prop('checked')){
                               if(selectedDate){
                                     if(isDate(selectedDate)){
                                           var html = "";
                                           $('#globalMessages').html(html);
+                                          $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
+                                              ACC.checkoutB2B.refresh(data);            
+                                        });
                                     return true;
                                     }else
                                     {
@@ -915,7 +917,7 @@ $('#checkoutPlaceOrder2').click(function(){
                                     }
                               }
                               else{
-                                    var html = "<div class='alert negative'>Please select delivery address.</div>";
+                                    var html = "<div class='alert negative'>Please select delivery address and Date.</div>";
                                     $('#globalMessages').html(html);
                                     $("html, body").animate({ scrollTop: 0 }, 50);
                                     return false;

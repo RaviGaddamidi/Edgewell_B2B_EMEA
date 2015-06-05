@@ -28,7 +28,7 @@
 					<label><spring:theme code="checkout.summary.purchaseOrderNumber"/></label>
 					<br>
 			
-					<input type="text" id="PurchaseOrderNumber"  name="PurchaseOrderNumber" maxlength="255" />
+					<input type="text" id="PurchaseOrderNumber"  name="PurchaseOrderNumber" maxlength="19" />
 				</div>
 			</div>
 		</div>
