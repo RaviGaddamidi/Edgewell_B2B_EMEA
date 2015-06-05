@@ -11,8 +11,9 @@
 .miniCart > a .count{
 	background:#464646;
 	color:#fff;
-	width:26px;
+	width:auto;
 	margin:0 5px;
+	padding:0 5px;
 	font-size:0.833em;
 	display: inline-block;
 	text-align:center;
