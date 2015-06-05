@@ -179,8 +179,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					for (int i = 0; i < emailCCList.size(); i++)
 					{
 						final String emailAddress = emailCCList.get(i);
-						final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(
-								emailContext.getToEmail(), emailContext.getToDisplayName());
+						final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(emailAddress,
+								emailAddress);
 						ccAddress.setEmailAddress(emailAddress);
 						ccAddress.setDisplayName(getDisplayName());
 						if (null != ccAddress)
