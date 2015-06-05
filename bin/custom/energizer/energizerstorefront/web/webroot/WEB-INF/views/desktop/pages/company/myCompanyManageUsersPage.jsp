@@ -28,13 +28,13 @@
 					<a href="${manageUsersUrl}" class="button add"><spring:theme code="text.company.manageUser.button.create" text="Create New User"/></a>
 				</ycommerce:testId>
 			</div>
-			<div class="description"><spring:theme code="text.company.manageusers.subtitle" arguments="${b2bStore}"/></div>
+		<!--	<div class="description"><spring:theme code="text.company.manageusers.subtitle" arguments="${b2bStore}"/></div> -->
 			
 			
 				<c:if test="${not empty searchPageData.results}">
-					<p>
+				<!--	<p>
 						<spring:theme code="text.company.manageUser.viewUsers" text="View Users"/>
-					</p>
+					</p> -->
 					<nav:pagination top="true" supportShowPaged="${isShowPageAllowed}" supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}"
 									searchUrl="/my-company/organization-management/manage-users?sort=${searchPageData.pagination.sort}"
 									sortQueryParams="user=${param.user}"
