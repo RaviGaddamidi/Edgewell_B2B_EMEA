@@ -31,7 +31,7 @@
 <single-checkout:summaryFlow cartData="${cartData}" />
 
 
-	
+	<input type="hidden" value="${poNumberPattern}" id="poNumPatternId" />
 	
 	<div id="placeOrder" class="clearfix">
 	<%-- <form:form action="${placeOrderUrl}" id="placeOrderForm1" commandName="placeOrderForm"> --%>
@@ -41,7 +41,7 @@
 			<form:input type="hidden" id="securityCode" class="securityCodeCard" path="securityCode" value=""/>
 			
 			
-			<button type="submit" class="positive right" id="checkoutPlaceOrder"  onclick="validatePONumber();"><spring:theme code="checkout.summary.placeOrder"  /></button>
+			<button type="submit" class="positive right" id="checkoutPlaceOrder" ><spring:theme code="checkout.summary.placeOrder"  /></button>
 			
 			<%-- <button type="submit" class="positive right placeOrderButton" ><spring:theme code="checkout.summary.placeOrder"/></button> --%>
 			<%-- <button type="button" class="positive right requestQuoteButton"><spring:theme code="checkout.summary.negotiateQuote"/></button>
@@ -100,7 +100,7 @@
 		
 		<%-- <button type="submit" class="positive right placeOrderButton" ><spring:theme code="checkout.summary.placeOrder"/></button> --%>
 		
-		<button type="submit" class="positive right" id="checkoutPlaceOrder2"  onclick="validatePONumber();" ><spring:theme code="checkout.summary.placeOrder"/></button>
+		<button type="submit" class="positive right" id="checkoutPlaceOrder2" ><spring:theme code="checkout.summary.placeOrder"/></button>
 		
 		<div class="terms left">
 			<formElement:formCheckbox idKey="Terms2" labelKey="checkout.summary.placeOrder.readTermsAndConditions" inputCSS="checkbox-input" labelCSS="checkbox-label" path="termsCheck" mandatory="true" />

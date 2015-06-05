@@ -108,24 +108,3 @@
 
 <%-- Fix for Webkit Browsers (Needs to be loaded last)  --%>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.skiplinks.js"></script>
-
-<script type="text/javascript">
- function validatePONumber()
- {
-	 var poNumber = document.getElementById("PurchaseOrderNumber").value;
-	 var poNumberPattern = '${poNumberPattern}';
-	 var result;
-	 if (poNumberPattern.test(poNumber)) 
-	 {
-		return true;
-	 }
-	 else 
-	 {
-		alert('Please Enter Valid Purchase Order Number');
-		return false;
-	 }	 
- } 
- 
-
- 
-</script>
