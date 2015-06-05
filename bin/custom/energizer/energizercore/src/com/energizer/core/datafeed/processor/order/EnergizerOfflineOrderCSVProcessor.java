@@ -90,6 +90,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	private static final String SAP_ORDER_NO = "SAPOrderNo";
 	private static final String CREATED_BY_USER = "CreatedByUser";
 	private static final String CREATED_DATE = "CreatedDate";
+	private static final String CREATED_TIME = "CreatedTime";
 	private static final String REQ_DELIVERY_DATE = "ReqDeliveryDate";
 	private static final String PO_NO = "PONo";
 	private static final String TOTAL_VALUE = "TotalValue";
@@ -131,6 +132,8 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 	private static final String ENERGIZER_DATE_FORMAT_KEY = Config.getParameter("dateFormat");
 	private static final SimpleDateFormat ORDER_DATE_FORMATTER = new SimpleDateFormat(ENERGIZER_DATE_FORMAT_KEY);
+	private static final String ENERGIZER_DELIVERY_DATE_FORMAT_KEY = Config.getParameter("deliveryDateFormat");
+	private static final SimpleDateFormat ORDER_DELIVERY_DATE_FORMATTER = new SimpleDateFormat(ENERGIZER_DELIVERY_DATE_FORMAT_KEY);
 	private static final String ENERGIZER_SITE = Config.getParameter("offline.energizer.site");
 	private static final Logger LOG = Logger.getLogger(EnergizerOfflineOrderCSVProcessor.class);
 
@@ -327,8 +330,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		if (energizerB2BUnitModel == null)
 		{
-			LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + " " + energizerB2BUnitModel.getUid()
-					+ " is not exist");
+			LOG.info("In Record Number " + record.getRecordNumber() + " " + B2B_ACCOUNT + "does not exist");
 			isOrderCreatedOrUpdated = false;
 		}
 		else
@@ -621,7 +623,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 		{
 			try
 			{
-				createdDate = ORDER_DATE_FORMATTER.parse(csvValuesMap.get(CREATED_DATE));
+				createdDate = ORDER_DATE_FORMATTER.parse(csvValuesMap.get(CREATED_DATE) + csvValuesMap.get(CREATED_TIME));
 			}
 			catch (final ParseException e)
 			{
@@ -635,7 +637,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 		{
 			try
 			{
-				reqDeliveryDate = ORDER_DATE_FORMATTER.parse(csvValuesMap.get(REQ_DELIVERY_DATE));
+				reqDeliveryDate = ORDER_DELIVERY_DATE_FORMATTER.parse(csvValuesMap.get(REQ_DELIVERY_DATE));
 			}
 			catch (final ParseException e)
 			{
