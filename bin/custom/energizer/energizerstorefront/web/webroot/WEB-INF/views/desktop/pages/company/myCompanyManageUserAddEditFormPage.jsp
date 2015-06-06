@@ -93,10 +93,12 @@
 						<formElement:formInputBox idKey="profile.contactNumber" labelKey="profile.contactNumber" path="contactNumber"
 													   inputCSS="text"
 													   mandatory="true"/>
-						<formElement:formSelectBox idKey="text.company.user.unit.title" skipBlank="true"
-												labelKey="text.company.user.unit.title" path="parentB2BUnit"
-												mandatory="true" items="${b2bUnits}" disabled="${not empty param.unit and not empty param.role}"
-												/>
+						<div style="display: none">						   
+							<formElement:formSelectBox idKey="text.company.user.unit.title" skipBlank="true"
+													labelKey="text.company.user.unit.title" path="parentB2BUnit"
+													mandatory="true" items="${b2bUnits}" disabled="${not empty param.unit and not empty param.role}"
+													/>
+						</div>							
 						<!-- As per discussion multiple role functionality is enabled -->
 						<div class="companyRoles-cls">
 						<formElement:formCheckboxes idKey="text.company.user.roles" labelKey="text.company.user.roles"
@@ -125,3 +127,7 @@
 				<common:back cancelUrl="${cancelUrl}"/>
 	</div>
 </template:page>
+
+<script type="text/javascript">
+	
+</script>
