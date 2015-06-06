@@ -258,3 +258,13 @@ INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents
 
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true]
 ;;MiddleContent-CartPageSlot;MiddleContent;;EmptyCartMessageParagraphComponentSlot
+
+
+
+#removing the search text box from the login page as suggested in the observations
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;LoginPage_SearchBoxSlot;SearchBox;LangCurrencyComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position;contentSlot(uid,$contentCV)[unique=true];page(uid,$contentCV)
+;;SearchBox-LoginPage1;SearchBox;LoginPage_SearchBoxSlot;login
+
