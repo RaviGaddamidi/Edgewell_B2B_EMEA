@@ -53,7 +53,7 @@
 		
 	<div class="cart clearfix">
 	
-	  <form id="addToCartForm${product.code}" action="<c:url value="/cart/add" />" method="post" class="add_to_cart_form clear_fix">
+	  <form id="addToCartForm${product.code}" action="<c:url value="/cart/add" />" method_data="post" class="add_to_cart_form clear_fix">
 			<input type="hidden" name="productCodePost" value="${product.code}"/>
 			<c:if test="${not empty product.averageRating}">
 				<product:productStars rating="${product.averageRating}" />

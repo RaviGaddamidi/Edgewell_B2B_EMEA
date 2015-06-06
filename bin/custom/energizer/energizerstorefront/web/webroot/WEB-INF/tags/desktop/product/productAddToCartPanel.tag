@@ -85,7 +85,7 @@
 				</button>			
 			</c:when>					
 			<c:otherwise>
-				<button id="addToCartButton" type="${buttonType}" class="addToCartButton" disabled="disabled">
+				<button id="addToCartButton" type="${buttonType}" class="addToCartButton display_none">
 					<spring:theme code="basket.add.to.basket"/>
 				</button>
 			</c:otherwise>

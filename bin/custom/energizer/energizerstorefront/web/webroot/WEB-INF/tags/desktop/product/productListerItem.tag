@@ -128,8 +128,8 @@
                                 
                                 <c:choose>
 	                               <c:when test="${!product.obsolete && not empty product.uom && not empty product.customerProductPrice }">
-		                                <button type="${buttonType}" class="addToCartButton <c:if test="${product.stock.stockLevelStatus.code eq 'outOfStock' }">out-of-stock</c:if>" 
-		                                	<c:if test="${product.stock.stockLevelStatus.code eq 'outOfStock' }"> disabled="disabled" aria-disabled="true"</c:if>>${addToCartText}
+		                                <button type="${buttonType}" class="addToCartButton display_none <c:if test="${product.stock.stockLevelStatus.code eq 'outOfStock' }">out-of-stock</c:if>" 
+		                                	<c:if test="${product.stock.stockLevelStatus.code eq 'outOfStock' }"> disabled="disabled" aria-disabled="true" style="display:none;"</c:if>>${addToCartText}
 		                                </button>
 	                                </c:when>	                                 
 	                                <c:when test="${product.obsolete}">
@@ -143,7 +143,7 @@
 		                                </button>                                
 	                                </c:when>	 
 	                                <c:otherwise >
-		                                <button type="${buttonType}" class="addToCartButton" disabled="disabled" aria-disabled="true">
+		                                <button type="${buttonType}" class="addToCartButton display_none" disabled="disabled" aria-disabled="true">
 		                                	${addToCartText}
 		                                </button>                                
 	                                </c:otherwise>
