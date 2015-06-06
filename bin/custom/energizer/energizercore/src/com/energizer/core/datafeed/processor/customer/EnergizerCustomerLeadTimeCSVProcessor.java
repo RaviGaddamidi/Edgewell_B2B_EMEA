@@ -101,10 +101,14 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 				energizerAccountID = csvValuesMap.get(ENERGIZER_ACCOUNT_ID).trim();
 				shippingPointNo = csvValuesMap.get(SHIPPING_POINT_NO).trim();
 				shipTo = csvValuesMap.get(SHIP_TO).trim();
-				//set the default LeadTimeInDays to 30 Days as it is configured
-				if (csvValuesMap.get(LEAD_TIME_IN_DAYS).isEmpty())
+				//set the default LeadTimeInDays to 30 Days as it is configured, else get value from csv map
+				if (csvValuesMap.get(LEAD_TIME_IN_DAYS).isEmpty() || Integer.valueOf(csvValuesMap.get(LEAD_TIME_IN_DAYS)) == 0)
 				{
 					leadTimeInDays = defaultLeadTime;
+				}
+				else
+				{
+					leadTimeInDays = Integer.valueOf(csvValuesMap.get(LEAD_TIME_IN_DAYS).trim());
 				}
 				final EnergizerB2BUnitModel energizerB2BUnitModel = isEnergizerAccountExist(energizerAccountID);
 				if (energizerB2BUnitModel != null)
@@ -268,7 +272,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 				{
 					value = configurationService.getConfiguration().getProperty(DEFAULT_LEAD_TIME_VALUE).toString();
 				}
-				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0)
+				if (!NumberUtils.isNumber(value) || Double.valueOf(value) < 0.0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
