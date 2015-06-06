@@ -135,7 +135,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 			put("5", "CANCELLED");
 		}
 	};
-	private static final String ENERGIZER_DATE_FORMAT_KEY = Config.getParameter("dateFormat");
+	private static final String ENERGIZER_DATE_FORMAT_KEY = Config.getParameter("deliveryDateFormat");
 	private static final SimpleDateFormat ORDER_DATE_FORMATTER = new SimpleDateFormat(ENERGIZER_DATE_FORMAT_KEY);
 	private static final Logger LOG = Logger.getLogger(EnergizerOrderUpdateCSVProcessor.class);
 
