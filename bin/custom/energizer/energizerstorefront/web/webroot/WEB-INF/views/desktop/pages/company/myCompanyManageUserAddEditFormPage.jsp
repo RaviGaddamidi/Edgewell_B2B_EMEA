@@ -120,7 +120,7 @@
 						<a href="${cancelUrl}" class="button manageusercancel"><spring:theme code="b2bcustomer.cancel" text="Cancel"/></a>
 					</ycommerce:testId>
 					<ycommerce:testId code="User_Save_button">
-						<button type="submit" class="save"><spring:theme code="text.account.user.saveUpdates" text="Save Updates"/></button>
+						<button type="submit" class="save"><spring:theme code="text.account.user.save" text="Save Updates"/></button>
 					</ycommerce:testId>
 
 				</form:form>
