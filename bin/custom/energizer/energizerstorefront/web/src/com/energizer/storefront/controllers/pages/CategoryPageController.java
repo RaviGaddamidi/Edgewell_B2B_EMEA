@@ -97,6 +97,8 @@ public class CategoryPageController extends AbstractSearchPageController
 	@Resource(name = "energizerSolrQueryManipulationService")
 	private EnergizerSolrQueryManipulationService energizerSolrQueryManipulationService;
 
+	private static final String ACTIVE_B2BUNIT = "activeB2BUnit";
+
 
 	@RequestMapping(value = CATEGORY_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET)
 	public String category(@PathVariable("categoryCode") final String categoryCode,
@@ -157,6 +159,7 @@ public class CategoryPageController extends AbstractSearchPageController
 		model.addAttribute("showCategoriesOnly", Boolean.valueOf(showCategoriesOnly));
 		model.addAttribute("pageType", PageType.CATEGORY.name());
 		model.addAttribute("userLocation", customerLocationService.getUserLocation());
+		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
 
 		updatePageTitle(category, searchPageData.getBreadcrumbs(), model);
 		final RequestContextData requestContextData = getRequestContextData(request);
