@@ -1,20 +1,23 @@
 ACC.product = {
 	
 	initQuickviewLightbox:function(){
-		this.enableAddToCartButton();
+		
 		this.bindToAddToCartForm();
 	},
 	
 	
 	enableAddToCartButton: function ()
 	{
-		$('#addToCartButton').removeAttr("disabled");
+		$('#addToCartButton').removeClass("display_none");
+		$('.addToCartButton').removeClass("display_none");
+		
 	},
 
 	bindToAddToCartForm: function ()
 	{
 		var addToCartForm = $('.add_to_cart_form');
 		addToCartForm.ajaxForm({url:addToCartForm.attr("action_data"),success: ACC.product.displayAddToCartPopup});
+
 	},
 
 	
