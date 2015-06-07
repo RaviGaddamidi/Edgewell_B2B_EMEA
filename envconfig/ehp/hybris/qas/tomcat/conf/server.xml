@@ -63,8 +63,8 @@
 
     <Connector port="${tomcat.ssl.port}"
     				maxHttpHeaderSize="8192"
-			   proxyName="ehpqa.household.com"
-			   proxyPort="49150"
+			   proxyName="${tomcat.site.proxyName}"
+			   proxyPort="${proxy.ssl.port}"
                maxThreads="150"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
