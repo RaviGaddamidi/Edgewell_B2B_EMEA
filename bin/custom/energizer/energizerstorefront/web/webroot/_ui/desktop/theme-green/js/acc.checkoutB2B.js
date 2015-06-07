@@ -41,13 +41,21 @@ ACC.checkoutB2B = {
 
 
 
-                  /*$("#PurchaseOrderNumber").on("mouseout",function(){
+                  $("#PurchaseOrderNumber").on("blur",function(){
+                	  
+                	  var poNumber = $(this).val();    
+                      var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
+                      if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
+                    	 if(poNumberPattern.test(poNumber)){
                         
                               $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: $(this).val()}, function(data){
                                     ACC.checkoutB2B.refresh(data);            
                               });
+                              
+                    	 }
+                    }
                         
-                  });*/
+                  });
 
             }
       
