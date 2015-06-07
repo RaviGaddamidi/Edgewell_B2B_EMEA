@@ -38,6 +38,7 @@ import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.enums.OrderStatus;
+import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.enumeration.EnumerationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -778,6 +779,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		try
 		{
+			final UserModel user = userService.getCurrentUser();
 			final B2BOrderApprovalData orderApprovalDetails = orderFacade.getOrderApprovalDetailsForCode(workflowActionCode);
 			model.addAttribute("orderApprovalData", orderApprovalDetails);
 			if (!model.containsAttribute("orderApprovalDecisionForm"))
@@ -792,6 +794,9 @@ public class AccountPageController extends AbstractSearchPageController
 			{ orderApprovalDetails.getB2bOrderData().getCode() }, "Order {0}", getI18nService().getCurrentLocale()), null));
 
 			model.addAttribute("breadcrumbs", breadcrumbs);
+
+			//suspecting the change of customer model to employee model enforcing the customer model in the current session
+			userService.setCurrentUser(userService.getUserForUID(user.getUid()));
 
 		}
 		catch (final UnknownIdentifierException e)
@@ -813,6 +818,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		try
 		{
+			final UserModel user = userService.getCurrentUser();
 			if ("REJECT".contains(orderApprovalDecisionForm.getApproverSelectedDecision())
 					&& StringUtils.isEmpty(orderApprovalDecisionForm.getComments()))
 			{
@@ -829,6 +835,9 @@ public class AccountPageController extends AbstractSearchPageController
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
 			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData.getB2bOrderData().getCode());
+
+			//suspecting the change of customer model to employee model enforcing the customer model in the current session
+			userService.setCurrentUser(userService.getUserForUID(user.getUid()));
 
 		}
 		catch (final Exception e)
