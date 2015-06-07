@@ -41,18 +41,23 @@ ACC.checkoutB2B = {
 
 
 
-                  $("#PurchaseOrderNumber").on("blur",function(){
+                  $("#PurchaseOrderNumber").blur(function(){
                 	  
                 	  var poNumber = $(this).val();    
                       var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
                       if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
                     	 if(poNumberPattern.test(poNumber)){
-                        
+                    		 $('#globalMessages').empty();
                               $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: $(this).val()}, function(data){
                                     ACC.checkoutB2B.refresh(data);            
                               });
                               
-                    	 }
+                    	 }else{
+                   		  var html = "<div class='alert negative'>Purchase Order Number is not valid.</div>";
+                          $('#globalMessages').html(html);
+                          $("html, body").animate({ scrollTop: 0 }, 50);
+                          return false; 
+                	  }
                     }
                         
                   });
