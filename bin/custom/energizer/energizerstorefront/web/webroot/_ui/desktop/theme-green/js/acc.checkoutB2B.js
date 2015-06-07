@@ -41,13 +41,13 @@ ACC.checkoutB2B = {
 
 
 
-                  $("#PurchaseOrderNumber").on("mouseout",function(){
+                  /*$("#PurchaseOrderNumber").on("mouseout",function(){
                         
                               $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: $(this).val()}, function(data){
                                     ACC.checkoutB2B.refresh(data);            
                               });
                         
-                  })
+                  });*/
 
             }
       
@@ -837,7 +837,7 @@ $('#checkoutPlaceOrder').click(function(){
       var poNumber = $("#PurchaseOrderNumber").val();
       var selectedDate = $('#datepicker-2').val();    
       var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
-      if(poNumber){
+      if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
     	 if(poNumberPattern.test(poNumber)){
     		
             if($("#Terms1").prop('checked')){
@@ -895,7 +895,7 @@ $('#checkoutPlaceOrder2').click(function(){
       var poNumber = $("#PurchaseOrderNumber").val();
                   var selectedDate = $('#datepicker-2').val();    
                   var poNumberPattern =new RegExp('^'+$('#poNumPatternId').val());
-                  if(poNumber){
+                  if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
                 	  if(poNumberPattern.test(poNumber)){
                 		
                         if($("#Terms1").prop('checked')){
