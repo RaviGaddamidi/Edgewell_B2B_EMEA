@@ -63,8 +63,8 @@
 
     <Connector port="${tomcat.ssl.port}"
     				maxHttpHeaderSize="8192"
-			   proxyName="qa.edgewell.com"
-			   proxyPort="63322"
+			   proxyName="${tomcat.site.proxyName}"
+			  proxyPort="${proxy.ssl.port}"
                maxThreads="150"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
@@ -79,7 +79,7 @@
 					clientAuth="false"
    				sslProtocol = "TLS"
    				keystoreFile="${catalina.home}/lib/keystore"
-   				keystorePass="edgewell"
+   				keystorePass="123456"
                 />
 
     <!--
@@ -89,7 +89,7 @@
      --> 
 	${tomcat.connectors.ajp.plain}	
 
-    <Engine name="Catalina" defaultHost="localhost">
+    <Engine name="Catalina" defaultHost="${tomcat.site.hostName}">
 
 			<Valve 	className="org.apache.catalina.valves.AccessLogValve"
              		directory="${HYBRIS_LOG_DIR}/tomcat"
@@ -98,7 +98,7 @@
 	      		 	pattern="combined"
           />
 
-      <Host 	name="localhost"
+      <Host 	name="${tomcat.site.hostName}"
       			appBase="webapps"
 		       	unpackWARs="false"
 		       	autoDeploy="false">
