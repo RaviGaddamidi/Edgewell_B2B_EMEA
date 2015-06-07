@@ -23,7 +23,7 @@ public class B2BPermissionTypeSelectionForm
 {
 	private String b2BPermissionType;
 
-	@NotNull(message = "{general.required}")
+	@NotNull(message = "{text.company.managePermissions.value.error.permissiontype}")
 	public String getB2BPermissionType()
 	{
 		return b2BPermissionType;

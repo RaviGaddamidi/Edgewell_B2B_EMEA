@@ -15,17 +15,20 @@ package com.energizer.storefront.forms.validation;
 
 import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
-import com.energizer.storefront.forms.B2BPermissionForm;
 
 import java.text.ParseException;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import com.energizer.storefront.forms.B2BPermissionForm;
 
 
 /**
@@ -37,6 +40,7 @@ public class B2BPermissionFormValidator implements Validator
 {
 	@Resource(name = "formatFactory")
 	private FormatFactory formatFactory;
+	private static final Logger LOG = Logger.getLogger(B2BPermissionFormValidator.class);
 
 	/*
 	 * (non-Javadoc)
@@ -59,18 +63,21 @@ public class B2BPermissionFormValidator implements Validator
 	{
 		final B2BPermissionForm b2BPermissionForm = (B2BPermissionForm) object;
 		final String permissionType = b2BPermissionForm.getB2BPermissionTypeData().getCode();
-
+		if (StringUtils.isEmpty(b2BPermissionForm.getCode()))
+		{
+			errors.rejectValue("code", "text.company.managePermissions.value.error.permissionname");
+		}
 		if (!B2BPermissionTypeEnum.B2BBUDGETEXCEEDEDPERMISSION.equals(B2BPermissionTypeEnum.valueOf(permissionType)))
 		{
 			if (StringUtils.isEmpty(b2BPermissionForm.getCurrency()))
 			{
-				errors.rejectValue("currency", "general.required");
+				errors.rejectValue("currency", "text.company.managePermissions.value.error.permissioncurrency");
 			}
-
-			final String thresholdValue = b2BPermissionForm.getValue();
+			//			we would be to strip the commas:
+			final String thresholdValue = b2BPermissionForm.getValue().replaceAll(",", "");
 			if (StringUtils.isBlank(thresholdValue))
 			{
-				errors.rejectValue("value", "general.required");
+				errors.rejectValue("value", "text.company.managePermissions.value.error.permissionvalue");
 			}
 			else
 			{
@@ -78,13 +85,18 @@ public class B2BPermissionFormValidator implements Validator
 				try
 				{
 					thresholdNumber = getFormatFactory().createNumberFormat().parse(thresholdValue);
-					if (thresholdNumber.doubleValue() < 0D)
+					if (thresholdNumber.doubleValue() <= 0D)
 					{
 						errors.rejectValue("value", "text.company.managePermissions.threshold.value.error");
+					}
+					if (!NumberUtils.isNumber(thresholdValue))
+					{
+						errors.rejectValue("value", "text.company.managePermissions.threshold.value.invalid");
 					}
 				}
 				catch (final ParseException e)
 				{
+					LOG.error(e);
 					errors.rejectValue("value", "text.company.managePermissions.threshold.value.invalid");
 				}
 			}
@@ -93,7 +105,7 @@ public class B2BPermissionFormValidator implements Validator
 			{
 				if (StringUtils.isEmpty(b2BPermissionForm.getTimeSpan()))
 				{
-					errors.rejectValue("timeSpan", "general.required");
+					errors.rejectValue("timeSpan", "text.company.managePermissions.value.error.permissiontimespan");
 				}
 			}
 		}

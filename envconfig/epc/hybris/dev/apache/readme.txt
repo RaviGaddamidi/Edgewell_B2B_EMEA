@@ -1,0 +1,1 @@
+This apache configs are sourced from 210 dev, which is currently working with 63322 and 10000 ports for mindtree PC access. And its connect to tomcat 208
