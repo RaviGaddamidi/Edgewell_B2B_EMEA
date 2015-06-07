@@ -43,7 +43,7 @@ public class B2BPermissionForm
 		this.code = code;
 	}
 
-	@NotNull(message = "{general.required}")
+	@NotNull(message = "{text.company.managePermissions.value.error.businessunit}")
 	public String getParentUnitName()
 	{
 		return parentUnitName;
