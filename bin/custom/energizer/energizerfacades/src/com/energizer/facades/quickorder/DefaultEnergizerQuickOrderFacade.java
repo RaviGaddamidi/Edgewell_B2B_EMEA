@@ -360,4 +360,53 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 		return cartData;
 	}
 
+	public void getOrderEntryShippingPoints(final OrderEntryData orderEntryData, final QuickOrderData quickOrder)
+	{
+		final String productCode = orderEntryData.getProduct().getCode();
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
+		final String shippingPointNo = energizerCMIR.getShippingPoint();
+
+		orderEntryData.setShippingPoint(shippingPointNo);
+		/*
+		 * if (cartService.hasSessionCart()) {
+		 */
+		final CartModel cartModel = cartService.getSessionCart();
+		if (cartModel.getEntries() != null && !cartModel.getEntries().isEmpty())
+		{
+			final AbstractOrderEntryModel orderEntry = cartModel.getEntries().get(0);
+
+			final String cartProductCode = orderEntry.getProduct().getCode();
+
+			final EnergizerCMIRModel cartenergizerCMIR = energizerProductService.getEnergizerCMIR(cartProductCode, b2bUnit.getUid());
+
+			final String cartshippingPoint = cartenergizerCMIR.getShippingPoint();
+			LOG.info("The shippingPointNo of product in the cart : " + cartshippingPoint);
+			orderEntryData.setReferenceShippingPoint(cartshippingPoint);
+			quickOrder.setCurrentShippingPointId(cartshippingPoint);
+
+		}
+		else
+		{
+			if (quickOrder.getCurrentShippingPointId() != null)
+			{
+				energizerCMIR = energizerProductService.getEnergizerCMIR(orderEntryData.getProduct().getCode(), b2bUnit.getUid());
+				final String shippingPoint = energizerCMIR.getShippingPoint();
+				orderEntryData.setShippingPoint(shippingPoint);
+				orderEntryData.setReferenceShippingPoint(quickOrder.getCurrentShippingPointId());
+			}
+			else
+			{
+				energizerCMIR = energizerProductService.getEnergizerCMIR(orderEntryData.getProduct().getCode(), b2bUnit.getUid());
+				final String shippingPoint = energizerCMIR.getShippingPoint();
+				orderEntryData.setShippingPoint(shippingPoint);
+				orderEntryData.setReferenceShippingPoint(quickOrder.getCurrentShippingPointId());
+				quickOrder.setCurrentShippingPointId(shippingPoint);
+			}
+
+		}
+		//}
+	}
+
 }

@@ -35,4 +35,6 @@ public interface EnergizerQuickOrderFacade
 	public void updateQtyToExistingProduct(QuickOrderData quickOrder, String productCode, Long qty);
 
 	public CartData getCurrentSessionCart();
+
+	public void getOrderEntryShippingPoints(final OrderEntryData orderEntryData, QuickOrderData quickOrder);
 }

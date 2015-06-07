@@ -29,6 +29,7 @@
     
     <bean class="com.energizer.quickorder.QuickOrderData">
     	<property name="shippingPointId" type="String"/>
+    	<property name="currentShippingPointId" type="String"/>
         <property name="lineItems" type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderEntryData&gt;"/>
     </bean>
        

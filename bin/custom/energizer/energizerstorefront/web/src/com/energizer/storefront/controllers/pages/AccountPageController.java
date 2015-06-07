@@ -24,6 +24,7 @@ import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commercefacades.order.CheckoutFacade;
 import de.hybris.platform.commercefacades.order.data.CCPaymentInfoData;
+import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.order.data.OrderHistoryData;
@@ -1199,7 +1200,8 @@ public class AccountPageController extends AbstractSearchPageController
 		{
 			model.addAttribute("orderform", null);
 		}
-		model.addAttribute("cartData", quickOrderFacade.getCurrentSessionCart());
+		final CartData cartData = quickOrderFacade.getCurrentSessionCart();
+		model.addAttribute("cartData", cartData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(QUICK_ORDER_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(QUICK_ORDER_PAGE));
 		model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.quickorder.pageHeading"));
@@ -1218,6 +1220,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
 				.getAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE));
+
 		//quickOrderFacade.addItemToQuickOrder(quickOrder, energizerMaterialID, distributorMaterialID);
 		//fetch and set the UOM and MOQ for the product for the customer
 		final EnergizerCMIRModel cmir = quickOrderFacade.getCMIRForProductCodeOrCustomerMaterialID(energizerMaterialID,
@@ -1243,6 +1246,7 @@ public class AccountPageController extends AbstractSearchPageController
 				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerMaterialID, distributorMaterialID, cmir);
 				if (orderEntry != null)
 				{
+					quickOrderFacade.getOrderEntryShippingPoints(orderEntry, quickOrder);
 					orderEntryBusinessRulesService.validateBusinessRules(orderEntry);
 					//run the business rules on the product
 					if (orderEntryBusinessRulesService.hasErrors())
