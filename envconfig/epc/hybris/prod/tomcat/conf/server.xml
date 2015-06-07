@@ -79,7 +79,7 @@
 					clientAuth="false"
    				sslProtocol = "TLS"
    				keystoreFile="${catalina.home}/lib/keystore"
-   				keystorePass="123456"
+   				keystorePass="edgewell"
                 />
 
     <!--
