@@ -679,26 +679,19 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			for (final AbstractOrderEntryModel orderEntryModel : orderModelEntries)
 			{
 				final String modelProdCode = orderEntryModel.getProduct().getCode();
-				for (final ZSD_TSOITEM_D31E8C xmlEntry : xmlEntries)
+				for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
 				{
-					final String responseProdCode = xmlEntry.getMATERIAL().getValue();
-					if (modelProdCode.equalsIgnoreCase(responseProdCode))
+					if (conditions.getMATERIAL().getValue().equals(modelProdCode)
+							&& conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
 					{
 
-						for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
-						{
-							if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
-							{
-
-								final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
-								final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
-								final Double entryTotla = baseUomPrice * baseUomQuantity;
-								orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
-								orderEntryModel.setTotalPrice(entryTotla);
-								orderEntryModel.setRejectedStatus("No");
-								modelService.save(orderEntryModel);
-							}
-						}
+						final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+						final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+						final Double entryTotla = baseUomPrice * baseUomQuantity;
+						orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
+						orderEntryModel.setTotalPrice(entryTotla);
+						orderEntryModel.setRejectedStatus("No");
+						modelService.save(orderEntryModel);
 					}
 				}
 
@@ -803,44 +796,29 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	private void updateDataEntries(final OrderEntryData orderEntry, final List<ZSD_TSOITEM_Fa2309> xmlEntries,
 			final List<ZSD_TSOCONDITIONS_Fa2309> condtionList)
 	{
-		for (final ZSD_TSOITEM_Fa2309 ZSD_TSOITEM_Fa2309 : xmlEntries)
+		final ProductData productData = orderEntry.getProduct();
+		final String prodCode = productData.getCode();
+		for (final ZSD_TSOCONDITIONS_Fa2309 condtion : condtionList)
 		{
-			final ProductData productData = orderEntry.getProduct();
-			if (productData.getCode().equalsIgnoreCase(ZSD_TSOITEM_Fa2309.getMATERIAL().getValue()))
+			if (prodCode.equalsIgnoreCase(condtion.getMATERIAL().getValue()))
 			{
-				//productData.setCode(ZSD_TSOITEM_Fa2309.getMATERIAL().getValue());
-				//productData.setShippingPoint(ZSD_TSOITEM_Fa2309.getPLANT().getValue());
-				final String respProdCode = ZSD_TSOITEM_Fa2309.getMATERIAL().getValue();
-				//ordering quantity at user specific UOM
-				final Long orderingQuantity = orderEntry.getQuantity();
-				//orderEntry.setQuantity(ZSD_TSOITEM_Fa2309.getTARGET_QTY().getValue());
-				PriceData priceData = new PriceData();
-				priceData.setValue(new BigDecimal(ZSD_TSOITEM_Fa2309.getNET_VALUE().getValue()));
-
-				for (final ZSD_TSOCONDITIONS_Fa2309 condtion : condtionList)
+				// ZPRO will give material price at base UOM
+				if (condtion.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
 				{
-					if (respProdCode.equalsIgnoreCase(condtion.getMATERIAL().getValue()))
-					{
-						// ZPRO will give material price at base UOM
-						if (condtion.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
-						{
-							priceData = new PriceData();
-							// COND_VALUE is base UOM price
-							final Double eachUnitValue = Double.parseDouble(condtion.getCOND_VALUE().getValue());
-							final Double quantityAtBaseUOM = Double.parseDouble(condtion.getCONBASEVAL().getValue());
-							final Double totalPriceValue = (eachUnitValue * quantityAtBaseUOM);
-							priceData.setValue(new BigDecimal(totalPriceValue / orderingQuantity));
-							priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
-							orderEntry.setBasePrice(priceData);
+					PriceData priceData = new PriceData();
+					// COND_VALUE is base UOM price
+					final Double eachUnitValue = Double.parseDouble(condtion.getCOND_VALUE().getValue());
+					final Double quantityAtBaseUOM = Double.parseDouble(condtion.getCONBASEVAL().getValue());
+					final Double totalPriceValue = (eachUnitValue * quantityAtBaseUOM);
+					priceData.setValue(new BigDecimal(totalPriceValue / orderEntry.getQuantity()));
+					priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					orderEntry.setBasePrice(priceData);
 
-							priceData = new PriceData();
-							priceData.setValue(new BigDecimal(totalPriceValue));
-							priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
-							orderEntry.setTotalPrice(priceData);
-						}
-					}
+					priceData = new PriceData();
+					priceData.setValue(new BigDecimal(totalPriceValue));
+					priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					orderEntry.setTotalPrice(priceData);
 				}
-
 			}
 		}
 	}
