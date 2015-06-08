@@ -81,7 +81,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					techFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					getTechnicalFeedErrors().clear();
-					continue;
+					//continue;
 				}
 				if (!getBusinessFeedErrors().isEmpty())
 				{
