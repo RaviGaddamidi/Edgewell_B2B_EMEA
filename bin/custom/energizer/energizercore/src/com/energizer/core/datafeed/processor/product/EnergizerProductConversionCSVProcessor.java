@@ -114,7 +114,6 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				//if (energizerProduct != null)
 				//{
 				LOG.info("THE DETAILS OF THE PRODUCT IS :" + energizerProduct.getCode() + " " + energizerProduct.getApprovalStatus());
-
 				//Check for the EnergizerConversionFactor
 				energizerProductFactorList = energizerProduct.getProductConversionFactors();
 				final ArrayList<EnergizerProductConversionFactorModel> tmpFactorList = new ArrayList<EnergizerProductConversionFactorModel>();
