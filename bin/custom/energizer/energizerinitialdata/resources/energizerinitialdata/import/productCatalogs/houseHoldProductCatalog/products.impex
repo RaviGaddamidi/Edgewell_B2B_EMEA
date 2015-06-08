@@ -19,11 +19,3 @@ $approved=approvalstatus(code)[default='check']
 #;PRD008;SEG1004FAM1002;Energizer;;;;approved;
 
 INSERT_UPDATE EnergizerProduct;code[unique=true];$supercategories;manufacturerName;manufacturerAID;unit(code);ean;$approved;$catalogVersion
-;PRD001;;Energizer;;;;approved;
-;PRD002;;Energizer;;;;approved;
-;PRD003;;Energizer;;;;approved;
-;PRD004;;Energizer;;;;approved;
-;PRD005;;Energizer;;;;approved;
-;PRD006;;Energizer;;;;approved;
-;PRD007;;Energizer;;;;approved;
-;PRD008;;Energizer;;;;approved;

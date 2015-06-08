@@ -81,7 +81,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					techFeedErrorRecords.addAll(getTechnicalFeedErrors());
 					getTechnicalFeedErrors().clear();
-					continue;
+					//continue;
 				}
 				if (!getBusinessFeedErrors().isEmpty())
 				{
@@ -111,63 +111,59 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					LOG.error((csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " EnergizerProduct does  not exist ");
 					continue;
 				}
+				//if (energizerProduct != null)
+				//{
+				LOG.info("THE DETAILS OF THE PRODUCT IS :" + energizerProduct.getCode() + " " + energizerProduct.getApprovalStatus());
+				//Check for the EnergizerConversionFactor
+				energizerProductFactorList = energizerProduct.getProductConversionFactors();
+				final ArrayList<EnergizerProductConversionFactorModel> tmpFactorList = new ArrayList<EnergizerProductConversionFactorModel>();
 
-				if (energizerProduct != null)
+				//If there is no associated productConversionFactor then create and attach with the product
+				EnergizerProductConversionFactorModel energizerProductConversionModel = null;
+
+				try
 				{
-					LOG.info("THE DETAILS OF THE PRODUCT IS :" + energizerProduct.getCode() + " "
-							+ energizerProduct.getApprovalStatus());
-
-					//Check for the EnergizerConversionFactor
-					energizerProductFactorList = energizerProduct.getProductConversionFactors();
-					final ArrayList<EnergizerProductConversionFactorModel> tmpFactorList = new ArrayList<EnergizerProductConversionFactorModel>();
-
-					//If there is no associated productConversionFactor then create and attach with the product
-					EnergizerProductConversionFactorModel energizerProductConversionModel = null;
-
-					try
+					boolean matchingRecordFound = false;
+					if (energizerProductFactorList != null)
 					{
-						boolean matchingRecordFound = false;
-						if (energizerProductFactorList != null)
+						tmpFactorList.addAll(energizerProductFactorList);
+						LOG.info("The size of productConversionFactorModels is :" + tmpFactorList.size());
+						//Retrieve the productConversionFactor and perform the matching process and do an update in case of any mismatch
+
+						for (final EnergizerProductConversionFactorModel energizerProductConversionFactorModel : energizerProductFactorList)
 						{
-							tmpFactorList.addAll(energizerProductFactorList);
-							LOG.info("The size of productConversionFactorModels is :" + tmpFactorList.size());
-							//Retrieve the productConversionFactor and perform the matching process and do an update in case of any mismatch
+							LOG.info("Factor Model UOM is:" + energizerProductConversionFactorModel.getAlternateUOM());
 
-							for (final EnergizerProductConversionFactorModel energizerProductConversionFactorModel : energizerProductFactorList)
+							if (isModelSame(energizerProductConversionFactorModel, csvValuesMap))
 							{
-								LOG.info("Factor Model UOM is:" + energizerProductConversionFactorModel.getAlternateUOM());
-
-								if (isModelSame(energizerProductConversionFactorModel, csvValuesMap))
-								{
-									matchingRecordFound = true;
-									energizerProductConversionModel = energizerProductConversionFactorModel;
-									break;
-								}
+								matchingRecordFound = true;
+								energizerProductConversionModel = energizerProductConversionFactorModel;
+								break;
 							}
 						}
-						if (!matchingRecordFound)
-						{
-							energizerProductConversionModel = modelService.create(EnergizerProductConversionFactorModel.class);
-							energizerProductConversionModel.setErpMaterialId(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID)
-									.trim());
-							energizerProductConversionModel.setAlternateUOM(csvValuesMap.get(EnergizerCoreConstants.ALTERNATE_UOM)
-									.trim()); //PALLET, LAYER, CASE				
-							tmpFactorList.add(energizerProductConversionModel);
-						}
-						this.addUpdateRecord(energizerProductConversionModel, csvValuesMap);
-						energizerProduct.setProductConversionFactors(tmpFactorList);
-						modelService.saveAll();
-						succeedRecord++;
-						setRecordSucceeded(succeedRecord);
 					}
-					catch (final Exception e)
+					if (!matchingRecordFound)
 					{
-						LOG.error("Error ---- " + e);
-						//this.logErrors(errors);
-						continue;
+						energizerProductConversionModel = modelService.create(EnergizerProductConversionFactorModel.class);
+						energizerProductConversionModel
+								.setErpMaterialId(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).trim());
+						energizerProductConversionModel.setAlternateUOM(csvValuesMap.get(EnergizerCoreConstants.ALTERNATE_UOM).trim()); //PALLET, LAYER, CASE				
+						tmpFactorList.add(energizerProductConversionModel);
 					}
-
+					this.addUpdateRecord(energizerProductConversionModel, csvValuesMap);
+					energizerProduct.setProductConversionFactors(tmpFactorList);
+					modelService.saveAll();
+					succeedRecord++;
+					setRecordSucceeded(succeedRecord);
 				}
+				catch (final Exception e)
+				{
+					LOG.error("Error ---- " + e);
+					//this.logErrors(errors);
+					continue;
+				}
+
+				//}
 			}
 		}
 		catch (final Exception e)
