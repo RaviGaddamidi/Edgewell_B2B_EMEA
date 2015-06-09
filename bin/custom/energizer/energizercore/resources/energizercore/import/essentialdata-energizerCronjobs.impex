@@ -1,7 +1,7 @@
 #importing EnergizerCronjobs for csv feeds
 # Import config properties into impex macros
-UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
+$defaultCurrency=USD
 $interfaceTypeEnergizerCustomer = $config-interfaceType_EnergizerCustomer
 $interfaceTypeSalesArea=$config-interfaceType_SalesArea
 $interfaceTypeB2BUser =$config-interfaceType_B2BUser
@@ -19,30 +19,31 @@ $technicalEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@e
 $businessEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
 $emailAddress=sriram.venkatasubramanian@energizer.com
 
-INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false]
-;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;Product Media Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;Customer Address Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;Product Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;Product Conversion Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerCMIRCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCMIR;Product CMIR Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerLeadTimeCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeLeadTime;Lead Time Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerOfflineOrderCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOfflineOrder;Offline Order Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerOrderUpdateCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOrderUpdate;Order Update Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProductNameCSVProcessor;energizerCSVFeedCronJob;en;energizerProductNameCSVProcessor;Product Name Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
-;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
-;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress
+INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
+;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;Product Media Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;Customer Address Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;Product Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;Product Conversion Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerCMIRCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCMIR;Product CMIR Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerLeadTimeCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeLeadTime;Lead Time Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerOfflineOrderCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOfflineOrder;Offline Order Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerOrderUpdateCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerOrderUpdate;Order Update Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductNameCSVProcessor;energizerCSVFeedCronJob;en;energizerProductNameCSVProcessor;Product Name Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
 ######################################################################################################
 #				This is to send a email notification or registration email to B2BUnit Admin user     #
 ######################################################################################################
-INSERT_UPDATE CronJob; code[unique=true];job(code);singleExecutable;sessionLanguage(isocode)
-;userManagementSendEMailCronJob;userManagementSendEMailJob;false;en
+INSERT_UPDATE CronJob; code[unique=true];job(code);singleExecutable;sessionLanguage(isocode);sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
+;userManagementSendEMailCronJob;userManagementSendEMailJob;false;en;;
  
 ############################################################################################################
 #				This is to send a email notification or registration email to Admin user  for every 5 mins    #
