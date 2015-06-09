@@ -164,7 +164,6 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@medi
 ;;/images/banners/homepage/ENR_Lights.jpg;ENR_Lights.jpg;$siteResource/images/banners/homepage/ENR_Lights.jpg;image/jpg;Energizer Portable Lighting
 ;;/images/banners/homepage/EVR_Battery.jpg;EVR_Battery.jpg;$siteResource/images/banners/homepage/EVR_Battery.jpg;image/jpg;Eveready Non-Rechargeable
 ;;/images/banners/homepage/EVR_Lights.jpg;EVR_Lights.jpg;$siteResource/images/banners/homepage/EVR_Lights.jpg;image/jpg;Eveready Portable Lighting
-#;;/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;Powertools_468x418_Rotating_Image_EN_02.jpg;$siteResource/images/banners/homepage/Powertools_468x418_Rotating_Image_EN_02.jpg;image/jpg;Energizer
 
 
 # Site Logo Component

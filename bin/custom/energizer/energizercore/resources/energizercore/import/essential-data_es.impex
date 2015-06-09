@@ -1,4 +1,4 @@
-# Import essential data for the Accelerator
+﻿# Import essential data for the Accelerator
 #
 # Localization es
 # 
@@ -21,12 +21,11 @@ UPDATE Currency;isocode[unique=true];name[lang=$lang]
 # Titles
 UPDATE Title;code[unique=true];name[lang=$lang]
 ;dr;Dr.;
-;miss;Fräulein;
-;mr;Herr;
-;mrs;Frau;
-;ms;Ms;
-;rev;Rev.;
-
+;miss;señorita;
+;mr;Sr;
+;mrs;señora;
+;ms;Sra;
+;rev;revolución;
 
 # Credit / Debit Cards
 #UPDATE CreditCardType;code[unique=true];name[lang=$lang]
