@@ -44,6 +44,8 @@ public class EnergizerURLFilter extends OncePerRequestFilter implements CMSFilte
 	private static final Logger LOG = Logger.getLogger(EnergizerURLFilter.class);
 
 	private static final String HOMEPAGE = "/";
+	private static final String WEBSITE = "website.";
+	private static final String HTTPS = ".https";
 
 	private ConfigurationService configurationService;
 
@@ -91,7 +93,7 @@ public class EnergizerURLFilter extends OncePerRequestFilter implements CMSFilte
 		{
 			final String requestURL = httpRequest.getRequestURL().toString();
 			final String websiteURL = configurationService.getConfiguration().getString(
-					"website." + getCurrentCmsSite().getUid() + ".https");
+					WEBSITE + getCurrentCmsSite().getUid() + HTTPS);
 			final URL aURL = new URL(requestURL);
 			final URL bURL = new URL(websiteURL);
 			if (requestURL.indexOf(bURL.getHost()) != -1 && requestURL.indexOf(aURL.getHost()) != -1
