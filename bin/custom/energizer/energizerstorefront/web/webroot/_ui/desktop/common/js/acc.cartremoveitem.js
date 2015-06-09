@@ -1,6 +1,6 @@
 var isContainerfull;
 ACC.cartremoveitem = {
-
+		isOrderBlocked: false,
 		bindAll: function ()
 		{	
 			this.bindCartRemoveProduct();
@@ -383,6 +383,7 @@ ACC.cartremoveitem = {
 				var removeItem = false;
 				var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
 				var totalProductVolumeInPercent = cartData.totalProductVolumeInPercent;
+				ACC.cartremoveitem.isOrderBlocked =cartData.isOrderBlocked;
 								
 				if (entryNum == -1) // grouped item
 				{   
@@ -500,9 +501,13 @@ ACC.cartremoveitem = {
 		{
 		var contHeight = $("#volume_cont").height();
 		var isContainerFull = $('#isContainerFull').val();
+		var isOrderBlocked = $('#isOrderBlocked').val();
 		var getVolTxt = $("#volume_txt").val();
 		var getWeightTxt = $("#weight_txt").val();
 		var weightCont = $("#weight_cont").height(); 	
+		
+		var errorsDiv = $('#businesRuleErrors').show();	
+		var errorMsg = "";
 		
 		if(isContainerFull == 'true')
 		{
@@ -534,10 +539,26 @@ ACC.cartremoveitem = {
 		
 			$("#checkoutButton_top").attr("disabled", true);
 			$("#checkoutButton_bottom").attr("disabled",true);	
+			$("#continueButton_bottom").attr("disabled",true);	
 			
-			ACC.common.$globalMessages.html('<div id="businesRuleErrors" class="alert negative" style="display: block;">Dear Customer, You have exceeded the limit. Please adjust the cart.<br></div>'	);
-			$("html, body").animate({ scrollTop: 0 }, 50);
+			errorMsg = "Dear Customer, You have exceeded the limit. Please adjust the cart. <br>";
 		}	
+		
+		if(isOrderBlocked=='true'){
+			errorMsg =errorMsg + " Dear Customer, You order has been blocked. Please contact Customer Care <br>"
+
+		}
+
+		
+        if(errorMsg==""){
+        	errorsDiv.hide()
+        	errorsDiv.removeClass("alert negative");
+        }else{
+            errorsDiv.html(errorMsg); 
+            errorsDiv.addClass("alert negative");
+            $("html, body").animate({ scrollTop: 0 }, 50);
+        }
+		
 		
 		if(isContainerFull == 'false')
 		{ 
@@ -598,13 +619,17 @@ ACC.cartremoveitem = {
 				 
 					 //Disable checkout buttons
 					 $("#checkoutButton_top").attr("disabled", true);
-					 $("#checkoutButton_bottom").attr("disabled",true);				 
+					 $("#checkoutButton_bottom").attr("disabled",true);	
+					 $("#continueButton_bottom").attr("disabled",true);	
 				}
 				
 				if(isContainerFull == 'false')
 				{
-				 $("#checkoutButton_top").attr("disabled", false);				 
-				 $("#checkoutButton_bottom").attr("disabled",false);
+				 if(ACC.cartremoveitem.isOrderBlocked != true)	{
+					 $("#checkoutButton_top").attr("disabled", false);				 
+					 $("#checkoutButton_bottom").attr("disabled",false);
+					 $("#continueButton_bottom").attr("disabled",false);	
+				 }
 				 $("#volume_utilization").css('background-color', '#33cc33'); 
 				 $("#weight_utilization").css('background-color', '#33cc33'); 
 				 

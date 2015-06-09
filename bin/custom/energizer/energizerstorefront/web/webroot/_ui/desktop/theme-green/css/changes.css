@@ -90,6 +90,14 @@ button.checkoutButton {
 	margin-top: 20px;
 }
 
+
+button.checkoutButtonRed {
+	font-size: 140%;
+	margin-top: 20px;
+	background: none repeat scroll 0 0 red;
+    border-color: red;
+}
+
 #savedPaymentList .paymentEntry {
 	min-height: 188px;
 }
