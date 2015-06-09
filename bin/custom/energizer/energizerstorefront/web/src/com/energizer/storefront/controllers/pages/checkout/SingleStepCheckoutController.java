@@ -928,7 +928,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			model.addAttribute("cartData1", cartData);
 			final Long endTime = System.currentTimeMillis();
 			LOG.info("Simulation invocation ended " + endTime);
-			LOG.info("Simulation total time in Sec" + (srartTime - endTime) / 1000);
+			LOG.info("Simulation total time in Sec" + (endTime - srartTime) / 1000);
 			return ControllerConstants.Views.Pages.SingleStepCheckout.SimulateCheckoutSummaryPage;
 		}
 		catch (final HttpClientErrorException clientException)
