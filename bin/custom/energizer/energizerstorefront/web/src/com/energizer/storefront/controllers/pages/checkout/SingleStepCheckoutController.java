@@ -882,7 +882,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			//no items in the cart, then redirect to "Card" page. also when back button is pressed.
 			if (!hasItemsInCart())
 			{
-				return FORWARD_PREFIX + "/cart"; // no items in the cart
+				return REDIRECT_PREFIX + "/checkout/single/summary";
 			}
 			cartData.setRequestedDeliveryDate(energizerB2BCheckoutFlowFacade.getCheckoutCart().getRequestedDeliveryDate());
 
