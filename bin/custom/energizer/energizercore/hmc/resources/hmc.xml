@@ -27,6 +27,7 @@
 			<typeref type="EnergizerPriceRow" description="energizer.pricerow.description" />
 			<typeref type="EnergizerAddress" description="energizer.address.description" />
 			<typeref type="MetricUnit" description="energizer.metricunit.description" />
+			<typeref type="EnergizerShippingPoint" description="energizer.shippingpoint.description" />
 		</group>
 		
 	</explorertree>
