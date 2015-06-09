@@ -306,6 +306,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		for (final AbstractOrderEntryModel modelEntry : modelEntries)
 		{
 			updateModelEntry(modelEntry, dataEntries);
+			modelEntry.setRejectedStatus("No");
 			getModelService().save(modelEntry);
 		}
 		//getCartService().calculateCart(model);
