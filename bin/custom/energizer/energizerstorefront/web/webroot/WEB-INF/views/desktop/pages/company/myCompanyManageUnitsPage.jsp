@@ -42,11 +42,11 @@
 		
 		<div class="headline"><spring:theme code="text.company.manage.units.label" text="Manage Units"/></div>
 		
-		<div class="right">
+		<%-- <div class="right">
 			<ycommerce:testId code="Unit_CreateNewUnit_button">
 				<a href="${createUnitUrl}" class="button add"><spring:theme code="text.company.manage.units.newUnitButton" text="Create New Unit"/></a>
 			</ycommerce:testId>
-		</div>
+		</div> --%>
 		
 		<div class="description"><spring:theme code="text.company.manage.units.subtitle"/></div>
 				

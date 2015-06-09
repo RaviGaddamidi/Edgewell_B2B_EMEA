@@ -853,15 +853,23 @@ $('#checkoutPlaceOrder').click(function(){
       if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
     	 if(poNumberPattern.test(poNumber)){
     		
-            if($("#Terms1").prop('checked')){
+           
                   if($(".summaryDeliveryAddress li").text() != "None selected"){
                         if(isDate(selectedDate)){
+                        	 if($("#Terms1").prop('checked')){
                               var html = "";
                               $('#globalMessages').html(html);
                               $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
                                   ACC.checkoutB2B.refresh(data);            
                             });
                         return true;
+                        	 }
+                        	 else{
+                                 var html = "<div class='alert negative'>Please accept terms & conditions before submitting your order.</div>";
+                                 $('#globalMessages').html(html);
+                                 $("html, body").animate({ scrollTop: 0 }, 50);
+                                 return false;
+                           }//end
                         }else
                         {
                               
@@ -878,13 +886,8 @@ $('#checkoutPlaceOrder').click(function(){
                         return false;
                   }
                   
-            }
-            else{
-                  var html = "<div class='alert negative'>Please accept terms & conditions before submitting your order.</div>";
-                  $('#globalMessages').html(html);
-                  $("html, body").animate({ scrollTop: 0 }, 50);
-                  return false;
-            }//end
+            
+            
     	  }else{
     		  var html = "<div class='alert negative'>Purchase Order Number is not valid.</div>";
               $('#globalMessages').html(html);
@@ -911,15 +914,24 @@ $('#checkoutPlaceOrder2').click(function(){
                   if(poNumber && !new RegExp('^\\s{1,}$').test(poNumber) && poNumber!=''){
                 	  if(poNumberPattern.test(poNumber)){
                 		
-                        if($("#Terms1").prop('checked')){
+                       
                               if($(".summaryDeliveryAddress li").text() != "None selected"){
                                     if(isDate(selectedDate)){
+                                    	 if($("#Terms1").prop('checked')){
                                           var html = "";
                                           $('#globalMessages').html(html);
                                           $.postJSON(config.setPurchaseOrderNumberUrl, {purchaseOrderNumber: poNumber}, function(data){
                                               ACC.checkoutB2B.refresh(data);            
                                         });
-                                    return true;
+                                          return true;
+                                    	 }
+                                    	 else{
+                                             var html = "<div class='alert negative'>Please accept terms & conditions before submitting your order.</div>";
+                                             $('#globalMessages').html(html);
+                                             $("html, body").animate({ scrollTop: 0 }, 50);
+                                             return false;
+                                       }//end
+                                  
                                     }else
                                     {
                                           
@@ -935,14 +947,8 @@ $('#checkoutPlaceOrder2').click(function(){
                                     $("html, body").animate({ scrollTop: 0 }, 50);
                                     return false;
                               }
-                              
-                        }
-                        else{
-                              var html = "<div class='alert negative'>Please accept terms & conditions before submitting your order.</div>";
-                              $('#globalMessages').html(html);
-                              $("html, body").animate({ scrollTop: 0 }, 50);
-                              return false;
-                        }//end
+                   
+                       
                 	  }else{
                 		  var html = "<div class='alert negative'>Purchase Order Number is not valid.</div>";
                           $('#globalMessages').html(html);
@@ -976,7 +982,8 @@ function isDate(txtDate)
    //Checks for mm/dd/yyyy format.
    dtMonth = dtArray[1];
    dtDay= dtArray[3];
-   dtYear = dtArray[5];        
+   dtYear = dtArray[5];
+  
 
    if (dtMonth < 1 || dtMonth > 12) {
 	  
@@ -998,31 +1005,33 @@ function isDate(txtDate)
    preDtMonth = preDtArray[1];
       preDtDay = preDtArray[3];
       preDtYear = preDtArray[5];
+      
       if( dtMonth < preDtMonth){
-    	  
+    	
     	  if(dtYear <= preDtYear && dtDay <= preDtDay){
     		  
     		  return false;
     	  }
     	  
     	 
-            return true;
+           
       }
       if( dtDay < preDtDay){
+    	 
     	 
     	  if(dtYear <= preDtYear && dtMonth <= preDtMonth){
     		  return false;
     	  }
     	 
-            return true;
+           
       }
       if( dtYear < preDtYear){
-    	  
-    	  if(dtDay <= preDtDay && dtMonth <= preDtMonth){
-    		  return false;
-    	  }
     	 
-            return true;
+    	  
+    		  return false;
+    	
+    	 
+           
       }
    return true;
 }
