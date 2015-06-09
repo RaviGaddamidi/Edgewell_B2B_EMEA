@@ -976,7 +976,8 @@ function isDate(txtDate)
    //Checks for mm/dd/yyyy format.
    dtMonth = dtArray[1];
    dtDay= dtArray[3];
-   dtYear = dtArray[5];        
+   dtYear = dtArray[5];
+  
 
    if (dtMonth < 1 || dtMonth > 12) {
 	  
@@ -998,31 +999,33 @@ function isDate(txtDate)
    preDtMonth = preDtArray[1];
       preDtDay = preDtArray[3];
       preDtYear = preDtArray[5];
+      
       if( dtMonth < preDtMonth){
-    	  
+    	
     	  if(dtYear <= preDtYear && dtDay <= preDtDay){
     		  
     		  return false;
     	  }
     	  
     	 
-            return true;
+           
       }
       if( dtDay < preDtDay){
+    	 
     	 
     	  if(dtYear <= preDtYear && dtMonth <= preDtMonth){
     		  return false;
     	  }
     	 
-            return true;
+           
       }
       if( dtYear < preDtYear){
-    	  
-    	  if(dtDay <= preDtDay && dtMonth <= preDtMonth){
-    		  return false;
-    	  }
     	 
-            return true;
+    	  
+    		  return false;
+    	
+    	 
+           
       }
    return true;
 }
