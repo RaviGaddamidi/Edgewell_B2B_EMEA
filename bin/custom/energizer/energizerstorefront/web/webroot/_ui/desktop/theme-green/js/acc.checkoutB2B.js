@@ -854,7 +854,7 @@ $('#checkoutPlaceOrder').click(function(){
     	 if(poNumberPattern.test(poNumber)){
     		
             if($("#Terms1").prop('checked')){
-                  if(selectedDate){
+                  if($(".summaryDeliveryAddress li").text() != "None selected"){
                         if(isDate(selectedDate)){
                               var html = "";
                               $('#globalMessages').html(html);
@@ -872,7 +872,7 @@ $('#checkoutPlaceOrder').click(function(){
                         }
                   }
                   else{
-                        var html = "<div class='alert negative'>Please select delivery address and Date</div>";
+                        var html = "<div class='alert negative'>Please select Delivery Address</div>";
                         $('#globalMessages').html(html);
                         $("html, body").animate({ scrollTop: 0 }, 50);
                         return false;
@@ -912,7 +912,7 @@ $('#checkoutPlaceOrder2').click(function(){
                 	  if(poNumberPattern.test(poNumber)){
                 		
                         if($("#Terms1").prop('checked')){
-                              if(selectedDate){
+                              if($(".summaryDeliveryAddress li").text() != "None selected"){
                                     if(isDate(selectedDate)){
                                           var html = "";
                                           $('#globalMessages').html(html);
@@ -930,7 +930,7 @@ $('#checkoutPlaceOrder2').click(function(){
                                     }
                               }
                               else{
-                                    var html = "<div class='alert negative'>Please select delivery address and Date.</div>";
+                                    var html = "<div class='alert negative'>Please select Delivery Address.</div>";
                                     $('#globalMessages').html(html);
                                     $("html, body").animate({ scrollTop: 0 }, 50);
                                     return false;
