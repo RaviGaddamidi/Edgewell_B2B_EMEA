@@ -18,7 +18,7 @@
 	<ycommerce:testId code="paymentType_text">
 		<div class="contentSection">
 			<div class="content">
-				<div class="headline"><spring:theme code="text.account.orderHistory.poNumber" htmlEscape="false"/></div>
+				<div class="headline"><spring:theme code="text.account.orderHistory.poNumber" htmlEscape="false"/><span class="mandatory"><img width="5" height="6" alt="Required" title="Required" src="/_ui/desktop/common/images/mandatory.gif"></span></div>
 				<div>
 		           <%--  <c:forEach items="${paymentTypes}" var="paymentType">
 		                <form:radiobutton path="paymentTypes" id="PaymentTypeSelection_${paymentType.code}" name="PaymentType" value="${paymentType.code}" label="${paymentType.displayName}"/><br>

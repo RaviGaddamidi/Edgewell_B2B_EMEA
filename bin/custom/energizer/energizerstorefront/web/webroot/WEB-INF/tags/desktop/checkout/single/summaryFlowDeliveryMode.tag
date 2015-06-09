@@ -75,7 +75,7 @@
 		</form>
 	</script>
 	
-	<div class="headline"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/></div>
+	<div class="headline"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/><span class="mandatory"><img width="5" height="6" alt="Required" title="Required" src="/_ui/desktop/common/images/mandatory.gif"></span></div>
 	<spring:theme code="basket.your.shopping.estimatedleadtime"/> <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
 	<spring:theme code="product.product.details.future.date"/>
 	<div id="deliveryDateId">

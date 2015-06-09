@@ -36,7 +36,7 @@
 	<script id="deliveryAddressSummaryTemplate" class="sectionTemplate" type="text/x-jquery-tmpl">
 	<div class="summaryDeliveryAddress">
 
-			<div class="headline"></span><spring:theme code="checkout.summary.deliveryAddress.header" htmlEscape="false"/></div>
+			<div class="headline"></span><spring:theme code="checkout.summary.deliveryAddress.header" htmlEscape="false"/><span class="mandatory"><img width="5" height="6" alt="Required" title="Required" src="/_ui/desktop/common/images/mandatory.gif"></span></div>
 				<ul>
 					{{if data.deliveryAddress}}
 						<li>{{= data.deliveryAddress.title}} {{= data.deliveryAddress.firstName}} {{= data.deliveryAddress.lastName}}</li>
