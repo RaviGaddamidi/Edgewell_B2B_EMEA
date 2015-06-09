@@ -69,6 +69,8 @@ public abstract class AbstractPageController extends AbstractController
 	public static final String CMS_PAGE_MODEL = "cmsPage";
 	public static final String CMS_PAGE_TITLE = "pageTitle";
 
+	public static final String JUST_UPDATED_PWD = "justupdatedpassword";
+
 	@Resource(name = "cmsSiteService")
 	private CMSSiteService cmsSiteService;
 
