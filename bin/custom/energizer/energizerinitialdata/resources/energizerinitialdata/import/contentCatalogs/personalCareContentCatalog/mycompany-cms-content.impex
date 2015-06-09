@@ -130,7 +130,7 @@ INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];positi
 UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];visible
 ;CompanyBudgetNavNode;;false
 ;CompanyCostCenterNavNode;;false
-;CompanyUnitsNavNode;;true
+;CompanyUnitsNavNode;;false
 ;CompanyUserGroupsNavNode;;false
 ;CompanyPermissionsNavNode;;true
 
