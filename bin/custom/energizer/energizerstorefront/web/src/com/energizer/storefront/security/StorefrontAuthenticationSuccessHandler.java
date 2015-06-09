@@ -32,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import com.energizer.storefront.constants.WebConstants;
+import com.energizer.storefront.controllers.pages.AbstractPageController;
 
 
 /**
@@ -46,6 +47,8 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 	private BruteForceAttackCounter bruteForceAttackCounter;
 
 	private Map<UiExperienceLevel, Boolean> forceDefaultTargetForUiExperienceLevel;
+
+	private final static String HOMEPAGE = "/";
 
 	public UiExperienceService getUiExperienceService()
 	{
@@ -78,7 +81,18 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 
 		getBruteForceAttackCounter().resetUserCounter(getCustomerFacade().getCurrentCustomer().getUid());
 
-		super.onAuthenticationSuccess(request, response, authentication);
+		//redirect the user to homepage if the user has just updated the password
+		if (sessionService.getAttribute(AbstractPageController.JUST_UPDATED_PWD) != null
+				&& sessionService.getAttribute(AbstractPageController.JUST_UPDATED_PWD).equals(
+						AbstractPageController.JUST_UPDATED_PWD))
+		{
+			sessionService.removeAttribute(AbstractPageController.JUST_UPDATED_PWD);
+			response.sendRedirect(HOMEPAGE);
+		}
+		else
+		{
+			super.onAuthenticationSuccess(request, response, authentication);
+		}
 	}
 
 	protected CartFacade getCartFacade()

@@ -175,6 +175,8 @@ public class PasswordResetPageController extends AbstractPageController
 				getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.password.updated");
+				//adding a session attribute that will be removed in the StorefrontAuthenticationSuccessHandler.java once the successful login happens
+				getSessionService().setAttribute(JUST_UPDATED_PWD, JUST_UPDATED_PWD);
 			}
 			catch (final TokenInvalidatedException e)
 			{

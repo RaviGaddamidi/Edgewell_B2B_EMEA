@@ -83,6 +83,7 @@ public class CartPageController extends AbstractPageController
 	private static final String ERROR_MSG_TYPE = "errorMsg";
 	private static final String QUANTITY_INVALID_BINDING_MESSAGE_KEY = "basket.error.quantity.invalid.binding";
 	private static final String ORDER_EXCEEDED = "container.business.rule.orderExceeded";
+	private static final String ORDER_BLOCKED = "container.business.rule.orderblocked";
 
 	protected static final Logger LOG = Logger.getLogger(CartPageController.class);
 
@@ -277,6 +278,13 @@ public class CartPageController extends AbstractPageController
 
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_EXCEEDED));
 		}
+
+		if (cartData.isIsOrderBlocked())
+		{
+
+			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
+		}
+
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 		return cartData;
 	}

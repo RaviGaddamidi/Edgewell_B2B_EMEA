@@ -35,6 +35,8 @@
 	
 	<cart:cartRestoration/>
 	<cart:cartValidation/>
+	
+	<input name="isOrderBlocked" type="hidden" id="isOrderBlocked" value="${cartData.isOrderBlocked }"><br/>	
 
 	
 	<cms:pageSlot position="TopContent" var="feature" element="div" class="span-24">
@@ -47,7 +49,7 @@
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
-					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
+					<button id ="checkoutButton_top" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
 				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
@@ -94,11 +96,24 @@
 					</div>
 				</div>
 		
-			<a class="button continueShop-button" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>
+			<!--   Start Code changes for order flag check  for continueShop button -->
+			<c:choose>
+				<c:when test="${cartData.isOrderBlocked }">
+					<!-- a class="button continueShop-button" disabled="disabled" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a-->
+					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
+				</c:when>
+				<c:otherwise>
+					<!-- a class="button continueShop-button"  style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>-->
+					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" ><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
+				</c:otherwise>
+			</c:choose>
+			<!--   End Code changes for order flag check  for continueShop button -->	
+				
+				
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
-					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
+					<button id ="checkoutButton_bottom" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
 				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
