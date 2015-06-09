@@ -55,9 +55,9 @@
 	<div class="headline"><spring:theme code="text.company.manage.units.unitDetails" text="View Unit: {0}" arguments="${empty unit.name ? unit.uid : unit.name}"/></div>
 	
 	<div class="right">
-		<a href="${editUnitUrl}" class="button edit">
+		<%-- <a href="${editUnitUrl}" class="button edit">
 			<spring:theme code="text.company.manage.units.button.editUnit" text="Edit Unit"/>
-		</a>
+		</a> --%>
 		<c:choose>
 			<c:when test="${unit.active}">
 				<c:if test="${unit.uid != user.unit.uid}">
@@ -122,7 +122,7 @@
 		</tr>
 	</table>
 	
-	
+	<%-- 
 	<div class="headline"><spring:theme code="text.company.manage.units.accountManagers" text="Account Managers"/></div>
 	<spring:theme code="text.company.manage.units.view.accountManagers.subtitle" arguments="${b2bStore}"/>
 
@@ -338,7 +338,7 @@
 			</tbody>
 		</table>
 	
-
+ --%>
 
 <spring:url
 		value="/my-company/organization-management/manage-units/administrators"
@@ -351,12 +351,12 @@
 		var="createUserUrl">
 	<spring:param name="unit" value="${unit.uid}"/>
 </spring:url>
-<spring:url
+<%-- <spring:url
 		value="/my-company/organization-management/manage-units/managers"
 		var="editManagersUrl">
 	<spring:param name="unit" value="${unit.uid}"/>
 	<spring:param name="role" value="b2bmanagergroup"/>
-</spring:url>
+</spring:url> --%>
 <spring:url
 		value="/my-company/organization-management/manage-units/approvers"
 		var="editApproversUrl">
@@ -378,10 +378,10 @@
                   editUrl="${editAdministratorUrl}"
                   createUrl="${createUserUrl}" subtitleKey="text.company.manage.units.view.administrators.subtitle"/>
 
-<company:userList users="${unit.managers}" action="managers" role="b2bmanagergroup"
+<%-- <company:userList users="${unit.managers}" action="managers" role="b2bmanagergroup"
                   editUrl="${editManagersUrl}"
                   createUrl="${createUserUrl}" subtitleKey="text.company.manage.units.view.managers.subtitle"/>
-
+ --%>
 <company:userList users="${unit.customers}" action="customers" role="b2bcustomergroup"
                   editUrl="${editCustomersUrl}"
                   createUrl="${createUserUrl}" subtitleKey="text.company.manage.units.view.customers.subtitle"/>
