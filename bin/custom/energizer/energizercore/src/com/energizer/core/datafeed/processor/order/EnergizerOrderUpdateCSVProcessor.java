@@ -179,6 +179,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	{
 		try
 		{
+			orderModels = new ArrayList<OrderModel>();
 			LOG.info("EnergizerOrderUpdateCSVProcessor:process:Start");
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord tempRecord : records)

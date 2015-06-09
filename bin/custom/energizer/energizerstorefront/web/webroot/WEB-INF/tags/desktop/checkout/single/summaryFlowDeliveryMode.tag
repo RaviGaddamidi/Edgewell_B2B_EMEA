@@ -75,7 +75,7 @@
 		</form>
 	</script>
 	
-	<div class="headline"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/></div>
+	<div class="headline"></span><spring:theme code="checkout.summary.deliveryDate.header" htmlEscape="false"/><span class="mandatory"><img width="5" height="6" alt="Required" title="Required" src="/_ui/desktop/common/images/mandatory.gif"></span></div>
 	<spring:theme code="basket.your.shopping.estimatedleadtime"/> <div  id="leadTimeId">  ${cartData.leadTime} </br>  </div>
 	<spring:theme code="product.product.details.future.date"/>
 	<div id="deliveryDateId">
@@ -84,7 +84,7 @@
 	</c:if>
 	</div>     
 	<!-- <div class="contentSection"></div> -->
-	<input type="text" id="datepicker-2"  placeholder="mm-dd-yy" style="width: 152px;margin-top: 10px;"/>
+	<input type="text" id="datepicker-2"  placeholder="mm-dd-yyyy" style="width: 152px;margin-top: 10px;"/>
 	
 	<%-- <div style="display:none">
 		<div id="summaryDeliveryModeOverlay" class="summaryOverlay ">
