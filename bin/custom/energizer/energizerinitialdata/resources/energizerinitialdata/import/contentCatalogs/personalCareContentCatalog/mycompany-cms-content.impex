@@ -121,13 +121,11 @@ INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];positi
 ;;SideContent-UserGroups;SideContent;manageUsergroups;SideContent-Company;;;
 ;;SideContent-UnitApprovers;SideContent;manageUnitApprovers;SideContent-Company;;;
 
-
-
-################################################################################################
+#---------------------------------------------------------------------------------------------------
 ##	   This is to disable the MANAGE BUDGETS,MANAGE COSTCENTERS							      ##
 ##     MANAGE UNITS, MANAGE USERGROUPS, MANAGE PERMISSIONS on body content side. 		      ##
 ## 	   visible=true, this will be enable the component on the body content side, else   false ##
-################################################################################################
+#---------------------------------------------------------------------------------------------------
 # CMS Navigation Nodes - My Company
 UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];visible
 ;CompanyBudgetNavNode;;false
@@ -136,11 +134,11 @@ UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];visible
 ;CompanyUserGroupsNavNode;;false
 ;CompanyPermissionsNavNode;;true
 
-####################################################################################################
+#---------------------------------------------------------------------------------------------------
 ##	   This is to disable the COMPANY BUDGETS,COMPANY COSTCENTERS							      ##
 ##     COMPANY UNITS, COMPANY USERGROUPS, COMPANY PERMISSIONS, COMPANY MANAGEMENT 			      ##
 ## 	   WHEN visible=true, this will be enable the component on the left hand side  ELSE disabled  ##
-####################################################################################################
+#---------------------------------------------------------------------------------------------------
 
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];visible
 ;;CompanyBudgetLink;false

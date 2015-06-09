@@ -39,21 +39,19 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 ;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
-######################################################################################################
+#--------------------------------------------------------------------------------------------------------------
 #				This is to send a email notification or registration email to B2BUnit Admin user     #
-######################################################################################################
+#--------------------------------------------------------------------------------------------------------------
 INSERT_UPDATE CronJob; code[unique=true];job(code);singleExecutable;sessionLanguage(isocode);sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
 ;userManagementSendEMailCronJob;userManagementSendEMailJob;false;en;;
- 
-############################################################################################################
-#				This is to send a email notification or registration email to Admin user  for every 5 mins    #
-############################################################################################################
+#-------------------------------------------------------------------------------------------------------------
+#				This is to send a email notification or registration email to Admin user  for every 5 mins
+#--------------------------------------------------------------------------------------------------------------
 INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 ;userManagementSendEMailCronJob; 0 0/5 * * * ?
-
-
-
+#------------------------------------------------------------------
 # this is the trigger schedule for all the cron jobs
+#------------------------------------------------------------------
 INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 ;energizerCustomerCSVProcessor;0 00 01 ? * *
 ;energizerB2BUserCSVProcessor;0 15 01 ? * *
