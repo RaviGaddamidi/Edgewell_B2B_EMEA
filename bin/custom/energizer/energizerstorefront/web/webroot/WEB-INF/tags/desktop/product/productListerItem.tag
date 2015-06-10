@@ -120,6 +120,7 @@
                             <c:set var="buttonType">button</c:set>
                             <spring:theme code="text.addToCart.outOfStock" var="addToCartText"/>
                         </c:if>
+                        <sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
                         <c:if test="${empty isOrderForm || not isOrderForm}">
                             <form id="addToCartForm${product.code}" action_data="<c:url value="/cart/add"/>" method="post" class="add_to_cart_form">
 								<label for="qtyInput"><spring:theme code="basket.page.quantity"/></label>
@@ -173,6 +174,7 @@
                                                             
                             </form>
                         </c:if>
+                        </sec:authorize>
                         <c:if test="${not empty isOrderForm && isOrderForm}">
                             <label for="qty"><spring:theme code="basket.page.quantity" /></label>
                             <input type=hidden id="productPrice[${sessionScope.skuIndex}]" value="${product.price.value}" />

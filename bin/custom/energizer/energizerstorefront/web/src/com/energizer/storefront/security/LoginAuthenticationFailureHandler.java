@@ -16,6 +16,8 @@ package com.energizer.storefront.security;
 
 
 
+import de.hybris.platform.servicelayer.session.SessionService;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -32,14 +34,40 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
  */
 public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler
 {
-    private BruteForceAttackCounter bruteForceAttackCounter;
+	private BruteForceAttackCounter bruteForceAttackCounter;
+	private SessionService sessionService;
+
+	private final static String FAILED_MAX_ATTEMPTS_TO_LOGIN = "FAILED_MAX_ATTEMPTS_TO_LOGIN";
+
+	/**
+	 * @return the sessionService
+	 */
+	public SessionService getSessionService()
+	{
+		return sessionService;
+	}
+
+
+	/**
+	 * @param sessionService
+	 *           the sessionService to set
+	 */
+	public void setSessionService(final SessionService sessionService)
+	{
+		this.sessionService = sessionService;
+	}
+
 
 	@Override
 	public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
 			final AuthenticationException exception) throws IOException, ServletException
 	{
-        // Register brute attacks
-        bruteForceAttackCounter.registerLoginFailure(request.getParameter("j_username"));
+		// Register brute attacks
+		bruteForceAttackCounter.registerLoginFailure(request.getParameter("j_username"));
+		if (bruteForceAttackCounter.isAttack(request.getParameter("j_username")))
+		{
+			sessionService.setAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN, FAILED_MAX_ATTEMPTS_TO_LOGIN);
+		}
 
 		// Store the j_username in the session
 		request.getSession().setAttribute("SPRING_SECURITY_LAST_USERNAME", request.getParameter("j_username"));
@@ -48,13 +76,14 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 	}
 
 
-    protected BruteForceAttackCounter getBruteForceAttackCounter()
-    {
-        return bruteForceAttackCounter;
-    }
-    @Required
-    public void setBruteForceAttackCounter(BruteForceAttackCounter bruteForceAttackCounter)
-    {
-        this.bruteForceAttackCounter = bruteForceAttackCounter;
-    }
+	protected BruteForceAttackCounter getBruteForceAttackCounter()
+	{
+		return bruteForceAttackCounter;
+	}
+
+	@Required
+	public void setBruteForceAttackCounter(final BruteForceAttackCounter bruteForceAttackCounter)
+	{
+		this.bruteForceAttackCounter = bruteForceAttackCounter;
+	}
 }

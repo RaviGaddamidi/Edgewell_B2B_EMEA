@@ -126,6 +126,8 @@ public class AddToCartController extends AbstractController
 			return getViewWithBindingErrorMessages(model, bindingErrors);
 		}
 
+
+
 		final CartModificationData modification = cartFacade.addOrderEntry(orderEntryData);
 
 		model.addAttribute("numberShowing", Config.getInt(SHOWN_PRODUCT_COUNT, 3));

@@ -64,7 +64,7 @@
 					</li> --%>
 				<%--</sec:authorize>
 				--%>
-				<sec:authorize ifAllGranted="ROLE_B2BAPPROVERGROUP">
+				<sec:authorize ifAnyGranted="ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
 					<li class='${selected eq 'approval-dashboard' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/approval-dashboard" var="encodedUrl" />
 						<div class="order-approval-cls"><ycommerce:testId code="myAccount_orderdashboard_navLink">
@@ -73,7 +73,7 @@
 						</div>
 					</li>
 				</sec:authorize>
-				<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
+				<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
 					<li class='${selected eq 'excelfileupload' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/excelfileupload" var="encodedUrl" />
 						<ycommerce:testId code="myAccount_orders_navLink">

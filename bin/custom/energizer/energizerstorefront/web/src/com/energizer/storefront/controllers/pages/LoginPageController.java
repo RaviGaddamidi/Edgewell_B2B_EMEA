@@ -17,7 +17,6 @@ import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.user.UserService;
-import com.energizer.storefront.controllers.ControllerConstants;
 
 import java.io.IOException;
 
@@ -36,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+
 
 /**
  * Login Controller. Handles login and register for the account flow.
@@ -50,6 +52,11 @@ public class LoginPageController extends AbstractLoginPageController
 
 	@Resource
 	private UserService userService;
+
+	private final static String FAILED_MAX_ATTEMPTS_TO_LOGIN = "FAILED_MAX_ATTEMPTS_TO_LOGIN";
+
+	private final static String ACCOUNT_IS_BLOCKED = "login.maxattempts.failed";
+
 
 	public void setHttpSessionRequestCache(final HttpSessionRequestCache accHttpSessionRequestCache)
 	{
@@ -75,6 +82,15 @@ public class LoginPageController extends AbstractLoginPageController
 		if (!loginError)
 		{
 			storeReferer(referer, request, response);
+		}
+		else
+		{
+			if (getSessionService().getAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN) != null
+					&& getSessionService().getAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN).equals(FAILED_MAX_ATTEMPTS_TO_LOGIN))
+			{
+				GlobalMessages.addErrorMessage(model, ACCOUNT_IS_BLOCKED);
+				getSessionService().removeAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN);
+			}
 		}
 		return getDefaultLoginPage(loginError, session, model);
 	}
