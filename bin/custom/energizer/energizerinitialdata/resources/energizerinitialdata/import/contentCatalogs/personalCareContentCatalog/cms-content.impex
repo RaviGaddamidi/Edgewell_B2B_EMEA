@@ -164,7 +164,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;ExcelOrderPageLink;Excel Order;/my-account/excelfileupload;ExcelOrderPageLink;ExcelOrderPageLink
 
 INSERT_UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];name;userGroups(uid);includeSubgroups;components(&componentRef)
-;;CustomerGroupRestriction;Customer Group Restriction;b2bapprovergroup,b2bcustomergroup,b2badmingroup;true;MyAccountLink
+;;CustomerGroupRestriction;Customer Group Restriction;b2bcustomergroup,b2badmingroup;true;MyAccountLink
 ;;AdminGroupRestriction;Admin Group Restriction;b2badmingroup;true;MyCompanyLink
 ;;ViewerGroupRestriction;Viewer Group Restriction;b2bviewergroup;true;MyAccountLink
 
