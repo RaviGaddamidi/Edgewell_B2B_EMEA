@@ -55,6 +55,9 @@
 		</security:port-mappings>
 
 		<security:request-cache ref="httpSessionRequestCache"/>
+		
+		<security:access-denied-handler ref="b2bAccessDeniedHandler"/>
+		
 
 	</security:http>
 
