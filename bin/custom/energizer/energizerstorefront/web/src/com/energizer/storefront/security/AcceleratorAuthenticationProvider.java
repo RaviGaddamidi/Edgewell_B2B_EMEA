@@ -35,17 +35,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 /**
  * Derived authentication provider supporting additional authentication checks. See
  * {@link de.hybris.platform.spring.security.RejectUserPreAuthenticationChecks}.
- *
+ * 
  * <ul>
  * <li>prevent login without password for users created via CSCockpit</li>
  * <li>prevent login as user in group admingroup</li>
  * <li>prevent login as user if not authorised for B2B</li>
  * <li>prevent login as user if not authorised for B2B</li>
  * </ul>
- *
+ * 
  * any login as admin disables SearchRestrictions and therefore no page can be viewed correctly
  */
 public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvider
@@ -63,19 +64,19 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 
 
 	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException
+	public Authentication authenticate(final Authentication authentication) throws AuthenticationException
 	{
 		final String username = (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
 		if (getBruteForceAttackCounter().isAttack(username))
 		{
 			try
 			{
-				UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
+				final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
 				userModel.setLoginDisabled(true);
 				getModelService().save(userModel);
-				bruteForceAttackCounter.resetUserCounter(userModel.getUid());
+				//bruteForceAttackCounter.resetUserCounter(userModel.getUid());
 			}
-			catch (UnknownIdentifierException e)
+			catch (final UnknownIdentifierException e)
 			{
 				LOG.warn("Brute force attack attempt for non existing user name " + username);
 			}
@@ -88,10 +89,9 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 		// check if the user of the cart matches the current user and if the
 		// user is not anonymous. If otherwise, remove delete the session cart as it might
 		// be stolen / from another user
-		String sessionCartUserId = getCartService().getSessionCart().getUser().getUid();
+		final String sessionCartUserId = getCartService().getSessionCart().getUser().getUid();
 
-		if (!username.equals(sessionCartUserId) &&
-				!sessionCartUserId.equals(userService.getAnonymousUser().getUid()))
+		if (!username.equals(sessionCartUserId) && !sessionCartUserId.equals(userService.getAnonymousUser().getUid()))
 		{
 			getCartService().setSessionCart(null);
 		}
@@ -143,7 +143,8 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	}
 
 	/**
-	 * @param b2bUserGroupProvider the b2bUserGroupProvider to set
+	 * @param b2bUserGroupProvider
+	 *           the b2bUserGroupProvider to set
 	 */
 	public void setB2bUserGroupProvider(final B2BUserGroupProvider b2bUserGroupProvider)
 	{
@@ -151,7 +152,8 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	}
 
 	/**
-	 * @param adminGroup the adminGroup to set
+	 * @param adminGroup
+	 *           the adminGroup to set
 	 */
 	public void setAdminGroup(final String adminGroup)
 	{
@@ -177,7 +179,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	}
 
 	@Required
-	public void setBruteForceAttackCounter(BruteForceAttackCounter bruteForceAttackCounter)
+	public void setBruteForceAttackCounter(final BruteForceAttackCounter bruteForceAttackCounter)
 	{
 		this.bruteForceAttackCounter = bruteForceAttackCounter;
 	}
@@ -188,7 +190,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	}
 
 	@Required
-	public void setUserService(UserService userService)
+	public void setUserService(final UserService userService)
 	{
 		this.userService = userService;
 	}
@@ -199,7 +201,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	}
 
 	@Required
-	public void setModelService(ModelService modelService)
+	public void setModelService(final ModelService modelService)
 	{
 		this.modelService = modelService;
 	}
@@ -209,7 +211,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 		return cartService;
 	}
 
-	public void setCartService(CartService cartService)
+	public void setCartService(final CartService cartService)
 	{
 		this.cartService = cartService;
 	}

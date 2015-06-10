@@ -51,7 +51,7 @@ public class DefaultBruteForceAttackCounter implements BruteForceAttackCounter
 		if (StringUtils.isNotEmpty(userUid))
 		{
 			final LoginFailure count = get(prepareUserUid(userUid), Integer.valueOf(0));
-			count.setCounter(Math.min(count.getCounter() + 1, maxFailedLogins + 1));
+			count.setCounter(count.getCounter() + 1);
 			count.setDate(new Date());
 			bruteForceAttackCache.put(prepareUserUid(userUid), count);
 		}
