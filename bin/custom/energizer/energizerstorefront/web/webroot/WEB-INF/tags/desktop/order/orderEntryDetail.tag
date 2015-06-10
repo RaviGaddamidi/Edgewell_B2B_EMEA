@@ -94,18 +94,32 @@
 	<c:when test="${entry.adjustedQty eq entry.quantity}">
 	<td headers="header7" class="adjustedquantity">
 		<ycommerce:testId code="orderDetails_productQuantity_label">
-			<c:if test="${entry.adjustedQty > 0}">
-				${entry.adjustedQty}
-			</c:if>
+			<c:choose>
+				<c:when test="${entry.rejectedStatus == 'Yes'}">
+					${entry.adjustedQty}
+				</c:when>
+				<c:otherwise>
+					<c:if test="${entry.adjustedQty > 0}">
+						${entry.adjustedQty}
+					</c:if>
+				</c:otherwise>
+			</c:choose>
 		</ycommerce:testId>
 	</td>
 	</c:when>
 	<c:otherwise>
 	<td headers="header7" class="adjustedquantity textHighlight">
 	<ycommerce:testId code="orderDetails_productQuantity_label">
-		<c:if test="${entry.adjustedQty > 0}">
-			${entry.adjustedQty}
-		</c:if>
+		<c:choose>
+			<c:when test="${entry.rejectedStatus == 'Yes'}">
+				${entry.adjustedQty}
+			</c:when>
+			<c:otherwise>
+				<c:if test="${entry.adjustedQty > 0}">
+					${entry.adjustedQty}
+				</c:if>
+			</c:otherwise>
+		</c:choose>
 	</ycommerce:testId>
 	</td>
 	</c:otherwise>
@@ -116,9 +130,16 @@
 		<ycommerce:testId code="orderDetails_productItemPrice_label">
 			<c:choose>
 				<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
-					<c:if test="${entry.adjustedItemPrice.value > 0}">
-						<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="false"/>
-					</c:if>
+					<c:choose>
+						<c:when test="${entry.rejectedStatus == 'Yes'}">
+							<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
+						</c:when>
+						<c:otherwise>
+							<c:if test="${entry.adjustedItemPrice.value > 0}">
+								<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
 				</c:when>
 				<c:otherwise>
 					<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="false"/>
@@ -130,30 +151,44 @@
 	</td>
 	</c:when>
 	<c:otherwise>
-	<td headers="header8" class="adjustedPrice textHighlight">
-	<ycommerce:testId code="orderDetails_productItemPrice_label">
-		<c:choose>
-			<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
-				<c:if test="${entry.adjustedItemPrice.value > 0}">
-					<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
-				</c:if>
-			</c:when>
-			<c:otherwise>
-				<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="false"/>
-				
-				<format:price priceData="${entry.product.priceRange.maxPrice}" displayFreeForZero="false"/>
-			</c:otherwise>
-		</c:choose>
-	</ycommerce:testId>
-</td>
+		<td headers="header8" class="adjustedPrice textHighlight">
+		<ycommerce:testId code="orderDetails_productItemPrice_label">
+			<c:choose>
+				<c:when test="${not entry.product.multidimensional or (entry.product.priceRange.minPrice.value eq entry.product.priceRange.maxPrice.value)}">
+					<c:choose>
+						<c:when test="${entry.rejectedStatus == 'Yes'}">
+							<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
+						</c:when>
+						<c:otherwise>
+							<c:if test="${entry.adjustedItemPrice.value > 0}">
+								<format:price priceData="${entry.adjustedItemPrice}" displayFreeForZero="flase"/>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:otherwise>
+					<format:price priceData="${entry.product.priceRange.minPrice}" displayFreeForZero="false"/>
+					<format:price priceData="${entry.product.priceRange.maxPrice}" displayFreeForZero="false"/>
+				</c:otherwise>
+			</c:choose>
+		</ycommerce:testId>
+		</td>
 	</c:otherwise>
 	</c:choose>
 	<td headers="header9" class="adjustedTotalPrice">
 		<%-- <ycommerce:testId code="orderDetails_productQuantity_label" ><fmt:formatNumber value="${entry.adjustedLinePrice}" maxFractionDigits="2"/></ycommerce:testId> --%>
 		<ycommerce:testId code="orderDetails_productQuantity_label" >
-			<c:if test="${entry.adjustedLinePrice.value > 0}">
-				<format:price priceData="${entry.adjustedLinePrice}" displayFreeForZero="flase"/>
-			</c:if>
+			<c:choose>
+				<c:when test="${entry.rejectedStatus == 'Yes'}">
+					<format:price priceData="${entry.adjustedLinePrice}" displayFreeForZero="flase"/>
+				</c:when>
+				<c:otherwise>
+					<c:if test="${entry.adjustedLinePrice.value > 0}">
+						<format:price priceData="${entry.adjustedLinePrice}" displayFreeForZero="flase"/>
+					</c:if>
+				</c:otherwise>
+			</c:choose>
+			
 		</ycommerce:testId>
 	</td>
 	<td headers="header10" class="rejected">
