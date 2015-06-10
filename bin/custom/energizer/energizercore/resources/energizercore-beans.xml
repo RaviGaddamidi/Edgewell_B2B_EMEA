@@ -90,6 +90,7 @@
 		<property name="documentID" type="String"/>
 		<property name="contrEP" type="String"/>
 		<property name="documentClass" type="String"/>
+		<property name="isOrderBlock" type="boolean"/>
 			
     </bean>    
     

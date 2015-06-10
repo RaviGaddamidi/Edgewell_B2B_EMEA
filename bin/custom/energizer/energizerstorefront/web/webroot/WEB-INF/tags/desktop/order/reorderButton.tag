@@ -7,7 +7,16 @@
 
 <form:form action="${reorderUrl}" id="reorderForm" commandName="reorderForm">
 	<form:input type="hidden" name="orderCode" path="orderCode" value="${order.code}" />
+	<c:choose>
+	<c:when test="${orderData.isOrderBlock == true}">
+	<button type="submit" class="positive right pad_right re-order" id="reorderButton" disabled="disabled">
+		<spring:theme code="checkout.blocked.order" text="Reorder"/>
+	</button>
+	</c:when>
+	<c:otherwise>
 	<button type="submit" class="positive right pad_right re-order" id="reorderButton">
 		<spring:theme code="text.order.reorderbutton" text="Reorder"/>
 	</button>
+	</c:otherwise>
+	</c:choose>
 </form:form>
