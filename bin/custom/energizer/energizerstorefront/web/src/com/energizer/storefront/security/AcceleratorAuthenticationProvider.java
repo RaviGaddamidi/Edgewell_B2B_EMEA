@@ -74,6 +74,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 				final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
 				userModel.setLoginDisabled(true);
 				getModelService().save(userModel);
+				//let's not reset the counter to keep showing the attempt exhaustion message.
 				//bruteForceAttackCounter.resetUserCounter(userModel.getUid());
 			}
 			catch (final UnknownIdentifierException e)
