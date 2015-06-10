@@ -102,7 +102,9 @@
 		<security:intercept-url pattern="/cart" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
 		<security:intercept-url pattern="/cart*" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
 		<security:intercept-url pattern="/cart/**" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
-		
+		<security:intercept-url pattern="/my-cart" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
+		<security:intercept-url pattern="/my-cart/*" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
+		<security:intercept-url pattern="/my-cart/**" access="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP" requires-channel="https"/>
 
 
 		<!-- SSL / AUTHENTICATED pages Organization management pages-->
