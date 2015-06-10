@@ -439,42 +439,53 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 			}
 			else
 			{
-				if (!customerUOM.equalsIgnoreCase(uom))
+				if (rejectedStatus.equalsIgnoreCase("No"))
 				{
-					if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity())
 					{
-						// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
-						// and they are always bigger than incoming UOM(sales uom)
-						finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
-						energizerOrderEntry.setAdjustedQty(new Integer(0));
-						energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
-						// update the value with incoming value
-						energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
-						//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
-						energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
-						energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
-					}
-					else
-					{
-						LOG.info("orderEntryQty from SAP has not changed " + orderEntryQty / finalConversionFactor);
+						if (!customerUOM.equalsIgnoreCase(uom))
+						{
+							if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity())
+							{
+								// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
+								// and they are always bigger than incoming UOM(sales uom)
+								finalConversionFactor = customerUOMMultiplier / salesUOMMultiplier;
+								energizerOrderEntry.setAdjustedQty(new Integer(0));
+								energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
+								// update the value with incoming value
+								energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue() / finalConversionFactor);
+								//since the price UOM is always maintained at each (as per confirmation from Hitesh Wadhwa )
+								energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
+								energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
+							}
+							else
+							{
+								LOG.info("orderEntryQty from SAP has not changed " + orderEntryQty / finalConversionFactor);
+							}
+						}
+						else
+						{
+							if (orderEntryQty != energizerOrderEntry.getQuantity())
+							{
+								//clear the previous value before updating 
+								energizerOrderEntry.setAdjustedQty(new Integer(0));
+								energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
+								// update the value with incoming value
+								energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue());
+								energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
+								energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
+							}
+							else
+							{
+								LOG.info("orderEntryQty from SAP has not changed " + orderEntryQty);
+							}
+						}
 					}
 				}
 				else
 				{
-					if (orderEntryQty != energizerOrderEntry.getQuantity())
-					{
-						//clear the previous value before updating 
-						energizerOrderEntry.setAdjustedQty(new Integer(0));
-						energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
-						// update the value with incoming value
-						energizerOrderEntry.setAdjustedQty(orderEntryQty.intValue());
-						energizerOrderEntry.setAdjustedItemPrice(new BigDecimal(itemTotalPrice * customerUOMMultiplier));
-						energizerOrderEntry.setAdjustedLinePrice(BigDecimal.valueOf(lineItemTotalPrice));
-					}
-					else
-					{
-						LOG.info("orderEntryQty from SAP has not changed " + orderEntryQty);
-					}
+					energizerOrderEntry.setAdjustedQty(new Integer(0));
+					energizerOrderEntry.setAdjustedItemPrice(new BigDecimal("0.00"));
+					energizerOrderEntry.setAdjustedLinePrice(new BigDecimal("0.00"));
 				}
 			}
 			energizerOrderEntry.setUnit(existUnit);
