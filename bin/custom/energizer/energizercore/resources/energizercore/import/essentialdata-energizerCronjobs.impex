@@ -15,9 +15,9 @@ $interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrde
 $interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
 $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
 
-$technicalEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
-$businessEmailAddress=sriram.venkatasubramanian@energizer.com,kaushik.ganguly@energizer.com
-$emailAddress=sriram.venkatasubramanian@energizer.com
+$technicalEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
+$businessEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
+$emailAddress=ehpvalidation@gmail.com
 
 UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
