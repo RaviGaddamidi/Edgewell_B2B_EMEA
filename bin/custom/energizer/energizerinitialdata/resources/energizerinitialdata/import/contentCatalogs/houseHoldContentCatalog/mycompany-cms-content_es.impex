@@ -95,12 +95,6 @@ UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[l
 
 
 
-$contentCatalog=houseHoldContentCatalog
-$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Online'])
-$siteResource=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-
-$lang=es
-
 #  Header Link Componenet #
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
  ;;LogoutLink;"Desconectarse / Salir"
@@ -113,3 +107,11 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
  ;;PrivacyPolicyLink;"Política de privacidad"
  ;;LegalLink;"Legal"
  ;;ContactUSLink;"Contáctenos"
+ ;;CompanyUsersLink;"administrar usuarios"
+ ;;ManageUsersLink;"administrar usuarios"
+ ;;ManagePermissionsLink;"administrar permisos"
+ ;;CompanyUsersAddLink;"Añadir nuevos usuarios"
+ ;;CompanyUsersEditLink;"Editar o desactivar los usuarios"
+ ;;CompanyPermissionsEditLink;"Editar o desactivar los permisos"
+ ;;CompanyPermissionsLink;"administrar permisos"
+ ;;CompanyPermissionsAddLink;"Añadir un nuevo permiso"
