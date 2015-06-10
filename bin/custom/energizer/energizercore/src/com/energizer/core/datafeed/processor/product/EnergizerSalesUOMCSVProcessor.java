@@ -6,7 +6,6 @@ package com.energizer.core.datafeed.processor.product;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
 import de.hybris.platform.category.model.CategoryModel;
-import de.hybris.platform.core.GenericSearchConstants.LOG;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.model.ModelService;
@@ -31,7 +30,6 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerCategoryModel;
 import com.energizer.core.model.EnergizerProductModel;
-import com.energizer.core.model.EnergizerSalesAreaUOMModel;
 import com.energizer.services.product.EnergizerB2BUnitService;
 import com.energizer.services.product.EnergizerSalesUOMService;
 
@@ -100,7 +98,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		{
 			EnergizerCategoryModel energizerSubCategory = null;
 			EnergizerProductModel energizerProduct = null;
-			List<EnergizerCMIRModel> cmirList;
+			final List<EnergizerCMIRModel> cmirList;
 
 			packgingUnits = new ArrayList<String>();
 			packgingUnits.add(EnergizerCoreConstants.EA);
@@ -135,79 +133,111 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				final String familyID = csvValuesMap.get(EnergizerCoreConstants.FAMILY_ID).trim();
 				final String uom = csvValuesMap.get(EnergizerCoreConstants.UOM).trim();
 				final String moq = csvValuesMap.get(EnergizerCoreConstants.MOQ).trim();
+				final String erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).trim();
+
 				CategoryModel energizerCategory = null;
 				Collection<CategoryModel> subCategories = null;
 
-				final List<EnergizerSalesAreaUOMModel> salesUOMs = energizerSalesUOMService.getSalesAreaUOM(familyID);
-				//				addUpdateSalesAreaUOM(salesOrganisation, distributionChannel, division, segmentId, familyID, uom, moq, salesUOMs);
-
-				try
+				//in case of exception at account-material level
+				if (erpMaterialId != null && !erpMaterialId.isEmpty() && customerId != null && !customerId.isEmpty())
 				{
-					energizerCategory = categoryService.getCategoryForCode(catalogVersion, segmentId);
-					if (energizerCategory == null)
+					EnergizerProductModel existEnergizerProd = null;
+					try
 					{
-						LOG.error(segmentId + " category does  not exist ");
+						existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(erpMaterialId);
+						updateCMIRRecord(existEnergizerProd, customerId, uom, moq);
+					}
+					catch (final Exception e)
+					{
+						LOG.error("EnergizerProduct with material id: " + erpMaterialId + "  does  not exist.  " + e);
 						continue;
 					}
 				}
-				catch (final Exception exception)
+				else
 				{
-					LOG.error("Error in retreiving the category " + exception);
-				}
-
-				LOG.info("The category is : " + energizerCategory.getCode() + " " + energizerCategory.getName());
-				try
-				{
-					subCategories = energizerCategory.getAllSubcategories();
-					if (subCategories == null || subCategories.isEmpty())
+					try
 					{
-						LOG.error("No Subcategories found for " + segmentId + "Category");
-						continue;
-					}
-					for (final CategoryModel subCategory : subCategories)
-					{
-						LOG.info("energizer Sub Category" + subCategory.getCode());
-						if (subCategory.getCode().equalsIgnoreCase(familyID))
+						energizerCategory = categoryService.getCategoryForCode(catalogVersion, segmentId);
+						if (energizerCategory == null)
 						{
-							LOG.info("energizer Sub Category" + subCategory.getCode());
-							energizerSubCategory = (EnergizerCategoryModel) subCategory;
-							break;
+							LOG.error(segmentId + " category does  not exist ");
+							continue;
 						}
 					}
-				}
-				catch (final Exception exception)
-				{
-					LOG.error("Error in retreiving the subcategories" + exception);
-				}
-
-				if (energizerSubCategory == null)
-				{
-					LOG.error("No Subcategories found for " + segmentId + "Category");
-					continue;
-				}
-
-				final List<ProductModel> products = productService.getProductsForCategory(energizerSubCategory);
-				if (products == null || products.isEmpty())
-				{
-					LOG.info("No Products found for the sub-category : " + energizerSubCategory);
-				}
-
-				if (customerId.isEmpty())
-				{
-					final List<EnergizerB2BUnitModel> b2bUnitModels = energizerB2BUnitService.getB2BUnitForSalesArea(
-							salesOrganisation, distributionChannel, division);
-
-					if (b2bUnitModels == null || b2bUnitModels.isEmpty())
+					catch (final Exception exception)
 					{
-						LOG.info("No B2BUnits found for the sales org : " + salesOrganisation + " distributionChannel : "
-								+ distributionChannel + " and division : " + division);
+						LOG.error("Error in retreiving the category " + exception);
+					}
+
+					LOG.info("The category is : " + energizerCategory.getCode());
+					try
+					{
+						subCategories = energizerCategory.getAllSubcategories();
+						if (subCategories == null || subCategories.isEmpty())
+						{
+							LOG.error("No Subcategories found for " + segmentId + "Category");
+							continue;
+						}
+						for (final CategoryModel subCategory : subCategories)
+						{
+							LOG.info("Energizer Sub Category : " + subCategory.getCode());
+							if (subCategory.getCode().equalsIgnoreCase(familyID))
+							{
+								LOG.info("Sub Category matches with input..." + familyID);
+								energizerSubCategory = (EnergizerCategoryModel) subCategory;
+								break;
+							}
+						}
+					}
+					catch (final Exception exception)
+					{
+						LOG.error("Error in retreiving the subcategories" + exception);
+					}
+
+					if (energizerSubCategory == null)
+					{
+						LOG.error("No Subcategories found for the category : " + segmentId);
 						continue;
 					}
 
-					for (final EnergizerB2BUnitModel energizerB2BUnitModel : b2bUnitModels)
+					final List<ProductModel> products = productService.getProductsForCategory(energizerSubCategory);
+					if (products == null || products.isEmpty())
 					{
-						LOG.info("The sales area of energizerB2BUnitModel is :" + energizerB2BUnitModel.getSalesOrganisation());
+						LOG.info("No Products found for the sub-category : " + energizerSubCategory);
+					}
 
+					if (customerId.isEmpty())
+					{
+						final List<EnergizerB2BUnitModel> b2bUnitModels = energizerB2BUnitService.getB2BUnitForSalesArea(
+								salesOrganisation, distributionChannel, division);
+
+						if (b2bUnitModels == null || b2bUnitModels.isEmpty())
+						{
+							LOG.info("No B2BUnits found for the sales org : " + salesOrganisation + " distributionChannel : "
+									+ distributionChannel + " and division : " + division);
+							continue;
+						}
+
+						for (final EnergizerB2BUnitModel energizerB2BUnitModel : b2bUnitModels)
+						{
+							LOG.info("The sales area of energizerB2BUnitModel is :" + energizerB2BUnitModel.getSalesOrganisation());
+
+							for (final ProductModel product : products)
+							{
+								if (product == null)
+								{
+									continue;
+								}
+								if (product instanceof EnergizerProductModel)
+								{
+									energizerProduct = (EnergizerProductModel) product;
+									updateCMIRRecord(energizerProduct, energizerB2BUnitModel.getUid(), uom, moq);
+								}
+							}
+						}
+					}
+					else
+					{
 						for (final ProductModel product : products)
 						{
 							if (product == null)
@@ -216,69 +246,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 							}
 							if (product instanceof EnergizerProductModel)
 							{
+								LOG.info("The details about the product is :" + product.getCode());
+
 								energizerProduct = (EnergizerProductModel) product;
-
-								cmirList = energizerProduct.getProductCMIR();
-								if (cmirList == null || cmirList.isEmpty())
-								{
-									LOG.info("No CMIR records found for the product : " + energizerProduct.getCode());
-									continue;
-								}
-
-								LOG.info("The number of customers associated with this product is:" + cmirList.size());
-
-								//if (!cmirList.isEmpty())
-								//{
-								for (final EnergizerCMIRModel energizerCMIR : cmirList)
-								{
-									if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(energizerB2BUnitModel.getUid()))
-									{
-										energizerCMIR.setUom(uom);
-										energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
-										modelService.saveAll();
-										break;
-									}
-								}
-								//}
-							}
-						}
-					}
-				}
-				else
-				{
-					for (final ProductModel product : products)
-					{
-						if (product == null)
-						{
-							continue;
-						}
-						if (product instanceof EnergizerProductModel)
-						{
-							LOG.info("The details about the product is :" + product.getCode() + product.getDescription());
-
-							energizerProduct = (EnergizerProductModel) product;
-
-							cmirList = energizerProduct.getProductCMIR();
-							if (cmirList == null || cmirList.isEmpty())
-							{
-								LOG.info("No CMIR records found for the product : " + energizerProduct.getCode());
-								continue;
-							}
-
-							LOG.info("The number of customers associated with this product is:" + cmirList.size());
-
-							if (!cmirList.isEmpty())
-							{
-								for (final EnergizerCMIRModel energizerCMIR : cmirList)
-								{
-									if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(customerId))
-									{
-										energizerCMIR.setUom(uom);
-										energizerCMIR.setOrderingUnit(Integer.parseInt(moq));
-										modelService.saveAll();
-										break;
-									}
-								}
+								updateCMIRRecord(energizerProduct, customerId, uom, moq);
 							}
 						}
 					}
@@ -286,7 +257,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				succeedRecord++;
 				setRecordSucceeded(succeedRecord);
 			}
-
 		}
 		catch (final Exception e)
 		{
@@ -297,42 +267,26 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		return getCsvFeedErrorRecords();
 	}
 
-	/**
-	 * @param salesAreaID
-	 * @param segmentId
-	 * @param familyID
-	 * @param uom
-	 * @param moq
-	 * @param salesUOMs
-	 */
-	@SuppressWarnings("unused")
-	private void addUpdateSalesAreaUOM(final String salesOrganisation, final String distributionChannel, final String division,
-			final String segmentId, final String familyID, final String uom, final String moq,
-			final List<EnergizerSalesAreaUOMModel> salesUOMs)
+	private void updateCMIRRecord(final EnergizerProductModel energizerProduct, final String b2bUnitId, final String uom,
+			final String moq)
 	{
-		EnergizerSalesAreaUOMModel energizerSalesAreaUOMModel;
-		if ((salesUOMs == null || salesUOMs.size() == 0) && !familyID.isEmpty())
+		List<EnergizerCMIRModel> cmirList;
+		cmirList = energizerProduct.getProductCMIR();
+		if (cmirList == null || cmirList.isEmpty())
 		{
-			energizerSalesAreaUOMModel = modelService.create(EnergizerSalesAreaUOMModel.class);
-			energizerSalesAreaUOMModel.setFamilyID(familyID);
-
-			energizerSalesAreaUOMModel.setSalesOrganisation(salesOrganisation);
-			energizerSalesAreaUOMModel.setDistributionChannel(distributionChannel);
-			energizerSalesAreaUOMModel.setDivision(division);
-			energizerSalesAreaUOMModel.setMeasureOfQuantity(moq);
-			energizerSalesAreaUOMModel.setUnitOfMeasure(uom);
-			LOG.info(familyID + "--" + segmentId + "--" + familyID + "--" + uom + "--" + moq);
-
-			modelService.save(energizerSalesAreaUOMModel);
-			LOG.info("sales area UOM saved");
+			LOG.info("No CMIR records found for the product : " + energizerProduct.getCode());
+			return;
 		}
-		else
+		LOG.info("The number of customers associated with this product is:" + cmirList.size());
+		for (final EnergizerCMIRModel energizerCMIR : cmirList)
 		{
-			final List<EnergizerSalesAreaUOMModel> energizerSalesAreaUOMModelList = salesUOMs;
-			energizerSalesAreaUOMModelList.get(0).setMeasureOfQuantity(moq);
-			energizerSalesAreaUOMModelList.get(0).setUnitOfMeasure(uom);
-			modelService.save(energizerSalesAreaUOMModelList.get(0));
-			LOG.info("updating the sales area UOM");
+			if (energizerCMIR.getB2bUnit().getUid().equalsIgnoreCase(b2bUnitId))
+			{
+				energizerCMIR.setUom(uom);
+				energizerCMIR.setOrderingUnit(Integer.valueOf(moq));
+				modelService.saveAll();
+				break;
+			}
 		}
 	}
 
