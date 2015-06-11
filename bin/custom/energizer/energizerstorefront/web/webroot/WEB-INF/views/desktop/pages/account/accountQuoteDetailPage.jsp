@@ -48,7 +48,9 @@
 				<order:orderTotalsItem order="${orderData}"/>
 			</div>
 			<div class="span-19 last">
+			<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
 				<order:reorderButton order="${orderData}"/>
+				</sec:authorize>
 			</div>
 		</div>
 	</div>
