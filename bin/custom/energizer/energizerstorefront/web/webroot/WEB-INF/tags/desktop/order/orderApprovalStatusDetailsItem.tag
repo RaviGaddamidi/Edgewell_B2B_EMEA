@@ -22,6 +22,11 @@
 			<tr>
 				<td><spring:theme code="text.account.orderApprovalDetails.OrderNumber" text="Order number" />:${orderApprovalData.b2bOrderData.code}</td>
 			</tr>
+			<c:if test="${not empty orderApprovalData.b2bOrderData.erpOrderNumber}">
+			<tr>
+			<td><spring:theme code="text.account.orderApprovalDetails.HybrisOrderNumber" text="Order number" />:${orderApprovalData.b2bOrderData.erpOrderNumber}</td>
+			</tr>
+			</c:if>
 			<tr>
 				<td><spring:theme code="text.account.orderApprovalDetails.orderPlacedBy" text="Order placed by" />:${orderApprovalData.b2bOrderData.b2bCustomerData.name}</td>
 			</tr>
