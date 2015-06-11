@@ -90,7 +90,7 @@
 				</sec:authorize>
 				
 				<!-- Added the below section, This is to allow the B2B View group users could able to view the all orders from their B2B Units.-->
-        		<sec:authorize ifAnyGranted="ROLE_B2BVIEWERGROUP,ROLE_B2BADMINGROUP,ROLE_B2BCUSTOMERGROUP">
+        		<sec:authorize ifAnyGranted="ROLE_B2BVIEWERGROUP,ROLE_B2BADMINGROUP,ROLE_B2BCUSTOMERGROUP,ROLE_B2BAPPROVERGROUP">
 					<li class='${selected eq 'orders' || selected eq 'order' ? 'nav_selected' : ''}'>
 						<c:url value="/my-account/orders" var="encodedUrl" />
 						<ycommerce:testId code="myAccount_orders_navLink">
