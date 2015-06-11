@@ -235,7 +235,11 @@ public class CartPageController extends AbstractPageController
 
 		cartEntryBusinessRulesService.clearErrors();
 		final List<String> businessRuleErrors = new ArrayList<String>();
-		cartEntryBusinessRulesService.validateBusinessRules(getOrderEntryData(form.getQuantity(), productCode, entryNumber));
+		if (form.getQuantity() > 0)
+		{
+			cartEntryBusinessRulesService.validateBusinessRules(getOrderEntryData(form.getQuantity(), productCode, entryNumber));
+		}
+
 		if (cartEntryBusinessRulesService.hasErrors())
 		{
 			final List<BusinessRuleError> businessValidationRuleErrors = cartEntryBusinessRulesService.getErrors();
