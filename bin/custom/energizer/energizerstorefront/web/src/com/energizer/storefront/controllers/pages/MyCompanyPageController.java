@@ -735,8 +735,8 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected B2BPermissionData populateB2BPermissionDataFromForm(final B2BPermissionForm b2BPermissionForm) throws ParseException
 	{
 		final B2BPermissionData b2BPermissionData = new B2BPermissionData();
-		b2BPermissionData.setOriginalCode(b2BPermissionForm.getOriginalCode());
-		final String permissionCode = b2BPermissionForm.getCode();
+		b2BPermissionData.setOriginalCode(XSSFilterUtil.filter(b2BPermissionForm.getOriginalCode()));
+		final String permissionCode = XSSFilterUtil.filter(b2BPermissionForm.getCode());
 		if (StringUtils.isNotEmpty(permissionCode))
 		{
 			b2BPermissionData.setCode(permissionCode);
@@ -748,16 +748,17 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		final B2BPermissionTypeData b2BPermissionTypeData = b2BPermissionForm.getB2BPermissionTypeData();
 		b2BPermissionData.setB2BPermissionTypeData(b2BPermissionTypeData);
 		final CurrencyData currencyData = new CurrencyData();
-		currencyData.setIsocode(b2BPermissionForm.getCurrency());
+		currencyData.setIsocode(XSSFilterUtil.filter(b2BPermissionForm.getCurrency()));
 		b2BPermissionData.setCurrency(currencyData);
 
-		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BPermissionForm.getParentUnitName()));
-		final String permissionTimespan = b2BPermissionForm.getTimeSpan();
+		b2BPermissionData
+				.setUnit(companyB2BCommerceFacade.getUnitForUid(XSSFilterUtil.filter(b2BPermissionForm.getParentUnitName())));
+		final String permissionTimespan = XSSFilterUtil.filter(b2BPermissionForm.getTimeSpan());
 		if (StringUtils.isNotEmpty(permissionTimespan))
 		{
-			b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf(b2BPermissionForm.getTimeSpan()));
+			b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf(XSSFilterUtil.filter(b2BPermissionForm.getTimeSpan())));
 		}
-		final String monetaryValue = b2BPermissionForm.getValue();
+		final String monetaryValue = XSSFilterUtil.filter(b2BPermissionForm.getValue());
 		if (StringUtils.isNotEmpty(monetaryValue))
 		{
 			b2BPermissionData.setValue(Double.valueOf(formatFactory.createNumberFormat().parse(monetaryValue).doubleValue()));
