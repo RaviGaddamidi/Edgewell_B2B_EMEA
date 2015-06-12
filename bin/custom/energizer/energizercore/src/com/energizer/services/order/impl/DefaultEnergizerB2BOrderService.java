@@ -885,13 +885,13 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 		if (isZDF1PriceAvailable)
 		{
-			orderEntry.setBasePrice(zPR0PriceData);
-			orderEntry.setTotalPrice(zPR0TotalPriceData);
+			orderEntry.setBasePrice(zDF1PriceData);
+			orderEntry.setTotalPrice(zDF1TotalPriceData);
 		}
 		else if (isZPR0PriceAvailable)
 		{
-			orderEntry.setBasePrice(zDF1PriceData);
-			orderEntry.setTotalPrice(zDF1TotalPriceData);
+			orderEntry.setBasePrice(zPR0PriceData);
+			orderEntry.setTotalPrice(zPR0TotalPriceData);
 		}
 	}
 
