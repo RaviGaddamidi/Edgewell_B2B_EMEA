@@ -373,7 +373,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			emailSubject.append("Simulation Failed ");
 			emailBody.append("Hi <br/>");
 			emailBody.append("While creating data for simulating order in hybris " + "<br/>");
-			emailBody.append("we could not find the conversions for the sales UOM " + uom + "for the material id " + prodii9001Code
+			emailBody.append("we could not find the conversions for the sales UOM " + uom + "for the material id " + prodCode
 					+ "<br/>");
 			emailBody.append("This is an automatically generated email. Please do not reply to this mail");
 			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
