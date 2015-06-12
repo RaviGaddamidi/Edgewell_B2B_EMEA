@@ -37,7 +37,7 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 ;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
-;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
 #--------------------------------------------------------------------------------------------------------------
 #				This is to send a email notification or registration email to B2BUnit Admin user     #

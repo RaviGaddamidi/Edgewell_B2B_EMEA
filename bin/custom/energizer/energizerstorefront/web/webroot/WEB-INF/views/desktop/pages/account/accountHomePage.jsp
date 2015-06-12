@@ -80,7 +80,7 @@
             </div> --%>
             <%-- </sec:authorize> --%>
              
-             <sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
+             <sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
             <div class="tile column QuickOrders">
             	<c:url value="/my-account/quickorder" var="encodedUrl" />
             	<div class="headline"><a href="${encodedUrl}"> <spring:theme code="text.account.profile.QuickOrders" text="Quick Order"/> </a></div>
@@ -101,7 +101,7 @@
             	</ul>
        		</div>
 			</sec:authorize>
-			<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP,ROLE_B2BVIEWERGROUP">
+			<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP,ROLE_B2BAPPROVERGROUP,ROLE_B2BVIEWERGROUP">
             <div class="tile column orderHistory">
                 <c:url value="/my-account/orders" var="encodedUrl" />
                 <div class="headline"><a href="${encodedUrl}"><spring:theme code="text.account.orderHistory" text="Order History"/></a></div>

@@ -101,12 +101,12 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			final List<EnergizerCMIRModel> cmirList;
 
 			packgingUnits = new ArrayList<String>();
-			packgingUnits.add(EnergizerCoreConstants.EA);
+			//packgingUnits.add(EnergizerCoreConstants.EA);
 			packgingUnits.add(EnergizerCoreConstants.INTERPACK);
 			packgingUnits.add(EnergizerCoreConstants.CASE);
 			packgingUnits.add(EnergizerCoreConstants.LAYER);
 			packgingUnits.add(EnergizerCoreConstants.PALLET);
-			packgingUnits.add(EnergizerCoreConstants.EA);
+			//packgingUnits.add(EnergizerCoreConstants.EA);
 
 			long succeedRecord = getRecordSucceeded();
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
@@ -374,7 +374,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					columnNames.add(columnHeader);
 					columnNumbers.add(columnNumber);
 					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column can be EA, Interpack, Case, Layer, Pallet");
+					error.setMessage(columnHeader + " column can be Interpack(IP), Case(CS), Layer(LAY), Pallet(PAL)");
 					columnNumbers.add(columnNumber);
 					error.setColumnNumber(columnNumbers);
 					error.setUserType(BUSINESS_USER);

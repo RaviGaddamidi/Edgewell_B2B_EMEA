@@ -11,6 +11,7 @@
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common" %>
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/desktop/nav/breadcrumb" %>
 <%@ taglib prefix="ycommerce" uri="http://hybris.com/tld/ycommercetags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <jsp:useBean id="DateTimeUtil"  class="com.energizer.storefront.util.EnergizerDateTimeUtil" /> 
 
 <template:page pageTitle="${pageTitle}">
@@ -73,8 +74,9 @@
 			</div>
 			
 			<div class="span-19 last orderFix-cls">
+			<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
 		  		 <order:reorderButton order="${orderData}"/>
-		  		
+		  	</sec:authorize>	
 				 <c:if test="${not empty orderData.status && orderData.status == 'INVOICED' }"> 
 				 	<order:viewInvoiceButton orderData="${orderData}"/>
 				</c:if> 

@@ -6,7 +6,7 @@
 $contentCatalog=houseHoldContentCatalog
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $emailResource=jar:com.energizer.core.setup.CoreSystemSetup&/energizercore/import/contentCatalogs/$contentCatalog/emails
-$emailid=Sriram.Venkatasubramanian@energizer.com
+$emailid=ehpvalidation@gmail.com
 # Language
 $lang=es
 

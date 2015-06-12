@@ -44,6 +44,15 @@ UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=en]
 # CMS Navigation Nodes - My Company
 UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
 ;;CompanySummaryNavNode;"Account Summary"
+# CMS Navigation Nodes - My Company
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
+;CompanyLeftNavNode;; su empresa; su empresa
+;CompanyBudgetNavNode;; su empresa; Administrar Presupuestos
+;CompanyCostCenterNavNode;; su empresa; Administrar CostCenters
+;CompanyUnitsNavNode;; su empresa; Administrar Unidades
+;CompanyUsersNavNode;; su empresa; Administrar usuarios
+;CompanyUserGroupsNavNode;; su empresa; Administrar Grupos de Usuarios
+;CompanyPermissionsNavNode;; su empresa; Administrar permisos
 
 # Energizer Terms and Conditions Page
 
@@ -94,13 +103,6 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=
 UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang]
 
 
-
-$contentCatalog=houseHoldContentCatalog
-$contentCV=catalogVersion(catalog(id[default=$contentCatalog]),version[default='Online'])
-$siteResource=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/contentCatalogs/$contentCatalog
-
-$lang=es
-
 #  Header Link Componenet #
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
  ;;LogoutLink;"Desconectarse / Salir"
@@ -113,3 +115,40 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
  ;;PrivacyPolicyLink;"Política de privacidad"
  ;;LegalLink;"Legal"
  ;;ContactUSLink;"Contáctenos"
+ ;;CompanyUsersLink;"administrar usuarios"
+ ;;ManageUsersLink;"administrar usuarios"
+ ;;ManagePermissionsLink;"administrar permisos"
+ ;;CompanyUsersAddLink;"Añadir nuevos usuarios"
+ ;;CompanyUsersEditLink;"Editar o desactivar los usuarios"
+ ;;CompanyPermissionsEditLink;"Editar o desactivar los permisos"
+ ;;CompanyPermissionsLink;"administrar permisos"
+ ;;CompanyPermissionsAddLink;"Añadir un nuevo permiso"
+ ;;CompanyBudgetAddLink; "Añadir nuevos Presupuestos"
+ ;;CompanyBudgetEditLink; "presupuestos Editar o desactivar"
+ ;;CompanyBudgetLink; "Administrar Presupuestos"
+ ;;CompanyCostCenterAddLink; "Añadir nuevo centro de costos"
+ ;;CompanyCostCenterEditLink; "centros Editar o costos desactivar"
+ ;;CompanyCostCenterLink; "Administrar Centros de costes"
+ ;;CompanyHomeLink; "Mi Empresa"
+ ;;CompanyOrganizationtLink; "Gestión de organizaciones"
+ ;;CompanyPermissionsAddLink; "Añadir nuevo permiso"
+ ;;CompanyPermissionsEditLink; "Editar permisos o desactivar"
+ ;;CompanyPermissionsLink; "Administrar permisos"
+ ;;CompanyUnitsAddLink; "Crear nuevas unidades"
+ ;;CompanyUnitsEditLink; "Editar o desactivar las unidades"
+ ;;CompanyUnitsLink; "Administrar Grupos de Negocio"
+ ;;CompanyUserGroupsAddLink; "Añadir nuevo grupo de usuarios"
+ ;;CompanyUserGroupsEditLink; "Editar o pedido y desactivar grupos de usuarios"
+ ;;CompanyUserGroupsLink; "Administrar Grupos de Usuarios"
+ ;;CompanyUsersAddLink; "Añadir nuevos usuarios"
+ ;;CompanyUsersEditLink; "Editar o desactivar los usuarios"
+ ;;CompanyUsersLink; "Administrar usuarios"
+ ;;LogoutLink; "Salir"
+ ;;ManageBudgetsLink; "Administrar Presupuestos"
+ ;;ManageBusinessUnitsLink; "Administrar Grupos de Negocio"
+ ;;ManageCostCentersLink; "Administrar Centros de costes"
+ ;;ManagePermissionsLink; "Administrar permisos"
+ ;;ManageUsergroupsLink; "Administrar Grupos de Usuarios"
+ ;;ManageUsersLink; "Administrar usuarios"
+ ;;MyAccountLink; "Mi Cuenta"
+ ;;MyCompanyLink; "Mi Empresa"
