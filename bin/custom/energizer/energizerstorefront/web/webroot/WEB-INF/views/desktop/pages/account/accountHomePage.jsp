@@ -145,7 +145,7 @@
 		</div>
 		<%-- </sec:authorize>
  --%>
-		<sec:authorize ifAllGranted="ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
+		<sec:authorize ifAnyGranted="ROLE_B2BAPPROVERGROUP,ROLE_B2BADMINGROUP">
 			<div class="tile column approval-dashboard">
 				<c:url value="/my-account/approval-dashboard" var="encodedUrl" />
 				<div class="headline">
