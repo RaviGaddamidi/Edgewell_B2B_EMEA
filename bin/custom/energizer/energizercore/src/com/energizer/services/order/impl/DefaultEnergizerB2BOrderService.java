@@ -274,7 +274,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "PAL");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
 							Integer quantityInInt = 0;
-							if (conversionMultiplierForCase != null)
+							if (conversionMultiplier != null)
 							{
 								quantityInInt = conversionMultiplier / conversionMultiplierForCase;
 							}
@@ -289,9 +289,9 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						{
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
-							Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							Integer quantityinInt = 0;
 							//quantityinInt = conversionMultiplier / conversionMultiplierForCase;
-							if (conversionMultiplierForCase != null)
+							if (conversionMultiplier != null)
 							{
 								quantityinInt = conversionMultiplier / conversionMultiplierForCase;
 							}
@@ -370,11 +370,10 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final EmailAddressModel fromAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
 			final StringBuilder emailBody = new StringBuilder();
 			final StringBuilder emailSubject = new StringBuilder();
-			emailSubject.append("Simulation Failed For the user " + orderData.getUser().getUid());
+			emailSubject.append("Simulation Failed ");
 			emailBody.append("Hi <br/>");
-			emailBody.append("While creating data for simulating order in hybris for the user " + orderData.getUser().getUid()
-					+ "<br/>");
-			emailBody.append("we could not find the conversions for the sales UOM " + uom + "for the material id " + prodCode
+			emailBody.append("While creating data for simulating order in hybris " + "<br/>");
+			emailBody.append("we could not find the conversions for the sales UOM " + uom + "for the material id " + prodii9001Code
 					+ "<br/>");
 			emailBody.append("This is an automatically generated email. Please do not reply to this mail");
 			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
