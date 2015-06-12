@@ -292,12 +292,14 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 		// EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService.getUnitForUid(b2bAccount);
 		EnergizerB2BUnitModel energizerB2BUnitModel = null;
 		final List<AddressModel> addresses = defaultEnergizerAddressFacade.fetchAddress(b2bAccount);
+		AddressModel addrs = null;
 		//only one sold to party will be assigned to one address
 		for (final AddressModel address : addresses)
 		{
 			if (address.getOwner() instanceof EnergizerB2BUnitModel)
 			{
 				energizerB2BUnitModel = (EnergizerB2BUnitModel) address.getOwner();
+				addrs = address;
 			}
 		}
 
@@ -389,6 +391,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 						+ " is not having any members of admin group");
 				isOrderCreatedOrUpdated = false;
 			}
+			energizerOrderModel.setDeliveryAddress(addrs);
 		}
 		if (isOrderCreatedOrUpdated == false)
 		{

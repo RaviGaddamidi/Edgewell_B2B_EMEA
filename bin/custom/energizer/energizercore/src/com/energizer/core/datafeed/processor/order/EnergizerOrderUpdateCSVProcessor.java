@@ -444,7 +444,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					{
 						if (!customerUOM.equalsIgnoreCase(uom))
 						{
-							if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity())
+							if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity()
+									|| energizerOrderEntry.getBasePrice() != (itemTotalPrice * customerUOMMultiplier))
 							{
 								// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
 								// and they are always bigger than incoming UOM(sales uom)
@@ -464,7 +465,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 						}
 						else
 						{
-							if (orderEntryQty != energizerOrderEntry.getQuantity())
+							if (orderEntryQty != energizerOrderEntry.getQuantity()
+									|| energizerOrderEntry.getBasePrice() != (itemTotalPrice * customerUOMMultiplier))
 							{
 								//clear the previous value before updating 
 								energizerOrderEntry.setAdjustedQty(new Integer(0));
