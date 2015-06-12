@@ -726,20 +726,49 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			for (final AbstractOrderEntryModel orderEntryModel : orderModelEntries)
 			{
 				final String modelProdCode = orderEntryModel.getProduct().getCode();
+				Double zDF1BaseUomPrice = Double.parseDouble("0.00");
+				Double zDF1BaseUomQuantity = Double.parseDouble("0.00");
+				Double zDF1EntryTotla = Double.parseDouble("0.00");
+
+				Double zPR0BaseUomPrice = Double.parseDouble("0.00");
+				Double zPR0BaseUomQuantity = Double.parseDouble("0.00");
+				Double zPR0EntryTotla = Double.parseDouble("0.00");
+				boolean isZDF1PriceAvailable = false;
+				boolean isZPR0PriceAvailable = false;
+
 				for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
 				{
-					if (conditions.getMATERIAL().getValue().equals(modelProdCode)
-							&& conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
+					if (conditions.getMATERIAL().getValue().equals(modelProdCode))
 					{
-
-						final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
-						final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
-						final Double entryTotla = baseUomPrice * baseUomQuantity;
-						orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
-						orderEntryModel.setTotalPrice(entryTotla);
-						orderEntryModel.setRejectedStatus("No");
-						modelService.save(orderEntryModel);
+						if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
+						{
+							zPR0BaseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+							zPR0BaseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+							zPR0EntryTotla = zPR0BaseUomPrice * zPR0BaseUomQuantity;
+							isZPR0PriceAvailable = true;
+						}
+						if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZDF1"))
+						{
+							zDF1BaseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+							zDF1BaseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+							zDF1EntryTotla = zDF1BaseUomPrice * zDF1BaseUomQuantity;
+							isZDF1PriceAvailable = true;
+						}
 					}
+				}
+				if (isZDF1PriceAvailable)
+				{
+					orderEntryModel.setBasePrice(zDF1EntryTotla / orderEntryModel.getQuantity());
+					orderEntryModel.setTotalPrice(zDF1EntryTotla);
+					orderEntryModel.setRejectedStatus("No");
+					modelService.save(orderEntryModel);
+				}
+				else if (isZPR0PriceAvailable)
+				{
+					orderEntryModel.setBasePrice(zPR0EntryTotla / orderEntryModel.getQuantity());
+					orderEntryModel.setTotalPrice(zPR0EntryTotla);
+					orderEntryModel.setRejectedStatus("No");
+					modelService.save(orderEntryModel);
 				}
 
 			}
