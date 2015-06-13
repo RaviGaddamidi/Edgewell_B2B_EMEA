@@ -16,7 +16,7 @@ $storefrontContextRoot=$config-b2bStorefrontContextRoot
 
 # CMS Site
 INSERT_UPDATE CMSSite;uid[unique=true];theme(code);channel(code);stores(uid);contentCatalogs(id);defaultCatalog(id);defaultLanguage(isoCode);urlPatterns;active;previewURL;startingPage(uid,$contentCV);urlEncodingAttributes;defaultPromotionGroup(Identifier)[default=personalCarePromoGrp]
-;$siteUid;green;B2B;$storeUid;$contentCatalog;$productCatalog;$defaultLanguage;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=$siteUid)(|\&.*)$,(?i)^https?://$siteUid\.[^/]+(|/.*|\?.*)$,(?i)^https?://qa\.edgewell\.[^/]+(|/.*|\?.*)$,(?i)^https?://prod\.edgewell\.[^/]+(|/.*|\?.*)$,(?i)^https?://edgewell\.[^/]+(|/.*|\?.*)$;true;$storefrontContextRoot/?site=$siteUid;homepage;currency
+;$siteUid;green;B2B;$storeUid;$contentCatalog;$productCatalog;$defaultLanguage;(?i)^https?://[^/]+(/[^?]*)?\?(.*\&)?(site=$siteUid)(|\&.*)$,(?i)^https?://$siteUid\.[^/]+(|/.*|\?.*)$,(?i)^https?://qa\.edgewell\.[^/]+(|/.*|\?.*)$,(?i)^https?://live\.edgewell\.[^/]+(|/.*|\?.*)$,(?i)^https?://edgewell\.[^/]+(|/.*|\?.*)$;true;$storefrontContextRoot/?site=$siteUid;homepage;currency
 
 # Cart Cleanup CronJobs
 INSERT_UPDATE CartRemovalCronJob;code[unique=true];job(code)[default=cartRemovalJob];sites(uid)[default=$siteUid];sessionLanguage(isoCode)[default=en]
