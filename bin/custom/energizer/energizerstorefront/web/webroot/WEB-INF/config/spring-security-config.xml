@@ -363,6 +363,7 @@
 		<property name="authorizedGroupsToCheckOut">
 			<set value-type="java.lang.String">
 				<value>b2bcustomergroup</value>
+				<value>b2badmingroup</value>
 			</set>
 		</property>
 	</bean>

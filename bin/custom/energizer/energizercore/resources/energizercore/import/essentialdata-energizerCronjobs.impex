@@ -1,6 +1,8 @@
 #importing EnergizerCronjobs for csv feeds
 # Import config properties into impex macros
 
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+
 $defaultCurrency=USD
 $interfaceTypeEnergizerCustomer = $config-interfaceType_EnergizerCustomer
 $interfaceTypeSalesArea=$config-interfaceType_SalesArea
@@ -19,7 +21,6 @@ $technicalEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
 $businessEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
 $emailAddress=ehpvalidation@gmail.com
 
-UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
 INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
@@ -37,7 +38,7 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 ;energizerCategory2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerCategory2CategoryRelationCSVProcessor;Category2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProduct2CategoryCSVProcessor;energizerCSVFeedCronJob;en;energizerProduct2CategoryCSVProcessor;Product2Category Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
-;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
 #--------------------------------------------------------------------------------------------------------------
 #				This is to send a email notification or registration email to B2BUnit Admin user     #

@@ -241,6 +241,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				succeedRecord++;
 				setRecordSucceeded(succeedRecord);
 			}//end of for loop
+			LOG.info("orderModels list size before sending email " + orderModels.size());
 			if (orderModels.size() > 0)
 			{
 				prepareEmail(orderModels);
@@ -261,64 +262,62 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	{
 		final List<String> possibleOrderStatusValues = Arrays.asList(SEND_EMAIL_FOR_ORDER_STATUS.split(new Character(',')
 				.toString()));
-		final String orderStatusCode = status.toUpperCase();
-		final boolean result = possibleOrderStatusValues.contains(orderStatusCode);
+		/*
+		 * final String orderStatusCode = status.toUpperCase(); final boolean result =
+		 * possibleOrderStatusValues.contains(orderStatusCode);
+		 */
 		final Set<OrderModel> models = new HashSet<OrderModel>();
 		models.addAll(orderModels);
-
-		if (result)
+		LOG.info("order for which emails to be sent" + models.toString());
+		for (final OrderModel orderModel : models)
 		{
-			for (final OrderModel orderModel : models)
-			{
-				final UserModel user = orderModel.getUser();
-				final B2BCustomerModel b2bOrderCreator = (B2BCustomerModel) user;
-				final Set<B2BCustomerModel> b2bOrderApprovers = orderModel.getB2bUnit().getApprovers();
+			final UserModel user = orderModel.getUser();
+			final B2BCustomerModel b2bOrderCreator = (B2BCustomerModel) user;
+			final Set<B2BCustomerModel> b2bOrderApprovers = orderModel.getB2bUnit().getApprovers();
 
-				if (b2bOrderCreator.getActive() && !StringUtils.isEmpty(b2bOrderCreator.getEmail()))
+			if (b2bOrderCreator.getActive() && !StringUtils.isEmpty(b2bOrderCreator.getEmail()))
+			{
+				final String orderCreatorEmail = b2bOrderCreator.getEmail();
+				final EmailAddressModel fromEmail = getEmailService().getOrCreateEmailAddressForEmail(FROM_EMAIL_ADDRESS,
+						FROM_EMAIL_DISPLAY_NAME);
+				EmailAddressModel toEmail = getEmailService().getOrCreateEmailAddressForEmail(orderCreatorEmail, orderCreatorEmail);
+				final List<EmailAddressModel> toAddress = new ArrayList<EmailAddressModel>();
+				toAddress.add(toEmail);
+				final List<EmailAddressModel> orderApproversEmailList = new ArrayList<EmailAddressModel>();
+				if (null != b2bOrderApprovers && !b2bOrderApprovers.isEmpty())
 				{
-					final String orderCreatorEmail = b2bOrderCreator.getEmail();
-					final EmailAddressModel fromEmail = getEmailService().getOrCreateEmailAddressForEmail(FROM_EMAIL_ADDRESS,
-							FROM_EMAIL_DISPLAY_NAME);
-					EmailAddressModel toEmail = getEmailService()
-							.getOrCreateEmailAddressForEmail(orderCreatorEmail, orderCreatorEmail);
-					final List<EmailAddressModel> toAddress = new ArrayList<EmailAddressModel>();
-					toAddress.add(toEmail);
-					final List<EmailAddressModel> orderApproversEmailList = new ArrayList<EmailAddressModel>();
-					if (null != b2bOrderApprovers && !b2bOrderApprovers.isEmpty())
+					for (final B2BCustomerModel b2bOrderApprover : b2bOrderApprovers)
 					{
-						for (final B2BCustomerModel b2bOrderApprover : b2bOrderApprovers)
+						if (b2bOrderApprover.getActive() && !StringUtils.isEmpty(b2bOrderApprover.getEmail()))
 						{
-							if (b2bOrderApprover.getActive() && !StringUtils.isEmpty(b2bOrderApprover.getEmail()))
-							{
-								toEmail = getEmailService().getOrCreateEmailAddressForEmail(b2bOrderApprover.getEmail(),
-										b2bOrderApprover.getEmail());
-								orderApproversEmailList.add(toEmail);
-							}
+							toEmail = getEmailService().getOrCreateEmailAddressForEmail(b2bOrderApprover.getEmail(),
+									b2bOrderApprover.getEmail());
+							orderApproversEmailList.add(toEmail);
 						}
 					}
-					final Map<String, Object> contextmap = new HashMap<String, Object>();
-					userService.setCurrentUser(orderModel.getUser());
-					orderData = getOrderConverter().convert(orderModel);
-					final BaseSiteModel baseSite = orderModel.getSite();
-					contextmap.put("orderData", orderData);
-					contextmap.put("baseSite", baseSite);
-					if (status.equalsIgnoreCase("SHIPPED"))
-					{
-						energizerGenericEmailGenerationService.generateAndSendEmail("DeliverySentEmailTemplate", toAddress, fromEmail,
-								orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
-					}
-					if (status.equalsIgnoreCase("CANCELLED"))
-					{
-						energizerGenericEmailGenerationService.generateAndSendEmail("OrderCancelledEmailTemplate", toAddress,
-								fromEmail, orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
-					}
-					if (status.equalsIgnoreCase("IN_PROCESS"))
-					{
-						energizerGenericEmailGenerationService.generateAndSendEmail("OrderInProcessEmailTemplate", toAddress,
-								fromEmail, orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
-					}
 				}
+				final Map<String, Object> contextmap = new HashMap<String, Object>();
+				userService.setCurrentUser(orderModel.getUser());
+				orderData = getOrderConverter().convert(orderModel);
+				final BaseSiteModel baseSite = orderModel.getSite();
+				contextmap.put("orderData", orderData);
+				contextmap.put("baseSite", baseSite);
 
+				if (orderModel.getStatus().getCode().equalsIgnoreCase("SHIPPED"))
+				{
+					energizerGenericEmailGenerationService.generateAndSendEmail("DeliverySentEmailTemplate", toAddress, fromEmail,
+							orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
+				}
+				if (orderModel.getStatus().getCode().equalsIgnoreCase("CANCELLED"))
+				{
+					energizerGenericEmailGenerationService.generateAndSendEmail("OrderCancelledEmailTemplate", toAddress, fromEmail,
+							orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
+				}
+				if (orderModel.getStatus().getCode().equalsIgnoreCase("IN_PROCESS"))
+				{
+					energizerGenericEmailGenerationService.generateAndSendEmail("OrderInProcessEmailTemplate", toAddress, fromEmail,
+							orderApproversEmailList, orderModel.getUser().getSessionLanguage(), contextmap);
+				}
 			}
 		}
 	}
@@ -444,7 +443,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 					{
 						if (!customerUOM.equalsIgnoreCase(uom))
 						{
-							if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity())
+							if ((orderEntryQty / finalConversionFactor) != energizerOrderEntry.getQuantity()
+									|| energizerOrderEntry.getBasePrice() != (itemTotalPrice * customerUOMMultiplier))
 							{
 								// for pilot project we are only suppose to get final conversions for PAL and LAY UOM's
 								// and they are always bigger than incoming UOM(sales uom)
@@ -464,7 +464,8 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 						}
 						else
 						{
-							if (orderEntryQty != energizerOrderEntry.getQuantity())
+							if (orderEntryQty != energizerOrderEntry.getQuantity()
+									|| energizerOrderEntry.getBasePrice() != (itemTotalPrice * customerUOMMultiplier))
 							{
 								//clear the previous value before updating 
 								energizerOrderEntry.setAdjustedQty(new Integer(0));

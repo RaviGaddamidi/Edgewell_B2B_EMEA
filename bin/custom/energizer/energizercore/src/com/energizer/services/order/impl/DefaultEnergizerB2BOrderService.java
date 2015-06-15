@@ -274,14 +274,13 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "PAL");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
 							Integer quantityInInt = 0;
-							if (conversionMultiplierForCase != null)
+							if (conversionMultiplier != null)
 							{
 								quantityInInt = conversionMultiplier / conversionMultiplierForCase;
 							}
 							else
 							{
-								LOG.info("Could not find the conversion factor in cases(CS)" + material);
-								throw new Exception("No converion found in Cases for material " + material);
+								sendEmail(orderData, material, prodCode, "PAL");
 							}
 							quantity = quantityInInt.longValue() * quantity;
 							uom = "CS";
@@ -290,15 +289,15 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 						{
 							final Integer conversionMultiplier = getAlernateConversionMultiplierForUOM(conversionList, "LAY");
 							final Integer conversionMultiplierForCase = getAlernateConversionMultiplierForUOM(conversionList, "CS");
-							Integer quantityinInt = conversionMultiplier / conversionMultiplierForCase;
-							if (conversionMultiplierForCase != null)
+							Integer quantityinInt = 0;
+							//quantityinInt = conversionMultiplier / conversionMultiplierForCase;
+							if (conversionMultiplier != null)
 							{
 								quantityinInt = conversionMultiplier / conversionMultiplierForCase;
 							}
 							else
 							{
-								LOG.info("Could not find the conversion factor in cases(CS)" + material);
-								throw new Exception("No converion found in Cases for material " + material);
+								sendEmail(orderData, material, prodCode, "LAY");
 							}
 							quantity = quantityinInt.longValue() * quantity;
 							uom = "CS";
@@ -358,6 +357,31 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			LOG.error(jaxbException.getMessage());
 		}
 		return parsedXML;
+	}
+
+	private void sendEmail(final AbstractOrderData orderData, final String material, final String prodCode, final String uom)
+			throws Exception
+	{
+		{
+			LOG.info("Could not find the conversion factor in cases(CS)" + material);
+			String supportEmail = Config.getString("energizer.customer.support.to.email", "test@test.com");
+			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+			supportEmail = Config.getString("energizer.customer.support.from.email", "test@test.com");
+			final EmailAddressModel fromAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+			final StringBuilder emailBody = new StringBuilder();
+			final StringBuilder emailSubject = new StringBuilder();
+			emailSubject.append("Simulation Failed ");
+			emailBody.append("Hi <br/>");
+			emailBody.append("While creating data for simulating order in hybris " + "<br/>");
+			emailBody.append("we could not find the conversions for the sales UOM " + uom + "for the material id " + prodCode
+					+ "<br/>");
+			emailBody.append("This is an automatically generated email. Please do not reply to this mail");
+			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
+					emailSubject.toString(), emailBody.toString(), null);
+			LOG.error("Failed to simulate order \n ");
+			emailService.send(message);
+			throw new Exception("No converion found in Cases for material " + material);
+		}
 	}
 
 	/**
@@ -573,16 +597,17 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			if (option.equalsIgnoreCase("simulate"))
 			{
 				emailSubject.append("ERROR: Order simulation failed in SAP");
-				emailBody.append("Order simulation failed in SAP because of bad format of xml <br/>");
+				emailBody.append("Order simulation failed in SAP because of bad format of xml <br/>" + requestXML);
 			}
 			else if (option.equalsIgnoreCase("createOrder"))
 			{
 				emailSubject.append("ERROR: Creating order in SAP failed");
-				emailBody.append("Creating order in SAP failed because of bad format of xml <br/>");
+				emailBody.append("Creating order in SAP failed because of bad format of xml <br/>" + requestXML);
 			}
+			emailBody.append("This is an automatically generated email. Please do not reply to this mail");
 			//emailBody.append(requestXML);
 			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
-					emailSubject.toString(), emailBody.toString() + "<br/>" + requestXML, null);
+					emailSubject.toString(), emailBody.toString() + "<br/>", null);
 			LOG.error("Failed to simulate order \n " + requestXML);
 			emailService.send(message);
 			throw clientException;
@@ -590,10 +615,31 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		catch (final RestClientException restException)
 		{
 			LOG.error("Failed to simulate order" + restException.getMessage());
+			String supportEmail = Config.getString("energizer.customer.support.to.email", "test@test.com");
+			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+			supportEmail = Config.getString("energizer.customer.support.from.email", "test@test.com");
+			final EmailAddressModel fromAddress = emailService.getOrCreateEmailAddressForEmail(supportEmail, "Hybris Test Mail");
+			final StringBuilder emailBody = new StringBuilder();
+			final StringBuilder emailSubject = new StringBuilder();
+			if (option.equalsIgnoreCase("simulate"))
+			{
+				emailSubject.append("ERROR: Order simulation failed in SAP");
+				emailBody.append("Order simulation failed in SAP because of <br/>" + restException.getMessage() + "<br/>");
+			}
+			else if (option.equalsIgnoreCase("createOrder"))
+			{
+				emailSubject.append("ERROR: Creating order in SAP failed");
+				emailBody.append("Creating order in SAP failed because of <br/>" + restException.getMessage() + "<br/>");
+			}
+			//emailBody.append(requestXML);
+			emailBody.append("This is an automatically generated email. Please do not reply to this mail");
+			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
+					emailSubject.toString(), emailBody.toString() + "<br/>", null);
+			LOG.error("Failed to simulate order \n " + requestXML);
+			emailService.send(message);
 			throw restException;
 		}
 	}
-
 
 	private AbstractOrderData simulateOrderUnMarshall(final String responce, final CartData orderData) throws Exception
 	{
@@ -679,20 +725,49 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			for (final AbstractOrderEntryModel orderEntryModel : orderModelEntries)
 			{
 				final String modelProdCode = orderEntryModel.getProduct().getCode();
+				Double zDF1BaseUomPrice = Double.parseDouble("0.00");
+				Double zDF1BaseUomQuantity = Double.parseDouble("0.00");
+				Double zDF1EntryTotla = Double.parseDouble("0.00");
+
+				Double zPR0BaseUomPrice = Double.parseDouble("0.00");
+				Double zPR0BaseUomQuantity = Double.parseDouble("0.00");
+				Double zPR0EntryTotla = Double.parseDouble("0.00");
+				boolean isZDF1PriceAvailable = false;
+				boolean isZPR0PriceAvailable = false;
+
 				for (final ZSD_TSOCONDITIONS_D31E8C conditions : conditionArray.getValue().getZSD_TSOCONDITIONS())
 				{
-					if (conditions.getMATERIAL().getValue().equals(modelProdCode)
-							&& conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
+					if (conditions.getMATERIAL().getValue().equals(modelProdCode))
 					{
-
-						final Double baseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
-						final Double baseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
-						final Double entryTotla = baseUomPrice * baseUomQuantity;
-						orderEntryModel.setBasePrice(entryTotla / orderEntryModel.getQuantity());
-						orderEntryModel.setTotalPrice(entryTotla);
-						orderEntryModel.setRejectedStatus("No");
-						modelService.save(orderEntryModel);
+						if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
+						{
+							zPR0BaseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+							zPR0BaseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+							zPR0EntryTotla = zPR0BaseUomPrice * zPR0BaseUomQuantity;
+							isZPR0PriceAvailable = true;
+						}
+						if (conditions.getCOND_TYPE().getValue().equalsIgnoreCase("ZDF1"))
+						{
+							zDF1BaseUomPrice = Double.parseDouble(conditions.getCOND_VALUE().getValue());
+							zDF1BaseUomQuantity = Double.parseDouble(conditions.getCONBASEVAL().getValue());
+							zDF1EntryTotla = zDF1BaseUomPrice * zDF1BaseUomQuantity;
+							isZDF1PriceAvailable = true;
+						}
 					}
+				}
+				if (isZDF1PriceAvailable)
+				{
+					orderEntryModel.setBasePrice(zDF1EntryTotla / orderEntryModel.getQuantity());
+					orderEntryModel.setTotalPrice(zDF1EntryTotla);
+					orderEntryModel.setRejectedStatus("No");
+					modelService.save(orderEntryModel);
+				}
+				else if (isZPR0PriceAvailable)
+				{
+					orderEntryModel.setBasePrice(zPR0EntryTotla / orderEntryModel.getQuantity());
+					orderEntryModel.setTotalPrice(zPR0EntryTotla);
+					orderEntryModel.setRejectedStatus("No");
+					modelService.save(orderEntryModel);
 				}
 
 			}
@@ -769,6 +844,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			emailBody = getOrderCreationEmailBody(emailBody, unmarshalledOrdCreationObject);
 			unmarshalledOrdCreationObject.getMESSAGETABLE().getValue().getBAPIRET2().toString();
 		}
+		emailBody.append("<br/> This is an automatically generated email. Please do not reply to this mail");
 
 		final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, fromAddress, "",
 				"ERROR: Order simulation failed in SAP", emailBody.toString(), null);
@@ -798,28 +874,52 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	{
 		final ProductData productData = orderEntry.getProduct();
 		final String prodCode = productData.getCode();
+		final PriceData zPR0PriceData = new PriceData();
+		final PriceData zPR0TotalPriceData = new PriceData();
+		final PriceData zDF1PriceData = new PriceData();
+		final PriceData zDF1TotalPriceData = new PriceData();
+		boolean isZDF1PriceAvailable = false;
+		boolean isZPR0PriceAvailable = false;
 		for (final ZSD_TSOCONDITIONS_Fa2309 condtion : condtionList)
 		{
 			if (prodCode.equalsIgnoreCase(condtion.getMATERIAL().getValue()))
 			{
-				// ZPRO will give material price at base UOM
+				// ZPRO (product listing price) will give material price at base UOM
 				if (condtion.getCOND_TYPE().getValue().equalsIgnoreCase("ZPR0"))
 				{
-					PriceData priceData = new PriceData();
 					// COND_VALUE is base UOM price
 					final Double eachUnitValue = Double.parseDouble(condtion.getCOND_VALUE().getValue());
 					final Double quantityAtBaseUOM = Double.parseDouble(condtion.getCONBASEVAL().getValue());
 					final Double totalPriceValue = (eachUnitValue * quantityAtBaseUOM);
-					priceData.setValue(new BigDecimal(totalPriceValue / orderEntry.getQuantity()));
-					priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
-					orderEntry.setBasePrice(priceData);
-
-					priceData = new PriceData();
-					priceData.setValue(new BigDecimal(totalPriceValue));
-					priceData.setCurrencyIso(condtion.getCURRENCY().getValue());
-					orderEntry.setTotalPrice(priceData);
+					zPR0PriceData.setValue(new BigDecimal(totalPriceValue / orderEntry.getQuantity()));
+					zPR0PriceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					zPR0TotalPriceData.setValue(new BigDecimal(totalPriceValue));
+					zPR0TotalPriceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					isZPR0PriceAvailable = true;
+				}
+				if (condtion.getCOND_TYPE().getValue().equalsIgnoreCase("ZDF1"))
+				{
+					// COND_VALUE is base UOM price
+					final Double eachUnitValue = Double.parseDouble(condtion.getCOND_VALUE().getValue());
+					final Double quantityAtBaseUOM = Double.parseDouble(condtion.getCONBASEVAL().getValue());
+					final Double totalPriceValue = (eachUnitValue * quantityAtBaseUOM);
+					zDF1PriceData.setValue(new BigDecimal(totalPriceValue / orderEntry.getQuantity()));
+					zDF1PriceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					zDF1TotalPriceData.setValue(new BigDecimal(totalPriceValue));
+					zDF1TotalPriceData.setCurrencyIso(condtion.getCURRENCY().getValue());
+					isZDF1PriceAvailable = true;
 				}
 			}
+		}
+		if (isZDF1PriceAvailable)
+		{
+			orderEntry.setBasePrice(zDF1PriceData);
+			orderEntry.setTotalPrice(zDF1TotalPriceData);
+		}
+		else if (isZPR0PriceAvailable)
+		{
+			orderEntry.setBasePrice(zPR0PriceData);
+			orderEntry.setTotalPrice(zPR0TotalPriceData);
 		}
 	}
 
