@@ -28,7 +28,7 @@ UPDATE CMSSite;uid[unique=true];defaultPreviewCategory(code, $productCV);default
 
 # Site Logo
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
-;;/images/theme/HHLogo.png;HHLogo.png;$siteResource/images/theme/HHLogo.png;image/png;Eveready
+;;/images/theme/HHLogo.png;HHLogo.png;$siteResource/images/theme/HHLogo.png;image/png;Energizer
 
 
 # Site Logo Component
