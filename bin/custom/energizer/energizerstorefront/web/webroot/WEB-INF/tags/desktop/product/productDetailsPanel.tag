@@ -54,7 +54,7 @@
 			<spring:theme code="basket.page.customerProductName" />
 			: ${fn:escapeXml(product.customerProductName)}<br>
 			<spring:theme code="basket.page.shipFrom" />
-			: ${fn:escapeXml( product.shippingPoint)} <br>
+			: ${fn:escapeXml( product.shippingPointName)} <br>
 			<spring:theme code="basket.page.moq" />
 			: ${fn:escapeXml(product.moq)}<br>
 			<spring:theme code="basket.page.uom" />
