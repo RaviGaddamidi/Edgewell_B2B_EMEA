@@ -1,5 +1,6 @@
 #importing EnergizerCronjobs for csv feeds
 # Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
 $defaultCurrency=USD
 $interfaceTypeEnergizerCustomer = $config-interfaceType_EnergizerCustomer
@@ -19,7 +20,6 @@ $technicalEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
 $businessEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
 $emailAddress=ehpvalidation@gmail.com
 
-UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
 
 INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
