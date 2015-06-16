@@ -63,6 +63,12 @@ public class DefaultEnergizerOrderService implements EnergizerOrderService
 	}
 
 	@Override
+	public OrderModel getHybrisOrderNoForOfflineOrder(final String sapOrderNo)
+	{
+		return energizerOrderDAO.findHybrisOrderNoForOfflineOrder(sapOrderNo);
+	}
+
+	@Override
 	public OrderEntryModel getExistingOrderItem(final OrderModel energizerOrderModel,
 			final EnergizerProductModel energizerProductModel)
 	{

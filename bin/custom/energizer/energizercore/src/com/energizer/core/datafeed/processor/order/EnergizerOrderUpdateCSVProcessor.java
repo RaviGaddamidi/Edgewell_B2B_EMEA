@@ -211,7 +211,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				if (existEnergizerOrder == null)
 				{
 					LOG.info("In Record Number " + record.getRecordNumber() + " " + SAP_ORDER_NO + " " + sapOrderNo + " and "
-							+ HYBRIS_ORDER_NO + " " + hybrisOrderNo + " is not exist");
+							+ HYBRIS_ORDER_NO + " " + hybrisOrderNo + " does not exist");
 					continue;
 				}
 
@@ -544,6 +544,19 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		if (!StringUtils.isEmpty(csvValuesMap.get(HYBRIS_ORDER_NO)))
 		{
 			hybrisOrderNo = csvValuesMap.get(HYBRIS_ORDER_NO);
+		}
+		else
+		{
+			// if the hybris order no is empty, it should be an off line order and load hybris order no and assign it
+			final OrderModel offlineOrder = energizerOrderService.getHybrisOrderNoForOfflineOrder(sapOrderNo);
+			if (offlineOrder != null)
+			{
+				hybrisOrderNo = offlineOrder.getCode();
+			}
+			else
+			{
+				hybrisOrderNo = "";
+			}
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(PO_NO)))
