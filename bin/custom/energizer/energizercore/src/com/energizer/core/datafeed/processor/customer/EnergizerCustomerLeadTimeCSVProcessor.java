@@ -223,8 +223,6 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 			}
 			if (columnHeader.equalsIgnoreCase(LEAD_TIME_IN_DAYS))
 			{
-				//set the default LeadTimeInDays to 30 Days as it is configured,
-				//then set LeadTimeValue as 30 in order to skip the below validation
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
