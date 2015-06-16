@@ -312,13 +312,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			long recordFailed = getRecordFailed();
 			final String value = map.get(columnHeader).trim();
-			/*
-			 * if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SALES_ORG) ||
-			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISTRIBUTION_CHANNEL) ||
-			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DIVISION) ||
-			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SEGMENT_ID) ||
-			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.FAMILY_ID)) {
-			 */
 			if (value.isEmpty())
 			{
 				final List<String> columnNames = new ArrayList<String>();
@@ -336,7 +329,6 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				recordFailed++;
 				setRecordFailed(recordFailed);
 			}
-			//}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
 			{
 				final boolean isValidMOQ = (NumberUtils.isNumber(value));

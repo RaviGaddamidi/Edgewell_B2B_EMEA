@@ -225,10 +225,6 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 			{
 				//set the default LeadTimeInDays to 30 Days as it is configured,
 				//then set LeadTimeValue as 30 in order to skip the below validation
-				/*
-				 * if (value.isEmpty()) { value =
-				 * configurationService.getConfiguration().getProperty(DEFAULT_LEAD_TIME_VALUE).toString(); }
-				 */
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) < 0.0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
