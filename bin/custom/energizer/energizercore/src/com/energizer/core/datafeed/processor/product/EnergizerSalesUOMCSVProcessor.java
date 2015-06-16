@@ -133,7 +133,12 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				final String familyID = csvValuesMap.get(EnergizerCoreConstants.FAMILY_ID).trim();
 				final String uom = csvValuesMap.get(EnergizerCoreConstants.UOM).trim();
 				final String moq = csvValuesMap.get(EnergizerCoreConstants.MOQ).trim();
-				final String erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).trim();
+
+				String erpMaterialId = "";
+				if (csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID) != null)
+				{
+					erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).trim();
+				}
 
 				CategoryModel energizerCategory = null;
 				Collection<CategoryModel> subCategories = null;
@@ -300,36 +305,38 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		final Map<String, String> map = record.toMap();
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
+
 		for (final String columnHeader : record.toMap().keySet())
 		{
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
 			long recordFailed = getRecordFailed();
 			final String value = map.get(columnHeader).trim();
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SALES_ORG)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISTRIBUTION_CHANNEL)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DIVISION)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SEGMENT_ID)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.FAMILY_ID))
+			/*
+			 * if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SALES_ORG) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISTRIBUTION_CHANNEL) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DIVISION) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SEGMENT_ID) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.FAMILY_ID)) {
+			 */
+			if (value.isEmpty())
 			{
-				if (value.isEmpty())
-				{
-					final List<String> columnNames = new ArrayList<String>();
-					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					error = new EnergizerCSVFeedError();
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(columnHeader);
-					columnNumbers.add(columnNumber);
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should not be empty");
-					error.setColumnNumber(columnNumbers);
-					error.setUserType(BUSINESS_USER);
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
-				}
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error = new EnergizerCSVFeedError();
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				columnNumbers.add(columnNumber);
+				error.setColumnName(columnNames);
+				error.setMessage(columnHeader + " column should not be empty");
+				error.setColumnNumber(columnNumbers);
+				error.setUserType(BUSINESS_USER);
+				getBusinessFeedErrors().add(error);
+				setBusRecordError(getBusinessFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
 			}
+			//}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
 			{
 				final boolean isValidMOQ = (NumberUtils.isNumber(value));
