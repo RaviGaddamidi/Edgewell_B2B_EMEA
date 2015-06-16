@@ -20,7 +20,7 @@ public interface EnergizerOrderService
 
 	/**
 	 * This function will return OrderModel object for a given sapOrderNo if it is not exist then it will return null
-	 *
+	 * 
 	 * @param sapOrderNo
 	 * @return OrderModel
 	 */
@@ -29,7 +29,7 @@ public interface EnergizerOrderService
 	/**
 	 * This function will return OrderModel object for a given sapOrderNo and hybrisOrderNo if it is not exist then it
 	 * will return null
-	 *
+	 * 
 	 * @param sapOrderNo
 	 * @param hybrisOrderNo
 	 * @return OrderModel
@@ -38,7 +38,7 @@ public interface EnergizerOrderService
 
 	/**
 	 * This function will return order entry if entry is not exist then it will return null
-	 *
+	 * 
 	 * @param energizerOrderModel
 	 * @param energizerProductModel
 	 * @return OrderEntryModel
@@ -49,7 +49,7 @@ public interface EnergizerOrderService
 	/**
 	 * This function will return OrderStatus object for a given energizer order status code if code is valid otherwise it
 	 * will return null.
-	 *
+	 * 
 	 * @param energizerOrderStatusCode
 	 * @return OrderStatus
 	 */
@@ -59,7 +59,7 @@ public interface EnergizerOrderService
 	/**
 	 * This function will return all associated admin ids for energizerB2BUnitModel if it is having members of admin
 	 * group or it will return empty list if energizerB2BUnitModel id is not having admin members of admin group
-	 *
+	 * 
 	 * @param energizerB2BUnitModel
 	 * @return String
 	 */
@@ -70,7 +70,7 @@ public interface EnergizerOrderService
 	/**
 	 * This function will return all associated admin email ids for energizerB2BUnitModel if it is having members of
 	 * admin group or it will return empty list if energizerB2BUnitModel id is not having admin members of admin group
-	 *
+	 * 
 	 * @param energizerB2BUnitModel
 	 * @return String
 	 */
@@ -79,7 +79,7 @@ public interface EnergizerOrderService
 	/**
 	 * This function will return EnergizerProductModel object for a given erpMaterialID if erpMaterialId is exist for
 	 * Online catelog if productid Is not exist then it returns null
-	 *
+	 * 
 	 * @param productMaterialId
 	 * @return EnergizerProductModel
 	 */
@@ -89,9 +89,15 @@ public interface EnergizerOrderService
 	/**
 	 * This function will add adjustedLinePrice of all order entries for a given order and return it. If no order entry
 	 * is having adjustedLinePrice then it will return null
-	 *
+	 * 
 	 * @param energizerOrderModel
 	 * @return BigDecimal
 	 */
 	public BigDecimal getAdjustedTotalPriceForOrder(final OrderModel energizerOrderModel);
+
+	/**
+	 * @param sapOrderNo
+	 * @return
+	 */
+	OrderModel getHybrisOrderNoForOfflineOrder(String sapOrderNo);
 }
