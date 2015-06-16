@@ -100,4 +100,23 @@ public class DefaultEnergizerOrderDAO implements EnergizerOrderDAO
 		return energizerOrderEntryModels;
 	}
 
+	@Override
+	public OrderModel findHybrisOrderNoForOfflineOrder(final String sapOrderNo)
+	{
+		OrderModel energizerOrderModel = null;
+		//Retrieve EnergizerOrder
+		final String fsq = "SELECT{" + OrderModel.PK + "} from {" + OrderModel._TYPECODE + "} WHERE {" + OrderModel.ERPORDERNUMBER
+				+ "} =?sapOrderId";
+		final HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("sapOrderId", sapOrderNo);
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(fsq, params);
+		final SearchResult<OrderModel> result = flexibleSearchService.search(query);
+		final List<OrderModel> energizerOrderModels = result.getResult();
+		if (!energizerOrderModels.isEmpty())
+		{
+			energizerOrderModel = energizerOrderModels.get(0);
+		}
+		return energizerOrderModel;
+	}
+
 }

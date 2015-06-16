@@ -15,7 +15,7 @@ public interface EnergizerOrderDAO
 {
 	/**
 	 * This function will return OrderModel object for a given sapOrderNo if it is not exist then it will return null
-	 *
+	 * 
 	 * @param sapOrderNo
 	 * @return OrderModel
 	 */
@@ -24,7 +24,7 @@ public interface EnergizerOrderDAO
 	/**
 	 * This function will return OrderModel object for a given sapOrderNo and hybrisOrderNo if it is not exist then it
 	 * will return null
-	 *
+	 * 
 	 * @param sapOrderNo
 	 * @param hybrisOrderNo
 	 * @return OrderModel
@@ -33,7 +33,7 @@ public interface EnergizerOrderDAO
 
 	/**
 	 * This function will return order entry if entry is not exist then it will return null
-	 *
+	 * 
 	 * @param energizerOrderModel
 	 * @param energizerProductModel
 	 * @return OrderEntryModel
@@ -43,11 +43,17 @@ public interface EnergizerOrderDAO
 
 	/**
 	 * This function will return all order entry if no entry is exist for a given order then it will return null
-	 *
+	 * 
 	 * @param energizerOrderModel
 	 * @return List<OrderEntryModel>
 	 */
 	public List<OrderEntryModel> findExistingOrderItems(final OrderModel energizerOrderModel);
+
+	/**
+	 * @param sapOrderNo
+	 * @return
+	 */
+	public OrderModel findHybrisOrderNoForOfflineOrder(String sapOrderNo);
 
 
 }
