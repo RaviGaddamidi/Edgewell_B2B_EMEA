@@ -16,7 +16,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,13 +88,16 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
-				validate(record);
+				final boolean isRecordEmpty = validate(record);
 				if (!getBusinessFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
 					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
 					getBusinessFeedErrors().clear();
-					continue;
+					if (isRecordEmpty)
+					{
+						continue;
+					}
 				}
 				final Map<String, String> csvValuesMap = record.toMap();
 				energizerAccountID = csvValuesMap.get(ENERGIZER_ACCOUNT_ID).trim();
@@ -123,7 +125,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 						energizerB2BUnitLeadTimeModel.setSoldToAddressId(shipTo);
 						energizerB2BUnitLeadTimeModel.setLeadTime(leadTimeInDays);
 						modelService.save(energizerB2BUnitLeadTimeModel);
-						LOG.info("Customer lead time is saved for " + energizerB2BUnitModel + "with Lead time " + leadTimeInDays);
+						LOG.info("Customer lead time is saved for " + energizerB2BUnitModel + " with Lead time " + leadTimeInDays);
 						succeedRecord++;
 						setRecordSucceeded(succeedRecord);
 					}
@@ -134,7 +136,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 						energizerB2BUnitLeadTimeModel.setSoldToAddressId(shipTo);
 						energizerB2BUnitLeadTimeModel.setLeadTime(leadTimeInDays);
 						modelService.save(energizerB2BUnitLeadTimeModel);
-						LOG.info("Customer lead time is updated for the unit " + energizerB2BUnitModel + "with Lead time "
+						LOG.info("Customer lead time is updated for the unit " + energizerB2BUnitModel + " with Lead time "
 								+ leadTimeInDays);
 						succeedRecord++;
 						setRecordSucceeded(succeedRecord);
@@ -173,53 +175,6 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 		return energizerB2BUnitLeadTimeModel;
 	}
 
-	/**
-	 * @param record
-	 * @return boolean
-	 */
-	@SuppressWarnings("unused")
-	private boolean isValidRecord(final CSVRecord record)
-	{
-		boolean isValid = true;
-		final StringBuffer errBuffer = new StringBuffer();
-		errBuffer.append("Record Number " + record.getRecordNumber() + " has invalid field");
-		final Map<String, String> csvValuesMap = record.toMap();
-		energizerAccountID = csvValuesMap.get(ENERGIZER_ACCOUNT_ID).trim();
-		shippingPointNo = csvValuesMap.get(SHIPPING_POINT_NO).trim();
-		shipTo = csvValuesMap.get(SHIP_TO).trim();
-		if (StringUtils.isEmpty(energizerAccountID) || null == energizerAccountID)
-		{
-			isValid = false;
-			errBuffer.append(" || energizerAccountID = " + energizerAccountID);
-		}
-		if (StringUtils.isEmpty(shippingPointNo) || null == shippingPointNo)
-		{
-			isValid = false;
-			errBuffer.append(" || shippingPointNo = " + shippingPointNo);
-		}
-		if (StringUtils.isEmpty(shipTo) || null == shipTo)
-		{
-			isValid = false;
-			errBuffer.append(" || shipTo = " + shipTo);
-		}
-		try
-		{
-			leadTimeInDays = Integer.parseInt(csvValuesMap.get(LEAD_TIME_IN_DAYS).trim());
-		}
-		catch (final NumberFormatException e)
-		{
-			isValid = false;
-			errBuffer.append(" || leadTimeInDays = " + leadTimeInDays + " " + e.getMessage());
-		}
-		if (!isValid)
-		{
-			LOG.info(errBuffer);//Generate Log if record is not valid
-		}
-		return isValid;
-	}
-
-
-
 	//Check Energizer Account is exist or not if exist return correspond EnergizerB2BUnitModel object otherwise return null
 	public EnergizerB2BUnitModel isEnergizerAccountExist(final String accountId)
 	{
@@ -232,8 +187,9 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	 * @param record
 	 * 
 	 */
-	private void validate(final CSVRecord record)
+	private boolean validate(final CSVRecord record)
 	{
+		boolean isRecordEmpty = false;
 		EnergizerCSVFeedError error = null;
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
@@ -241,7 +197,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 		{
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
-			String value = record.toMap().get(columnHeader);
+			final String value = record.toMap().get(columnHeader);
 			if (columnHeader.equalsIgnoreCase(ENERGIZER_ACCOUNT_ID) || columnHeader.equalsIgnoreCase(SHIP_TO)
 					|| columnHeader.equalsIgnoreCase(SHIPPING_POINT_NO))
 			{
@@ -262,16 +218,13 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+					isRecordEmpty = true;
 				}
 			}
 			if (columnHeader.equalsIgnoreCase(LEAD_TIME_IN_DAYS))
 			{
 				//set the default LeadTimeInDays to 30 Days as it is configured,
 				//then set LeadTimeValue as 30 in order to skip the below validation
-				if (value.isEmpty())
-				{
-					value = configurationService.getConfiguration().getProperty(DEFAULT_LEAD_TIME_VALUE).toString();
-				}
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) < 0.0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
@@ -292,5 +245,6 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 				}
 			}
 		}
+		return isRecordEmpty;
 	}
 }
