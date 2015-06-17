@@ -55,5 +55,7 @@ public interface BruteForceAttackCounter
 	 */
 	int getUserFailedLogins(final String userUid);
 
-	int getMaxLoginAttempts(final String userUid);
+	int getMaxLoginAttempts();
+
+	void registerLoginFailure(final String userUid, final int count);
 }

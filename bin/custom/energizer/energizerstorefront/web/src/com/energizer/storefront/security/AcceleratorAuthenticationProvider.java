@@ -71,15 +71,15 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 
 		if (userModel.isLoginDisabled()
 				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
-						.getMaxLoginAttempts(StringUtils.lowerCase(username)))
+						.getMaxLoginAttempts())
 		{
 
-			bruteForceAttackCounter.resetUserCounter(userModel.getUid());
+			bruteForceAttackCounter.registerLoginFailure(userModel.getUid(), getBruteForceAttackCounter().getMaxLoginAttempts());
 
 		}
 		else if (!userModel.isLoginDisabled()
 				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) == getBruteForceAttackCounter()
-						.getMaxLoginAttempts(StringUtils.lowerCase(username)))
+						.getMaxLoginAttempts())
 		{
 			try
 			{
