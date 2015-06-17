@@ -15,6 +15,7 @@ package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.util.Config;
 
@@ -56,9 +57,13 @@ public class PasswordResetPageController extends AbstractPageController
 
 	private static final String UPDATE_PWD_CMS_PAGE = "updatePassword";
 	private static final String FORGOTTEN_PASSWORD_EXP_VALUE = "forgottenPassword.emailContext.expiresInMinutes";
+	private static final String EXP_IN_SECONDS = "forgottenPassword.emailContext.expiresInSeconds";
 
 	@Resource(name = "simpleBreadcrumbBuilder")
 	private ResourceBreadcrumbBuilder resourceBreadcrumbBuilder;
+
+	@Resource(name = "configurationService")
+	private ConfigurationService configurationService;
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String getPasswordRequest(final Model model) throws CMSItemNotFoundException
@@ -172,6 +177,8 @@ public class PasswordResetPageController extends AbstractPageController
 		{
 			try
 			{
+				LOG.debug("The password link expriy time in seconds :"
+						+ configurationService.getConfiguration().getLong(EXP_IN_SECONDS, 1800));
 				getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.password.updated");

@@ -173,12 +173,15 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	private Double itemTotalShipment = null;
 	private Double itemTotalDiscount = null;
 	private Double itemTax = null;
+	EnergizerCSVFeedError error = null;
+
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
 	{
 		try
 		{
+			Integer columnNumber = 0;
 			orderModels = new ArrayList<OrderModel>();
 			LOG.info("EnergizerOrderUpdateCSVProcessor:process:Start");
 			long succeedRecord = getRecordSucceeded();
@@ -212,6 +215,21 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				{
 					LOG.info("In Record Number " + record.getRecordNumber() + " " + SAP_ORDER_NO + " " + sapOrderNo + " and "
 							+ HYBRIS_ORDER_NO + " " + hybrisOrderNo + " does not exist");
+					error = new EnergizerCSVFeedError();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error.setLineNumber(record.getRecordNumber());
+					for (final String columnHeader : record.toMap().keySet())
+					{
+						columnNames.add(record.toMap().get(columnHeader));
+					}
+					error.setColumnName(columnNames);
+					error.setMessage(" In Record Number " + record.getRecordNumber() + " " + SAP_ORDER_NO + " " + sapOrderNo + " and "
+							+ HYBRIS_ORDER_NO + " " + hybrisOrderNo + " does not exist");
+					columnNumber++;
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
 					continue;
 				}
 
