@@ -8,6 +8,7 @@ import de.hybris.platform.category.CategoryService;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -68,9 +69,16 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "energizerSalesUOMService")
 	private EnergizerSalesUOMService energizerSalesUOMService;
 
+	@Resource
+	ConfigurationService configurationService;
+
 	private List<String> packgingUnits;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerSalesUOMCSVProcessor.class);
+
+	private String defaultMOQ = "";
+
+	private String defaultUOM = "";
 
 	/**
 	 * @param uomRecords
@@ -108,20 +116,16 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			packgingUnits.add(EnergizerCoreConstants.PALLET);
 			//packgingUnits.add(EnergizerCoreConstants.EA);
 
+			defaultMOQ = configurationService.getConfiguration().getString("feedprocessor.defalult.moq.value", null);
+			defaultUOM = configurationService.getConfiguration().getString("feedprocessor.defalult.uom.value", null);
+
 			long succeedRecord = getRecordSucceeded();
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
 			for (final CSVRecord uomRecord : uomRecords)
 			{
 				LOG.info(" CSV Record number: " + uomRecord.getRecordNumber());
 				LOG.info(" CSV Record: " + uomRecord.toMap());
-				validate(uomRecord);
-				if (!getBusinessFeedErrors().isEmpty())
-				{
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
-					getBusinessFeedErrors().clear();
-					continue;
-				}
+
 				final Map<String, String> csvValuesMap = uomRecord.toMap();
 
 				final String customerId = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_ID).trim();
@@ -131,8 +135,29 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				//final String salesAreaID = csvValuesMap.get(EnergizerCoreConstants.SALES_AREA_ID).trim();
 				final String segmentId = csvValuesMap.get(EnergizerCoreConstants.SEGMENT_ID).trim();
 				final String familyID = csvValuesMap.get(EnergizerCoreConstants.FAMILY_ID).trim();
-				final String uom = csvValuesMap.get(EnergizerCoreConstants.UOM).trim();
-				final String moq = csvValuesMap.get(EnergizerCoreConstants.MOQ).trim();
+				String uom = csvValuesMap.get(EnergizerCoreConstants.UOM).trim();
+				String moq = csvValuesMap.get(EnergizerCoreConstants.MOQ).trim();
+
+				final boolean[] isValids = new boolean[2]; //[0]-holds true if its empty, [1] holds true if moq/uom is invalid
+				validate(uomRecord, isValids);
+
+				csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+				getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
+				getBusinessFeedErrors().clear();
+
+				if (isValids[0])
+				{
+					continue;
+				}
+				if (isValids[1])
+				{
+					uom = defaultUOM;
+					moq = defaultMOQ;
+				}
+				/*
+				 * if (!getBusinessFeedErrors().isEmpty()) { csvFeedErrorRecords.addAll(getBusinessFeedErrors());
+				 * getTechnicalFeedErrors().addAll(getBusinessFeedErrors()); getBusinessFeedErrors().clear(); continue; }
+				 */
 
 				String erpMaterialId = "";
 				if (csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID) != null)
@@ -172,6 +197,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					catch (final Exception exception)
 					{
 						LOG.error("Error in retreiving the category " + exception);
+						continue;
 					}
 
 					LOG.info("The category is : " + energizerCategory.getCode());
@@ -197,6 +223,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					catch (final Exception exception)
 					{
 						LOG.error("Error in retreiving the subcategories" + exception);
+						continue;
 					}
 
 					if (energizerSubCategory == null)
@@ -299,12 +326,13 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 	 * 
 	 * @param record
 	 */
-	private void validate(final CSVRecord record)
+	private void validate(final CSVRecord record, final boolean[] isValidArr)
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
+
 
 		for (final String columnHeader : record.toMap().keySet())
 		{
@@ -312,27 +340,34 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			long recordFailed = getRecordFailed();
 			final String value = map.get(columnHeader).trim();
-			if (value.isEmpty())
+			if (!columnHeader.equalsIgnoreCase(EnergizerCoreConstants.UOM)
+					&& !columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
 			{
-				final List<String> columnNames = new ArrayList<String>();
-				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				error = new EnergizerCSVFeedError();
-				error.setLineNumber(record.getRecordNumber());
-				columnNames.add(columnHeader);
-				columnNumbers.add(columnNumber);
-				error.setColumnName(columnNames);
-				error.setMessage(columnHeader + " column should not be empty");
-				error.setColumnNumber(columnNumbers);
-				error.setUserType(BUSINESS_USER);
-				getBusinessFeedErrors().add(error);
-				setBusRecordError(getBusinessFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
+				if (value.isEmpty())
+				{
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error = new EnergizerCSVFeedError();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					columnNumbers.add(columnNumber);
+					error.setColumnName(columnNames);
+					error.setMessage(columnHeader + " column should not be empty");
+					error.setColumnNumber(columnNumbers);
+					error.setUserType(BUSINESS_USER);
+					getBusinessFeedErrors().add(error);
+					setBusRecordError(getBusinessFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+					if (isValidArr != null && isValidArr.length > 0)
+					{
+						isValidArr[0] = true;
+					}
+				}
 			}
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MOQ))
 			{
-				final boolean isValidMOQ = (NumberUtils.isNumber(value));
-				if (!isValidMOQ)
+				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -348,18 +383,11 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+					if (isValidArr != null && isValidArr.length > 1)
+					{
+						isValidArr[1] = true;
+					}
 				}
-				/*
-				 * quantity cannot be 0, This has been commented and fixed in cart page.
-				 * 
-				 * if (isMOQZeroValue) { final List<String> columnNames = new ArrayList<String>(); final List<Integer>
-				 * columnNumbers = new ArrayList<Integer>(); error = new EnergizerCSVFeedError();
-				 * error.setLineNumber(record.getRecordNumber()); columnNames.add(columnHeader);
-				 * columnNumbers.add(columnNumber); error.setColumnName(columnNames); error.setMessage(columnHeader +
-				 * " column should be a valid numeric"); error.setColumnNumber(columnNumbers);
-				 * error.setUserType(BUSINESS_USER); getBusinessFeedErrors().add(error);
-				 * setBusRecordError(getBusinessFeedErrors().size()); recordFailed++; setRecordFailed(recordFailed); }
-				 */
 			}
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.UOM))
@@ -381,6 +409,10 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 					setBusRecordError(getBusinessFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+					if (isValidArr != null && isValidArr.length > 1)
+					{
+						isValidArr[1] = true;
+					}
 				}
 			}
 		}
