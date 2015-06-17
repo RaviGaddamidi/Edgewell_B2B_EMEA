@@ -88,8 +88,8 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 		for (final CSVRecord record : records)
 		{
 
-			super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-			super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			//super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			//super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 
 			final Map<String, String> csvValuesMap = record.toMap();
 			validate(record);
@@ -111,6 +111,9 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 				final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
 				error.setLineNumber(record.getRecordNumber());
 				error.setMessage("No such Product : " + csvValuesMap.get(CSV_HEADERS[0]));
+				final List columnNmaeList = new ArrayList();
+				columnNmaeList.add(csvValuesMap.get(CSV_HEADERS[0]));
+				error.setColumnName(columnNmaeList);
 				getTechnicalFeedErrors().add(error);
 				setTechRecordError(getTechnicalFeedErrors().size());
 				recordFailed++;
