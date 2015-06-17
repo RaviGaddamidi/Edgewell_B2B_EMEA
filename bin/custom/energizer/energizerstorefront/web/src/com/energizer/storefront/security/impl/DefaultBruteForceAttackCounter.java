@@ -93,6 +93,11 @@ public class DefaultBruteForceAttackCounter implements BruteForceAttackCounter
 		}
 	}
 
+	@Override
+	public int getMaxLoginAttempts(final String userUid)
+	{
+		return maxFailedLogins;
+	}
 
 	protected LoginFailure get(final String userUid, final Integer startValue)
 	{

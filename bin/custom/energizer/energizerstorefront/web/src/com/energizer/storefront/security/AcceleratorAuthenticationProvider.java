@@ -67,11 +67,22 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	public Authentication authenticate(final Authentication authentication) throws AuthenticationException
 	{
 		final String username = (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
-		if (getBruteForceAttackCounter().isAttack(username))
+		final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
+
+		if (userModel.isLoginDisabled()
+				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
+						.getMaxLoginAttempts(StringUtils.lowerCase(username)))
+		{
+
+			bruteForceAttackCounter.resetUserCounter(userModel.getUid());
+
+		}
+		else if (!userModel.isLoginDisabled()
+				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) == getBruteForceAttackCounter()
+						.getMaxLoginAttempts(StringUtils.lowerCase(username)))
 		{
 			try
 			{
-				final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
 				userModel.setLoginDisabled(true);
 				getModelService().save(userModel);
 				//let's not reset the counter to keep showing the attempt exhaustion message.
