@@ -67,7 +67,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	private static String shipTo = "";
 	private static Integer leadTimeInDays = 0;
 	private static final long DEFAULT_LEAD_TIME = 30;
-	private static final String DEFAULT_LEAD_TIME_VALUE = "feedprocessor.defalult.leadtime.value";
+	private static final String DEFAULT_LEAD_TIME_VALUE = "defaultLeadTime";
 	@Autowired
 	private ConfigurationService configurationService;
 
