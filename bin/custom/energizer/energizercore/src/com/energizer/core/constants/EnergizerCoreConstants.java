@@ -91,4 +91,5 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 		assert false;
 	}
 
+
 }
