@@ -89,6 +89,7 @@ public class LoginPageController extends AbstractLoginPageController
 					&& getSessionService().getAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN).equals(FAILED_MAX_ATTEMPTS_TO_LOGIN))
 			{
 				GlobalMessages.addErrorMessage(model, ACCOUNT_IS_BLOCKED);
+				model.addAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN, FAILED_MAX_ATTEMPTS_TO_LOGIN);
 				getSessionService().removeAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN);
 			}
 		}
