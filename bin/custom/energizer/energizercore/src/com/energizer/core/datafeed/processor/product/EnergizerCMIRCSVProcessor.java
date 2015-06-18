@@ -274,7 +274,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private boolean isCMIRModelSame(final EnergizerCMIRModel cmirModel, final Map<String, String> csvValuesMap)
 	{
 		if (cmirModel != null && cmirModel.getErpMaterialId().equals(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID))
-				&& cmirModel.getCustomerMaterialId().equals(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID))
 				&& cmirModel.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
 		{
 			// record exists, just update other attributes
