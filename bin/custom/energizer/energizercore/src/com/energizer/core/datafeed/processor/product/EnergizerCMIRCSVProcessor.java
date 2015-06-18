@@ -130,7 +130,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				final String b2bUnitId = csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID);
 				final String erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID);
-				final String customerMaterialId = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID);
 				String currency = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE_CURRENCY);
 				String customerlistprice = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE);
 
@@ -181,7 +180,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					{
 						energizerCMIRModel = modelService.create(EnergizerCMIRModel.class);
 						energizerCMIRModel.setErpMaterialId(erpMaterialId);
-						energizerCMIRModel.setCustomerMaterialId(customerMaterialId);
 						energizerCMIRModel.setB2bUnit(energizerB2BUnitModel);
 
 						tmpCMIRModelList.add(energizerCMIRModel);
@@ -290,6 +288,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private void addUpdateCMIRRecord(final EnergizerCMIRModel energizerCMIRModel, final Map<String, String> csvValuesMap)
 			throws Exception
 	{
+		energizerCMIRModel.setCustomerMaterialId(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID));
 		energizerCMIRModel.setCustomerMaterialDescription(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION),
 				new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE).toLowerCase()));
 		energizerCMIRModel.setShippingPoint(csvValuesMap.get(EnergizerCoreConstants.SHIPMENT_POINT_NO));
