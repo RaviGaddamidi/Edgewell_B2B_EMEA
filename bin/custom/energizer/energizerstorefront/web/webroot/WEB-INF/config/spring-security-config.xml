@@ -288,6 +288,8 @@
 		  class="com.energizer.storefront.security.LoginAuthenticationFailureHandler">
 		<property name="bruteForceAttackCounter" ref="bruteForceAttackCounter"/>
 		<property name="sessionService" ref="sessionService"/>
+		<property name="userService" ref="userService"/>
+		<property name="modelService" ref="modelService"/>
 		<property name="defaultFailureUrl" value="/login?error=true"/>
 		<aop:scoped-proxy/>
 	</bean>

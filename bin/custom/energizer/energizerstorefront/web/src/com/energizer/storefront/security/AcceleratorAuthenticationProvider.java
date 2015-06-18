@@ -14,9 +14,7 @@
 package com.energizer.storefront.security;
 
 import de.hybris.platform.core.Constants;
-import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.order.CartService;
-import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.spring.security.CoreAuthenticationProvider;
@@ -67,36 +65,6 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	public Authentication authenticate(final Authentication authentication) throws AuthenticationException
 	{
 		final String username = (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
-		final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
-
-		if (userModel.isLoginDisabled()
-				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
-						.getMaxLoginAttempts())
-		{
-
-			bruteForceAttackCounter.registerLoginFailure(userModel.getUid(), getBruteForceAttackCounter().getMaxLoginAttempts());
-
-		}
-		else if (!userModel.isLoginDisabled()
-				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) == getBruteForceAttackCounter()
-						.getMaxLoginAttempts())
-		{
-			try
-			{
-				userModel.setLoginDisabled(true);
-				getModelService().save(userModel);
-				//let's not reset the counter to keep showing the attempt exhaustion message.
-				//bruteForceAttackCounter.resetUserCounter(userModel.getUid());
-			}
-			catch (final UnknownIdentifierException e)
-			{
-				LOG.warn("Brute force attack attempt for non existing user name " + username);
-			}
-			finally
-			{
-				throw new BadCredentialsException(messages.getMessage("CoreAuthenticationProvider.badCredentials", "Bad credentials"));
-			}
-		}
 
 		// check if the user of the cart matches the current user and if the
 		// user is not anonymous. If otherwise, remove delete the session cart as it might

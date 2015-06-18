@@ -16,7 +16,11 @@ package com.energizer.storefront.security;
 
 
 
+import de.hybris.platform.core.model.user.UserModel;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.session.SessionService;
+import de.hybris.platform.servicelayer.user.UserService;
 
 import java.io.IOException;
 
@@ -24,6 +28,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -34,8 +40,11 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
  */
 public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler
 {
+	private static final Logger LOG = Logger.getLogger(LoginAuthenticationFailureHandler.class);
 	private BruteForceAttackCounter bruteForceAttackCounter;
 	private SessionService sessionService;
+	private UserService userService;
+	private ModelService modelService;
 
 	private final static String FAILED_MAX_ATTEMPTS_TO_LOGIN = "FAILED_MAX_ATTEMPTS_TO_LOGIN";
 
@@ -64,6 +73,39 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 	{
 		// Register brute attacks
 		bruteForceAttackCounter.registerLoginFailure(request.getParameter("j_username"));
+		final String username = request.getParameter("j_username");
+		final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
+
+		if (userModel.isLoginDisabled()
+				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
+						.getMaxLoginAttempts())
+		{
+
+			bruteForceAttackCounter.registerLoginFailure(userModel.getUid(), getBruteForceAttackCounter().getMaxLoginAttempts());
+
+		}
+		else if (!userModel.isLoginDisabled()
+				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) >= getBruteForceAttackCounter()
+						.getMaxLoginAttempts())
+		{
+			try
+			{
+				userModel.setLoginDisabled(true);
+				getModelService().save(userModel);
+				//let's not reset the counter to keep showing the attempt exhaustion message.
+				//bruteForceAttackCounter.resetUserCounter(userModel.getUid());
+			}
+			catch (final UnknownIdentifierException e)
+			{
+				LOG.warn("Brute force attack attempt for non existing user name " + username);
+			}
+			finally
+			{
+
+			}
+		}
+
+
 		if (bruteForceAttackCounter.isAttack(request.getParameter("j_username")))
 		{
 			sessionService.setAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN, FAILED_MAX_ATTEMPTS_TO_LOGIN);
@@ -86,4 +128,27 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 	{
 		this.bruteForceAttackCounter = bruteForceAttackCounter;
 	}
+
+	protected UserService getUserService()
+	{
+		return userService;
+	}
+
+	@Required
+	public void setUserService(final UserService userService)
+	{
+		this.userService = userService;
+	}
+
+	protected ModelService getModelService()
+	{
+		return modelService;
+	}
+
+	@Required
+	public void setModelService(final ModelService modelService)
+	{
+		this.modelService = modelService;
+	}
+
 }
