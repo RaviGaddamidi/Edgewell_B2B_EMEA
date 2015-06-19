@@ -79,18 +79,10 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
-					techFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
 					getTechnicalFeedErrors().clear();
-					//continue;
-				}
-				if (!getBusinessFeedErrors().isEmpty())
-				{
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					businessFeedErrorRecords.addAll(getBusinessFeedErrors());
-					getBusinessFeedErrors().clear();
 					continue;
 				}
-
 				/*
 				 * Retrieve the energizerProduct based on an erpMaterialId. After retrieval check for the existence of
 				 * EnergizerProductConversionFactors field.
@@ -235,7 +227,6 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
 
-		String uomValue = "";
 		for (final String columnHeader : map.keySet())
 		{
 			columnNumber++;
@@ -260,10 +251,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				recordFailed++;
 				setRecordFailed(recordFailed);
 			}
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ALTERNATE_UOM))
-			{
-				uomValue = value;
-			}
+
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.BASE_UOM_MULTIPLIER))
 			{
 				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
@@ -275,7 +263,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					columnNames.add(columnHeader);
 					error.setLineNumber(record.getRecordNumber());
 					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be numeric");
+					error.setMessage(columnHeader + " column should be numeric and greater than 0");
 					columnNumbers.add(columnNumber);
 					error.setColumnNumber(columnNumbers);
 					getTechnicalFeedErrors().add(error);
@@ -292,18 +280,18 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				//{
 				if (!NumberUtils.isNumber(value) || new BigDecimal(value).compareTo(BigDecimal.ZERO) == 0)
 				{
-					final List<String> columnNamesB = new ArrayList<String>();
-					final List<Integer> columnNumbersB = new ArrayList<Integer>();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
 					error = new EnergizerCSVFeedError();
-					error.setUserType(BUSINESS_USER);
+					error.setUserType(TECHNICAL_USER);
+					columnNames.add(columnHeader);
 					error.setLineNumber(record.getRecordNumber());
-					columnNamesB.add(columnHeader);
-					error.setColumnName(columnNamesB);
+					error.setColumnName(columnNames);
 					error.setMessage(columnHeader + " column should be numeric and greater than 0");
-					columnNumbersB.add(columnNumber);
-					error.setColumnNumber(columnNumbersB);
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
 				}
