@@ -44,7 +44,13 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		target.setDocumentID(source.getDocumentID());
 		target.setDocumentClass(source.getDocumentClass());
 		target.setContrEP(source.getContrEP());
-		target.setIsOrderBlock(source.getB2bUnit().getOrderBlock());
+		if (null != source.getB2bUnit())
+		{
+			if (null != source.getB2bUnit().getOrderBlock())
+			{
+				target.setIsOrderBlock(source.getB2bUnit().getOrderBlock());
+			}
+		}
 
 		//target.setArchiveID(source.getArchiveID());
 
