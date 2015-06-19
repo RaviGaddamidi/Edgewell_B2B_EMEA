@@ -74,7 +74,15 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 		// Register brute attacks
 		bruteForceAttackCounter.registerLoginFailure(request.getParameter("j_username"));
 		final String username = request.getParameter("j_username");
-		final UserModel userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
+		UserModel userModel = null;
+		try
+		{
+			userModel = getUserService().getUserForUID(StringUtils.lowerCase(username));
+		}
+		catch (final Exception e)
+		{
+			LOG.warn("User does not exist.. " + username);
+		}
 
 		if (userModel.isLoginDisabled()
 				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
