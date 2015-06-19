@@ -93,6 +93,23 @@ public class DefaultBruteForceAttackCounter implements BruteForceAttackCounter
 		}
 	}
 
+	@Override
+	public int getMaxLoginAttempts()
+	{
+		return maxFailedLogins;
+	}
+
+	@Override
+	public void registerLoginFailure(final String userUid, final int count1)
+	{
+		if (StringUtils.isNotEmpty(userUid))
+		{
+			final LoginFailure count = get(prepareUserUid(userUid), Integer.valueOf(0));
+			count.setCounter(count1);
+			count.setDate(new Date());
+			bruteForceAttackCache.put(prepareUserUid(userUid), count);
+		}
+	}
 
 	protected LoginFailure get(final String userUid, final Integer startValue)
 	{

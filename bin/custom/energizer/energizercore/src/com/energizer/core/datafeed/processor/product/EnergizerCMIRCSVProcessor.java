@@ -99,14 +99,28 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				LOG.info(" CSV Record: " + record.toMap());
 
 				final Map<String, String> csvValuesMap = record.toMap();
-				validate(record);
-				if (!getTechnicalFeedErrors().isEmpty())
+
+				//if any field empty --- don't process record
+				//if cmir price empty --- trigger email, chk if list price is also empty....if empty --- trigger email, don't process record if both empty				
+				if (validate(record))
 				{
-					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
-					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
-					getTechnicalFeedErrors().clear();
+					addErrors();
 					continue;
 				}
+				if (validateCMIRPrice(record))
+				{
+					addErrors();
+					if (validateListPrice(record))
+					{
+						addErrors();
+						continue;
+					}
+				}
+
+				/*
+				 * if (!getTechnicalFeedErrors().isEmpty()) { csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+				 * getBusinessFeedErrors().addAll(getTechnicalFeedErrors()); getTechnicalFeedErrors().clear(); continue; }
+				 */
 				/*
 				 * if (!getBusinessFeedErrors().isEmpty() && hasCustomerBusinessError) {
 				 * csvFeedErrorRecords.addAll(getBusinessFeedErrors()); continue; }
@@ -116,7 +130,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				final String b2bUnitId = csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID);
 				final String erpMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID);
-				final String customerMaterialId = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID);
 				String currency = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE_CURRENCY);
 				String customerlistprice = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_LIST_PRICE);
 
@@ -167,7 +180,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					{
 						energizerCMIRModel = modelService.create(EnergizerCMIRModel.class);
 						energizerCMIRModel.setErpMaterialId(erpMaterialId);
-						energizerCMIRModel.setCustomerMaterialId(customerMaterialId);
 						energizerCMIRModel.setB2bUnit(energizerB2BUnitModel);
 
 						tmpCMIRModelList.add(energizerCMIRModel);
@@ -193,7 +205,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						//Retrieve the PriceRowModel and perform the matching process and do an update in case of any mismatch
 						for (final PriceRowModel enrPriceRowModel : energizerPriceRowModels)
 						{
-							LOG.debug("Product price product :" + enrPriceRowModel.getPrice());
+							LOG.info("Product price product :" + enrPriceRowModel.getPrice());
 							if (!(enrPriceRowModel instanceof EnergizerPriceRowModel))
 							{
 								LOG.debug("Not an energizer price row");
@@ -203,7 +215,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 							if (isENRPriceRowModelSame(enrPriceRow, csvValuesMap, energizerProduct))
 							{
-								LOG.debug("matchingPriceRowFound...");
+								LOG.info("matchingPriceRowFound...");
 								matchingPriceRowFound = true;
 								priceRowModel = enrPriceRow;
 								break;
@@ -213,7 +225,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 					if (!matchingPriceRowFound)
 					{
-						LOG.debug("matchingPriceRowFound not ...");
+						LOG.debug("matchingPriceRow NOT Found ...");
 						priceRowModel = modelService.create(EnergizerPriceRowModel.class);
 						priceRowModel.setB2bUnit(energizerB2BUnitModel);
 						priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
@@ -262,7 +274,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private boolean isCMIRModelSame(final EnergizerCMIRModel cmirModel, final Map<String, String> csvValuesMap)
 	{
 		if (cmirModel != null && cmirModel.getErpMaterialId().equals(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID))
-				&& cmirModel.getCustomerMaterialId().equals(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID))
 				&& cmirModel.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
 		{
 			// record exists, just update other attributes
@@ -276,6 +287,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private void addUpdateCMIRRecord(final EnergizerCMIRModel energizerCMIRModel, final Map<String, String> csvValuesMap)
 			throws Exception
 	{
+		energizerCMIRModel.setCustomerMaterialId(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID));
 		energizerCMIRModel.setCustomerMaterialDescription(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION),
 				new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE).toLowerCase()));
 		energizerCMIRModel.setShippingPoint(csvValuesMap.get(EnergizerCoreConstants.SHIPMENT_POINT_NO));
@@ -306,8 +318,9 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	/**
 	 * @param record
 	 */
-	private void validate(final CSVRecord record)
+	private boolean validate(final CSVRecord record)
 	{
+		boolean isEmptyRecord = false;
 		Integer columnNumber = 0;
 		EnergizerCSVFeedError error = null;
 		setRecordFailed(getRecordFailed());
@@ -342,31 +355,97 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+					isEmptyRecord = true;
 				}
 			}
-			if (!value.isEmpty() && columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE))
+			/*
+			 * if (!value.isEmpty() && columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE)) { if
+			 * (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0) { long recordFailed = getRecordFailed();
+			 * final List<String> columnNames = new ArrayList<String>(); final List<Integer> columnNumbers = new
+			 * ArrayList<Integer>(); error = new EnergizerCSVFeedError(); error.setUserType(TECHNICAL_USER);
+			 * error.setErrorCode("CMIR2001"); error.setLineNumber(record.getRecordNumber());
+			 * columnNames.add(columnHeader); error.setColumnName(columnNames); error.setMessage(columnHeader +
+			 * " column should be numeric and greater than 0"); columnNumbers.add(columnNumber);
+			 * error.setColumnNumber(columnNumbers); getTechnicalFeedErrors().add(error);
+			 * setTechRecordError(getTechnicalFeedErrors().size()); recordFailed++; setRecordFailed(recordFailed); } }
+			 */
+		}
+		return isEmptyRecord;
+	}
+
+	private boolean validateListPrice(final CSVRecord record)
+	{
+		boolean isEmptyListPrice = false;
+		Integer columnNumber = 0;
+		EnergizerCSVFeedError error = null;
+		setRecordFailed(getRecordFailed());
+		for (final String columnHeader : record.toMap().keySet())
+		{
+			columnNumber++;
+			setTotalRecords(record.getRecordNumber());
+			final String value = record.toMap().get(columnHeader);
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MATERIAL_LIST_PRICE)
+					&& (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0))
 			{
-				if (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0)
-				{
-					long recordFailed = getRecordFailed();
-					final List<String> columnNames = new ArrayList<String>();
-					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					error = new EnergizerCSVFeedError();
-					error.setUserType(TECHNICAL_USER);
-					error.setErrorCode("CMIR2001");
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(columnHeader);
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be numeric and greater than 0");
-					columnNumbers.add(columnNumber);
-					error.setColumnNumber(columnNumbers);
-					getTechnicalFeedErrors().add(error);
-					setTechRecordError(getTechnicalFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
-				}
+				long recordFailed = getRecordFailed();
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error = new EnergizerCSVFeedError();
+				error.setUserType(TECHNICAL_USER);
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setColumnName(columnNames);
+				error.setErrorCode("CMIR2001");
+				error.setMessage(columnHeader + " column should be numeric and greater than 0");
+				columnNumbers.add(columnNumber);
+				error.setColumnNumber(columnNumbers);
+				getTechnicalFeedErrors().add(error);
+				setTechRecordError(getTechnicalFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
+				isEmptyListPrice = true;
+				break;
 			}
 		}
+		return isEmptyListPrice;
+	}
+
+	private boolean validateCMIRPrice(final CSVRecord record)
+	{
+		boolean isEmptyCMIRPrice = false;
+		Integer columnNumber = 0;
+		EnergizerCSVFeedError error = null;
+		setRecordFailed(getRecordFailed());
+		for (final String columnHeader : record.toMap().keySet())
+		{
+			columnNumber++;
+			setTotalRecords(record.getRecordNumber());
+			final String value = record.toMap().get(columnHeader);
+			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE)
+					&& (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0))
+			{
+				long recordFailed = getRecordFailed();
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error = new EnergizerCSVFeedError();
+				error.setUserType(TECHNICAL_USER);
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setColumnName(columnNames);
+				error.setErrorCode("CMIR2001");
+				error.setMessage(columnHeader + " column should be numeric and greater than 0");
+				columnNumbers.add(columnNumber);
+				error.setColumnNumber(columnNumbers);
+				getTechnicalFeedErrors().add(error);
+				setTechRecordError(getTechnicalFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
+				isEmptyCMIRPrice = true;
+				break;
+			}
+		}
+		return isEmptyCMIRPrice;
+
 	}
 
 	/**
@@ -380,6 +459,13 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService
 				.getUnitForUid(b2bUnitId);
 		return energizerB2BUnitModel;
+	}
+
+	private void addErrors()
+	{
+		csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+		getTechnicalFeedErrors().clear();
 	}
 
 	/**

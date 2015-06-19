@@ -24,9 +24,12 @@
 		<div class="form_field-elements">
 			<formElement:formInputBox idKey="j_username" labelKey="login.username" path="j_username" inputCSS="text" mandatory="true"/>
 			<formElement:formPasswordBox idKey="j_password" labelKey="login.password" path="j_password" inputCSS="text password" mandatory="true"/>
+			<c:if test="${empty FAILED_MAX_ATTEMPTS_TO_LOGIN}">
 			<div class="form_field_error-message">
 				<a class="password-forgotten" href="${forgotPassworkdRequestPage}"><spring:theme code="login.link.forgottenPwd"/></a>
 			</div>
+			</c:if>
+			
 		</div>
 		<c:if test="${loginError}">
 			</div>

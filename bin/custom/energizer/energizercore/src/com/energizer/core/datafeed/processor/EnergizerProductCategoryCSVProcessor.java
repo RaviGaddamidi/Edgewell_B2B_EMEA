@@ -88,8 +88,8 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 		for (final CSVRecord record : records)
 		{
 
-			super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
-			super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			//super.technicalFeedErrors = new ArrayList<EnergizerCSVFeedError>();
+			//super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 
 			final Map<String, String> csvValuesMap = record.toMap();
 			validate(record);
@@ -111,6 +111,9 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 				final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
 				error.setLineNumber(record.getRecordNumber());
 				error.setMessage("No such Product : " + csvValuesMap.get(CSV_HEADERS[0]));
+				final List columnNmaeList = new ArrayList();
+				columnNmaeList.add(csvValuesMap.get(CSV_HEADERS[0]));
+				error.setColumnName(columnNmaeList);
 				getTechnicalFeedErrors().add(error);
 				setTechRecordError(getTechnicalFeedErrors().size());
 				recordFailed++;
@@ -162,42 +165,42 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 	{
 		EnergizerCSVFeedError error = null;
 		setRecordFailed(getRecordFailed());
-		if (!hasMandatoryFields(record, getHeadersForFeed(MATERIAL_CATEGORY_FEED_HEADERS_MANDATORY_KEY)))
+		//if (!hasMandatoryFields(record, getHeadersForFeed(MATERIAL_CATEGORY_FEED_HEADERS_MANDATORY_KEY)))
+		//{
+		final List<String> mandatoryFields = Arrays.asList(Config.getParameter(MATERIAL_CATEGORY_FEED_HEADERS_MANDATORY_KEY).split(
+				new Character(DELIMETER).toString()));
+		final Map<String, String> map = record.toMap();
+		Integer columnNumber = 0;
+		long recordFailed = getRecordFailed();
+		for (final String columnHeader : map.keySet())
 		{
-			final List<String> mandatoryFields = Arrays.asList(Config.getParameter(MATERIAL_CATEGORY_FEED_HEADERS_MANDATORY_KEY)
-					.split(new Character(DELIMETER).toString()));
-			final Map<String, String> map = record.toMap();
-			Integer columnNumber = 0;
-			long recordFailed = getRecordFailed();
-			for (final String columnHeader : map.keySet())
+			setTotalRecords(record.getRecordNumber());
+			if (mandatoryFields.contains(columnHeader))
 			{
-				setTotalRecords(record.getRecordNumber());
-				if (mandatoryFields.contains(columnHeader))
+				columnNumber++;
+				final String value = map.get(columnHeader);
+
+				if (value.isEmpty())
 				{
-					columnNumber++;
-					final String value = map.get(columnHeader);
-
-					if (value.isEmpty())
-					{
-						error = new EnergizerCSVFeedError();
-						final List<String> columnNames = new ArrayList<String>();
-						final List<Integer> columnNumbers = new ArrayList<Integer>();
-						error.setLineNumber(record.getRecordNumber());
-						columnNames.add(columnHeader);
-						error.setColumnName(columnNames);
-						error.setMessage(columnHeader + " column should not be empty");
-						columnNumbers.add(columnNumber);
-						error.setColumnNumber(columnNumbers);
-						getTechnicalFeedErrors().add(error);
-						setTechRecordError(getTechnicalFeedErrors().size());
-						recordFailed++;
-						setRecordFailed(recordFailed);
-					}
+					error = new EnergizerCSVFeedError();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					error.setColumnName(columnNames);
+					error.setMessage(columnHeader + " column should not be empty");
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
 				}
-
 			}
 
 		}
+
+		//}
 		return error;
 	}
 

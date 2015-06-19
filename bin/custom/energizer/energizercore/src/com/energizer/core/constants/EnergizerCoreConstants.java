@@ -41,6 +41,8 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	public static final String SHIPMENT_POINT_NO = "ShipmentPointNumber";
 	public static final String CUSTOMER_LIST_PRICE_CURRENCY = "CustomerListpricecurrency";
 	public static final String CUSTOMER_LIST_PRICE = "CustomerListPrice";
+	public static final String MATERIAL_LIST_PRICE_CURRENCY = "MaterialListpricecurrency";
+	public static final String MATERIAL_LIST_PRICE = "MaterialListprice";
 
 	// Constants for  EnergizerProductConversionCSVProcessor
 	public static final String ALTERNATE_UOM = "AlternateUOM";
@@ -88,5 +90,6 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 		super();
 		assert false;
 	}
+
 
 }

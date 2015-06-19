@@ -84,3 +84,47 @@ UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[la
 INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
 
 UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang]
+
+# CMS Navigation Nodes - My Company
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+;;CompanySummaryNavNode;"Account Summary"
+# CMS Navigation Nodes - My Company
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
+;CompanyLeftNavNode;; Your Company;Your Company
+;CompanyBudgetNavNode;; Your Company;Manage Budgets
+;CompanyCostCenterNavNode;; Your Company;Manage CostCenters
+;CompanyUnitsNavNode;; Your Company;Manage Units
+;CompanyUsersNavNode;; Your Company;Manage Users
+;CompanyUserGroupsNavNode;; Your Company;Manage UserGroups
+;CompanyPermissionsNavNode;; Your Company;Manage Permissions
+
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+ ;;CompanyBudgetAddLink;"Add New Budgets"
+ ;;CompanyBudgetEditLink;"Edit or disable budgets"
+ ;;CompanyBudgetLink;"Manage Budgets"
+ ;;CompanyCostCenterAddLink;"Add new cost center"
+ ;;CompanyCostCenterEditLink;"Edit or disable cost centers"
+ ;;CompanyCostCenterLink;"Manage Cost Centers"
+ ;;CompanyHomeLink;"My Company"
+ ;;CompanyOrganizationtLink;"Organization Management"
+ ;;CompanyPermissionsAddLink;"Add new permission"
+ ;;CompanyPermissionsEditLink;"Edit or disable permissions"
+ ;;CompanyPermissionsLink;"Manage Permissions"
+ ;;CompanyUnitsAddLink;"Create new units"
+ ;;CompanyUnitsEditLink;"Edit or disable units"
+ ;;CompanyUnitsLink;"Manage Business Units"
+ ;;CompanyUserGroupsAddLink;"Add new usergroup"
+ ;;CompanyUserGroupsEditLink;"Edit or disable order usergroups"
+ ;;CompanyUserGroupsLink;"Manage Usergroups"
+ ;;CompanyUsersAddLink;"Add new users"
+ ;;CompanyUsersEditLink;"Edit or disable users"
+ ;;CompanyUsersLink;"Manage Users"
+ ;;LogoutLink;"Sign Out"
+ ;;ManageBudgetsLink;"Manage Budgets"
+ ;;ManageBusinessUnitsLink;"Manage Business Units"
+ ;;ManageCostCentersLink;"Manage Cost Centers"
+ ;;ManagePermissionsLink;"Manage Permissions"
+ ;;ManageUsergroupsLink;"Manage Usergroups"
+ ;;ManageUsersLink;"Manage Users"
+ ;;MyAccountLink;"My Account"
+ ;;MyCompanyLink;"My Company"

@@ -1003,7 +1003,6 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 					GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
 							Localization.getLocalizedString(orderErr.getMessage()));
 				}
-				break;
 			}
 
 			/*
@@ -1031,6 +1030,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		if (OrderValidationErros.size() > 0 || ShippingValidationErros.size() > 0)
 		{
+			energizerB2BCheckoutFlowFacade.removeSessionCart();
 			return REDIRECT_PREFIX + "/my-account/order/" + orderCode;
 		}
 		else

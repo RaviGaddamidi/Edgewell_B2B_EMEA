@@ -596,4 +596,13 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 		}
 	}
+
+	/**
+	 * 
+	 */
+	public void removeSessionCart()
+	{
+		// YTODO Auto-generated method stub
+		getCartService().removeSessionCart();
+	}
 }
