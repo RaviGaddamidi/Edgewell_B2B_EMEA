@@ -84,6 +84,10 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 			LOG.warn("User does not exist.. " + username);
 		}
 
+		if(userModel == null){
+		
+		}
+		else{
 		if (userModel.isLoginDisabled()
 				&& getBruteForceAttackCounter().getUserFailedLogins(StringUtils.lowerCase(username)) > getBruteForceAttackCounter()
 						.getMaxLoginAttempts())
@@ -107,11 +111,9 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 			{
 				LOG.warn("Brute force attack attempt for non existing user name " + username);
 			}
-			finally
-			{
-
-			}
+			
 		}
+	  }
 
 
 		if (bruteForceAttackCounter.isAttack(request.getParameter("j_username")))
