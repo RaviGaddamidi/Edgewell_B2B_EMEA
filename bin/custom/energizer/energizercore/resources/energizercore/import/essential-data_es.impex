@@ -64,3 +64,4 @@ UPDATE MediaFormat;qualifier[unique=true];name[lang=$lang];
 #UPDATE ProductTaxGroup;code[unique=true];name[lang=$lang]
 #;ca-sales-tax-full;Kanadische Mehrwertsteuer;
 #;us-sales-tax-full;US-Mehrwertsteuer;
+
