@@ -7,7 +7,7 @@ $lang=es
 
 # Languages
 UPDATE Language;isocode[unique=true];name[lang=$lang]
-;es;Espaniol;
+;es;español;
 ;en;Englisch;
 
 
@@ -21,11 +21,11 @@ UPDATE Currency;isocode[unique=true];name[lang=$lang]
 # Titles
 UPDATE Title;code[unique=true];name[lang=$lang]
 ;dr;Dr.;
-;miss;señorita;
+;miss;Srta;
 ;mr;Sr;
-;mrs;señora;
+;mrs;Sra;
 ;ms;Sra;
-;rev;revolución;
+;rev;Rev;
 
 # Credit / Debit Cards
 #UPDATE CreditCardType;code[unique=true];name[lang=$lang]

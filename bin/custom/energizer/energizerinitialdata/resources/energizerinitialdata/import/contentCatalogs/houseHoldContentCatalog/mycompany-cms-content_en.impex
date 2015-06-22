@@ -37,6 +37,16 @@ UPDATE ProductReferencesComponent;$contentCV[unique=true];uid[unique=true];title
 # Category Pages
 UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];title[lang=en]
 
+# CMS Navigation Nodes - My Company
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
+;CompanyLeftNavNode;; Your Company;Your Company
+;CompanyBudgetNavNode;; Your Company;Manage Budgets
+;CompanyCostCenterNavNode;; Your Company;Manage CostCenters
+;CompanyUnitsNavNode;; Your Company;Manage Units
+;CompanyUsersNavNode;; Your Company;Manage Users
+;CompanyUserGroupsNavNode;; Your Company;Manage UserGroups
+;CompanyPermissionsNavNode;; Your Company;Manage Permissions
+
 # Energizer Terms and Conditions Page
 
 # CMS Paragraph Component
@@ -85,18 +95,6 @@ INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=
 
 UPDATE SimpleBannerComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang]
 
-# CMS Navigation Nodes - My Company
-UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
-;;CompanySummaryNavNode;"Account Summary"
-# CMS Navigation Nodes - My Company
-UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
-;CompanyLeftNavNode;; Your Company;Your Company
-;CompanyBudgetNavNode;; Your Company;Manage Budgets
-;CompanyCostCenterNavNode;; Your Company;Manage CostCenters
-;CompanyUnitsNavNode;; Your Company;Manage Units
-;CompanyUsersNavNode;; Your Company;Manage Users
-;CompanyUserGroupsNavNode;; Your Company;Manage UserGroups
-;CompanyPermissionsNavNode;; Your Company;Manage Permissions
 
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
  ;;CompanyBudgetAddLink;"Add New Budgets"

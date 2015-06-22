@@ -26,3 +26,21 @@ UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
  ;;storefinderPage;StoreFinder;
  ;;termsAndConditions;Términos y Condiciones;
  ;;updatePassword;Actualización Recordar Contraseña;
+ 
+ # CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;UserLoginLink;Iniciar Sesión
+;;MyAccountLink;Mi Cuenta
+;;MyCompanyLink;Mi Empresa
+;;LogoutLink;Cerrar Sesión
+;;StoreFinderLink;Store Locator
+;;QuickOrderPageLink;Pedido Rápido
+;;ExcelOrderPageLink;Excel Orden
+;;AboutUSLink;sobre nosotros
+#;;CopyRightLink;©2015 Energizer
+#;;TrademarkLink;Trademark
+;;TermsAndConditionsLink;Términos Y Condiciones
+;;PrivacyPolicyLink;política De Privacidad
+;;ContactUSLink;Contáctenos
+;;LegalLink;legal
+;;FAQLink;preguntas más frecuentes
