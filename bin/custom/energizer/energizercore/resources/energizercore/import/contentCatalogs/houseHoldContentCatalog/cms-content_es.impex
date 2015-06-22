@@ -27,6 +27,7 @@ UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
  ;;termsAndConditions;Términos y Condiciones;
  ;;updatePassword;Actualización Recordar Contraseña;
  
+ 
  # CMS Link Components
 UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
 ;;UserLoginLink;Iniciar Sesión
