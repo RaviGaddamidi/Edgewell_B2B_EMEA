@@ -941,7 +941,7 @@
 		<property name="i18nService" ref="i18nService"/>
 		<property name="passwordEncoderService" ref="passwordEncoderService"/>
 		<property name="secureTokenService" ref="secureTokenService"/>
-		<property name="tokenValiditySeconds" value="#{configurationService.configuration.getProperty('forgottenPassword.emailContext.expiresInSeconds')}"/>
+		<property name="tokenValiditySeconds" value="1800"/> <!-- #{configurationService.configuration.getProperty('forgottenPassword.emailContext.expiresInSeconds')}-->
 		<property name="customerAccountDao" ref="customerAccountDao"/>
 		<property name="baseSiteService" ref="baseSiteService"/>
 		<property name="baseStoreService" ref="baseStoreService"/>
