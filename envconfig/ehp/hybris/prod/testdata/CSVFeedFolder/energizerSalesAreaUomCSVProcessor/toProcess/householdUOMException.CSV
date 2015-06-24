@@ -1,5 +1,5 @@
 customerId,salesOrganisation,distributionChannel,division,segmentId,familyId,minimumOrderQuantity,unitOfMeasure,ERPMaterialID
 0098700403,0,0,0,0,0,10,LAY,E0072207
-0098700403,0,0,0,0,0,20,CS,E0221411
+0098700403,0,0,0,0,0,22,CS,E0221411
 0098700403,0,0,0,0,0,30,PAL,000000000007320497
 0098700403,0,0,0,0,0,40,CS,E0297504
