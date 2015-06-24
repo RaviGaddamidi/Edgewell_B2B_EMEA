@@ -54,20 +54,20 @@ INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 # this is the trigger schedule for all the cron jobs
 #------------------------------------------------------------------
 INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
-;energizerCustomerCSVProcessor;0 00 01 ? * *
-;energizerB2BUserCSVProcessor;0 15 01 ? * *
-;energizerCustomerAddressCSVProcessor;0 30 01 ? * *
-;energizerProductCSVProcessor;0 45 01 ? * *
-;energizerProductNameCSVProcessor;0 30 02 ? * *
-;energizerProductMediaCSVProcessor;0 00 03 ? * *
-;energizerProductHierarchyCSVProcessor;0 45 03 ? * *
-;energizerCategory2CategoryCSVProcessor;0 00 04 ? * *
-;energizerProduct2CategoryCSVProcessor;0 20 04 ? * *
-;energizerProduct2CategoryCSVProcessor;0 00 05 ? * *
-;energizerOrphanedProductsCronJob;0 00 06 ? * *
-;energizerProductConversionCSVProcessor;0 00 07 ? * *
-;energizerSalesUOMCSVProcessor;0 30 07 ? * *
-;energizerCMIRCSVProcessor;0 15 08 ? * *
-;energizerLeadTimeCSVProcessor;0 30 08 ? * *
-;energizerOrderUpdateCSVProcessor;0 00 09 ? * *
-;energizerOfflineOrderCSVProcessor;0 00 10 ? * *
+;energizerCustomerCSVProcessor;0 0 1 ? * *
+;energizerB2BUserCSVProcessor;0 15 1 ? * *
+;energizerCustomerAddressCSVProcessor;0 30 1 ? * *
+;energizerProductCSVProcessor;0 45 1 ? * *
+;energizerProductNameCSVProcessor;0 30 2 ? * *
+;energizerProductMediaCSVProcessor;0 0 3 ? * *
+;energizerProductHierarchyCSVProcessor;0 45 3 ? * *
+;energizerCategory2CategoryCSVProcessor;0 0 4 ? * *
+;energizerProduct2CategoryCSVProcessor;0 20 4 ? * *
+;energizerProduct2CategoryCSVProcessor;0 0 5 ? * *
+;energizerOrphanedProductsCronJob;0 0 6 ? * *
+;energizerProductConversionCSVProcessor;0 0 7 ? * *
+;energizerSalesUOMCSVProcessor;0 30 7 ? * *
+;energizerCMIRCSVProcessor;0 15 8 ? * *
+;energizerLeadTimeCSVProcessor;0 30 8 ? * *
+;energizerOrderUpdateCSVProcessor;0 0 9 ? * *
+;energizerOfflineOrderCSVProcessor;0 0 10 ? * *
