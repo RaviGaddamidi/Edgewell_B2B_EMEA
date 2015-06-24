@@ -37,7 +37,7 @@
 								</tr>
 								<tr>
 									<td height="30" align="right" valign="middle" bgcolor="#51585c">
-										<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.secureBaseUrl}/my-account"><font color="#FFFFFF">${ctx.messages.myAccount}</font></a> | <a href="${ctx.baseUrl}/store-finder"><font color="#FFFFFF">${ctx.messages.storeFinder}</font></a> &nbsp;&nbsp;</font>
+										<!--<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.secureBaseUrl}/my-account"><font color="#FFFFFF">${ctx.messages.myAccount}</font></a> | <a href="${ctx.baseUrl}/store-finder"><font color="#FFFFFF">${ctx.messages.storeFinder}</font></a> &nbsp;&nbsp;</font>-->
 									</td>
 								</tr>
 								<tr>
@@ -189,7 +189,7 @@
 												<td>
 													<table>
 														<tr>
-															<td width="40%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.deliveryMethod}</b></font></td>
+															<!--<td width="40%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.deliveryMethod}</b></font></td>-->
 															<td width="10%">&nbsp;</td>
 															<td width="50%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.deliveryAddress}</b></font></td>
 														</tr>
@@ -199,14 +199,14 @@
 															<td>&nbsp;</td>
 														</tr>
 														<tr>
-															<td>
+															<!--<td>
 																#if(${ctx.order.deliveryCost.value} > 0)
 																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.order.deliveryMode.name}</font></p>
 																#else
 																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.freeDelivery}</font></p>
 																#end
 																<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('deliveryETA', ${ctx.order.deliveryMode.description})}</font></p>
-															</td>
+															</td>-->
 															<td>&nbsp;</td>
 															<td><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">
 																${ctx.order.deliveryAddress.title} ${ctx.order.deliveryAddress.firstName} ${ctx.order.deliveryAddress.lastName}<br/>
@@ -291,12 +291,9 @@
 #set ($deliveryInfoUrl = "${ctx.baseUrl}/my-account/order/${ctx.order.code}")
 #set ($mailToUrl = "mailto:${ctx.messages.contactUsEmailAddress}")
 #set ($paragraphContactUs = ${ctx.messages.getMessage('paragraphContactUs', "#genHtmlLinkStartTag(${ctx.messages.contactUsPage})", "#genHtmlLinkEndTag()", "#genHtmlLink($mailToUrl '#666666' ${ctx.messages.contactUsEmailAddress})")})
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphAccountLocation', "#genHtmlLinkStartTag($accountUrl)", "#genHtmlLinkEndTag()")}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.paragraphCreateAccount}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphDeliveryInfo', "#genHtmlLinkStartTag($deliveryInfoUrl)", "#genHtmlLinkEndTag()")}</font></p>
-										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.signature}</font></p>
+										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.note}</font></p>
 									</td>
 								</tr>
 								<tr>
@@ -309,7 +306,7 @@
 								</tr>
 								<tr>
 									<td height="30" align="right" valign="middle" bgcolor="#51585c">
-										<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.baseUrl}"><font color="#FFFFFF">${ctx.messages.help}</font></a> | <a href="${ctx.messages.contactUsPage}"><font color="#FFFFFF">${ctx.messages.contactUs}</font></a> | <a href="${ctx.baseUrl}"><font color="#FFFFFF">${ctx.messages.termsAndCondition}</font></a> &nbsp;&nbsp;</font>
+										<font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif"><a href="${ctx.messages.faqUrl}"><font color="#FFFFFF">${ctx.messages.help}</font></a> | <a href="${ctx.messages.contactUsPage}"><font color="#FFFFFF">${ctx.messages.contactUs}</font></a> | <a href="${ctx.messages.termsUrl}"><font color="#FFFFFF">${ctx.messages.termsAndCondition}</font></a> &nbsp;&nbsp;</font>
 									</td>
 								</tr>
 								<tr>
