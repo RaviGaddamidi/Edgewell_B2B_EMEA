@@ -1,0 +1,5 @@
+CustomerID,SalesOrg,DistributionChannel,Division,Customername,OrderType,DeletionFlag,Status,Currency,MinimumOrderValue,DefaultLanguage
+0098143111,1000,10,10,CIAMESA SA,ZFT,0,0,USD,            100000,EN
+0098143123,1000,10,10,ARCOM S/A,ZFT,0,0,USD,            100000,EN
+0098144074,1000,10,10,PREMIUM BRANDS GROUP SA PBG SA,ZFT,0,0,USD,            100000,EN
+0098700403,1000,10,10,EVEREADY ECUADOR CA,ZFT,0,0,USD,            100000,EN

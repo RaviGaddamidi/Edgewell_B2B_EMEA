@@ -1,0 +1,8 @@
+customerId,salesOrganisation,distributionChannel,division,segmentId,familyId,minimumOrderQuantity,unitOfMeasure
+0098700403,1000,10,10,Eveready Batteries,Eveready Batteries-Eveready Gold,2,CS
+0098700403,1000,10,10,Lighting Products,Lighting Products-Handheld Lights,12,
+0098700403,1000,10,10,Energizer Batteries,Energizer Batteries-Ultimate Lithium,20,CG
+0098700403,1000,10,10,Eveready Batteries,Eveready Batteries-Heavy Duty,20,CS
+0098700403,1000,10,10,Rechargeable,Rechargeable-Batteries,20,CS
+0098700403,1000,10,10,Eveready Batteries,Eveready Batteries-Extra Duration/Super Heavy Duty,20,CS
+0098700403,1000,10,10,Specialty Batteries,Specialty Batteries-Electronic Batteries,2,CS

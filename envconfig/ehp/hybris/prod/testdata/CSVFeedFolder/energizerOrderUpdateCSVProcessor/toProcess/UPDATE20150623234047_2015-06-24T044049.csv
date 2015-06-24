@@ -1,0 +1,6 @@
+SAPOrderNo,POnumber,Requesteddeliverydate,TotalValue,TotalTax,TotalShipment,TotalDiscount,HybrisOrderNo,Status,ContainerID,SealNumber,VesselNumber,ERPMaterialID,OrderEntryQty,UOM,Rejectionreason,ItemTotalPrice,PriceConditionUnit,PriceUoM,LineItemTotalPrice,ItemTotalShipment,ItemTotalDiscount,ItemTax,BDSDocId,BDSContRep,BDSDocuClass
+0050051700,42535t5,20150717,            0.00,,0,0,00045481,1,,,,E0072207,0000000032,CS,0,0.00 ,   1,EA,0.00 ,0,0,0.00 ,,,
+0050051701,54253,20150703,            0.00,,0,0,00045484,1,,,,E0136104,0000000005,CS,0,0.00 ,1000,EA,0.00 ,0,0,0.00 ,,,
+0050051702,4235,20150703,        59520.00,        0.00,0,0,00045489,1,,,,E0072207,0000000032,CS,0,1.50 ,   1,EA,59520.00 ,0,0,0.00 ,,,
+0050051703,5246536,20150717,         1965.00,        0.00,0,0,00045495,1,,,,E0140007,0000000005,CS,0,1.45 ,   1,EA,348.00 ,0,0,0.00 ,,,
+0050051703,5246536,20150717,         1965.00,        0.00,0,0,00045495,1,,,,E0638002,0000000050,CS,0,5.39 ,   1,EA,1617.00 ,0,0,0.00 ,,,
