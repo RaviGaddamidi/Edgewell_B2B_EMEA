@@ -7,7 +7,7 @@ $lang=es
 
 # Languages
 UPDATE Language;isocode[unique=true];name[lang=$lang]
-;es;español;
+;es;Español;
 ;en;Englisch;
 
 

@@ -61,7 +61,8 @@
 									</td>
 									<td headers="header4">
 										<ycommerce:testId code="orderApprovalDashboard_orderStatus_label">
-											<p>${order.b2bOrderData.created}</p>
+											<!--<p>${order.b2bOrderData.created}</p>-->
+											<p><fmt:formatDate value="${order.b2bOrderData.created}" dateStyle="long" timeStyle="short" type="both"/></p>
 										</ycommerce:testId>
 									</td>
 									<td headers="header5">
