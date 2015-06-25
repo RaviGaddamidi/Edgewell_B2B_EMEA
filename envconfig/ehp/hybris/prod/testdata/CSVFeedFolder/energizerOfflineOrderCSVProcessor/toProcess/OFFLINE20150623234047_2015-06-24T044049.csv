@@ -1,0 +1,1 @@
+SAPOrderNo,CreatedByUser,CreatedDate,CreatedTime,ReqDeliveryDate,PONo,TotalValue,TotalShipment,TotalDiscount,TotalTax,B2BAccount,Status,ContainerID,SealNumber,VesselNumber,ERPMaterialID,OrderEntryQty,UOM,UnitPrice,PriceConditionUnit,PriceUoM,TotalPrice,ItemTotalShipment,ItemTotalDiscount,ItemTax,BDSDocId,BDSContRep,BDSDocuClass
