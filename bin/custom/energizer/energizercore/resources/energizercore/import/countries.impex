@@ -251,6 +251,11 @@ INSERT_UPDATE Country;isocode[unique=true];name[lang=en];active[default=true]
 ;ZA;"South Africa"
 ;ZM;"Zambia"
 ;ZW;"Zimbabwe"
+;CUW;"Curacao"
+;DOM;"Dominicana"
+;KY;"Grand Cayman"
+;KNA;"Saint Kitts Nevis"
+;TTO;"Trinidad Y Tobago"
 
 # ISO 3166-2:US
 #
