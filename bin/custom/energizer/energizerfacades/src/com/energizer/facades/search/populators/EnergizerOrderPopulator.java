@@ -51,6 +51,10 @@ public class EnergizerOrderPopulator extends OrderPopulator
 				target.setIsOrderBlock(source.getB2bUnit().getOrderBlock());
 			}
 		}
+		if (null != source.getRejectionComment())
+		{
+			target.setRejectionComments(source.getRejectionComment());
+		}
 
 		//target.setArchiveID(source.getArchiveID());
 

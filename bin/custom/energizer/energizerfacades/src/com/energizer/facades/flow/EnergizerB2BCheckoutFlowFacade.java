@@ -35,7 +35,8 @@ public interface EnergizerB2BCheckoutFlowFacade
 
 	public void setLeadTime(int leadTime);
 
-	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode);
+	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode,
+			final String rejectionComment);
 
 	public CartData simulateOrder(CartData cartData) throws Exception;
 }

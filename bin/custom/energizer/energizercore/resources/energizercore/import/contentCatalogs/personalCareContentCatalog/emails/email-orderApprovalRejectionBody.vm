@@ -173,11 +173,17 @@
 											<tr>
 												<td>
 													<table>
-														#foreach($permissionResult in $ctx.order.b2bPermissionResult)
+														<!--#foreach($permissionResult in $ctx.order.b2bPermissionResult)
 														<tr>
 															<td width="100%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('rejectionDetails', "#genHtmlBoldFont($permissionResult.approver)", "#genHtmlBoldFont($permissionResult.permissionTypeCode)")}</font></td>
 														</tr>
-														#end
+														#end-->
+														#if(${ctx.order.rejectionComments})
+															<tr>
+																<td width="100%"><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('rejectionDetails', "#genHtmlBoldFont(${ctx.order.rejectionComments})")}</font></td>
+															</tr>
+															#end
+														
 													</table>
 												</td>
 											</tr>
@@ -280,7 +286,7 @@
 																		<td valign="top"><p><font color="#666666" size="3" face="Arial, Helvetica, sans-serif"><b>${ctx.order.totalPrice.formattedValue}</b></font></p></td>
 																	</tr>
 																</table>
-															<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>
+																<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('includesTax', ${ctx.order.totalTax.formattedValue})}</font></p>-->
 															</td>
 														</tr>
 													</table>

@@ -753,6 +753,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="rejectionComment" type="java.lang.String">
+						<description>this is reference to store rejection comment</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 
 				</attributes>
 			</itemtype>

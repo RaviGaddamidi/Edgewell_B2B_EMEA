@@ -91,6 +91,7 @@
 		<property name="contrEP" type="String"/>
 		<property name="documentClass" type="String"/>
 		<property name="isOrderBlock" type="boolean"/>
+		<property name="rejectionComments" type="String"></property>
 			
     </bean>    
     

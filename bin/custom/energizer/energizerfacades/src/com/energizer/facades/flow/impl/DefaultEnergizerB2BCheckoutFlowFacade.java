@@ -389,10 +389,12 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	 * @param currentUser
 	 * @param string
 	 */
-	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode)
+	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode,
+			final String rejectionComment)
 	{
 		final OrderModel orderModel = b2bOrderService.getOrderForCode(orderCode);
 		orderModel.setOrderApprover(orderApprover);
+		orderModel.setRejectionComment(rejectionComment);
 		modelService.save(orderModel);
 	}
 
