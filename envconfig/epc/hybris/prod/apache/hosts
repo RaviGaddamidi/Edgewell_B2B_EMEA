@@ -17,5 +17,7 @@
 #       38.25.63.10     x.acme.com              # x client host
 
 # localhost name resolution is handled within DNS itself.
-10.98.1.208	edgewell.qa.com
-10.98.2.207	qa.edgewell.com
+#	127.0.0.1       localhost
+#	::1             localhost
+10.98.1.205		hybrisportal.edgewell.com
+10.98.2.204		distributorportal.edgewell.com
