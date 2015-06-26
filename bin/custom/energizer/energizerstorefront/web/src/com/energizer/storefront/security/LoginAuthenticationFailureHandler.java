@@ -81,11 +81,12 @@ public class LoginAuthenticationFailureHandler extends SimpleUrlAuthenticationFa
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("User does not exist.. " + username);
+			LOG.info("User does not exist.. " + username);
+			e.printStackTrace();
 		}
 
 		if(userModel == null){
-		
+			LOG.info("User does not exist since userModel is null " + username);
 		}
 		else{
 		if (userModel.isLoginDisabled()
