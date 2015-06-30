@@ -956,5 +956,41 @@
 					 value="#{configurationService.configuration.getProperty('guest.orderstatuspage.access.expiry.month')}"/>
 	</bean>
 	
+	<bean id="findApprovers"
+	      class="com.energizer.core.actions.FindApprovers"
+	      parent="abstractSimpleB2BApproveOrderDecisionAction">
+		<property name="b2bPermissionService" ref="energizerB2BPermissionService"/>
+		<property name="permissionResultHelper" ref="permissionResultHelper"/>
+	</bean>
 	
+	<bean id="energizerB2BPermissionService"
+	      class="com.energizer.services.order.EnergizerB2BPermissionService"
+	      parent="defaultB2BPermissionService">
+	</bean>
+	
+	<!--  approval process starts -->
+	<bean id="b2BAbstractWorkflowAutomatedAction" class="com.energizer.core.actions.B2BAbstractWorkflowAutomatedAction" abstract="true" >
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+	<bean id="afterApproveOrderWorkflowDecisionAction" class="de.hybris.platform.b2b.process.approval.actions.AfterApproveOrderWorkflowDecisionAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="eventService" ref="eventService"/>
+	</bean>
+
+	<bean id="afterRejectOrderWorkflowDecisionAction" class="de.hybris.platform.b2b.process.approval.actions.AfterRejectOrderWorkflowDecisionAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="eventService" ref="eventService"/>
+	</bean>
+
+	<bean id="approveDecisionAutomatedAction" class="com.energizer.core.actions.ApproveDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="eventService" ref="eventService"/>
+	</bean>
+
+	<bean id="rejectDecisionAutomatedAction" class="de.hybris.platform.b2b.process.approval.actions.RejectDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="eventService" ref="eventService"/>
+	</bean>
+
+	<bean id="b2bAfterWorkflowAction" class="de.hybris.platform.b2b.process.approval.actions.B2BAfterWorkflowAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="businessProcessService" ref="businessProcessService"/>
+		<property name="processParameterHelper" ref="processParameterHelper"/>
+	</bean>
 </beans>

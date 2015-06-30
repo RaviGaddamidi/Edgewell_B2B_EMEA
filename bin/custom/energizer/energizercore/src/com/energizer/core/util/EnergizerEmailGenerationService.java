@@ -1,3 +1,5 @@
+
+
 /**
  * 
  */
@@ -51,6 +53,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 
 	private List<String> emailList;
 
+	private Set<String> emailSet;
+
 	private List<String> emailCCList;
 	@Resource
 	ModelService modelService;
@@ -82,6 +86,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final String displayName = order.getDeliveryAddress().getDisplayName();
 			setSalesPersonEmailId(salesPersonEmailId);
 			setDisplayName(displayName);
+			emailSet = new HashSet<String>();
 			emailList = new ArrayList<String>();
 			emailCCList = new ArrayList<String>();
 			b2bCustomerModels = new HashSet<B2BCustomerModel>();
@@ -92,23 +97,21 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					.getPermissionResults();
 			for (final B2BPermissionResultModel b2bPermissionResultModel : b2bPermissionResultModels)
 			{
-				if (emailList.size() > 0)
+				if (emailSet.size() > 0)
 				{
-					for (final String email : emailList)
-					{
-						if (!email.equalsIgnoreCase(b2bPermissionResultModel.getApprover().getEmail()))
-						{
-							emailList.add(b2bPermissionResultModel.getApprover().getEmail());
-						}
-					}
+
+
+					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
+
+
 				}
 				else
 				{
-					emailList.add(b2bPermissionResultModel.getApprover().getEmail());
+					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
 				}
 
 			}
-
+			emailList.addAll(emailSet);
 			b2bCustomerModelList = new ArrayList<B2BCustomerModel>();
 			orderApprover = ((OrderProcessModel) businessProcessModel).getOrder().getOrderApprover();
 			b2bCustomerModelList.addAll(b2bCustomerModels);
