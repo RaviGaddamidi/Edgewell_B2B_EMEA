@@ -99,6 +99,7 @@ public class EnergizerGenericEmailGenerationService
 	{
 		this.frontendTemplateName = frontendTemplateName;
 		final CatalogVersionModel contentCatalogVersion = null;
+		ContentCatalogModel contentCatalog = null;
 		CMSSiteModel baseSite = null;
 		if (contextMap != null)
 		{
@@ -110,7 +111,10 @@ public class EnergizerGenericEmailGenerationService
 				}
 			}
 		}
-		final ContentCatalogModel contentCatalog = baseSite.getContentCatalogs().get(0);
+		if (null != baseSite)
+		{
+			contentCatalog = baseSite.getContentCatalogs().get(0);
+		}
 		final EmailMessageModel emailMessageModel = generateEmail(
 				catalogService.getCatalogVersion(contentCatalog.getId(), "Online"), toAddress, fromAddress, ccAddress, language,
 				contextMap);
@@ -122,6 +126,7 @@ public class EnergizerGenericEmailGenerationService
 			final LanguageModel language, final Map<String, Object> contextMap)
 	{
 		final List<CatalogVersionModel> catalogs = new ArrayList<CatalogVersionModel>();
+		EnergizerGenericEmailContext emailContext = null;
 		catalogs.add(contentCatalogVersion);
 		catalogVersionService.setSessionCatalogVersions(catalogs);
 
@@ -139,7 +144,9 @@ public class EnergizerGenericEmailGenerationService
 		Assert.notNull(subjectRenderTemplate, "Subject associated with MasterTemplate of EmailPageModel cannot be null");
 
 		final EmailMessageModel emailMessageModel;
-		final EnergizerGenericEmailContext emailContext = create(emailPageModel, bodyRenderTemplate, language, contextMap);
+
+		emailContext = create(emailPageModel, bodyRenderTemplate, language, contextMap);
+
 		if (emailContext == null)
 		{
 			LOG.error("Failed to create email context for businessProcess ");
@@ -166,6 +173,8 @@ public class EnergizerGenericEmailGenerationService
 		return emailMessageModel;
 
 	}
+
+
 
 	protected boolean validate(final EnergizerGenericEmailContext emailContext)
 	{
@@ -380,15 +389,19 @@ public class EnergizerGenericEmailGenerationService
 			{
 				return emailContexts.entrySet().iterator().next().getValue();
 			}
+
 			else
 			{
 				throw new RuntimeException("Cannot find bean in application context for context class [" + contextClass + "]");
 			}
+
+
 		}
 		catch (final ClassNotFoundException e)
 		{
 			LOG.error("failed to create email context", e);
 			throw new RuntimeException("Cannot find email context class", e);
+
 		}
 	}
 

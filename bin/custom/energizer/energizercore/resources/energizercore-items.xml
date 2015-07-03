@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- [y] hybris Platform Copyright (c) 2000-2014 hybris AG All rights reserved. This software is the confidential and proprietary information 
-	of hybris ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only in accordance with 
-	the terms of the license agreement you entered into with hybris. -->
+<!-- [y] hybris Platform Copyright (c) 2000-2014 hybris AG All rights reserved. 
+	This software is the confidential and proprietary information of hybris ("Confidential 
+	Information"). You shall not disclose such Confidential Information and shall 
+	use it only in accordance with the terms of the license agreement you entered 
+	into with hybris. -->
 
-<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="items.xsd">
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="items.xsd">
 
 	<collectiontypes>
-		<collectiontype elementtype="Catalog" code="DependentCatalogs" autocreate="true" type="list" />
-		<collectiontype elementtype="Unit" code="UnitList" autocreate="true" type="list" />
-		<collectiontype elementtype="java.lang.String" code="StringList" autocreate="true" type="list" />
-		<collectiontype elementtype="EnergizerCMIR" code="CMIRList" autocreate="true" type="list" />
-		<collectiontype elementtype="EnergizerProductConversionFactor" code="EnergizerProductConversionFactorList"
+		<collectiontype elementtype="Catalog" code="DependentCatalogs"
 			autocreate="true" type="list" />
+		<collectiontype elementtype="Unit" code="UnitList"
+			autocreate="true" type="list" />
+		<collectiontype elementtype="java.lang.String" code="StringList"
+			autocreate="true" type="list" />
+		<collectiontype elementtype="EnergizerCMIR" code="CMIRList"
+			autocreate="true" type="list" />
+		<collectiontype elementtype="EnergizerProductConversionFactor"
+			code="EnergizerProductConversionFactorList" autocreate="true" type="list" />
 
 	</collectiontypes>
 
 	<enumtypes>
-		<enumtype code="OrderStatus" autocreate="false" generate="true" dynamic="true">
+		<enumtype code="OrderStatus" autocreate="false" generate="true"
+			dynamic="true">
 			<value code="PENDING" />
 			<value code="IN_PROCESS" />
 			<value code="SHIPPED" />
 			<value code="INVOICED" />
 			<!-- <value code="CANCELLED" /> -->
 		</enumtype>
-		<enumtype generate="true" code="B2BCheckoutFlowEnum" autocreate="true" dynamic="true">
+		<enumtype generate="true" code="B2BCheckoutFlowEnum"
+			autocreate="true" dynamic="true">
 			<!-- <model package="com.energizer.core.enums"/> -->
 			<value code="SINGLE" />
 			<value code="MULTISTEP" />
 		</enumtype>
-		<enumtype generate="true" code="B2BCheckoutPciOptionEnum" autocreate="true" dynamic="true">
+		<enumtype generate="true" code="B2BCheckoutPciOptionEnum"
+			autocreate="true" dynamic="true">
 			<!-- <model package="com.energizer.core.enums"/> -->
 			<value code="Default" />
 			<value code="HOP" />
@@ -38,12 +48,14 @@
 	<itemtypes>
 		<!-- Add your item definitions here -->
 
-		<itemtype code="HeaderNavigationComponent" autocreate="true" generate="true" extends="NavigationBarComponent"
+		<itemtype code="HeaderNavigationComponent" autocreate="true"
+			generate="true" extends="NavigationBarComponent"
 			jaloclass="de.hybris.platform.acceleratorcms.jalo.components.HeaderNavigationComponent">
 			<description>It represents navigation bar component that contains cms navigation node. Nodes structure can be built in a hierarchical way.</description>
 		</itemtype>
 
-		<itemtype code="MultipleCatalogsSyncCronJob" extends="CronJob" autocreate="true" generate="true"
+		<itemtype code="MultipleCatalogsSyncCronJob" extends="CronJob"
+			autocreate="true" generate="true"
 			jaloclass="com.energizer.core.jalo.MultipleCatalogsSyncCronJob">
 			<attributes>
 				<attribute type="DependentCatalogs" qualifier="contentCatalogs">
@@ -64,8 +76,8 @@
 		</itemtype>
 
 		<typegroup name="btg">
-			<itemtype code="OrganizationOrderStatistics" autocreate="true" generate="true"
-				jaloclass="com.energizer.core.jalo.btg.OrganizationOrderStatistics">
+			<itemtype code="OrganizationOrderStatistics" autocreate="true"
+				generate="true" jaloclass="com.energizer.core.jalo.btg.OrganizationOrderStatistics">
 				<description>Used to collect order total information within an organization</description>
 				<deployment table="OrganizationOrderStats" typecode="6214" />
 				<attributes>
@@ -104,12 +116,14 @@
 			</itemtype>
 
 
-			<itemtype code="OrganizationOrdersReportingCronJob" autocreate="true" generate="true" extends="CronJob"
+			<itemtype code="OrganizationOrdersReportingCronJob"
+				autocreate="true" generate="true" extends="CronJob"
 				jaloclass="com.energizer.core.jalo.btg.OrganizationOrdersReportingCronJob">
 			</itemtype>
 
-			<itemtype code="BTGOrganizationTotalSpentInCurrencyLastYearOperand" extends="BTGAbstractOrderOperand" autocreate="true"
-				generate="true" jaloclass="com.energizer.core.jalo.btg.BTGOrganizationTotalSpentInCurrencyLastYearOperand">
+			<itemtype code="BTGOrganizationTotalSpentInCurrencyLastYearOperand"
+				extends="BTGAbstractOrderOperand" autocreate="true" generate="true"
+				jaloclass="com.energizer.core.jalo.btg.BTGOrganizationTotalSpentInCurrencyLastYearOperand">
 				<description>Gets total of all orders for an organization in the prior year for a given catalog category
 					if provided
 				</description>
@@ -128,8 +142,10 @@
 				</attributes>
 			</itemtype>
 
-			<itemtype code="BTGOrganizationTotalSpentInCurrencyRelativeDatesOperand" extends="BTGOrganizationTotalSpentInCurrencyLastYearOperand"
-				autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.btg.BTGOrganizationTotalSpentInCurrencyRelativeDatesOperand">
+			<itemtype code="BTGOrganizationTotalSpentInCurrencyRelativeDatesOperand"
+				extends="BTGOrganizationTotalSpentInCurrencyLastYearOperand"
+				autocreate="true" generate="true"
+				jaloclass="com.energizer.core.jalo.btg.BTGOrganizationTotalSpentInCurrencyRelativeDatesOperand">
 				<description>Gets total of all orders for an organization in the past period specified for a given catalog
 					category if provided
 				</description>
@@ -152,14 +168,16 @@
 		<!-- Energizer Specific Data Models -->
 		<typegroup name="EnergizerDataModels">
 
-			<itemtype code="EnergizerB2BUnit" extends="B2BUnit" autocreate="true" generate="true"
+			<itemtype code="EnergizerB2BUnit" extends="B2BUnit"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerB2BUnit">
 				<description>Customized B2BUnit with SAP specific data
                         </description>
 				<attributes>
 					<!-- customer account ID maintain in ID OOTB field -->
 					<!-- customer primary admin - maintain in contact person OOTB field -->
-					<!-- sold to address (EnergizerAddress) - maintain in addresses OOTB field -->
+					<!-- sold to address (EnergizerAddress) - maintain in addresses OOTB 
+						field -->
 					<attribute qualifier="salesOrganisation" type="java.lang.String">
 						<description>Sales Organisation</description>
 						<modifiers />
@@ -225,7 +243,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerProduct" extends="Product" autocreate="true" generate="true"
+			<itemtype code="EnergizerProduct" extends="Product"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerProduct">
 				<description>Energizer Product model with SAP specific data
 				</description>
@@ -241,17 +260,13 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-			<!--		<attribute qualifier="productWeight" type="MetricUnit">
-						<description>product weight for each</description>
-						<modifiers />
-						<persistence type="property" />
-					</attribute>
-					<attribute qualifier="productVolume" type="MetricUnit">
-						<description>product volume for each</description>
-						<modifiers />
-						<persistence type="property" />
-					</attribute>  -->
-					<attribute qualifier="productConversionFactors" type="EnergizerProductConversionFactorList">
+					<!-- <attribute qualifier="productWeight" type="MetricUnit"> <description>product 
+						weight for each</description> <modifiers /> <persistence type="property" 
+						/> </attribute> <attribute qualifier="productVolume" type="MetricUnit"> <description>product 
+						volume for each</description> <modifiers /> <persistence type="property" 
+						/> </attribute> -->
+					<attribute qualifier="productConversionFactors"
+						type="EnergizerProductConversionFactorList">
 						<description>product conversion factors for all packs possible for a product</description>
 						<modifiers />
 						<persistence type="property" />
@@ -315,8 +330,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerCMIR" extends="GenericItem" autocreate="true" generate="true"
-				jaloclass="com.energizer.core.jalo.EnergizerCMIR">
+			<itemtype code="EnergizerCMIR" extends="GenericItem"
+				autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.EnergizerCMIR">
 				<description>CMIR Record</description>
 				<deployment table="en_cmir" typecode="10201" />
 				<attributes>
@@ -359,7 +374,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerProductConversionFactor" extends="GenericItem" autocreate="true" generate="true"
+			<itemtype code="EnergizerProductConversionFactor" extends="GenericItem"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerProductConversionFactor">
 				<description>Energizer ProductConversion Factor</description>
 				<deployment table="en_pcf" typecode="10206" />
@@ -398,7 +414,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerSalesAreaUOM" extends="GenericItem" autocreate="true" generate="true"
+			<itemtype code="EnergizerSalesAreaUOM" extends="GenericItem"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerSalesAreaUOM">
 				<deployment table="en_slsuom" typecode="10209" />
 				<attributes>
@@ -441,8 +458,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerB2BUnitLeadTime" autocreate="true" generate="true"
-				jaloclass="com.energizer.core.jalo.EnergizerB2BUnitLeadTime">
+			<itemtype code="EnergizerB2BUnitLeadTime" autocreate="true"
+				generate="true" jaloclass="com.energizer.core.jalo.EnergizerB2BUnitLeadTime">
 
 				<description>Custom lead time(estimated time of delivery) mapping
 				</description>
@@ -472,8 +489,26 @@
 				</attributes>
 			</itemtype>
 
+			<itemtype code="EnergizerPasswordQuestions" autocreate="true"
+				generate="true">
 
-			<itemtype code="EnergizerB2BCustomer" extends="B2BCustomer" autocreate="true" generate="true"
+				<description>Storing Password Questions to be displayed
+				</description>
+				<deployment table="en_password" typecode="10228" />
+				<attributes>
+					
+										
+					<attribute qualifier="passwordQuestion" type="localized:java.lang.String" >
+						<description>PasswordQuestion</description>
+						<persistence type="property" />
+					</attribute>
+
+				</attributes>
+			</itemtype>
+
+
+			<itemtype code="EnergizerB2BCustomer" extends="B2BCustomer"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerB2BCustomer">
 				<description>Customized B2BCustomer with SAP specific data
 				</description>
@@ -501,7 +536,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerShippingPoint" extends="GenericItem" autocreate="true" generate="true"
+			<itemtype code="EnergizerShippingPoint" extends="GenericItem"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerShippingPoint">
 
 				<description>Custom Data Model to maintain the shipping point list
@@ -529,7 +565,8 @@
 			</itemtype>
 
 
-			<itemtype code="EnergizerPriceRow" extends="PriceRow" autocreate="true" generate="true"
+			<itemtype code="EnergizerPriceRow" extends="PriceRow"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerPriceRow">
 				<description>Energizer Price row for custom price based on b2bunit
 				</description>
@@ -546,7 +583,8 @@
 				</attributes>
 			</itemtype>
 
-			<!-- <itemtype code="EnergizerAddress" extends="Address" autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.EnergizerAddress"> -->
+			<!-- <itemtype code="EnergizerAddress" extends="Address" autocreate="true" 
+				generate="true" jaloclass="com.energizer.core.jalo.EnergizerAddress"> -->
 
 			<itemtype code="Address" autocreate="false" generate="false">
 				<description>Energizer address with specific SAP address ID
@@ -573,7 +611,8 @@
 				</attributes>
 			</itemtype>
 
-			<itemtype code="MetricUnit" extends="GenericItem" autocreate="true" generate="true">
+			<itemtype code="MetricUnit" extends="GenericItem"
+				autocreate="true" generate="true">
 
 				<description>Metric Unit for volume or weight
 				</description>
@@ -593,8 +632,9 @@
 			</itemtype>
 
 			<!-- <itemtype code="EnergizerOrder" extends="Order" autocreate="true" -->
-			<!-- Surendra : As discussed with Sriram and Kaushik changing item definition - renaming from energizer order to abstract order 
-				and movine few attribute to order level -->
+			<!-- Surendra : As discussed with Sriram and Kaushik changing item definition 
+				- renaming from energizer order to abstract order and movine few attribute 
+				to order level -->
 
 			<itemtype code="AbstractOrder" autocreate="false" generate="false">
 
@@ -607,12 +647,14 @@
 				currency
 				Freight charges - OOTB delivery cost
 				Taxes - OOTB
-				Sold to - OOTB billing address - this uses EnergizerAddress Model
+				Sold to -
+				OOTB billing address - this uses EnergizerAddress Model
 				Ship to -
 				OOTB shipping address - this uses EnergizerAddress Model
-				Order Total - OOTB
+				Order Total
+				- OOTB
 				Order Currency - OOTB
-				Purchase order number - OOTB 
+				Purchase order number - OOTB
 
 				<attributes>
 					<attribute qualifier="b2bUnit" type="EnergizerB2BUnit">
@@ -709,24 +751,22 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					
+
 					<attribute qualifier="vesselNumber" type="java.lang.String">
 						<description>this is reference to documents in SAP</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					
+
 					<attribute qualifier="invoicePDF" type="java.lang.String">
 						<description>this is reference to documents in SAP</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					
-					<!--  <attribute qualifier="archiveID" type="java.lang.String">
-						<description>this is reference to documents in SAP</description>
-						<modifiers />
-						<persistence type="property" />
-					</attribute>-->
+
+					<!-- <attribute qualifier="archiveID" type="java.lang.String"> <description>this 
+						is reference to documents in SAP</description> <modifiers /> <persistence 
+						type="property" /> </attribute> -->
 					<attribute qualifier="isPendingApprovalEmailSent" type="java.lang.Boolean">
 						<description>to avoind sending email second time</description>
 						<modifiers />
@@ -761,9 +801,11 @@
 
 				</attributes>
 			</itemtype>
-			<!-- Surendra : As discussed Sriram and Kaushik changing item definition - renaming from energizer order entry to order entry -->
+			<!-- Surendra : As discussed Sriram and Kaushik changing item definition 
+				- renaming from energizer order entry to order entry -->
 			<!-- <itemtype code="OrderEntry" autocreate="false" generate="false"> -->
-			<itemtype code="AbstractOrderEntry" autocreate="false" generate="false">
+			<itemtype code="AbstractOrderEntry" autocreate="false"
+				generate="false">
 				<description>Energizer order entry with specific SAP address ID
 				</description>
 				<!-- OrderEntry id - OOTB -->
@@ -790,19 +832,20 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					<!-- Romil : As discussed with SAP team adding item definition for rejectionReason and itemTotalShipment to AbstractOrderEntry -->
+					<!-- Romil : As discussed with SAP team adding item definition for rejectionReason 
+						and itemTotalShipment to AbstractOrderEntry -->
 					<attribute qualifier="rejectionReason" type="java.lang.String">
 						<description>Rejection Reason</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					<!--  Siddu: As discussed with SAP team and Sriram -->
+					<!-- Siddu: As discussed with SAP team and Sriram -->
 					<attribute qualifier="rejectedStatus" type="java.lang.String">
 						<description>Rejected Status</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					
+
 					<attribute qualifier="itemTotalShipment" type="java.lang.Double">
 						<description>Item Total Shipment</description>
 						<modifiers />
@@ -816,7 +859,8 @@
 				</attributes>
 			</itemtype>
 
-			<itemtype code="EnergizerCategory" extends="Category" autocreate="true" generate="true"
+			<itemtype code="EnergizerCategory" extends="Category"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerCategory">
 
 				<description>Customizing Category model to accomodate the type of category
@@ -830,7 +874,8 @@
 					</attribute>
 				</attributes>
 			</itemtype>
-			<itemtype code="EnergizerCronJob" extends="CronJob" autocreate="true" generate="true"
+			<itemtype code="EnergizerCronJob" extends="CronJob"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerCronJob">
 				<deployment table="EnergizerCronJob" typecode="10210" />
 				<attributes>
@@ -856,7 +901,8 @@
 					</attribute>
 				</attributes>
 			</itemtype>
-			<itemtype code="EnergizerCMSLinkComponent" extends="CMSLinkComponent" autocreate="true" generate="true"
+			<itemtype code="EnergizerCMSLinkComponent" extends="CMSLinkComponent"
+				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerCMSLinkComponent">
 				<deployment table="en_cmslink" typecode="10211" />
 				<attributes>
@@ -866,7 +912,7 @@
 						<persistence type="property" />
 					</attribute>
 				</attributes>
-			</itemtype>	
+			</itemtype>
 
 		</typegroup>
 

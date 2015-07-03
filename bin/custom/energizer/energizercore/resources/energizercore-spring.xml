@@ -910,6 +910,11 @@
 		<property name="urlEncoderService" ref="urlEncoderService"/>
 	</bean>
 	
+	<bean id="energizerPasswordExpiryEmailContext" class="com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext"
+	parent="energizerGenericEmailContext"></bean>
+	
+	
+	
 	<bean id="generateSendsubmitOrderToSAPFailedNotificationEmail"
 		class="de.hybris.platform.acceleratorservices.process.email.actions.GenerateEmailAction"
 		parent="abstractAction">
@@ -955,6 +960,13 @@
 		<property name="monthsForOrderExpiry"
 					 value="#{configurationService.configuration.getProperty('guest.orderstatuspage.access.expiry.month')}"/>
 	</bean>
+	
+	<bean id="energizerPasswordExpiryJob" class="com.energizer.core.datafeed.processor.customer.EnergizerPasswordExpiryJob"
+		autowire="byName" />
+	<bean id="defaultEnergizerPasswordExpiryFacade" class="com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordExpiryFacade"
+	autowire="byName"></bean>
+		
+		
 	
 	
 </beans>

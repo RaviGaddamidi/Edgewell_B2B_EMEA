@@ -80,6 +80,7 @@ import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade;
+import com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade;
 import com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade;
 import com.energizer.facades.order.impl.DefaultEnergizerB2BOrderHistoryFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
@@ -182,6 +183,11 @@ public class AccountPageController extends AbstractSearchPageController
 	//Customization of orders
 	@Resource(name = "defaultEnergizerB2BOrderHistoryFacade")
 	private DefaultEnergizerB2BOrderHistoryFacade orderHistoryFacade;
+
+	@Resource(name = "defaultEnergizerB2BPasswordQuestionsFacade")
+	private DefaultEnergizerB2BPasswordQuestionsFacade passwordQuestionsFacade;
+
+
 	@Resource(name = "userService")
 	private UserService userService;
 
@@ -317,6 +323,7 @@ public class AccountPageController extends AbstractSearchPageController
 			}));
 		}
 
+
 		model.addAttribute("customerData", customerData);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -407,6 +414,9 @@ public class AccountPageController extends AbstractSearchPageController
 	@RequireHardLogIn
 	public String editProfile(final Model model) throws CMSItemNotFoundException
 	{
+
+		//LOG.info(" Password Questions List: " + passwordQuestionsFacade.getEnergizerPasswordQuestions().size());
+		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 		model.addAttribute("titleData", userFacade.getTitles());
 
 		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
@@ -417,6 +427,8 @@ public class AccountPageController extends AbstractSearchPageController
 		updateProfileForm.setFirstName(customerData.getFirstName());
 		updateProfileForm.setLastName(customerData.getLastName());
 		updateProfileForm.setContactNumber(customerData.getContactNumber());
+		updateProfileForm.setPasswordQuestion(customerData.getPasswordQuestion());
+		updateProfileForm.setPasswordAnswer(customerData.getPasswordAnswer());
 		model.addAttribute("updateProfileForm", updateProfileForm);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -442,11 +454,17 @@ public class AccountPageController extends AbstractSearchPageController
 		customerData.setUid(currentCustomerData.getUid());
 		customerData.setDisplayUid(currentCustomerData.getDisplayUid());
 		customerData.setContactNumber(updateProfileForm.getContactNumber());
+		LOG.info("Selected passwordQuestion: " + updateProfileForm.getPasswordQuestion());
+		LOG.info("Selected passwordAnswer: " + updateProfileForm.getPasswordAnswer());
+		customerData.setPasswordQuestion(updateProfileForm.getPasswordQuestion());
+		customerData.setPasswordAnswer(updateProfileForm.getPasswordAnswer());
 		model.addAttribute("titleData", userFacade.getTitles());
+		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 
 		if (bindingResult.hasErrors())
 		{
 			model.addAttribute("titleData", userFacade.getTitles());
+			model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 		}
 		else
@@ -478,6 +496,16 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final UpdatePasswordForm updatePasswordForm = new UpdatePasswordForm();
 
+		final List<String> passwordQuestions = new ArrayList<String>();
+		/*
+		 * passwordQuestions.add("Which is your favourite Sports");
+		 * passwordQuestions.add("Which is first owned motorcycle");
+		 * passwordQuestions.add("When did you complete your graduation");
+		 * passwordQuestions.add("Which month is your father's birthday");
+		 */
+		model.addAttribute("passwordQuestionList", userFacade.getTitles());
+
+		//	model.addAttribute("passwordQuestionList", passwordQuestions);
 		model.addAttribute("updatePasswordForm", updatePasswordForm);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -833,7 +861,7 @@ public class AccountPageController extends AbstractSearchPageController
 			b2bOrderApprovalData.setWorkflowActionModelCode(orderApprovalDecisionForm.getWorkFlowActionCode());
 
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
-            energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
+			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData.getB2bOrderData().getCode(), orderApprovalDecisionForm.getComments());
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
