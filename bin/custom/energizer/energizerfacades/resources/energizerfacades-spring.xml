@@ -370,6 +370,37 @@
 		class="com.energizer.services.order.impl.DefaultEnergizerB2BOrderHistoryService"/>
 	<!-- End View order history -->
 
+
+
+
+	<!-- Start PasswordQuestions List -->
+	<bean id="defaultEnergizerB2BPasswordQuestionsFacade"
+		class="com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade">
+		<property name="energizerPasswordQuestionsConverter" ref="energizerPasswordQuestionsConverter" />
+	</bean>
+	<bean id="defaultEnergizerB2BPasswordQuestionsDAO"
+		class="com.energizer.services.account.dao.impl.DefaultEnergizerB2BPasswordQuestionsDAO"/>
+	<bean id="defaultEnergizerB2BPasswordQuestionsService"
+		class="com.energizer.services.account.impl.DefaultEnergizerB2BPasswordQuestionsService"/>
+	<!-- End PasswordQuestions List -->
+
+
+	<alias name="defaultEnergizerPasswordQuestionsConverter" alias="energizerPasswordQuestionsConverter"/>
+	<bean id="defaultEnergizerPasswordQuestionsConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="com.energizer.core.data.EnergizerPasswordQuestionsData"/>
+		<property name="populators">
+			<list>
+				<ref bean="energizerPasswordQuestionsPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+
+<alias name="defaultEnergizerPasswordQuestionsPopulator" alias="energizerPasswordQuestionsPopulator"/>
+	<bean id="defaultEnergizerPasswordQuestionsPopulator"
+			class="com.energizer.facades.accounts.populators.EnergizerPasswordQuestionsPopulator"/>
+
+
 	<!-- Start Unit Check -->
 	<alias name="defaultEnergizerCompanyB2BCommerceFacade" alias="energizerCompanyB2BCommerceFacade" />
 	<bean id="defaultEnergizerCompanyB2BCommerceFacade"
