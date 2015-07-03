@@ -34,7 +34,7 @@ public class DefaultEnergizerB2BPasswordQuestionsFacade implements EnergizerB2BP
 
 	public List<EnergizerPasswordQuestionsData> getEnergizerPasswordQuestions()
 	{
-		LOG.info("Size of list,in Facade class: " + passwordQuestionsService.getPasswordQuestions().size());
+		//LOG.info("Size of list,in Facade class: " + passwordQuestionsService.getPasswordQuestions().size());
 		return Converters.convertAll(passwordQuestionsService.getPasswordQuestions(), getEnergizerPasswordQuestionsConverter());
 		//return passwordQuestionsService.getPasswordQuestions();
 	}
