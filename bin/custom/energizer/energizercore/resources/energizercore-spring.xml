@@ -963,6 +963,8 @@
 	
 	<bean id="energizerPasswordExpiryJob" class="com.energizer.core.datafeed.processor.customer.EnergizerPasswordExpiryJob"
 		autowire="byName" />
+	<bean id="defaultEnergizerPasswordExpiryFacade" class="com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordExpiryFacade"
+	autowire="byName"></bean>
 		
 		
 	

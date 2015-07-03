@@ -11,7 +11,6 @@ import de.hybris.platform.cronjob.enums.CronJobStatus;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
 import de.hybris.platform.servicelayer.model.ModelService;
-import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.text.ParseException;
@@ -48,9 +47,6 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 	private UserService userService;
 
 	@Resource
-	protected FlexibleSearchService flexibleSearchService;
-
-	@Resource
 	protected DefaultEnergizerPasswordExpiryFacade defaultEnergizerPasswordExpiryFacade;
 
 	@Resource
@@ -82,8 +78,6 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 		final List<EnergizerB2BCustomerModel> energizerB2BCustomerModels = defaultEnergizerPasswordExpiryFacade
 				.getEnergizerCustomers();
 
-		System.out.println("List Size :" + energizerB2BCustomerModels.size());
-		System.out.println("energizerB2BCustomerModels list of custome" + energizerB2BCustomerModels.get(0).getEmail());
 		for (final EnergizerB2BCustomerModel energizerB2BCustomerModel : energizerB2BCustomerModels)
 		{
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
