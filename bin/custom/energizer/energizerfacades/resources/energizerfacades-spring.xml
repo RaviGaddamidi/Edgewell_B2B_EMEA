@@ -513,6 +513,26 @@
 			</list>
 		</property>
 	</bean>
+	
+	
+	<alias name="energizerCustomerPopulator" alias="customerPopulator"/>
+	<bean id="energizerCustomerPopulator"
+		class="com.energizer.facades.accounts.populators.EnergizerCustomerPopulator">
+		<property name="currencyConverter" ref="currencyConverter"/>
+		<property name="languageConverter" ref="languageConverter"/>
+		<property name="customerNameStrategy" ref="customerNameStrategy"/>
+		<property name="energizerCustomerConverter" ref="energizerCustomerConverter"/>		
+	</bean>
+	<alias name="energizerCustomerConverter" alias="energizerCustomerConverter"/>
+	<bean id="energizerCustomerConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+		<property name="populators">
+			<list>
+				<ref bean="energizerCustomerPopulator" />
+			</list>
+		</property>
+	</bean>
+	
 
 	<alias name="energizerOrderEntryPopulator" alias="orderEntryPopulator"/>
 	<bean id="energizerOrderEntryPopulator"
