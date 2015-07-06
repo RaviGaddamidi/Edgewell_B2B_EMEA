@@ -193,6 +193,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 		catch (final Exception e)
 		{
+			LOG.info("Caught Eception during UnMashall " + e.getMessage());
 			return FAILURE;
 		}
 
@@ -689,7 +690,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 	}
 
 
-	private void simulateOrderforIDUnMarshall(final String response, final OrderModel orderModel)
+	private void simulateOrderforIDUnMarshall(final String response, final OrderModel orderModel) throws Exception
 	{
 		final JAXBContext jaxbContext;
 		final ZSD_BAPI_SALESORDER_SIMULATEResponse unmarshalledSimulateObject = null;
@@ -708,7 +709,7 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			if ("E".equalsIgnoreCase(status.getValue()))
 			{
 				sendEmailonError(unmarshalledSimulateObject, unmarshalledOrdCreationObject, orderModel, orderData);
-				throw new Exception("Simulation returned Status is E");
+				throw new Exception("Create order in SAP returned Status is E");
 			}
 
 			orderModel.setErpOrderNumber(head.getDOC_NUMBER().getValue());
@@ -776,7 +777,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 		}
 		catch (final Exception exception)
 		{
-			LOG.error(" Failed in Order Placing Process " + exception.getMessage(), exception);
+			LOG.error("Failed in Order Placing Process " + exception.getMessage(), exception);
+			throw new Exception(exception.getMessage());
 		}
 	}
 
