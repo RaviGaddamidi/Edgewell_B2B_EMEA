@@ -532,6 +532,18 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute type="java.lang.String" qualifier="previousPasswords">
+					<description>latest 5 passwords will be stored with delimeter seperated</description>
+					<persistence type="property" />
+					</attribute>
+					<attribute type="java.util.Date" qualifier="passwordModifiedTime">
+					<description>password updated time</description>
+					<persistence type="property" />
+					</attribute>
+					<attribute type="java.lang.Boolean" qualifier="isPasswordSet">
+					<description>password flag</description>
+					<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 
