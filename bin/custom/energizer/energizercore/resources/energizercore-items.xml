@@ -540,7 +540,7 @@
 					<description>password updated time</description>
 					<persistence type="property" />
 					</attribute>
-					<attribute type="java.lang.Boolean" qualifier="isPasswordSet">
+					<attribute type="java.lang.Boolean" qualifier="isPasswordQuestionSet">
 					<description>password flag</description>
 					<persistence type="property" />
 					</attribute>

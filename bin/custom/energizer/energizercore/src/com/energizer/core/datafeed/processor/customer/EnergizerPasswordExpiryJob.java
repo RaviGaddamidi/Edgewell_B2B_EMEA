@@ -84,7 +84,7 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 			Date maxDate;
 			try
 			{
-				maxDate = sdf.parse("20-May-2015");
+				maxDate = sdf.parse("17-Jun-2015");
 				final String passwordModifiedTime = sdf.format(maxDate);
 				//Date latestModifiedTime = energizerB2BCustomerModel.getPasswordModifiedTime();
 
@@ -92,10 +92,10 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 				final Calendar calPasswordModifiedDate = Calendar.getInstance();
 				calPasswordModifiedDate.setTime(latestModifiedTime);
 
-				LOG.debug("Calender password modified date is " + calPasswordModifiedDate.getTime());
+				LOG.info("Calender password modified date is " + calPasswordModifiedDate.getTime());
 				calPasswordModifiedDate.add(Calendar.DATE, passwordExpiryDays);
 
-				LOG.debug("Calender::: Pasword Expiry Date " + calPasswordModifiedDate.getTime());
+				LOG.info("Calender::: Pasword Expiry Date " + calPasswordModifiedDate.getTime());
 				final Calendar calNotificationDate = Calendar.getInstance();
 
 
@@ -103,11 +103,11 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 				{
 					calNotificationDate.add(Calendar.DATE, passwordNotificationDays);
 
-					LOG.debug("Calender Notification date " + calNotificationDate.getTime());
+					LOG.info("Calender Notification date " + calNotificationDate.getTime());
 					if (calNotificationDate.compareTo(calPasswordModifiedDate) <= 0)
 					{
 
-						LOG.debug("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
+						LOG.info("Dear " + energizerB2BCustomerModel.getEmail() + " Your password has not been expired");
 					}
 					else
 					{
@@ -117,8 +117,11 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 
 						//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
 
-						LOG.debug("Your Password will expire in " + remainingDays);
-						prepareEmail(energizerB2BCustomerModel, remainingDays);
+						LOG.info("Your Password will expire in " + remainingDays);
+						if (remainingDays == 10 || remainingDays == 1)
+						{
+							prepareEmail(energizerB2BCustomerModel, remainingDays);
+						}
 
 
 					}
@@ -126,7 +129,7 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 				else
 				{
 
-					LOG.debug("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
+					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
 					prepareEmail(energizerB2BCustomerModel, 0);
 				}
 			}
