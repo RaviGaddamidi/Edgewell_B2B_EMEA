@@ -81,6 +81,8 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade;
 import com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade;
+import com.energizer.facades.accounts.impl.DefaultEnergizerCompanyB2BCommerceFacade;
+import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator;
 import com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade;
 import com.energizer.facades.order.impl.DefaultEnergizerB2BOrderHistoryFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
@@ -214,6 +216,12 @@ public class AccountPageController extends AbstractSearchPageController
 
 	@Resource(name = "b2bCommerceFacade")
 	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+
+	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
+	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
+
+	@Resource(name = "energizerCustomerReversePopulator")
+	protected EnergizerB2BCustomerReversePopulator defaultEnergizerB2BCustomerReversePopulator;
 
 	@ModelAttribute("comments")
 	public List<String> getApproverComments()
@@ -496,16 +504,6 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final UpdatePasswordForm updatePasswordForm = new UpdatePasswordForm();
 
-		final List<String> passwordQuestions = new ArrayList<String>();
-		/*
-		 * passwordQuestions.add("Which is your favourite Sports");
-		 * passwordQuestions.add("Which is first owned motorcycle");
-		 * passwordQuestions.add("When did you complete your graduation");
-		 * passwordQuestions.add("Which month is your father's birthday");
-		 */
-		model.addAttribute("passwordQuestionList", userFacade.getTitles());
-
-		//	model.addAttribute("passwordQuestionList", passwordQuestions);
 		model.addAttribute("updatePasswordForm", updatePasswordForm);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -528,7 +526,18 @@ public class AccountPageController extends AbstractSearchPageController
 			{
 				try
 				{
-					customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+
+					final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.changingPassword(
+							updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+
+					if (!flag)
+					{
+
+						bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
+								"profile.newPassword.match");
+					}
+
+					//customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
 				}
 				catch (final PasswordMismatchException localException)
 				{

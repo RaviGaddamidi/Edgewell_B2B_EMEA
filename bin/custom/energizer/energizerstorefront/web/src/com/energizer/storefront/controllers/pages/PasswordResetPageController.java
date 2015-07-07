@@ -13,7 +13,9 @@
  */
 package com.energizer.storefront.controllers.pages;
 
+import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.facades.accounts.impl.DefaultEnergizerCompanyB2BCommerceFacade;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
@@ -64,6 +67,17 @@ public class PasswordResetPageController extends AbstractPageController
 
 	@Resource(name = "configurationService")
 	private ConfigurationService configurationService;
+
+	@Resource(name = "b2bCommerceFacade")
+	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+
+	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
+	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
+
+	@Resource(name = "b2bCustomerFacade")
+	protected CustomerFacade customerFacade;
+
+
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String getPasswordRequest(final Model model) throws CMSItemNotFoundException
@@ -179,7 +193,24 @@ public class PasswordResetPageController extends AbstractPageController
 			{
 				LOG.debug("The password link expriy time in seconds :"
 						+ configurationService.getConfiguration().getLong(EXP_IN_SECONDS, 1800));
-				getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
+
+
+				final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.updatingPassword(form.getPwd(), form.getToken());
+
+				if (!flag)
+				{
+					bindingResult.rejectValue("pwd", "profile.newPassword.match", new Object[] {}, "profile.newPassword.match");
+				}
+
+				if (bindingResult.hasErrors())
+				{
+					prepareErrorMessage(model, UPDATE_PWD_CMS_PAGE);
+					return ControllerConstants.Views.Pages.Password.PasswordResetChangePage;
+				}
+				//	getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
+
+
+
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.password.updated");
 				//adding a session attribute that will be removed in the StorefrontAuthenticationSuccessHandler.java once the successful login happens
