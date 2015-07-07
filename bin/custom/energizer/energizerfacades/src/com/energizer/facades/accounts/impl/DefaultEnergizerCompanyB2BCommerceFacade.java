@@ -16,14 +16,18 @@ import de.hybris.platform.commercefacades.customer.impl.DefaultCustomerFacade;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
+import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
 
@@ -32,6 +36,7 @@ import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
@@ -72,6 +77,15 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	@Resource(name = "energizerGroupsLookUpStrategy")
 	private DefaultEnergizerGroupsLookUpStrategy energizerGroupsLookUpStrategy;
+
+	@Resource(name = "configurationService")
+	private ConfigurationService configurationService;
+
+	@Value("${previousPasswordCount}")
+	int prevPasswordCount;
+
+	@Value("${passwordDelimiter}")
+	String passwordDelimiter;
 
 	/*
 	 * (non-Javadoc)
@@ -158,6 +172,223 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		{
 			e.printStackTrace();
 		}
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#updatePassword(com.energizer.core.model.
+	 * EnergizerB2BCustomerModel)
+	 */
+	@Override
+	public boolean updatingPassword(final String newPassword, final String token) throws TokenInvalidatedException
+	{
+
+		boolean flag = false, checkedMismatch = false;
+		final int prevPasswordsLength = prevPasswordCount;
+		final String delimiter = passwordDelimiter;
+
+
+		final String newEncodedPassword = null;
+		int i = 0;
+
+		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
+
+		if (customerModel.getPreviousPasswords() != null)
+		{
+			checkedMismatch = checkPreviousPasswordMatch(customerModel, newPassword);
+
+			if (checkedMismatch == false)
+			{
+				return flag;
+			}
+			else
+			{
+
+				if (customerModel.getPreviousPasswords().contains(delimiter))
+				{
+					LOG.info("With delimiter");
+					final StringTokenizer tempStringArray = new StringTokenizer(customerModel.getPreviousPasswords(), delimiter);
+					LOG.info(" String Tokenizer's size: " + tempStringArray.countTokens());
+
+					final String[] prevPasswords = new String[tempStringArray.countTokens()];
+
+					while (tempStringArray.hasMoreElements())
+					{
+						prevPasswords[i] = tempStringArray.nextElement().toString();
+						i++;
+					}
+
+					LOG.info("Previous Passwords length: " + prevPasswords.length);
+					if (prevPasswords.length == prevPasswordsLength)
+					{
+
+						customerModel.setPreviousPasswords(prevPasswords[1] + delimiter + prevPasswords[2] + delimiter
+								+ prevPasswords[3] + delimiter + prevPasswords[4] + delimiter + newEncodedPassword);
+					}
+					else if (prevPasswords.length < prevPasswordsLength)
+					{
+						customerModel.setPreviousPasswords(customerModel.getPreviousPasswords() + delimiter + newEncodedPassword);
+					}
+
+					customerModel.setPasswordModifiedTime(new Date());
+					getModelService().save(customerModel);
+					super.updatePassword(token, newPassword);
+					flag = true;
+					return flag;
+				}
+				else
+				{
+					LOG.info("Without delimiter");
+					customerModel.setPreviousPasswords(customerModel.getPreviousPasswords() + delimiter + newEncodedPassword);
+					customerModel.setPasswordModifiedTime(new Date());
+					getModelService().save(customerModel);
+					super.updatePassword(token, newPassword);
+					flag = true;
+					return flag;
+				}
+			}
+		}
+		else
+		{
+			customerModel.setPreviousPasswords(newEncodedPassword);
+			customerModel.setPasswordModifiedTime(new Date());
+			getModelService().save(customerModel);
+			super.updatePassword(token, newPassword);
+			flag = true;
+			return flag;
+
+		}
+	}
+
+	public boolean checkPreviousPasswordMatch(final EnergizerB2BCustomerModel customerModel, final String newPassword)
+	{
+		String newEncodedPassword = null;
+		final String delimiter = "|";
+		boolean flag = false;
+
+		LOG.info("Previuos Passwords: " + customerModel.getPreviousPasswords());
+		final StringTokenizer passwordString = new StringTokenizer(customerModel.getPreviousPasswords(), delimiter);
+
+		while (passwordString.hasMoreElements())
+		{
+			final String previousPassword = passwordString.nextElement().toString();
+			LOG.info(" Passwords: " + previousPassword);
+			newEncodedPassword = getPasswordEncoderService().encode(customerModel, newPassword, customerModel.getPasswordEncoding());
+			LOG.info("Encoded Password: " + newEncodedPassword);
+			if (previousPassword.equals(newEncodedPassword))
+			{
+				LOG.info("New Password matches with the previous 5 passwords");
+				flag = false;
+				return flag;
+			}
+			else
+			{
+				flag = true;
+			}
+		}
+
+		return flag;
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	@Override
+	public boolean changingPassword(final String currentPassword, final String newPassword)
+	{
+		boolean flag = false;
+		boolean checkedMismatch = false;
+		final int prevPasswordsLength = prevPasswordCount;
+		final String delimiter = passwordDelimiter;
+		String newEncodedPassword = null;
+		int i = 0;
+
+		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
+
+		if (customerModel.getPreviousPasswords() != null)
+		{
+			/*
+			 * LOG.info("Previuos Passwords: " + customerModel.getPreviousPasswords()); final StringTokenizer
+			 * passwordString = new StringTokenizer(customerModel.getPreviousPasswords(), delimiter);
+			 * 
+			 * while (passwordString.hasMoreElements()) { final String previousPassword =
+			 * passwordString.nextElement().toString(); LOG.info(" Passwords: " + previousPassword); newEncodedPassword =
+			 * getPasswordEncoderService().encode(customerModel, newPassword, customerModel.getPasswordEncoding());
+			 * LOG.info("Encoded Password: " + newEncodedPassword); if (previousPassword.equals(newEncodedPassword)) {
+			 * LOG.info("New Password matches with the previous 5 passwords"); Assert.hasText(newPassword,
+			 * "The field [newPassword] cannot be of 5 previous passwords"); return flag; } }
+			 */
+
+			checkedMismatch = checkPreviousPasswordMatch(customerModel, newPassword);
+
+			if (checkedMismatch == false)
+			{
+				return flag;
+			}
+			else
+			{
+				newEncodedPassword = getPasswordEncoderService().encode(customerModel, newPassword,
+						customerModel.getPasswordEncoding());
+				if (customerModel.getPreviousPasswords().contains(delimiter))
+				{
+					LOG.info("With delimiter");
+					final StringTokenizer tempStringArray = new StringTokenizer(customerModel.getPreviousPasswords(), delimiter);
+					LOG.info(" String Tokenizer's size: " + tempStringArray.countTokens());
+
+					final String[] prevPasswords = new String[tempStringArray.countTokens()];
+
+					while (tempStringArray.hasMoreElements())
+					{
+						prevPasswords[i] = tempStringArray.nextElement().toString();
+						i++;
+					}
+
+					LOG.info("Previous Passwords length: " + prevPasswords.length);
+					if (prevPasswords.length == prevPasswordsLength)
+					{
+
+						customerModel.setPreviousPasswords(prevPasswords[1] + delimiter + prevPasswords[2] + delimiter
+								+ prevPasswords[3] + delimiter + prevPasswords[4] + delimiter + newEncodedPassword);
+					}
+					else if (prevPasswords.length < prevPasswordsLength)
+					{
+						customerModel.setPreviousPasswords(customerModel.getPreviousPasswords() + delimiter + newEncodedPassword);
+					}
+
+					customerModel.setPasswordModifiedTime(new Date());
+					getModelService().save(customerModel);
+					super.changePassword(currentPassword, newPassword);
+					flag = true;
+					return flag;
+				}
+				else
+				{
+					LOG.info("Without delimiter");
+					customerModel.setPreviousPasswords(customerModel.getPreviousPasswords() + delimiter + newEncodedPassword);
+					customerModel.setPasswordModifiedTime(new Date());
+					getModelService().save(customerModel);
+					super.changePassword(currentPassword, newPassword);
+					flag = true;
+					return flag;
+				}
+			}
+		}
+		else
+		{
+			customerModel.setPreviousPasswords(newEncodedPassword);
+			customerModel.setPasswordModifiedTime(new Date());
+			getModelService().save(customerModel);
+			super.changePassword(currentPassword, newPassword);
+			flag = true;
+			return flag;
+
+		}
+
 	}
 
 	/*
@@ -257,4 +488,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 			b2bCustomer.getResults().get(i).setRoles(roles);
 		}
 	}
+
+
+
 }
