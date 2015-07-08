@@ -8,6 +8,7 @@ import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 
 import java.util.List;
 
@@ -97,6 +98,21 @@ public interface EnergizerCompanyB2BCommerceFacade
 
 	public boolean changingPassword(String currentPassword, String newPassword);
 
+	/**
+	 * 
+	 * 
+	 * @param currentPassword
+	 * @return
+	 */
+	public boolean validateCurrentPassword(final String currentPassword);
+
+	/**
+	 * 
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public EnergizerB2BCustomerModel getExistingUserForUID(final String email) throws UnknownIdentifierException;
 
 	/**
 	 * This method is to retrieves the all energizer B2B Unit administor user.
