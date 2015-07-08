@@ -14,12 +14,14 @@ import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.customer.impl.DefaultCustomerFacade;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
+import de.hybris.platform.commercefacades.user.exceptions.PasswordMismatchException;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
+import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.util.ArrayList;
@@ -262,6 +264,27 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		}
 	}
 
+
+	public EnergizerB2BCustomerModel getExistingUserForUID(final String email)
+	{
+		EnergizerB2BCustomerModel customerModel = null;
+		try
+		{
+			customerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(email);
+		}
+		catch (final UnknownIdentifierException e)
+		{
+			customerModel = null;
+		}
+		return customerModel;
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	public boolean checkPreviousPasswordMatch(final EnergizerB2BCustomerModel customerModel, final String newPassword)
 	{
 		String newEncodedPassword = null;
@@ -292,6 +315,32 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		return flag;
 	}
 
+	/**
+	 * 
+	 * 
+	 */
+	public boolean validateCurrentPassword(final String currentPassword)
+	{
+		boolean valid = false;
+
+		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
+
+		final String encodedCurrentPassword = getPasswordEncoderService().encode(customerModel, currentPassword,
+				customerModel.getPasswordEncoding());
+		if (encodedCurrentPassword.equals(customerModel.getEncodedPassword()))
+		{
+			valid = true;
+		}
+		else
+		{
+			valid = false;
+		}
+
+		return valid;
+
+	}
+
+
 
 	/**
 	 * 
@@ -312,18 +361,6 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 		if (customerModel.getPreviousPasswords() != null)
 		{
-			/*
-			 * LOG.info("Previuos Passwords: " + customerModel.getPreviousPasswords()); final StringTokenizer
-			 * passwordString = new StringTokenizer(customerModel.getPreviousPasswords(), delimiter);
-			 * 
-			 * while (passwordString.hasMoreElements()) { final String previousPassword =
-			 * passwordString.nextElement().toString(); LOG.info(" Passwords: " + previousPassword); newEncodedPassword =
-			 * getPasswordEncoderService().encode(customerModel, newPassword, customerModel.getPasswordEncoding());
-			 * LOG.info("Encoded Password: " + newEncodedPassword); if (previousPassword.equals(newEncodedPassword)) {
-			 * LOG.info("New Password matches with the previous 5 passwords"); Assert.hasText(newPassword,
-			 * "The field [newPassword] cannot be of 5 previous passwords"); return flag; } }
-			 */
-
 			checkedMismatch = checkPreviousPasswordMatch(customerModel, newPassword);
 
 			if (checkedMismatch == false)
@@ -362,7 +399,14 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 					customerModel.setPasswordModifiedTime(new Date());
 					getModelService().save(customerModel);
-					super.changePassword(currentPassword, newPassword);
+					try
+					{
+						super.changePassword(currentPassword, newPassword);
+					}
+					catch (final PasswordMismatchException localException)
+					{
+
+					}
 					flag = true;
 					return flag;
 				}
