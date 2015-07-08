@@ -527,22 +527,31 @@ public class AccountPageController extends AbstractSearchPageController
 				try
 				{
 
-					final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.changingPassword(
-							updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+					final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade
+							.validateCurrentPassword(updatePasswordForm.getCurrentPassword());
 
-					if (!flag)
+					if (validCurrentPwd)
 					{
+						final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.changingPassword(
+								updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
 
-						bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
-								"profile.newPassword.match");
+						if (!flag)
+						{
+
+							bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
+									"profile.newPassword.match");
+						}
 					}
-
+					else
+					{
+						bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
+								"profile.currentPassword.invalid");
+					}
 					//customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
 				}
-				catch (final PasswordMismatchException localException)
+				catch (final Exception e)
 				{
-					bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
-							"profile.currentPassword.invalid");
+					LOG.debug("In AccountPage Controller: " + e.getMessage());
 				}
 
 			}
