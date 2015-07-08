@@ -319,6 +319,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	 * 
 	 * 
 	 */
+	 @Override
 	public boolean validateCurrentPassword(final String currentPassword)
 	{
 		boolean valid = false;
