@@ -157,7 +157,7 @@ public class PasswordResetPageController extends AbstractPageController
 
 				if (customerModel == null)
 				{
-					bindingResult.rejectValue("email", "profile.email.invalid", new Object[] {}, "profile.email.invalid");
+					bindingResult.rejectValue("email", "profile.email.incorrect", new Object[] {}, "profile.email.incorrect");
 				}
 				else
 				{
