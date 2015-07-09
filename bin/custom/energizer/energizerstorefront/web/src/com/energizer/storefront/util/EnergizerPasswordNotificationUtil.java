@@ -47,10 +47,11 @@ public class EnergizerPasswordNotificationUtil
 		{
 
 			b2bCustomerModel = defaultEnergizerPasswordExpiryFacade.getCustomerByUID(userName);
-			try
+
+			//maxDate = sdf.parse("12-Jun-2015");
+			//final String passwordModifiedTime = sdf.format(maxDate);
+			if (null != b2bCustomerModel.getPasswordModifiedTime())
 			{
-				//maxDate = sdf.parse("12-Jun-2015");
-				//final String passwordModifiedTime = sdf.format(maxDate);
 				final Date latestModifiedTime = b2bCustomerModel.getPasswordModifiedTime();
 
 				//final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
@@ -109,10 +110,7 @@ public class EnergizerPasswordNotificationUtil
 					notificationMessages.add(daysCount);
 				}
 			}
-			catch (final Exception e)
-			{
-				e.printStackTrace();
-			}
+
 		}
 		return notificationMessages;
 	}
