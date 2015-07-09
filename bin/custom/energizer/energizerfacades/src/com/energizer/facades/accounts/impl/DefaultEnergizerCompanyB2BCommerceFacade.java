@@ -15,11 +15,14 @@ import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceServi
 import de.hybris.platform.commercefacades.customer.impl.DefaultCustomerFacade;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commercefacades.user.exceptions.PasswordMismatchException;
-import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
+import de.hybris.platform.commerceservices.customer.impl.DefaultCustomerAccountService;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.commerceservices.security.SecureToken;
+import de.hybris.platform.commerceservices.security.SecureTokenService;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
+import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -62,7 +65,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	private B2BCommerceUserService b2bUserService;
 
 	@Resource(name = "customerAccountService")
-	private CustomerAccountService customerAccountService;
+	private DefaultCustomerAccountService customerAccountService;
 
 	@SuppressWarnings("rawtypes")
 	@Resource(name = "defaultB2BUnitService")
@@ -82,6 +85,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	@Resource(name = "configurationService")
 	private ConfigurationService configurationService;
+
+	@Resource
+	private SecureTokenService secureTokenService;
 
 	@Value("${previousPasswordCount}")
 	int prevPasswordCount;
@@ -191,11 +197,15 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		final int prevPasswordsLength = prevPasswordCount;
 		final String delimiter = passwordDelimiter;
 
-
-		final String newEncodedPassword = null;
+		String newEncodedPassword = null;
 		int i = 0;
 
-		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
+		final SecureToken data = getSecureTokenService().decryptData(token);
+		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getUserService().getUserForUID(data.getData(),
+				CustomerModel.class);
+		//final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
+
+		newEncodedPassword = getPasswordEncoderService().encode(customerModel, newPassword, customerModel.getPasswordEncoding());
 
 		if (customerModel.getPreviousPasswords() != null)
 		{
@@ -264,7 +274,11 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		}
 	}
 
-
+	/**
+ * 
+ * 
+ */
+	@Override
 	public EnergizerB2BCustomerModel getExistingUserForUID(final String email)
 	{
 		EnergizerB2BCustomerModel customerModel = null;
@@ -319,7 +333,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	 * 
 	 * 
 	 */
-	 @Override
+	@Override
 	public boolean validateCurrentPassword(final String currentPassword)
 	{
 		boolean valid = false;
@@ -359,7 +373,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		int i = 0;
 
 		final EnergizerB2BCustomerModel customerModel = (EnergizerB2BCustomerModel) getCurrentSessionCustomer();
-
+		newEncodedPassword = getPasswordEncoderService().encode(customerModel, newPassword, customerModel.getPasswordEncoding());
 		if (customerModel.getPreviousPasswords() != null)
 		{
 			checkedMismatch = checkPreviousPasswordMatch(customerModel, newPassword);
@@ -370,8 +384,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 			}
 			else
 			{
-				newEncodedPassword = getPasswordEncoderService().encode(customerModel, newPassword,
-						customerModel.getPasswordEncoding());
+
 				if (customerModel.getPreviousPasswords().contains(delimiter))
 				{
 					LOG.info("With delimiter");
@@ -534,6 +547,22 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		}
 	}
 
+	/**
+	 * @return the secureTokenService
+	 */
+	public SecureTokenService getSecureTokenService()
+	{
+		return secureTokenService;
+	}
+
+	/**
+	 * @param secureTokenService
+	 *           the secureTokenService to set
+	 */
+	public void setSecureTokenService(final SecureTokenService secureTokenService)
+	{
+		this.secureTokenService = secureTokenService;
+	}
 
 
 }
