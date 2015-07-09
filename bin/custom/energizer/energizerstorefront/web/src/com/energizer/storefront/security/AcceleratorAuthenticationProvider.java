@@ -19,6 +19,10 @@ import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.spring.security.CoreAuthenticationProvider;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -32,6 +36,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.energizer.storefront.util.EnergizerPasswordNotificationUtil;
 
 
 /**
@@ -60,6 +66,9 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 
 	private B2BUserGroupProvider b2bUserGroupProvider;
 
+	@Resource
+	protected EnergizerPasswordNotificationUtil energizerPasswordNotificationUtil;
+
 
 	@Override
 	public Authentication authenticate(final Authentication authentication) throws AuthenticationException
@@ -87,7 +96,7 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 			throws AuthenticationException
 	{
 		super.additionalAuthenticationChecks(details, authentication);
-
+		List<String> notificationMessages = null;
 		// Check if user has supplied no password
 		if (StringUtils.isEmpty((String) authentication.getCredentials()))
 		{
@@ -112,6 +121,19 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 			throw new DisabledException("User " + details.getUsername() + " is disabled... "
 					+ messages.getMessage("text.company.manage.units.disabled"));
 		}
+
+
+		if (null != authentication.getName())
+		{
+			notificationMessages = energizerPasswordNotificationUtil.checkPasswordExpiryStatus(authentication.getName());
+			if (null != notificationMessages && notificationMessages.size() > 0 && notificationMessages.get(0).equalsIgnoreCase("1"))
+			{
+				throw new LockedException("Your Password Has Been expired.......Please reset your password");
+
+			}
+		}
+
+
 	}
 
 	/**

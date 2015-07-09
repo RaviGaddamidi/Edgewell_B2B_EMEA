@@ -21,8 +21,10 @@ import de.hybris.platform.commerceservices.order.CommerceCartRestorationExceptio
 import de.hybris.platform.servicelayer.session.SessionService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +33,11 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
+import com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordExpiryFacade;
+import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.pages.AbstractPageController;
+import com.energizer.storefront.util.EnergizerPasswordNotificationUtil;
 
 
 /**
@@ -50,6 +55,12 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 
 	private final static String HOMEPAGE = "/";
 
+	@Resource
+	protected DefaultEnergizerPasswordExpiryFacade defaultEnergizerPasswordExpiryFacade;
+
+	@Resource
+	protected EnergizerPasswordNotificationUtil energizerPasswordNotificationUtil;
+
 	public UiExperienceService getUiExperienceService()
 	{
 		return uiExperienceService;
@@ -66,6 +77,19 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 			final Authentication authentication) throws IOException, ServletException
 	{
 		getCustomerFacade().loginSuccess();
+		List<String> notificationMessages = null;
+		if (null != authentication.getName())
+		{
+			notificationMessages = energizerPasswordNotificationUtil.checkPasswordExpiryStatus(authentication.getName());
+			if (null != notificationMessages && notificationMessages.size() > 0 && notificationMessages.get(0).equalsIgnoreCase("0"))
+			{
+				sessionService.setAttribute("passwordAlert", notificationMessages.get(1));
+
+			}
+		}
+		isPasswordQuestionAnswerSet(authentication.getName());
+
+
 
 		if (!getCartFacade().hasSessionCart() || getCartFacade().getSessionCart().getEntries().isEmpty())
 		{
@@ -87,12 +111,31 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 						AbstractPageController.JUST_UPDATED_PWD))
 		{
 			sessionService.removeAttribute(AbstractPageController.JUST_UPDATED_PWD);
+
 			response.sendRedirect(HOMEPAGE);
+
 		}
 		else
 		{
+
+
 			super.onAuthenticationSuccess(request, response, authentication);
 		}
+	}
+
+	/**
+	 * @param name
+	 */
+	private void isPasswordQuestionAnswerSet(final String userName)
+	{
+
+		final EnergizerB2BCustomerModel energizerB2BCustomerModel = defaultEnergizerPasswordExpiryFacade.getCustomerByUID(userName);
+
+		if (!energizerB2BCustomerModel.getIsPasswordQuestionSet())
+		{
+			sessionService.setAttribute("quesAnsAlert", "Plesae set Password Question and Answer");
+		}
+
 	}
 
 	protected CartFacade getCartFacade()

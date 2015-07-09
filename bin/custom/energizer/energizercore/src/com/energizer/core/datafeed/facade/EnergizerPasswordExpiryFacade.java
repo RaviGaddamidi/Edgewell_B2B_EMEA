@@ -19,4 +19,6 @@ public interface EnergizerPasswordExpiryFacade
 	public List<CMSSiteModel> getCMSSiteByName(String siteName);
 
 	public List<EnergizerB2BCustomerModel> getEnergizerCustomers();
+
+	public EnergizerB2BCustomerModel getCustomerByUID(String UID);
 }

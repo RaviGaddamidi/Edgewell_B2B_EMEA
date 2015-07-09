@@ -13,7 +13,6 @@ import de.hybris.platform.servicelayer.cronjob.PerformResult;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,62 +80,54 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 		for (final EnergizerB2BCustomerModel energizerB2BCustomerModel : energizerB2BCustomerModels)
 		{
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-			Date maxDate;
-			try
+			final Date maxDate;
+			//maxDate = sdf.parse("17-Jun-2015");
+			//final String passwordModifiedTime = sdf.format(maxDate);
+			final Date latestModifiedTime = energizerB2BCustomerModel.getPasswordModifiedTime();
+
+			//final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
+			final Calendar calPasswordModifiedDate = Calendar.getInstance();
+			calPasswordModifiedDate.setTime(latestModifiedTime);
+
+			LOG.info("Calender password modified date is " + calPasswordModifiedDate.getTime());
+			calPasswordModifiedDate.add(Calendar.DATE, passwordExpiryDays);
+
+			LOG.info("Calender::: Pasword Expiry Date " + calPasswordModifiedDate.getTime());
+			final Calendar calNotificationDate = Calendar.getInstance();
+
+
+			if (calNotificationDate.compareTo(calPasswordModifiedDate) <= 0)
 			{
-				maxDate = sdf.parse("17-Jun-2015");
-				final String passwordModifiedTime = sdf.format(maxDate);
-				//Date latestModifiedTime = energizerB2BCustomerModel.getPasswordModifiedTime();
+				calNotificationDate.add(Calendar.DATE, passwordNotificationDays);
 
-				final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
-				final Calendar calPasswordModifiedDate = Calendar.getInstance();
-				calPasswordModifiedDate.setTime(latestModifiedTime);
-
-				LOG.info("Calender password modified date is " + calPasswordModifiedDate.getTime());
-				calPasswordModifiedDate.add(Calendar.DATE, passwordExpiryDays);
-
-				LOG.info("Calender::: Pasword Expiry Date " + calPasswordModifiedDate.getTime());
-				final Calendar calNotificationDate = Calendar.getInstance();
-
-
+				LOG.info("Calender Notification date " + calNotificationDate.getTime());
 				if (calNotificationDate.compareTo(calPasswordModifiedDate) <= 0)
 				{
-					calNotificationDate.add(Calendar.DATE, passwordNotificationDays);
 
-					LOG.info("Calender Notification date " + calNotificationDate.getTime());
-					if (calNotificationDate.compareTo(calPasswordModifiedDate) <= 0)
-					{
-
-						LOG.info("Dear " + energizerB2BCustomerModel.getEmail() + " Your password has not been expired");
-					}
-					else
-					{
-						final Calendar calCurrentDate = Calendar.getInstance();
-						final int remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
-						final long diff = calPasswordModifiedDate.getTimeInMillis() - calCurrentDate.getTimeInMillis();
-
-						//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
-
-						LOG.info("Your Password will expire in " + remainingDays);
-						if (remainingDays == 10 || remainingDays == 1)
-						{
-							prepareEmail(energizerB2BCustomerModel, remainingDays);
-						}
-
-
-					}
+					LOG.info("Dear " + energizerB2BCustomerModel.getEmail() + " Your password has not been expired");
 				}
 				else
 				{
+					final Calendar calCurrentDate = Calendar.getInstance();
+					final int remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
+					final long diff = calPasswordModifiedDate.getTimeInMillis() - calCurrentDate.getTimeInMillis();
 
-					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
-					prepareEmail(energizerB2BCustomerModel, 0);
+					//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
+
+					LOG.info("Your Password will expire in " + remainingDays);
+					if (remainingDays == 10 || remainingDays == 1)
+					{
+						prepareEmail(energizerB2BCustomerModel, remainingDays);
+					}
+
+
 				}
 			}
-			catch (final ParseException e)
+			else
 			{
 
-				LOG.error("Exception occured in EnergizerPasswordExpiryJob" + e.getMessage());
+				LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
+				prepareEmail(energizerB2BCustomerModel, 0);
 			}
 
 

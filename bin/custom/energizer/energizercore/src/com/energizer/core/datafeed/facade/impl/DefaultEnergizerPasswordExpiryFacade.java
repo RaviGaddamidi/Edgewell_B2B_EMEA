@@ -58,4 +58,24 @@ public class DefaultEnergizerPasswordExpiryFacade implements EnergizerPasswordEx
 		return energizerB2BCustomerModels;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.core.datafeed.facade.EnergizerPasswordExpiryFacade#getCustomerByUID(java.lang.String)
+	 */
+	@Override
+	public EnergizerB2BCustomerModel getCustomerByUID(final String UID)
+	{
+		EnergizerB2BCustomerModel b2bCustomerModel = null;
+		final String flexiSearchQuery = "SELECT{" + EnergizerB2BCustomerModel.PK + "} FROM {" + EnergizerB2BCustomerModel._TYPECODE
+				+ "}  WHERE {" + EnergizerB2BCustomerModel.UID + "}=?username";
+		final HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("username", UID);
+		final SearchResult<EnergizerB2BCustomerModel> result = flexibleSearchService.search(flexiSearchQuery, params);
+		final List<EnergizerB2BCustomerModel> energizerB2BCustomerModels = result.getResult();
+		b2bCustomerModel = energizerB2BCustomerModels.get(0);
+		return b2bCustomerModel;
+	}
+
+
 }

@@ -19,6 +19,7 @@ import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.stereotype.Controller;
@@ -35,8 +37,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.energizer.core.datafeed.processor.customer.EnergizerPasswordExpiryJob;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.util.EnergizerPasswordNotificationUtil;
 
 
 /**
@@ -47,6 +51,8 @@ import com.energizer.storefront.controllers.util.GlobalMessages;
 @RequestMapping(value = "/login")
 public class LoginPageController extends AbstractLoginPageController
 {
+
+	private static final Logger LOG = Logger.getLogger(EnergizerPasswordExpiryJob.class);
 	@Resource(name = "httpSessionRequestCache")
 	private HttpSessionRequestCache httpSessionRequestCache;
 
@@ -56,6 +62,12 @@ public class LoginPageController extends AbstractLoginPageController
 	private final static String FAILED_MAX_ATTEMPTS_TO_LOGIN = "FAILED_MAX_ATTEMPTS_TO_LOGIN";
 
 	private final static String ACCOUNT_IS_BLOCKED = "login.maxattempts.failed";
+
+
+	protected static final String SPRING_SECURITY_LAST_USERNAME = "SPRING_SECURITY_LAST_USERNAME";
+
+	@Resource
+	protected EnergizerPasswordNotificationUtil energizerPasswordNotificationUtil;
 
 
 	public void setHttpSessionRequestCache(final HttpSessionRequestCache accHttpSessionRequestCache)
@@ -73,10 +85,22 @@ public class LoginPageController extends AbstractLoginPageController
 
 		final UserModel user = userService.getCurrentUser();
 		final boolean isUserAnonymous = user == null || userService.isAnonymousUser(user);
+		List<String> notificationMessages = null;
 
 		if (!isUserAnonymous)
 		{
 			return REDIRECT_PREFIX + ROOT;
+		}
+
+		final String userName = (String) session.getAttribute(SPRING_SECURITY_LAST_USERNAME);
+		if (null != userName)
+		{
+			notificationMessages = energizerPasswordNotificationUtil.checkPasswordExpiryStatus(userName);
+			if (null != notificationMessages && notificationMessages.size() > 0 && notificationMessages.get(0).equalsIgnoreCase("1"))
+			{
+				GlobalMessages.addErrorMessage(model, notificationMessages.get(1));
+
+			}
 		}
 
 		if (!loginError)
@@ -93,6 +117,7 @@ public class LoginPageController extends AbstractLoginPageController
 				getSessionService().removeAttribute(FAILED_MAX_ATTEMPTS_TO_LOGIN);
 			}
 		}
+
 		return getDefaultLoginPage(loginError, session, model);
 	}
 
