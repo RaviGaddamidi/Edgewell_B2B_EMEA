@@ -40,6 +40,12 @@
 							<formElement:formInputBox idKey="forgottenPwd.email"
 								labelKey="forgottenPwd.email" path="email" inputCSS="text"
 								mandatory="true" />
+								
+								     <formElement:formSelectBox skipBlank="false" skipBlankMessageKey="form.select.empty" idKey="profile.passwordQuestion" labelKey="profile.passwordQuestion" path="passwordQuestion" mandatory="true" items="${passwordQuestionsList}"/>
+			  		   
+			  						 <formElement:formInputBox idKey="profile.passwordAnswer" labelKey="profile.passwordAnswer" path="passwordAnswer" inputCSS="text" mandatory="true"/>
+			
+								
 							<button class="positive" type="submit">
 								<spring:theme code="forgottenPwd.submit" />
 							</button>
