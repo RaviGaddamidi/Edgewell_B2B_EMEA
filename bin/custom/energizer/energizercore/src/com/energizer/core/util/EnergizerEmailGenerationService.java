@@ -1,5 +1,3 @@
-
-
 /**
  * 
  */
@@ -97,19 +95,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					.getPermissionResults();
 			for (final B2BPermissionResultModel b2bPermissionResultModel : b2bPermissionResultModels)
 			{
-				if (emailSet.size() > 0)
-				{
-
-
-					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
-
-
-				}
-				else
-				{
-					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
-				}
-
+				emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
 			}
 			emailList.addAll(emailSet);
 			b2bCustomerModelList = new ArrayList<B2BCustomerModel>();
@@ -117,9 +103,9 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			b2bCustomerModelList.addAll(b2bCustomerModels);
 			if (null != b2bCustomerModelList && b2bCustomerModelList.size() > 0)
 			{
-				for (int i = 0; i < b2bCustomerModelList.size(); i++)
+				for (final B2BCustomerModel customer : b2bCustomerModelList)
 				{
-					emailCCList.add(b2bCustomerModelList.get(i).getEmail());
+					emailCCList.add(customer.getEmail());
 				}
 			}
 

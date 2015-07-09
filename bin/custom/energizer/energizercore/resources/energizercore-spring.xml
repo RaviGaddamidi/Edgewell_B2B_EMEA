@@ -968,29 +968,13 @@
 	      parent="defaultB2BPermissionService">
 	</bean>
 	
-	<!--  approval process starts -->
-	<bean id="b2BAbstractWorkflowAutomatedAction" class="com.energizer.core.actions.B2BAbstractWorkflowAutomatedAction" abstract="true" >
+	<!--  approval process changes starts -->
+	<alias alias="b2BAbstractWorkflowAutomatedAction" name="energizerB2BAbstractWorkflowAutomatedAction"/>
+	<bean id="energizerB2BAbstractWorkflowAutomatedAction" class="com.energizer.core.actions.B2BAbstractWorkflowAutomatedAction" abstract="true" >
 		<property name="modelService" ref="modelService"/>
 	</bean>
-
-	<bean id="afterApproveOrderWorkflowDecisionAction" class="de.hybris.platform.b2b.process.approval.actions.AfterApproveOrderWorkflowDecisionAction" parent="b2BAbstractWorkflowAutomatedAction">
+	<alias alias="approveDecisionAutomatedAction" name="energizerApproveDecisionAutomatedAction"/>
+	<bean name="energizerApproveDecisionAutomatedAction" class="com.energizer.core.actions.ApproveDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
 		<property name="eventService" ref="eventService"/>
-	</bean>
-
-	<bean id="afterRejectOrderWorkflowDecisionAction" class="de.hybris.platform.b2b.process.approval.actions.AfterRejectOrderWorkflowDecisionAction" parent="b2BAbstractWorkflowAutomatedAction">
-		<property name="eventService" ref="eventService"/>
-	</bean>
-
-	<bean id="approveDecisionAutomatedAction" class="com.energizer.core.actions.ApproveDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
-		<property name="eventService" ref="eventService"/>
-	</bean>
-
-	<bean id="rejectDecisionAutomatedAction" class="de.hybris.platform.b2b.process.approval.actions.RejectDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
-		<property name="eventService" ref="eventService"/>
-	</bean>
-
-	<bean id="b2bAfterWorkflowAction" class="de.hybris.platform.b2b.process.approval.actions.B2BAfterWorkflowAction" parent="b2BAbstractWorkflowAutomatedAction">
-		<property name="businessProcessService" ref="businessProcessService"/>
-		<property name="processParameterHelper" ref="processParameterHelper"/>
 	</bean>
 </beans>

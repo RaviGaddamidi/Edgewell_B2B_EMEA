@@ -833,7 +833,7 @@ public class AccountPageController extends AbstractSearchPageController
 			b2bOrderApprovalData.setWorkflowActionModelCode(orderApprovalDecisionForm.getWorkFlowActionCode());
 
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
-            energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
+			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData.getB2bOrderData().getCode(), orderApprovalDecisionForm.getComments());
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
@@ -842,11 +842,20 @@ public class AccountPageController extends AbstractSearchPageController
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("Attempted to load a order that does not exist or is not visible", e);
-			GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
-					"text.account.profile.paymentCart.removed");
-
-			return REDIRECT_MY_ACCOUNT;
+			if (e.getMessage().equalsIgnoreCase("Process already completed"))
+			{
+				GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"Approval process already completed by an another approver");
+				//GlobalMessages.addErrorMessage(model, "Approval process already completed by an another approver");
+				return REDIRECT_MY_ACCOUNT + "/orderApprovalDetails/" + orderApprovalDecisionForm.getWorkFlowActionCode();
+			}
+			else
+			{
+				LOG.warn("Attempted to load a order that does not exist or is not visible", e);
+				GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"text.account.profile.paymentCart.removed");
+				return REDIRECT_MY_ACCOUNT;
+			}
 		}
 
 		return REDIRECT_MY_ACCOUNT + "/orderApprovalDetails/" + orderApprovalDecisionForm.getWorkFlowActionCode();

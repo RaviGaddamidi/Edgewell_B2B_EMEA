@@ -40,6 +40,7 @@ import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
+import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -228,8 +229,11 @@ public class MyCompanyPageController extends AbstractSearchPageController
 				.getB2BPermissionTypes();
 		for (final B2BPermissionTypeData b2bPermissionType : permissionTypeDatalist)
 		{
-			final SelectOption selectOption = new SelectOption(b2bPermissionType.getCode(), b2bPermissionType.getName());
-			b2bPermissionTypeList.add(selectOption);
+			if (b2bPermissionType.getCode().equals(B2BPermissionTypeEnum.B2BORDERTHRESHOLDPERMISSION.getCode()))
+			{
+				final SelectOption selectOption = new SelectOption(b2bPermissionType.getCode(), b2bPermissionType.getName());
+				b2bPermissionTypeList.add(selectOption);
+			}
 		}
 
 		return b2bPermissionTypeList;
@@ -515,6 +519,20 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			b2bCustomerModel.setRegistrationEmailFlag(Boolean.TRUE);
 			if (null != b2bCustomerModel)
 			{
+				boolean permissionNotYetAssigned = true;
+				for (final PrincipalGroupModel goups : b2bCustomerModel.getGroups())
+				{
+					if (permissionNotYetAssigned
+							&& (goups.getUid().equalsIgnoreCase("b2bcustomergroup") || goups.getUid().equalsIgnoreCase(
+									"b2bapprovergroup")))
+					{
+						b2bCommerceUserFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(), companyB2BCommerceFacade
+								.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid() + "_defaultBudgetPerm");
+						b2bCommerceUserFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(), companyB2BCommerceFacade
+								.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid() + "_defaultOrdThresholdPerm");
+						permissionNotYetAssigned = false;
+					}
+				}
 				customerAccountService.register(b2bCustomerModel, Config.getParameter(DEFAULT_PASSWORD));
 			}
 			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.user.added");
@@ -660,6 +678,19 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	{
 		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
 		//		customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
+		final List<B2BPermissionData> permissions = customerData.getPermissions();
+		final List<B2BPermissionData> onlyOrderThresholdPermissions = new ArrayList<B2BPermissionData>();
+		if (permissions != null)
+		{
+			for (final B2BPermissionData permission : permissions)
+			{
+				if (permission.getB2BPermissionTypeData().getCode().equals("B2BOrderThresholdPermission"))
+				{
+					onlyOrderThresholdPermissions.add(permission);
+				}
+			}
+		}
+		customerData.setPermissions(onlyOrderThresholdPermissions);
 		energizerCompanyB2BCommerceFacade.populateRolesByCustomer(user, customerData);
 		model.addAttribute("customerData", customerData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
@@ -735,8 +766,8 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected B2BPermissionData populateB2BPermissionDataFromForm(final B2BPermissionForm b2BPermissionForm) throws ParseException
 	{
 		final B2BPermissionData b2BPermissionData = new B2BPermissionData();
-		b2BPermissionData.setOriginalCode(XSSFilterUtil.filter(b2BPermissionForm.getOriginalCode()));
-		final String permissionCode = XSSFilterUtil.filter(b2BPermissionForm.getCode());
+		b2BPermissionData.setOriginalCode(b2BPermissionForm.getOriginalCode());
+		final String permissionCode = b2BPermissionForm.getCode();
 		if (StringUtils.isNotEmpty(permissionCode))
 		{
 			b2BPermissionData.setCode(permissionCode);
@@ -748,17 +779,16 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		final B2BPermissionTypeData b2BPermissionTypeData = b2BPermissionForm.getB2BPermissionTypeData();
 		b2BPermissionData.setB2BPermissionTypeData(b2BPermissionTypeData);
 		final CurrencyData currencyData = new CurrencyData();
-		currencyData.setIsocode(XSSFilterUtil.filter(b2BPermissionForm.getCurrency()));
+		currencyData.setIsocode(b2BPermissionForm.getCurrency());
 		b2BPermissionData.setCurrency(currencyData);
 
-		b2BPermissionData
-				.setUnit(companyB2BCommerceFacade.getUnitForUid(XSSFilterUtil.filter(b2BPermissionForm.getParentUnitName())));
-		final String permissionTimespan = XSSFilterUtil.filter(b2BPermissionForm.getTimeSpan());
+		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BPermissionForm.getParentUnitName()));
+		final String permissionTimespan = b2BPermissionForm.getTimeSpan();
 		if (StringUtils.isNotEmpty(permissionTimespan))
 		{
-			b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf(XSSFilterUtil.filter(b2BPermissionForm.getTimeSpan())));
+			b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf(b2BPermissionForm.getTimeSpan()));
 		}
-		final String monetaryValue = XSSFilterUtil.filter(b2BPermissionForm.getValue());
+		final String monetaryValue = b2BPermissionForm.getValue();
 		if (StringUtils.isNotEmpty(monetaryValue))
 		{
 			b2BPermissionData.setValue(Double.valueOf(formatFactory.createNumberFormat().parse(monetaryValue).doubleValue()));
