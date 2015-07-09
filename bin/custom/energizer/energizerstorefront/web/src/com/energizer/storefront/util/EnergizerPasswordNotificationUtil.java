@@ -40,6 +40,7 @@ public class EnergizerPasswordNotificationUtil
 		final Date maxDate;
 		String returnMessage = "";
 		String messageValue = "";
+		String daysCount = "";
 		EnergizerB2BCustomerModel b2bCustomerModel = null;
 		final List<String> notificationMessages = new ArrayList<String>();
 		if (null != userName)
@@ -48,11 +49,11 @@ public class EnergizerPasswordNotificationUtil
 			b2bCustomerModel = defaultEnergizerPasswordExpiryFacade.getCustomerByUID(userName);
 			try
 			{
-				maxDate = sdf.parse("13-Jun-2015");
-				final String passwordModifiedTime = sdf.format(maxDate);
-				//final Date latestModifiedTime = b2bCustomerModel.getPasswordModifiedTime();
+				//maxDate = sdf.parse("12-Jun-2015");
+				//final String passwordModifiedTime = sdf.format(maxDate);
+				final Date latestModifiedTime = b2bCustomerModel.getPasswordModifiedTime();
 
-				final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
+				//final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
 				final Calendar calPasswordModifiedDate = Calendar.getInstance();
 				calPasswordModifiedDate.setTime(latestModifiedTime);
 
@@ -78,7 +79,7 @@ public class EnergizerPasswordNotificationUtil
 					else
 					{
 						final Calendar calCurrentDate = Calendar.getInstance();
-						final int remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
+						final Integer remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
 						final long diff = calPasswordModifiedDate.getTimeInMillis() - calCurrentDate.getTimeInMillis();
 
 						//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
@@ -86,7 +87,9 @@ public class EnergizerPasswordNotificationUtil
 						LOG.info("Your Password will expire in " + remainingDays);
 						//if (remainingDays == 10 || remainingDays == 1)
 						//{
-						returnMessage = "Your Password will expire in " + remainingDays + " days";
+						returnMessage = "account.password.expiry.notification";
+						daysCount = remainingDays.toString();
+						//+ remainingDays + "account.password.daycount";
 						messageValue = "0";
 						//}
 
@@ -95,12 +98,16 @@ public class EnergizerPasswordNotificationUtil
 				}
 				else
 				{
-					returnMessage = "Your Password has been Expired";
+					returnMessage = "account.password.expiry";
 					messageValue = "1";
 
 				}
 				notificationMessages.add(messageValue);
 				notificationMessages.add(returnMessage);
+				if (null != daysCount)
+				{
+					notificationMessages.add(daysCount);
+				}
 			}
 			catch (final Exception e)
 			{

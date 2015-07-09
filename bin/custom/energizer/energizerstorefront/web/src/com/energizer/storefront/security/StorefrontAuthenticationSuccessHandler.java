@@ -84,6 +84,7 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 			if (null != notificationMessages && notificationMessages.size() > 0 && notificationMessages.get(0).equalsIgnoreCase("0"))
 			{
 				sessionService.setAttribute("passwordAlert", notificationMessages.get(1));
+				sessionService.setAttribute("dayCount", notificationMessages.get(2));
 
 			}
 		}
@@ -133,7 +134,7 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 
 		if (!energizerB2BCustomerModel.getIsPasswordQuestionSet())
 		{
-			sessionService.setAttribute("quesAnsAlert", "Plesae set Password Question and Answer");
+			sessionService.setAttribute("quesAnsAlert", "account.password.isQuestionAnsSet");
 		}
 
 	}

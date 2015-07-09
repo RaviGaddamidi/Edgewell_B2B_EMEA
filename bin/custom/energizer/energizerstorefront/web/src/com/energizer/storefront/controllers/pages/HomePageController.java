@@ -70,12 +70,15 @@ public class HomePageController extends AbstractPageController
 		}
 		if (null != sessionService.getAttribute("passwordAlert"))
 		{
-			GlobalMessages.addErrorMessage(model, (String) sessionService.getAttribute("passwordAlert"));
+
+			GlobalMessages.addMessage(model, "accErrorMsgs", (String) sessionService.getAttribute("passwordAlert"), new Object[]
+			{ sessionService.getAttribute("dayCount") });
 			sessionService.removeAttribute("passwordAlert");
+			sessionService.removeAttribute("dayCount");
 		}
 		if (null != sessionService.getAttribute("quesAnsAlert"))
 		{
-			GlobalMessages.addErrorMessage(model, (String) sessionService.getAttribute("quesAnsAlert"));
+			GlobalMessages.addBusinessRuleMessage(model, (String) sessionService.getAttribute("quesAnsAlert"));
 			sessionService.removeAttribute("quesAnsAlert");
 		}
 		storeCmsPageInModel(model, getContentPageForLabelOrId(null));
