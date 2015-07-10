@@ -1321,10 +1321,14 @@ public class AccountPageController extends AbstractSearchPageController
 	public String quickOrderRemoveItem(final Model model, @RequestParam("energizerMaterialID") final String energizerMaterialID,
 			final HttpSession session) throws CMSItemNotFoundException
 	{
-		final QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
+		QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
 				.getAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE));
 		quickOrderFacade.removeItemFromQuickOrder(quickOrder, energizerMaterialID);
-
+		// if the session does not have entries clear shipping point also.
+		if (quickOrder.getLineItems().size() == 0)
+		{
+			quickOrder = null;
+		}
 		session.setAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE, quickOrder);
 		model.addAttribute("orderform", quickOrder);
 
