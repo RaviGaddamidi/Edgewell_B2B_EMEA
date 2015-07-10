@@ -8,6 +8,7 @@ import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.AbstractOrderModel;
+import de.hybris.platform.workflow.model.WorkflowActionModel;
 
 import java.util.List;
 
@@ -39,4 +40,10 @@ public interface EnergizerB2BCheckoutFlowFacade
 			final String rejectionComment);
 
 	public CartData simulateOrder(CartData cartData) throws Exception;
+
+	/**
+	 * @param workFlowActionCode
+	 * @return
+	 */
+	public WorkflowActionModel getActionForCode(String workFlowActionCode);
 }

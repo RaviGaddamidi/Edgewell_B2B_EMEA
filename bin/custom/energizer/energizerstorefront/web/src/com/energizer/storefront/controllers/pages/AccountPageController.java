@@ -44,6 +44,7 @@ import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.localization.Localization;
 import de.hybris.platform.workflow.enums.WorkflowActionType;
+import de.hybris.platform.workflow.model.WorkflowActionModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -826,7 +827,14 @@ public class AccountPageController extends AbstractSearchPageController
 				model.addAttribute("orderApprovalDecisionForm", orderApprovalDecisionForm);
 				return orderApprovalDetails(orderApprovalDecisionForm.getWorkFlowActionCode(), model);
 			}
-
+			final WorkflowActionModel workflowActionModel = energizerB2BCheckoutFlowFacade
+					.getActionForCode(orderApprovalDecisionForm.getWorkFlowActionCode());
+			if ((workflowActionModel.getName().equalsIgnoreCase("APPROVAL") || workflowActionModel.getName().equalsIgnoreCase(
+					"REJECTED"))
+					&& !workflowActionModel.getStatus().getCode().equalsIgnoreCase("in_progress"))
+			{
+				throw new Exception("Process already completed");
+			}
 			B2BOrderApprovalData b2bOrderApprovalData = new B2BOrderApprovalData();
 			b2bOrderApprovalData.setSelectedDecision(orderApprovalDecisionForm.getApproverSelectedDecision());
 			b2bOrderApprovalData.setApprovalComments(orderApprovalDecisionForm.getComments());
