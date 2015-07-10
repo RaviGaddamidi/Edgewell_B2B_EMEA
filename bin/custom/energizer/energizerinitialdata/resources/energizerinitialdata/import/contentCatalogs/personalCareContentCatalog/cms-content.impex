@@ -106,20 +106,20 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;SiteRootNode;;SiteRootNode;root;;HomepageNavLink;SiteRootNode
 ;Feminine_Care_Nav_Node;;Feminine Care;SiteRootNode; ; ;Feminine_Care_Nav_Node
 ;Infant_Care_Nav_Node;;Infant Care;SiteRootNode; ; ;Infant_Care_Nav_Node
-;Shaving_Nav_Node;;Shaving;SiteRootNode; ; ;Shaving_Nav_Node
+;Shaving_Nav_Node;;Shaving;SiteRootNode;Edge_Nav_Node,Schick_Nav_Node,Skintimate_Nav_Node ; ;Shaving_Nav_Node
 ;Skin_Care_Nav_Node;;Skin Care;SiteRootNode; ; ;Skin_Care_Nav_Node
 ;Sun_Care_Nav_Node;;Sun Care;SiteRootNode; ; ;Sun_Care_Nav_Node
-;Playtex_Nav_Node;;Playtex;Feminine_Care_Nav_Node; ;Playtex_Link;Playtex_Nav_Node
 ;Carefree_Nav_Node;;Carefree;Feminine_Care_Nav_Node; ;Carefree_Link;Carefree_Nav_Node
-;Stayfree_Nav_Node;;Stayfree;Feminine_Care_Nav_Node; ;Stayfree_Link;Stayfree_Nav_Node
 ;Ob_Nav_Node;;Ob;Feminine_Care_Nav_Node; ;Ob_Link;Ob_Nav_Node
+;Playtex_Nav_Node;;Playtex;Feminine_Care_Nav_Node; ;Playtex_Link;Playtex_Nav_Node
+;Stayfree_Nav_Node;;Stayfree;Feminine_Care_Nav_Node; ;Stayfree_Link;Stayfree_Nav_Node
 ;Infant_Playtex_Nav_Node;;Playtex;Infant_Care_Nav_Node; ;Infant_Playtex_Link;Infant_Playtex_Nav_Node
-;Schick_Nav_Node;;Schick;Shaving_Nav_Node; ;Schick_Link;Schick_Nav_Node
 ;Edge_Nav_Node;;Edge;Shaving_Nav_Node; ;Edge_Link;Edge_Nav_Node
+;Schick_Nav_Node;;Schick;Shaving_Nav_Node; ;Schick_Link;Schick_Nav_Node
 ;Skintimate_Nav_Node;;Skintimate;Shaving_Nav_Node; ;Skintimate_Link;Skintimate_Nav_Node
 ;Personal_Cleansing_Clothes_Nav_Node;;Personal Cleansing Clothes;Skin_Care_Nav_Node; ;Personal_Cleansing_Clothes_Link;Personal_Cleansing_Clothes_Nav_Node
-;Wet_Ones_Nav_Node;;Wet Ones;Skin_Care_Nav_Node; ;Wet_Ones_Link;Wet_Ones_Nav_Node
 ;SkinCare_Playtex_Nav_Node;;Playtex;Skin_Care_Nav_Node; ;SkinCare_Playtex_Link;SkinCare_Playtex_Nav_Node
+;Wet_Ones_Nav_Node;;Wet Ones;Skin_Care_Nav_Node; ;Wet_Ones_Link;Wet_Ones_Nav_Node
 ;Banana_Boat_Nav_Node;;Banana Boat;Sun_Care_Nav_Node; ;Banana_Boat_Link;Banana_Boat_Nav_Node
 ;Hawaiian_Tropic_Nav_Node;;Hawaiian Tropic;Sun_Care_Nav_Node; ;Hawaiian_Tropic_Link;Hawaiian_Tropic_Nav_Node
 
