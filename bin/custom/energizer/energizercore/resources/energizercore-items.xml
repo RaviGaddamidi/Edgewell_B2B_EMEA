@@ -541,8 +541,9 @@
 					<persistence type="property" />
 					</attribute>
 					<attribute type="java.lang.Boolean" qualifier="isPasswordQuestionSet">
-					<description>password flag</description>
+					<modifiers />
 					<persistence type="property" />
+					<defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
 					</attribute>
 				</attributes>
 			</itemtype>
