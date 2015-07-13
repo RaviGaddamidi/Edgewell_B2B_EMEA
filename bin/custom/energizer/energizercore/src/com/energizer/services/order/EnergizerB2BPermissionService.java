@@ -13,8 +13,10 @@ import de.hybris.platform.core.model.order.AbstractOrderModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.model.ModelService;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -62,6 +64,34 @@ public class EnergizerB2BPermissionService extends DefaultB2BPermissionService
 			{
 				permissionResult.add(createPermissionResult(order, approver, b2bUnit));
 			}
+		}
+		return permissionResult;
+	}
+
+	public List<B2BPermissionResultModel> getApproversForOpenPermission(final AbstractOrderModel order,
+			final B2BCustomerModel employee, final Collection<B2BPermissionResultModel> openPermissions)
+	{
+		final List<B2BPermissionResultModel> permissionResult = new ArrayList<>();
+		final EnergizerB2BCustomerModel customer = (EnergizerB2BCustomerModel) order.getUser();
+		if (Collections.isEmpty(openPermissions))
+		{
+			return permissionResult;
+		}
+		if (b2bCommerceUserService.getParentUnitForCustomer(customer.getUid()) != null)
+		{
+			final EnergizerB2BUnitModel b2bUnit = (EnergizerB2BUnitModel) b2bCommerceUserService.getParentUnitForCustomer(customer
+					.getUid());
+			EnergizerB2BCustomerModel approver = null;
+
+			for (final UserModel user : b2bUnit.getApprovers())
+			{
+				approver = (EnergizerB2BCustomerModel) user;
+				if (approver != null)
+				{
+					permissionResult.add(createPermissionResult(order, approver, b2bUnit));
+				}
+			}
+
 		}
 		return permissionResult;
 	}

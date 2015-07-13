@@ -4,6 +4,7 @@
 package com.energizer.facades.flow.impl;
 
 import de.hybris.platform.b2b.services.B2BOrderService;
+import de.hybris.platform.b2b.services.B2BWorkflowIntegrationService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.order.data.AbstractOrderData;
 import de.hybris.platform.commercefacades.order.data.CartData;
@@ -27,6 +28,7 @@ import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.workflow.model.WorkflowActionModel;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -94,6 +96,8 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	@Resource(name = "userService")
 	UserService userService;
 
+	@Resource
+	private B2BWorkflowIntegrationService b2bWorkflowIntegrationService;
 
 	@Resource
 	private B2BOrderService b2bOrderService;
@@ -607,4 +611,33 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		// YTODO Auto-generated method stub
 		getCartService().removeSessionCart();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getActionForCode(java.lang.String)
+	 */
+	@Override
+	public WorkflowActionModel getActionForCode(final String workFlowActionCode)
+	{
+		return getB2bWorkflowIntegrationService().getActionForCode(workFlowActionCode);
+	}
+
+	/**
+	 * @return the b2bWorkflowIntegrationService
+	 */
+	public B2BWorkflowIntegrationService getB2bWorkflowIntegrationService()
+	{
+		return b2bWorkflowIntegrationService;
+	}
+
+	/**
+	 * @param b2bWorkflowIntegrationService
+	 *           the b2bWorkflowIntegrationService to set
+	 */
+	public void setB2bWorkflowIntegrationService(final B2BWorkflowIntegrationService b2bWorkflowIntegrationService)
+	{
+		this.b2bWorkflowIntegrationService = b2bWorkflowIntegrationService;
+	}
+
 }

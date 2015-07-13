@@ -34,6 +34,7 @@ import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -412,6 +413,15 @@ public class UserManagementPageController extends MyCompanyPageController
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
 		final SearchPageData<B2BPermissionData> searchPageData = b2bCommerceUserFacade.getPagedPermissionsForCustomer(pageableData,
 				user);
+		final List<B2BPermissionData> orderTreholdPermissionList = new ArrayList<B2BPermissionData>();
+		for (final B2BPermissionData permData : searchPageData.getResults())
+		{
+			if (permData.getB2BPermissionTypeData().getCode().equalsIgnoreCase("B2BOrderThresholdPermission"))
+			{
+				orderTreholdPermissionList.add(permData);
+			}
+		}
+		searchPageData.setResults(orderTreholdPermissionList);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "permissions");
 		model.addAttribute("baseUrl", "/my-company/organization-management/manage-users");

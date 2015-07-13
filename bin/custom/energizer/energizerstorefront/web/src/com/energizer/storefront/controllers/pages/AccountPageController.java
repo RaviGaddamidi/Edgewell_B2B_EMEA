@@ -44,6 +44,7 @@ import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.localization.Localization;
 import de.hybris.platform.workflow.enums.WorkflowActionType;
+import de.hybris.platform.workflow.model.WorkflowActionModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -826,14 +827,21 @@ public class AccountPageController extends AbstractSearchPageController
 				model.addAttribute("orderApprovalDecisionForm", orderApprovalDecisionForm);
 				return orderApprovalDetails(orderApprovalDecisionForm.getWorkFlowActionCode(), model);
 			}
-
+			final WorkflowActionModel workflowActionModel = energizerB2BCheckoutFlowFacade
+					.getActionForCode(orderApprovalDecisionForm.getWorkFlowActionCode());
+			if ((workflowActionModel.getName().equalsIgnoreCase("APPROVAL") || workflowActionModel.getName().equalsIgnoreCase(
+					"REJECTED"))
+					&& !workflowActionModel.getStatus().getCode().equalsIgnoreCase("in_progress"))
+			{
+				throw new Exception("Process already completed");
+			}
 			B2BOrderApprovalData b2bOrderApprovalData = new B2BOrderApprovalData();
 			b2bOrderApprovalData.setSelectedDecision(orderApprovalDecisionForm.getApproverSelectedDecision());
 			b2bOrderApprovalData.setApprovalComments(orderApprovalDecisionForm.getComments());
 			b2bOrderApprovalData.setWorkflowActionModelCode(orderApprovalDecisionForm.getWorkFlowActionCode());
 
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
-            energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
+			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData.getB2bOrderData().getCode(), orderApprovalDecisionForm.getComments());
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
@@ -842,11 +850,20 @@ public class AccountPageController extends AbstractSearchPageController
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("Attempted to load a order that does not exist or is not visible", e);
-			GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
-					"text.account.profile.paymentCart.removed");
-
-			return REDIRECT_MY_ACCOUNT;
+			if (e.getMessage().equalsIgnoreCase("Process already completed"))
+			{
+				GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"Approval process already completed by an another approver");
+				//GlobalMessages.addErrorMessage(model, "Approval process already completed by an another approver");
+				return REDIRECT_MY_ACCOUNT + "/orderApprovalDetails/" + orderApprovalDecisionForm.getWorkFlowActionCode();
+			}
+			else
+			{
+				LOG.warn("Attempted to load a order that does not exist or is not visible", e);
+				GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
+						"text.account.profile.paymentCart.removed");
+				return REDIRECT_MY_ACCOUNT;
+			}
 		}
 
 		return REDIRECT_MY_ACCOUNT + "/orderApprovalDetails/" + orderApprovalDecisionForm.getWorkFlowActionCode();
@@ -1304,10 +1321,14 @@ public class AccountPageController extends AbstractSearchPageController
 	public String quickOrderRemoveItem(final Model model, @RequestParam("energizerMaterialID") final String energizerMaterialID,
 			final HttpSession session) throws CMSItemNotFoundException
 	{
-		final QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
+		QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
 				.getAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE));
 		quickOrderFacade.removeItemFromQuickOrder(quickOrder, energizerMaterialID);
-
+		// if the session does not have entries clear shipping point also.
+		if (quickOrder.getLineItems().size() == 0)
+		{
+			quickOrder = null;
+		}
 		session.setAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE, quickOrder);
 		model.addAttribute("orderform", quickOrder);
 

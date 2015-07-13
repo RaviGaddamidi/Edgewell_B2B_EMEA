@@ -34,7 +34,21 @@
 			<value code="HOP" />
 		</enumtype>
 	</enumtypes>
-
+	<relations>
+		<relation code="AbstractOrder2B2BPermissionResults"
+		          localized="false" generate="false" autocreate="false">
+			<sourceElement type="AbstractOrder" qualifier="Order"
+			               cardinality="one">
+				<modifiers read="true" write="true" search="true"/>
+			</sourceElement>
+			<targetElement type="B2BPermissionResult" qualifier="PermissionResults"
+			               cardinality="many" collectiontype="collection">
+			<!-- <targetElement type="B2BPermissionResult" qualifier="PermissionResults"
+			               cardinality="many" collectiontype="collection" ordered="true"> -->
+				<modifiers read="true" write="true" search="true" partof="true"/>
+			</targetElement>
+		</relation>
+	</relations>
 	<itemtypes>
 		<!-- Add your item definitions here -->
 

@@ -54,8 +54,6 @@ import de.hybris.platform.servicelayer.cronjob.CronJobService;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
-import com.energizer.test.constants.EnergizerTestConstants;
-import com.energizer.test.services.AccountManagerApproveScheduleService;
 
 import java.util.Collections;
 import java.util.Date;
@@ -72,6 +70,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import com.energizer.test.constants.EnergizerTestConstants;
+import com.energizer.test.services.AccountManagerApproveScheduleService;
 
 
 /**
@@ -125,8 +126,8 @@ public class B2BAcceleratorTestOrderData
 		placeOrderRequiringApproval(EnergizerTestConstants.HISTORICAL_USER_UID, "PENDING_APPROVAL");
 		placeOrderForQuoteNegotiation(EnergizerTestConstants.HISTORICAL_USER_UID, "PENDING_QUOTE");
 		placeOrderAndApproveByB2BApprover(EnergizerTestConstants.HISTORICAL_USER_UID, "ORDER_SENT_NOTIFICATION_SENT Approved");
-		placeOrderWithInCustomerPermissions(EnergizerTestConstants.HISTORICAL_USER_UID,
-				"ORDER_SENT_NOTIFICATION_SENT costcenter", true);
+		placeOrderWithInCustomerPermissions(EnergizerTestConstants.HISTORICAL_USER_UID, "ORDER_SENT_NOTIFICATION_SENT costcenter",
+				true);
 
 		placeReplenishmentOrderInCancelledState(EnergizerTestConstants.REPENISHMENT_USER_UID, "REPLENISHMENT_ENDED");
 		placeReplenishmentOrderInActiveState(EnergizerTestConstants.REPENISHMENT_USER_UID, "REPLENISHMENT_ONGOING");
@@ -562,8 +563,7 @@ public class B2BAcceleratorTestOrderData
 			final String purchaseOrderNumber, final String costCenterCode, final String quotePetition,
 			final B2BCustomerModel customer)
 	{
-		LOG.info(String.format("Creating order for [%s] for site [%s]", customer.getUid(),
-				EnergizerTestConstants.POWERTOOLS_SITE));
+		LOG.info(String.format("Creating order for [%s] for site [%s]", customer.getUid(), EnergizerTestConstants.POWERTOOLS_SITE));
 
 		final List<OrderModel> orderList = getCustomerAccountService().getOrderList(customer,
 				getBaseStoreSelectorStrategy().getCurrentBaseStore(), null);
@@ -703,7 +703,15 @@ public class B2BAcceleratorTestOrderData
 				b2bOrderApprovalData.setSelectedDecision(decision);
 				b2bOrderApprovalData.setApprovalComments(comment);
 				b2bOrderApprovalData.setWorkflowActionModelCode(approval.getWorkflowActionModelCode());
-				getOrderFacade().setOrderApprovalDecision(b2bOrderApprovalData);
+				try
+				{
+					getOrderFacade().setOrderApprovalDecision(b2bOrderApprovalData);
+				}
+				catch (final Exception e)
+				{
+					// YTODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return b2bOrderApprovalData;
 			}
 		}

@@ -3,12 +3,22 @@
  */
 package com.energizer.core.datafeed.processor.customer;
 
+
+import de.hybris.platform.b2b.enums.B2BPeriodRange;
+import de.hybris.platform.b2b.model.B2BBudgetModel;
+import de.hybris.platform.b2b.model.B2BCostCenterModel;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceBudgetFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceCostCenterFacade;
+import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BBudgetData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
+import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
+import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceBudgetService;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceCostCenterService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.core.model.c2l.CurrencyModel;
@@ -19,6 +29,7 @@ import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
+import de.hybris.platform.servicelayer.type.TypeService;
 import de.hybris.platform.util.Config;
 
 import java.math.BigDecimal;
@@ -26,8 +37,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -61,6 +74,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	private FlexibleSearchService flexibleSearchService;
 	@Resource
 	private CompanyB2BCommerceService companyB2BCommerceService;
+
 	private static final Logger LOG = Logger.getLogger(EnergizerCustomerCSVProcessor.class);
 	@Resource
 	private CommonI18NService commonI18NService;
@@ -77,8 +91,20 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "b2bCommerceCostCenterFacade")
 	protected B2BCommerceCostCenterFacade b2bCommerceCostCenterFacade;
 
+	@Resource(name = "b2bCommercePermissionFacade")
+	protected B2BCommercePermissionFacade b2bCommercePermissionFacade;
+
+	@Resource(name = "b2bCommerceCostCenterService")
+	private B2BCommerceCostCenterService b2bCommerceCostCenterService;
+
+	@Resource(name = "b2bCommerceBudgetService")
+	private B2BCommerceBudgetService b2bCommerceBudgetService;
+
 	@Autowired
 	protected ConfigurationService configurationService;
+
+	@Resource(name = "typeService")
+	private TypeService typeService;
 
 	protected List<B2BCostCenterData> b2bCostCenterDatas = new ArrayList<B2BCostCenterData>();
 
@@ -208,7 +234,9 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 							addNewBudget(b2BBudgetForm);
 							//---Create cost center for the unit
 							final B2BCostCenterForm b2BCostCenterForm = getB2BCostCenterFromLocalProperties(getParentB2BUnit);
-							addCostCenter(b2BCostCenterForm);
+							addCostCenter(b2BCostCenterForm, b2BBudgetForm);
+
+							saveDefaultPermission(getParentB2BUnit);
 
 							succeedRecord++;
 							setRecordSucceeded(succeedRecord);
@@ -381,16 +409,37 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		return b2BCostCenterData;
 	}
 
-	protected void addCostCenter(final B2BCostCenterForm b2BCostCenterForm) throws CMSItemNotFoundException
+	protected void addCostCenter(final B2BCostCenterForm b2BCostCenterForm, final B2BBudgetForm b2bBudgetForm)
+			throws CMSItemNotFoundException
 	{
 		final B2BCostCenterData b2BCostCenterData = populateB2BCostCenterDataFromForm(b2BCostCenterForm);
 		try
 		{
 			b2bCommerceCostCenterFacade.addCostCenter(b2BCostCenterData);
+			final B2BCostCenterModel b2BCostCenterModel = getB2BCommerceCostCenterService().getCostCenterForCode(
+					b2BCostCenterData.getCode());
+			final B2BBudgetModel b2BBudgetModel = getB2BCommerceBudgetService().getBudgetModelForCode(b2bBudgetForm.getCode());
+			final Set<B2BBudgetModel> budgetSet = new HashSet<B2BBudgetModel>();
+			budgetSet.add(b2BBudgetModel);
+			b2BCostCenterModel.setBudgets(budgetSet);
+			getCompanyB2BCommerceService().saveModel(b2BCostCenterModel);
 		}
 		catch (final Exception e)
 		{
 			LOG.warn("Exception while saving the cost center details " + e);
+		}
+	}
+
+	protected void saveDefaultPermission(final String b2bUnit) throws CMSItemNotFoundException
+	{
+		try
+		{
+			b2bCommercePermissionFacade.addPermission(populateB2BPermission(b2bUnit));
+			b2bCommercePermissionFacade.addPermission(populateOrderThresholdTimeSpanPermission(b2bUnit));
+		}
+		catch (final Exception e)
+		{
+			LOG.warn("Exception while saving the default permissions " + e);
 		}
 	}
 
@@ -428,5 +477,93 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 				setRecordFailed(recordFailed);
 			}
 		}
+	}
+
+	protected B2BPermissionData populateB2BPermission(final String b2bUnit) throws ParseException
+	{
+		final B2BPermissionData b2BPermissionData = new B2BPermissionData();
+		b2BPermissionData.setCode(b2bUnit.concat("_").concat("defaultBudgetPerm"));
+		b2BPermissionData.setOriginalCode(b2bUnit.concat("_").concat("defaultBudgetPerm"));
+		final B2BPermissionTypeData b2BPermissionTypeData = new B2BPermissionTypeData();
+		b2BPermissionTypeData.setCode(B2BPermissionTypeEnum.B2BBUDGETEXCEEDEDPERMISSION.getCode());
+		b2BPermissionTypeData.setName(typeService.getEnumerationValue(B2BPermissionTypeEnum.B2BBUDGETEXCEEDEDPERMISSION).getName());
+		b2BPermissionData.setB2BPermissionTypeData(b2BPermissionTypeData);
+		final CurrencyData currencyData = new CurrencyData();
+		currencyData.setIsocode(configurationService.getConfiguration().getProperty("b2BBudget.Isocode").toString());
+		b2BPermissionData.setCurrency(currencyData);
+		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2bUnit));
+		return b2BPermissionData;
+	}
+
+
+	protected B2BPermissionData populateOrderThresholdTimeSpanPermission(final String b2bUnit) throws ParseException
+	{
+		final B2BPermissionData b2BPermissionData = new B2BPermissionData();
+		b2BPermissionData.setCode(b2bUnit.concat("_").concat("defaultOrdThresholdPerm"));
+		b2BPermissionData.setOriginalCode(b2bUnit.concat("_").concat("defaultOrdThresholdPerm"));
+		final B2BPermissionTypeData b2BPermissionTypeData = new B2BPermissionTypeData();
+		b2BPermissionTypeData.setCode(B2BPermissionTypeEnum.B2BORDERTHRESHOLDTIMESPANPERMISSION.getCode());
+		b2BPermissionTypeData.setName(typeService.getEnumerationValue(B2BPermissionTypeEnum.B2BORDERTHRESHOLDTIMESPANPERMISSION)
+				.getName());
+		b2BPermissionData.setB2BPermissionTypeData(b2BPermissionTypeData);
+		final CurrencyData currencyData = new CurrencyData();
+		currencyData.setIsocode(configurationService.getConfiguration().getProperty("b2BBudget.Isocode").toString());
+		b2BPermissionData.setCurrency(currencyData);
+		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2bUnit));
+		b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf("WEEK"));
+		b2BPermissionData.setValue(Double.valueOf(formatFactory.createNumberFormat().parse("100000000").doubleValue()));
+		return b2BPermissionData;
+
+	}
+
+	/**
+	 * @return the companyB2BCommerceService
+	 */
+	public CompanyB2BCommerceService getCompanyB2BCommerceService()
+	{
+		return companyB2BCommerceService;
+	}
+
+	/**
+	 * @param companyB2BCommerceService
+	 *           the companyB2BCommerceService to set
+	 */
+	public void setCompanyB2BCommerceService(final CompanyB2BCommerceService companyB2BCommerceService)
+	{
+		this.companyB2BCommerceService = companyB2BCommerceService;
+	}
+
+	/**
+	 * @return the b2BCommerceCostCenterService
+	 */
+	public B2BCommerceCostCenterService getB2BCommerceCostCenterService()
+	{
+		return b2bCommerceCostCenterService;
+	}
+
+	/**
+	 * @param b2bCommerceCostCenterService
+	 *           the b2BCommerceCostCenterService to set
+	 */
+	public void setB2BCommerceCostCenterService(final B2BCommerceCostCenterService b2BCommerceCostCenterService)
+	{
+		b2bCommerceCostCenterService = b2BCommerceCostCenterService;
+	}
+
+	/**
+	 * @return the b2BCommerceBudgetService
+	 */
+	public B2BCommerceBudgetService getB2BCommerceBudgetService()
+	{
+		return b2bCommerceBudgetService;
+	}
+
+	/**
+	 * @param b2bCommerceBudgetService
+	 *           the b2BCommerceBudgetService to set
+	 */
+	public void setB2BCommerceBudgetService(final B2BCommerceBudgetService b2BCommerceBudgetService)
+	{
+		b2bCommerceBudgetService = b2BCommerceBudgetService;
 	}
 }
