@@ -464,6 +464,18 @@ public class AccountPageController extends AbstractSearchPageController
 		customerData.setContactNumber(updateProfileForm.getContactNumber());
 		LOG.info("Selected passwordQuestion: " + updateProfileForm.getPasswordQuestion());
 		LOG.info("Selected passwordAnswer: " + updateProfileForm.getPasswordAnswer());
+
+		if (updateProfileForm.getPasswordQuestion().equals("") || updateProfileForm.getPasswordQuestion().equals(null))
+		{
+			bindingResult.rejectValue("passwordQuestion", "profile.passwordQuestion.invalid", new Object[] {},
+					"profile.passwordQuestion.invalid");
+		}
+		if (updateProfileForm.getPasswordAnswer().equals("") || updateProfileForm.getPasswordAnswer().equals(null))
+		{
+			bindingResult.rejectValue("passwordAnswer", "profile.passwordAnswer.invalid", new Object[] {},
+					"profile.passwordAnswer.invalid");
+		}
+
 		customerData.setPasswordQuestion(updateProfileForm.getPasswordQuestion());
 		customerData.setPasswordAnswer(updateProfileForm.getPasswordAnswer());
 		model.addAttribute("titleData", userFacade.getTitles());
