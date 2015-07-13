@@ -73,7 +73,10 @@ public class DefaultEnergizerPasswordExpiryFacade implements EnergizerPasswordEx
 		params.put("username", UID);
 		final SearchResult<EnergizerB2BCustomerModel> result = flexibleSearchService.search(flexiSearchQuery, params);
 		final List<EnergizerB2BCustomerModel> energizerB2BCustomerModels = result.getResult();
-		b2bCustomerModel = energizerB2BCustomerModels.get(0);
+		if (null != energizerB2BCustomerModels && energizerB2BCustomerModels.size() > 0)
+		{
+			b2bCustomerModel = energizerB2BCustomerModels.get(0);
+		}
 		return b2bCustomerModel;
 	}
 

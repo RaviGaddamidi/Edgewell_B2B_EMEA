@@ -50,7 +50,7 @@ public class EnergizerPasswordNotificationUtil
 
 			//maxDate = sdf.parse("12-Jun-2015");
 			//final String passwordModifiedTime = sdf.format(maxDate);
-			if (null != b2bCustomerModel.getPasswordModifiedTime())
+			if (null != b2bCustomerModel && null != b2bCustomerModel.getPasswordModifiedTime())
 			{
 				final Date latestModifiedTime = b2bCustomerModel.getPasswordModifiedTime();
 
