@@ -313,7 +313,7 @@ INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter
 
 
 INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang];&componentRef
-;;FooterParagraphComponent;"<br/>&copy;2015 Energizer &nbsp;&nbsp;&nbsp;Trademark:Energizer and certain graphic designs are trademarks of Energizer";FooterParagraphComponent
+;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell &nbsp;&nbsp;&nbsp;Trademark:Edgewell and certain graphic designs are trademarks of Edgewell";FooterParagraphComponent
 ;;EmptyCartMessageParagraphComponent;"<h2>You have no items in your Cart.</h2>";EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
