@@ -21,14 +21,9 @@ import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.B2BPermissionForm;
-import com.energizer.storefront.forms.B2BPermissionTypeSelectionForm;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -42,6 +37,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.breadcrumb.Breadcrumb;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.B2BPermissionForm;
+import com.energizer.storefront.forms.B2BPermissionTypeSelectionForm;
 
 
 /**
@@ -69,6 +71,17 @@ public class PermissionManagementPageController extends MyCompanyPageController
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
 		final SearchPageData<B2BPermissionData> searchPageData = b2bCommercePermissionFacade.getPagedPermissions(pageableData);
+		final List<B2BPermissionData> filteredPermissions = new ArrayList<B2BPermissionData>();
+		for (final B2BPermissionData permissionData : searchPageData.getResults())
+		{
+			if (permissionData.getB2BPermissionTypeData().getCode()
+					.equals(B2BPermissionTypeEnum.B2BORDERTHRESHOLDPERMISSION.getCode()))
+			{
+				filteredPermissions.add(permissionData);
+			}
+		}
+		searchPageData.getPagination().setTotalNumberOfResults(filteredPermissions.size());
+		searchPageData.setResults(filteredPermissions);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "managePermissions");
 		model.addAttribute("metaRobots", "no-index,no-follow");

@@ -956,5 +956,25 @@
 					 value="#{configurationService.configuration.getProperty('guest.orderstatuspage.access.expiry.month')}"/>
 	</bean>
 	
+	<bean id="findApprovers"
+	      class="com.energizer.core.actions.FindApprovers"
+	      parent="abstractSimpleB2BApproveOrderDecisionAction">
+		<property name="b2bPermissionService" ref="energizerB2BPermissionService"/>
+		<property name="permissionResultHelper" ref="permissionResultHelper"/>
+	</bean>
 	
+	<bean id="energizerB2BPermissionService"
+	      class="com.energizer.services.order.EnergizerB2BPermissionService"
+	      parent="defaultB2BPermissionService">
+	</bean>
+	
+	<!--  approval process changes starts -->
+	<!-- <alias alias="b2BAbstractWorkflowAutomatedAction" name="energizerB2BAbstractWorkflowAutomatedAction"/> -->
+	<bean id="b2BAbstractWorkflowAutomatedAction" class="com.energizer.core.actions.B2BAbstractWorkflowAutomatedAction" abstract="true" >
+		<property name="modelService" ref="modelService"/>
+	</bean>
+	<!-- <alias alias="approveDecisionAutomatedAction" name="energizerApproveDecisionAutomatedAction"/> -->
+	<bean name="approveDecisionAutomatedAction" class="com.energizer.core.actions.ApproveDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
+		<property name="eventService" ref="eventService"/>
+	</bean>
 </beans>
