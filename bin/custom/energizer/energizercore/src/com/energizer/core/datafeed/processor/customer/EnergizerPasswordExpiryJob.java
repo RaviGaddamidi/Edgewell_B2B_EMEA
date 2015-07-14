@@ -81,13 +81,9 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 		{
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 			final Date maxDate;
-			//maxDate = sdf.parse("17-Jun-2015");
-			//final String passwordModifiedTime = sdf.format(maxDate);
 			if (null != energizerB2BCustomerModel.getPasswordModifiedTime())
 			{
 				final Date latestModifiedTime = energizerB2BCustomerModel.getPasswordModifiedTime();
-
-				//final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
 				final Calendar calPasswordModifiedDate = Calendar.getInstance();
 				calPasswordModifiedDate.setTime(latestModifiedTime);
 
@@ -112,9 +108,6 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 					{
 						final Calendar calCurrentDate = Calendar.getInstance();
 						final int remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
-						final long diff = calPasswordModifiedDate.getTimeInMillis() - calCurrentDate.getTimeInMillis();
-
-						//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
 
 						LOG.info("Your Password will expire in " + remainingDays);
 						if (remainingDays == 10 || remainingDays == 1)
@@ -128,7 +121,7 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 				else
 				{
 
-					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has not been expired");
+					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has been expired");
 					prepareEmail(energizerB2BCustomerModel, 0);
 				}
 

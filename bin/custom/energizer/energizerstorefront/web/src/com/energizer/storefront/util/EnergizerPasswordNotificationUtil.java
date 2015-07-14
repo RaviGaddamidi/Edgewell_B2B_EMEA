@@ -48,13 +48,9 @@ public class EnergizerPasswordNotificationUtil
 
 			b2bCustomerModel = defaultEnergizerPasswordExpiryFacade.getCustomerByUID(userName);
 
-			//maxDate = sdf.parse("12-Jun-2015");
-			//final String passwordModifiedTime = sdf.format(maxDate);
 			if (null != b2bCustomerModel && null != b2bCustomerModel.getPasswordModifiedTime())
 			{
 				final Date latestModifiedTime = b2bCustomerModel.getPasswordModifiedTime();
-
-				//final Date latestModifiedTime = sdf.parse(passwordModifiedTime);
 				final Calendar calPasswordModifiedDate = Calendar.getInstance();
 				calPasswordModifiedDate.setTime(latestModifiedTime);
 
@@ -81,16 +77,12 @@ public class EnergizerPasswordNotificationUtil
 					{
 						final Calendar calCurrentDate = Calendar.getInstance();
 						final Integer remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
-						final long diff = calPasswordModifiedDate.getTimeInMillis() - calCurrentDate.getTimeInMillis();
-
-						//final int diffInDays = (int) (diff / (1000 * 60 * 60 * 24));
 
 						LOG.info("Your Password will expire in " + remainingDays);
 						//if (remainingDays == 10 || remainingDays == 1)
 						//{
 						returnMessage = "account.password.expiry.notification";
 						daysCount = remainingDays.toString();
-						//+ remainingDays + "account.password.daycount";
 						messageValue = "0";
 						//}
 
