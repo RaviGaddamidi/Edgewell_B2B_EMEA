@@ -853,8 +853,7 @@ public class AccountPageController extends AbstractSearchPageController
 			if (e.getMessage().equalsIgnoreCase("Process already completed"))
 			{
 				GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
-						"Approval process already completed by an another approver");
-				//GlobalMessages.addErrorMessage(model, "Approval process already completed by an another approver");
+						"text.approval.process.already.completed");
 				return REDIRECT_MY_ACCOUNT + "/orderApprovalDetails/" + orderApprovalDecisionForm.getWorkFlowActionCode();
 			}
 			else
