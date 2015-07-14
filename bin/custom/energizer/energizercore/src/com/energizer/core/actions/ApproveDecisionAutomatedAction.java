@@ -60,6 +60,8 @@ public class ApproveDecisionAutomatedAction extends B2BAbstractWorkflowAutomated
 			{
 				LOG.info("Principal Assigned to %s action is %s " + new Object[]
 				{ _action.getName(), _action.getPrincipalAssigned().getUid() });
+				//activate all the action in the work flow so that they will be moved to next step.
+				// When one approver approves the orders, others approvers ' action will be triggered. 
 				activateLinks(_action);
 			}
 			order = process.getOrder();

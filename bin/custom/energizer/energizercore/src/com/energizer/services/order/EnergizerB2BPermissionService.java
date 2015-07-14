@@ -68,6 +68,14 @@ public class EnergizerB2BPermissionService extends DefaultB2BPermissionService
 		return permissionResult;
 	}
 
+	/**
+	 * this method will return all the permissions which are open without removing duplicates.
+	 * 
+	 * @param order
+	 * @param employee
+	 * @param openPermissions
+	 * @return
+	 */
 	public List<B2BPermissionResultModel> getApproversForOpenPermission(final AbstractOrderModel order,
 			final B2BCustomerModel employee, final Collection<B2BPermissionResultModel> openPermissions)
 	{
