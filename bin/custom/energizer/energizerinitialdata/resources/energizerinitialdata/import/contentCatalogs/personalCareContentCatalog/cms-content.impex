@@ -317,7 +317,7 @@ INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];con
 ;;EmptyCartMessageParagraphComponent;"<h2>You have no items in your Cart.</h2>";EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;FooterSlot;FooterComponent,FooterParagraphComponent
+;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell &nbsp;&nbsp;&nbsp;Trademark:Edgewell and certain graphic designs are trademarks of Edgewell";FooterParagraphComponent
 ;;EmptyCartMessageParagraphComponentSlot;EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true]
