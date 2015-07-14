@@ -173,6 +173,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 			customer.setContactNumber(customerData.getContactNumber());
 			customer.setPasswordQuestion(customerData.getPasswordQuestion());
 			customer.setPasswordAnswer(customerData.getPasswordAnswer());
+			customer.setIsPasswordQuestionSet(true);
 			customerAccountService.updateProfile(customer, customerData.getTitleCode(), name, customerData.getUid());
 			getModelService().save(customer);
 		}
