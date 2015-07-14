@@ -45,6 +45,7 @@ import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.util.GlobalMessages;
 import com.energizer.storefront.forms.ForgottenPwdForm;
+import com.energizer.storefront.forms.ResetPwdForm;
 import com.energizer.storefront.forms.UpdatePwdForm;
 
 
@@ -119,6 +120,79 @@ public class PasswordResetPageController extends AbstractPageController
 			return ControllerConstants.Views.Fragments.Password.ForgotPasswordValidationMessage;
 		}
 	}
+
+
+	@RequestMapping(value = "/reset-password", method = RequestMethod.GET)
+	public String getPasswordResetPage(final Model model, @RequestParam(required = false) final String uid)
+			throws CMSItemNotFoundException
+	{
+		final ResetPwdForm resetPwdForm = new ResetPwdForm();
+		if (null != uid)
+		{
+			resetPwdForm.setEmail(uid);
+		}
+		//model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
+		model.addAttribute(resetPwdForm);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+		return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+	}
+
+
+	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+	public String passwordResetPage(@Valid final ResetPwdForm resetPwdForm, final BindingResult bindingResult, final Model model)
+			throws CMSItemNotFoundException
+	{
+		model.addAttribute(resetPwdForm);
+		final String forgottenPassExpValue = Config.getParameter(FORGOTTEN_PASSWORD_EXP_VALUE);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+
+		if (!bindingResult.hasErrors())
+		{
+			try
+			{
+				final EnergizerB2BCustomerModel customerModel = defaultEnergizerCompanyB2BCommerceFacade
+						.getExistingUserForUID(resetPwdForm.getEmail());
+
+
+				if (customerModel == null)
+				{
+					bindingResult.rejectValue("email", "profile.email.incorrect", new Object[] {}, "profile.email.incorrect");
+				}
+				else
+				{
+
+					getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
+					GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+							"account.confirmation.forgotten.password.link.sent", new Object[]
+							{ forgottenPassExpValue });
+					model.addAttribute(new ForgottenPwdForm());
+
+				}
+			}
+			catch (final Exception e)
+			{
+
+			}
+
+		}
+		if (bindingResult.hasErrors())
+		{
+			GlobalMessages.addErrorMessage(model, "form.global.error");
+			//model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
+			model.addAttribute(resetPwdForm);
+			storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+			return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+		}
+
+		return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+	}
+
 
 	@RequestMapping(value = "/request-page", method = RequestMethod.GET)
 	public String getPasswordRequestPage(final Model model, @RequestParam(required = false) final String uid)
@@ -250,8 +324,6 @@ public class PasswordResetPageController extends AbstractPageController
 					return ControllerConstants.Views.Pages.Password.PasswordResetChangePage;
 				}
 				//	getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
-
-
 
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.password.updated");
