@@ -21,6 +21,7 @@ import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUserGroupData;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
@@ -413,15 +414,17 @@ public class UserManagementPageController extends MyCompanyPageController
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
 		final SearchPageData<B2BPermissionData> searchPageData = b2bCommerceUserFacade.getPagedPermissionsForCustomer(pageableData,
 				user);
-		final List<B2BPermissionData> orderTreholdPermissionList = new ArrayList<B2BPermissionData>();
-		for (final B2BPermissionData permData : searchPageData.getResults())
+		final List<B2BPermissionData> filteredPermissions = new ArrayList<B2BPermissionData>();
+		for (final B2BPermissionData permissionData : searchPageData.getResults())
 		{
-			if (permData.getB2BPermissionTypeData().getCode().equalsIgnoreCase("B2BOrderThresholdPermission"))
+			if (permissionData.getB2BPermissionTypeData().getCode()
+					.equals(B2BPermissionTypeEnum.B2BORDERTHRESHOLDPERMISSION.getCode()))
 			{
-				orderTreholdPermissionList.add(permData);
+				filteredPermissions.add(permissionData);
 			}
 		}
-		searchPageData.setResults(orderTreholdPermissionList);
+		searchPageData.getPagination().setTotalNumberOfResults(filteredPermissions.size());
+		searchPageData.setResults(filteredPermissions);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "permissions");
 		model.addAttribute("baseUrl", "/my-company/organization-management/manage-users");

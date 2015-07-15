@@ -57,9 +57,9 @@
 						<th id="header5">
 							<spring:theme code="text.company.${action}.timespan.title" text="TimeSpan"/>
 						</th>
-						<th id="header6">
+						<%-- <th id="header6">
 							<spring:theme code="text.company.column.parentUnit.name" text="Parent Unit"/>
-						</th>
+						</th> --%>
 						<th id="header7">
 							<spring:theme code="text.company.column.status.name" text="Status"/>
 						</th>
@@ -97,11 +97,11 @@
 									<p>${result.timeSpan}</p>
 								</ycommerce:testId>
 							</td>
-							<td headers="header6">
+							<%-- <td headers="header6">
 								<ycommerce:testId code="${action}_b2bunit_label">
 									<p>${result.unit.uid}</p>
 								</ycommerce:testId>
-							</td>
+							</td> --%>
 
 							<td headers="header7">
 								<ycommerce:testId code="${action}_status_label">

@@ -49,12 +49,12 @@
 								<th id="header2">
 									<spring:theme code="text.company.column.roles.name" text="Roles"/>
 								</th>
-								<th id="header3">
+								<%-- <th id="header3">
 									<spring:theme code="text.company.column.parentUnit.name" text="Parent Unit"/>
 								</th>
 								<th id="header4">
 								<spring:theme code="text.company.manageUser.user.costCenter" text="Cost center"/>
-								</th>
+								</th> --%>
 								<th id="header5">
 									<spring:theme code="text.company.status.title" text="Status"/>
 								</th>
@@ -87,10 +87,10 @@
 											</c:forEach>
 										</ycommerce:testId>
 									</td>
-									<td headers="header3">
+									<%-- <td headers="header3">
 										<ycommerce:testId code="my-company_user_unit_label">
-<%-- 										As per demo discussion, this links are commented 
-	<p><a href="${viewUnitUrl}">${user.unit.name}</a></p> --%>
+										As per demo discussion, this links are commented 
+	<p><a href="${viewUnitUrl}">${user.unit.name}</a></p>
 												${user.unit.name}
 										</ycommerce:testId>
 									</td>
@@ -101,13 +101,13 @@
 													var="viewCostCenterUrl">
 													<spring:param name="costCenterCode" value="${costCenter.code}"/>
 												</spring:url>
-												<%--  										As per demo discussion, this links are commented
+												 										As per demo discussion, this links are commented
 												by Selva
-												<p><a href="${viewCostCenterUrl}">${costCenter.code}</a></p> --%>
+												<p><a href="${viewCostCenterUrl}">${costCenter.code}</a></p>
 												<p>${costCenter.code}</p> 
 											</c:forEach>
 										</ycommerce:testId>
-									</td>
+									</td> --%>
 									<td headers="header5">
 										<ycommerce:testId code="costCenter_status_label">
 											<p>
