@@ -42,7 +42,7 @@ UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];title[lang=en]
 UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=en]
 
 # CMS Navigation Nodes - My Company
-UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title[lang=$lang]
 ;CompanyLeftNavNode;; su empresa; su empresa
 ;CompanyBudgetNavNode;; su empresa; Administrar Presupuestos
 ;CompanyCostCenterNavNode;; su empresa; Administrar CostCenters

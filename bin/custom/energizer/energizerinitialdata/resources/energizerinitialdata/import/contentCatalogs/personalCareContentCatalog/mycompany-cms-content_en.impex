@@ -37,7 +37,7 @@ UPDATE ProductReferencesComponent;$contentCV[unique=true];uid[unique=true];title
 UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];title[lang=en]
 
 # CMS Navigation Nodes - My Company
-UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title
+UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title[lang=$lang]
 ;CompanyLeftNavNode;; Your Company;Your Company
 ;CompanyBudgetNavNode;; Your Company;Manage Budgets
 ;CompanyCostCenterNavNode;; Your Company;Manage CostCenters

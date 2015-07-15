@@ -52,7 +52,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 
 
 # CMS Navigation Nodes - My Company
-INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title;parent(uid, $contentCV);links(&linkRef);&nodeRef
+INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;title[lang=$lang];parent(uid, $contentCV);links(&linkRef);&nodeRef
 ;CompanyLeftNavNode;;Your Company;Your Company;SiteRootNode;CompanyOrganizationtLink,CompanyBudgetLink,CompanyCostCenterLink,CompanyUnitsLink,CompanyUsersLink,CompanyUserGroupsLink,CompanyPermissionsLink;CompanyLeftNavNode
 ;CompanyBudgetNavNode;;Your Company;Manage Budgets;SiteRootNode;CompanyBudgetAddLink,CompanyBudgetEditLink;CompanyBudgetNavNode
 ;CompanyCostCenterNavNode;;Your Company;Manage CostCenters;SiteRootNode;CompanyCostCenterAddLink,CompanyCostCenterEditLink;CompanyCostCenterNavNode
