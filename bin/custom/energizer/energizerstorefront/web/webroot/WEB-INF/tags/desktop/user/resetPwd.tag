@@ -37,18 +37,18 @@
 				<form:form method="post" commandName="resetPwdForm">
 					<div class="form_field-elements">
 						<div class="form_field-input">
-							<formElement:formInputBox idKey="resetPwd.email"
-								labelKey="resetPwd.email" path="email" inputCSS="text"
+							<formElement:formInputBox idKey="forgottenPwd.email"
+								labelKey="forgottenPwd.email" path="email" inputCSS="text"
 								mandatory="true" />
 								
 								    
 								
 							<button class="positive" type="submit">
-								<spring:theme code="resetPwd.submit" />
+								<spring:theme code="forgottenPwd.submit" />
 							</button>
 						</div>
 						<ycommerce:testId code="User_Cancel_button">
-							<a href="${cancelUrl}" class="button forgotpasswordcancel"><spring:theme
+							<a href="${cancelUrl}" class="button positive"><spring:theme
 									code="b2bcustomer.cancel" text="Cancel" /></a>
 						</ycommerce:testId>
 					</div>
