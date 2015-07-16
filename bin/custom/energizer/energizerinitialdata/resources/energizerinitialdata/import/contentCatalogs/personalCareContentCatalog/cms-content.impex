@@ -228,13 +228,13 @@ INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&com
 #;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.playtexlatinoamerica.com/;/images/banners/homepage/banners 950px x600px Q4.jpg;true
 #;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px X3.jpg;true
 #;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/BB  950px x 600px BB.jpg;true
-;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.playtexlatinoamerica.com/;/images/banners/homepage/playtex 950px x 600px ENG.jpg;true
-;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px carefree ENG.jpg;true
-;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px stayfree ENG.jpg;true
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px X3 ENG.jpg;true
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px HT ENG.jpg;true
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px Q4 ENG.jpg;true
 ;;HomePageBannerComponent44;Homepage banner component44;HomePageBannerComponent44;http://www.stayfree.com/;/images/banners/homepage/BB  950px x 600px BB ENG.jpg;true
-;;HomePageBannerComponent55;Homepage banner component55;HomePageBannerComponent55;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px HT ENG.jpg;true
-;;HomePageBannerComponent66;Homepage banner component66;HomePageBannerComponent66;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px X3 ENG.jpg;true
-;;HomePageBannerComponent77;Homepage banner component77;HomePageBannerComponent77;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px Q4 ENG.jpg;true
+;;HomePageBannerComponent55;Homepage banner component55;HomePageBannerComponent55;http://www.playtexlatinoamerica.com/;/images/banners/homepage/playtex 950px x 600px ENG.jpg;true
+;;HomePageBannerComponent66;Homepage banner component66;HomePageBannerComponent66;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px carefree ENG.jpg;true
+;;HomePageBannerComponent77;Homepage banner component77;HomePageBannerComponent77;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px stayfree ENG.jpg;true
 
 
 INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
