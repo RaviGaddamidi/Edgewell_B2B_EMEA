@@ -1,4 +1,4 @@
-## messageSource=classpath:/energizercore/messages/email-replenishmentOrderPlaced_$lang.properties
+## messageSource=classpath:/energizercore/messages/email-replenishmentOrderPlaced_en.properties
 #macro( genHtmlBoldFont $text )
 <font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif"><b>$text</b></font>
 #end
