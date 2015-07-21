@@ -77,9 +77,9 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;FeminineCare_Playtex_Sport_Link;Sport Link;c/Feminine Care-Playtex-Sport;FeminineCare_Playtex_Sport_Link
 ;;FeminineCare_Stayfree_Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree-Stayfree;FeminineCare_Stayfree_Stayfree_Link
 ;;FeminineCare_o.b._o.b._Link;o.b. Link;c/Feminine Care-o.b.-o.b.;FeminineCare_o.b._o.b._Link
-;;InfantCare_Playtex_Dropins_Link;Dropins Link;c/Infant Care-Playtex-Dropins;InfantCare_Playtex_Dropins_Link
+;;InfantCare_Playtex_Dropins_Link;Drop Ins Link;c/Infant Care-Playtex-Drop Ins;InfantCare_Playtex_Dropins_Link
 ;;InfantCare_Playtex_VentAire_Link;VentAire Link;c/Infant Care-Playtex-VentAire;InfantCare_Playtex_VentAire_Link
-;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-Dropins & VentAire;InfantCare_Playtex_DropinsVentAire_Link
+;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-Dropins   VentAire;InfantCare_Playtex_DropinsVentAire_Link
 ;;InfantCare_Playtex_CupsMealtime_Link;Cups & Mealtime Link;c/Infant Care-Playtex-Cups & Mealtime;InfantCare_Playtex_CupsMealtime_Link
 ;;InfantCare_Playtex_DiaperGenie_Link;Diaper Genie Link;c/Infant Care-Playtex-Diaper Genie;InfantCare_Playtex_DiaperGenie_Link
 ;;InfantCare_Playtex_Accessories_Link;Accessories Link;c/Infant Care-Playtex-Accessories;InfantCare_Playtex_Accessories_Link
@@ -230,11 +230,12 @@ INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&com
 #;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/BB  950px x 600px BB.jpg;true
 ;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px X3 ENG.jpg;true
 ;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px HT ENG.jpg;true
-;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px Q4 ENG.jpg;true
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.playtexlatinoamerica.com/;/images/banners/homepage/banners 950px x600px Q4 ENG.jpg;true
 ;;HomePageBannerComponent44;Homepage banner component44;HomePageBannerComponent44;http://www.stayfree.com/;/images/banners/homepage/BB  950px x 600px BB ENG.jpg;true
 ;;HomePageBannerComponent55;Homepage banner component55;HomePageBannerComponent55;http://www.playtexlatinoamerica.com/;/images/banners/homepage/playtex 950px x 600px ENG.jpg;true
 ;;HomePageBannerComponent66;Homepage banner component66;HomePageBannerComponent66;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px carefree ENG.jpg;true
 ;;HomePageBannerComponent77;Homepage banner component77;HomePageBannerComponent77;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px stayfree ENG.jpg;true
+
 
 
 INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;banners(&componentRef)
@@ -313,11 +314,11 @@ INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter
 
 
 INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang];&componentRef
-;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell &nbsp;&nbsp;&nbsp;Trademark:Edgewell and certain graphic designs are trademarks of Edgewell";FooterParagraphComponent
+;;FooterParagraphComponent;"<br/>&copy;2015 Energizer &nbsp;&nbsp;&nbsp;Trademark:Energizer and certain graphic designs are trademarks of Energizer";FooterParagraphComponent
 ;;EmptyCartMessageParagraphComponent;"<h2>You have no items in your Cart.</h2>";EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell &nbsp;&nbsp;&nbsp;Trademark:Edgewell and certain graphic designs are trademarks of Edgewell";FooterParagraphComponent
+;;FooterSlot;FooterComponent,FooterParagraphComponent
 ;;EmptyCartMessageParagraphComponentSlot;EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true]

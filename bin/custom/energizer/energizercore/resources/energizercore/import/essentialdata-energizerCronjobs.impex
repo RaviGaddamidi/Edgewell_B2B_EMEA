@@ -17,9 +17,9 @@ $interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrde
 $interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
 $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
 
-$technicalEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
-$businessEmailAddress=ehpvalidation@gmail.com,kaushik.ganguly@energizer.com
-$emailAddress=ehpvalidation@gmail.com
+$technicalEmailAddress=DavidL.Kronmiller@Edgewell.com,Margaret.Lang@Edgewell.com,Erik.Villa@energizer.com
+$businessEmailAddress=Erik.Villa@energizer.com
+$emailAddress=Erik.Villa@energizer.com
 
 
 INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
