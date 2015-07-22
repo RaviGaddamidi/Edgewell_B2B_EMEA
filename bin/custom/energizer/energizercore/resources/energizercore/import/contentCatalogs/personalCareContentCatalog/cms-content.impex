@@ -77,7 +77,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 ;;FeminineCare_Playtex_Sport_Link;Sport Link;c/Feminine Care-Playtex-Sport;FeminineCare_Playtex_Sport_Link
 ;;FeminineCare_Stayfree_Stayfree_Link;Stayfree Link;c/Feminine Care-Stayfree-Stayfree;FeminineCare_Stayfree_Stayfree_Link
 ;;FeminineCare_o.b._o.b._Link;o.b. Link;c/Feminine Care-o.b.-o.b.;FeminineCare_o.b._o.b._Link
-;;InfantCare_Playtex_Dropins_Link;Dropins Link;c/Infant Care-Playtex-Dropins;InfantCare_Playtex_Dropins_Link
+;;InfantCare_Playtex_Dropins_Link;Drop Ins Link;c/Infant Care-Playtex-Dropins;InfantCare_Playtex_Drop Ins_Link
 ;;InfantCare_Playtex_VentAire_Link;VentAire Link;c/Infant Care-Playtex-VentAire;InfantCare_Playtex_VentAire_Link
 ;;InfantCare_Playtex_DropinsVentAire_Link;Dropins / Infant Link;c/Infant Care-Playtex-Dropins & VentAire;InfantCare_Playtex_DropinsVentAire_Link
 ;;InfantCare_Playtex_CupsMealtime_Link;Cups & Mealtime Link;c/Infant Care-Playtex-Cups & Mealtime;InfantCare_Playtex_CupsMealtime_Link
@@ -141,7 +141,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;FeminineCare_Playtex_Sport_Nav_Node;;Sport;Playtex_Nav_Node; ;FeminineCare_Playtex_Sport_Link;FeminineCare_Playtex_Sport_Nav_Node
 ;FeminineCare_Stayfree_Stayfree_Nav_Node;;Sport;Stayfree_Nav_Node; ;FeminineCare_Stayfree_Stayfree_Link;FeminineCare_Stayfree_Stayfree_Nav_Node
 ;FeminineCare_o.b._o.b._Nav_Node;;o.b.;Ob_Nav_Node; ;FeminineCare_o.b._o.b._Link;FeminineCare_o.b._o.b._Nav_Node
-;InfantCare_Playtex_Dropins_Nav_Node;;Drop Ins;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Dropins_Link;InfantCare_Playtex_Drop Ins_Nav_Node
+;InfantCare_Playtex_Dropins_Nav_Node;;Dropins;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Dropins_Link;InfantCare_Playtex_Dropins_Nav_Node
 ;InfantCare_Playtex_VentAire_Nav_Node;;VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_VentAire_Link;InfantCare_Playtex_VentAire_Nav_Node
 ;InfantCare_Playtex_DropinsVentAire_Nav_Node;;Dropins VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_DropinsVentAire_Link;InfantCare_Playtex_DropinsVentAire_Nav_Node
 ;InfantCare_Playtex_CupsMealtime_Nav_Node;;CupsMealtime;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_CupsMealtime_Link;InfantCare_Playtex_CupsMealtime_Nav_Node
