@@ -141,7 +141,7 @@ INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;pa
 ;FeminineCare_Playtex_Sport_Nav_Node;;Sport;Playtex_Nav_Node; ;FeminineCare_Playtex_Sport_Link;FeminineCare_Playtex_Sport_Nav_Node
 ;FeminineCare_Stayfree_Stayfree_Nav_Node;;Sport;Stayfree_Nav_Node; ;FeminineCare_Stayfree_Stayfree_Link;FeminineCare_Stayfree_Stayfree_Nav_Node
 ;FeminineCare_o.b._o.b._Nav_Node;;o.b.;Ob_Nav_Node; ;FeminineCare_o.b._o.b._Link;FeminineCare_o.b._o.b._Nav_Node
-;InfantCare_Playtex_Dropins_Nav_Node;;Dropins;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Dropins_Link;InfantCare_Playtex_Dropins_Nav_Node
+;InfantCare_Playtex_Dropins_Nav_Node;;Drop Ins;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_Dropins_Link;InfantCare_Playtex_Drop Ins_Nav_Node
 ;InfantCare_Playtex_VentAire_Nav_Node;;VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_VentAire_Link;InfantCare_Playtex_VentAire_Nav_Node
 ;InfantCare_Playtex_DropinsVentAire_Nav_Node;;Dropins VentAire;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_DropinsVentAire_Link;InfantCare_Playtex_DropinsVentAire_Nav_Node
 ;InfantCare_Playtex_CupsMealtime_Nav_Node;;CupsMealtime;Infant_Playtex_Nav_Node; ;InfantCare_Playtex_CupsMealtime_Link;InfantCare_Playtex_CupsMealtime_Nav_Node
@@ -317,7 +317,7 @@ INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];con
 ;;EmptyCartMessageParagraphComponent;"<h2>You have no items in your Cart.</h2>";EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
-;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell Personal Care &nbsp;&nbsp;&nbsp;SCHICK, WILKINSON SWORD, PERSONNA, EDGE, SKINTIMATE, GENTLE GLIDE, 360°, 360° PROTECTION, PLAY ON, SPORT, SPORT LEVEL PROTECTION, FLEXFIT, CAREFREE, STAYFREE, THERMOCONTROL, O.B., BANANA BOAT, HAWAIIAN TROPIC, LITTER GENIE, WET ONES and associated word marks and logos are trademarks or registered trademarks of Edgewell Personal Care Brands, LLC (or an Edgewell affiliate company) in the United States and other countries throughout the world. PLAYTEX is a trademark used under license.";FooterParagraphComponent
+#;;FooterParagraphComponent;"<br/>&copy;2015 Edgewell Personal Care &nbsp;&nbsp;&nbsp;SCHICK, WILKINSON SWORD, PERSONNA, EDGE, SKINTIMATE, GENTLE GLIDE, 360°, 360° PROTECTION, PLAY ON, #SPORT, SPORT LEVEL PROTECTION, FLEXFIT, CAREFREE, STAYFREE, THERMOCONTROL, O.B., BANANA BOAT, HAWAIIAN TROPIC, LITTER GENIE, WET ONES and associated word marks and logos are trademarks or #registered trademarks of Edgewell Personal Care Brands, LLC (or an Edgewell affiliate company) in the United States and other countries throughout the world. PLAYTEX is a trademark used #under license.";FooterParagraphComponent
 ;;EmptyCartMessageParagraphComponentSlot;EmptyCartMessageParagraphComponent
 
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CartPageTemplate'];contentSlot(uid,$contentCV)[unique=true]
