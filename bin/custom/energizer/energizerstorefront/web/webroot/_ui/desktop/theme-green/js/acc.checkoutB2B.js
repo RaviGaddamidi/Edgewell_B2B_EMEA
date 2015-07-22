@@ -353,8 +353,8 @@ ACC.checkoutB2B = {
                     	  // alert("data.requestedDeliveryDate "+data.requestedDeliveryDate);
                           leadTimeDate=new Date(data.requestedDeliveryDate);
                           // alert("leadTimeDate "+leadTimeDate);
-                          datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
-                          monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+                          datePart=(leadTimeDate.getDate().length < 2)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+                          monthPart=(leadTimeDate.getMonth().length < 2)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
                           yearPart=leadTimeDate.getFullYear().toString();
                           datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
                         }
@@ -364,8 +364,8 @@ ACC.checkoutB2B = {
                           if(document.leadTime!=null && document.leadTime>0)
                             {
                               leadTimeDate=new Date(new Date().getTime()+(86400000*document.leadTime));
-                              datePart=(leadTimeDate.getDate()<10)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
-                              monthPart=(leadTimeDate.getMonth()<10)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+                              datePart=(leadTimeDate.getDate().length < 2)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+                              monthPart=(leadTimeDate.getMonth().length < 2)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
                               yearPart=leadTimeDate.getFullYear().toString();
                               datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
                             }

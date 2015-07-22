@@ -140,7 +140,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					emailContext.getFromEmail(), emailSubject, emailBody, null);
 
 		}//order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Energizer Order Pending Approval") != -1)
+		else if (emailSubject.indexOf("Energizer Reference Number Pending Approval") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			if (null != emailList && emailList.size() > 0)
@@ -184,7 +184,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 						emailContext.getFromEmail(), emailSubject, emailBody, null);
 			}//end of if loop
 		}//end of order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Energizer Order Approval Failed for reference no") != -1)
+		else if (emailSubject.indexOf("Energizer Approval Failed for Reference no") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(orderApprover.getEmail(),
