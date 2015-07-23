@@ -839,10 +839,9 @@ public class AccountPageController extends AbstractSearchPageController
 			b2bOrderApprovalData.setSelectedDecision(orderApprovalDecisionForm.getApproverSelectedDecision());
 			b2bOrderApprovalData.setApprovalComments(orderApprovalDecisionForm.getComments());
 			b2bOrderApprovalData.setWorkflowActionModelCode(orderApprovalDecisionForm.getWorkFlowActionCode());
-
-			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
 			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
-					b2bOrderApprovalData.getB2bOrderData().getCode(), orderApprovalDecisionForm.getComments());
+					b2bOrderApprovalData, orderApprovalDecisionForm.getComments());
+			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
 			userService.setCurrentUser(userService.getUserForUID(user.getUid()));

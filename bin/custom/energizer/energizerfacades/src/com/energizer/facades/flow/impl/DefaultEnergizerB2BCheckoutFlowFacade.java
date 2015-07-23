@@ -5,6 +5,7 @@ package com.energizer.facades.flow.impl;
 
 import de.hybris.platform.b2b.services.B2BOrderService;
 import de.hybris.platform.b2b.services.B2BWorkflowIntegrationService;
+import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.order.data.AbstractOrderData;
 import de.hybris.platform.commercefacades.order.data.CartData;
@@ -393,10 +394,13 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	 * @param currentUser
 	 * @param string
 	 */
-	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode,
+	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final B2BOrderApprovalData b2bOrderApprovalData,
 			final String rejectionComment)
 	{
-		final OrderModel orderModel = b2bOrderService.getOrderForCode(orderCode);
+		final WorkflowActionModel workflowActionModel = getB2bWorkflowIntegrationService().getActionForCode(
+				b2bOrderApprovalData.getWorkflowActionModelCode());
+		final OrderModel orderModel = getB2bWorkflowIntegrationService().getOrderFromAction(workflowActionModel);
+		//final OrderModel orderModel = b2bOrderService.getOrderForCode(orderCode);
 		orderModel.setOrderApprover(orderApprover);
 		orderModel.setRejectionComment(rejectionComment);
 		modelService.save(orderModel);

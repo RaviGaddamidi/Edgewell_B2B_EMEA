@@ -3,6 +3,7 @@
  */
 package com.energizer.facades.flow;
 
+import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData;
 import de.hybris.platform.commercefacades.order.data.AbstractOrderData;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
@@ -36,7 +37,7 @@ public interface EnergizerB2BCheckoutFlowFacade
 
 	public void setLeadTime(int leadTime);
 
-	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final String orderCode,
+	public void setOrderApprover(final EnergizerB2BCustomerModel orderApprover, final B2BOrderApprovalData b2bOrderApprovalData,
 			final String rejectionComment);
 
 	public CartData simulateOrder(CartData cartData) throws Exception;
