@@ -18,4 +18,4 @@ UPDATE AcceleratorProductBOGOFPromotion;code[unique=true];enabled[default=true][
 
 UPDATE ProductPerfectPartnerPromotion;code[unique=true];enabled[default=true][unique=true];messageFired[lang=$lang];messageCouldHaveFired[lang=$lang]
 
-UPDATE ProductBundlePromotion;code[unique=true];enabled[default=true][unique=true];;messageFired[lang=$lang]messageCouldHaveFired[lang=$lang]
+UPDATE ProductBundlePromotion;code[unique=true];enabled[default=true][unique=true];;messageFired[lang=$lang];messageCouldHaveFired[lang=$lang]
