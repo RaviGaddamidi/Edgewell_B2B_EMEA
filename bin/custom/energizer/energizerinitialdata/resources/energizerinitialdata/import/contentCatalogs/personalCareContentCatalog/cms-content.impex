@@ -304,8 +304,8 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 #UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV);linkComponents(uid, $contentCV);;;;;
 #;;faq;frequentlyAskedQuestionsPage;FAQLink;;;;;
 
-INSERT_UPDATE CMSNavigationNode ;uid[unique=true]$contentCV[unique=true]; name;parent(uid, $contentCV);links(&componentRef);&nodeRef
- ;SiteRootNode; ;   SiteRootNode; root;;SiteRootNode;EnergizerNavNode; ; Energizer Site;  SiteRootNode;;EnergizerNavNode
+INSERT_UPDATE CMSNavigationNode ;uid[unique=true];$contentCV[unique=true]; name;parent(uid, $contentCV);links(&componentRef);&nodeRef
+;SiteRootNode; ;   SiteRootNode; root;;SiteRootNode;EnergizerNavNode; ; Energizer Site;  SiteRootNode;;EnergizerNavNode
 ;FooterNavNode;  ;Footer Nav Node;root; AboutUSLink,,,PrivacyPolicyLink,ContactUSLink,LegalLink,FAQLink; FooterNavNode
 
 INSERT_UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];wrapAfter;navigationNodes(&nodeRef);&componentRef
