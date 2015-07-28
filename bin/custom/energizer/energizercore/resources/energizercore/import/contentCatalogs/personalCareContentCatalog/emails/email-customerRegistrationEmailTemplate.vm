@@ -28,8 +28,7 @@
 								</tr>
 								<tr>
 									<td valign="middle">
-										${ctx.cmsSlotContents.SiteLogo}
-										<img src="${ctx.themeResourceUrl}/images/header_01.png" alt="" width="229" height="72" border="0" align="right" title="" />
+										${ctx.cmsSlotContents.SiteLogo}										
 									</td>
 								</tr>
 								<tr>
