@@ -8,7 +8,6 @@
 #macro(genHtmlLink $url $textColor $bodyContent)
 <a href="$url"><font color="$textColor">$bodyContent</font></a>
 #end
-
 <html>
 	<head>
 	</head>
