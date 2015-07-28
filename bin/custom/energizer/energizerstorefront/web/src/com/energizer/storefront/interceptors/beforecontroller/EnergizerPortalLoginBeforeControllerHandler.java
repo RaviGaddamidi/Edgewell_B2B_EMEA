@@ -59,6 +59,8 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 
 	private static final String TERMS_CONDITIONS = "termsandconditions.page.url";
 
+	private static final String CONTACTUS_URL = "/ContactUs";
+
 	private static final String FAQ = "faq.page.url";
 
 	private static final String LANGUAGE_URL = "/_s/language";
@@ -132,7 +134,8 @@ public class EnergizerPortalLoginBeforeControllerHandler implements BeforeContro
 		final boolean languageUrlFlag = !request.getRequestURI().contains(LANGUAGE_URL);
 		final boolean tncFlag = !request.getRequestURI().contains(Config.getParameter(TERMS_CONDITIONS));
 		final boolean fagFlag = !request.getRequestURI().contains(Config.getParameter(FAQ));
-		return loginUrlFlag && languageUrlFlag && tncFlag && fagFlag;
+		final boolean contactUsFlag = !request.getRequestURI().contains(CONTACTUS_URL);
+		return loginUrlFlag && languageUrlFlag && tncFlag && fagFlag && contactUsFlag;
 	}
 
 }
