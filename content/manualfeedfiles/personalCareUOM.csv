@@ -1,0 +1,6 @@
+customerId,salesOrganisation,distributionChannel,division,segmentId,familyId,minimumOrderQuantity,unitOfMeasure
+0098105518,1000,10,30,Feminine Care,Feminine Care-Playtex,1,PAL
+0098105518,1000,10,30,Feminine Care,Feminine Care-Carefree,1,Pal
+0098105518,1000,10,30,Feminine Care,Feminine Care-Stayfree,1,PAL
+0098105516,1000,10,40,Shaving,Shaving-Schick,1,CS
+0098105516,1000,10,30,Shaving,Shaving-Edge,1,CS

@@ -1,0 +1,5 @@
+customerId,salesOrganisation,distributionChannel,division,segmentId,familyId,minimumOrderQuantity,unitOfMeasure,ERPMaterialID
+0098105516,0,0,0,0,0,13,CS,X0002700
+0098105516,0,0,0,0,0,15,CS,X0055100
+0098105516,0,0,0,0,0,20,CS,X04703D0
+0098900104,0,0,0,0,0,3,CS,X08109J0
