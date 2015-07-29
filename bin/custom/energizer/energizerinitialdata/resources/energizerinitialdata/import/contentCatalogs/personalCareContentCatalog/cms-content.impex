@@ -331,3 +331,48 @@ INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents
 
 INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position;contentSlot(uid,$contentCV)[unique=true];page(uid,$contentCV)
 ;;SearchBox-LoginPage1;SearchBox;LoginPage_SearchBoxSlot;login
+
+
+
+
+######Contact Us Page
+
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=en];&componentRef
+;;ContactUsParagraphComponent;"<br/>&nbsp;&nbsp;&nbsp;<br/><h3>Contact Us </h3><br/><b>E-mail us at</b> : EdgewellICS@edgewell.com<br/><b>Call us at</b> : 1+ (314) 594-1900<br/><br/><b>Write to us at </b>: Edgewell Personal Care, Timberlake Corporate Center III, 1350 Timberlake Manor Parkway, Chesterfield, MO 63017, Attention: International Customer Service";ContactUsParagraphComponent
+
+# Content Slots TopHeaderSlot-ContentPage1
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];cmsComponents(&componentRef)
+;;TopHeaderSlot-ContentPage1;ContactUsParagraphComponent
+
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='contactUs'];contentSlot(uid,$contentCV)[unique=true]
+;; Section1-ContentPage1;Section1;; TopHeaderSlot-ContentPage1
+
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url;&componentRef;target(code)[default='sameWindow']
+;; ContactUSLink; Contact US Link ;/ContactUs; ContactUSLink;
+
+
+
+
+###### Apparel DE Terms And Conditions Page
+
+# CMSParagraphComponent
+INSERT_UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;;;;
+;;termsAndConditionsMenuParagraph;Terms and Conditions Paragraph;TermsAndConditionsMenuParagraph;;;;
+;;termsAndConditionsTextParagraph;Terms and Conditions Paragraph;TermsAndConditionsTextParagraph;;;;
+ 
+
+# ContentSlot
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;cmsComponents(&componentRef);;;
+;;Section2ASlot-TermsAndConditions;Section2A Slot for Terms and Conditions Page;true;TermsAndConditionsMenuParagraph;;;
+;;Section2BSlot-TermsAndConditions;Section2B Slot for Terms and Conditions Page;true;TermsAndConditionsTextParagraph;;;
+
+# ContentSlotForPage
+INSERT_UPDATE ContentSlotForPage;$contentCV[unique=true];uid[unique=true];position[unique=true];page(uid,$contentCV)[unique=true][default='termsAndConditions'];contentSlot(uid,$contentCV)[unique=true];;;
+;;Section2A-TermsAndConditions;Section2A;;Section2ASlot-TermsAndConditions;;;
+;;Section2B-TermsAndConditions;Section2B;;Section2BSlot-TermsAndConditions;;;
+
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=en];
+;;termsAndConditionsMenuParagraph;""
+;;termsAndConditionsTextParagraph;"</br></br></br><div style='position: absolute; left: 10%;'>Distributor understands, acknowledges and agrees that all sales made by Edgewell to Distributor are </br> subject to the terms and conditions of sale set </br> forth in the distribution agreement applicable to Distributor.
+</div>"
+
