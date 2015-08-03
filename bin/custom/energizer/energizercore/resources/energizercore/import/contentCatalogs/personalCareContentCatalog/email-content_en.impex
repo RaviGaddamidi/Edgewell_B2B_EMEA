@@ -6,7 +6,7 @@
 $contentCatalog=personalCareContentCatalog
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $emailResource=jar:com.energizer.core.setup.CoreSystemSetup&/energizercore/import/contentCatalogs/$contentCatalog/emails
-$emailid=epcvalidatione@gmail.com
+$emailid=orderportal@edgewell.com
 
 # Language
 $lang=en
@@ -42,10 +42,10 @@ UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript
 
 # Email Pages
 UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang]
- ;;CustomerRegistrationEmail;$emailid;"Customer Services Team"
- ;;ForgottenPasswordEmail;$emailid;"Customer Services Team"
- ;;OrderApprovalRejectionEmail;$emailid;"Customer Services Team"
- ;;OrderConfirmationEmail;$emailid;"Customer Services Team"
- ;;OrderPendingApprovalEmail;$emailid;"Customer Services Team"
- ;;ReplenishmentOrderConfirmationEmail;$emailid;"Customer Services Team"
- ;;ReplenishmentOrderPlacedEmail;$emailid;"Customer Services Team"
+ ;;CustomerRegistrationEmail;$emailid;"Order Portal Team"
+ ;;ForgottenPasswordEmail;$emailid;"Order Portal Team"
+ ;;OrderApprovalRejectionEmail;$emailid;"Order Portal Team"
+ ;;OrderConfirmationEmail;$emailid;"Order Portal Team"
+ ;;OrderPendingApprovalEmail;$emailid;"Order Portal Team"
+ ;;ReplenishmentOrderConfirmationEmail;$emailid;"Order Portal Team"
+ ;;ReplenishmentOrderPlacedEmail;$emailid;"Order Portal Team"
