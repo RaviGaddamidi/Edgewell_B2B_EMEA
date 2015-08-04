@@ -96,6 +96,8 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 			if (!getTechnicalFeedErrors().isEmpty())
 			{
 				csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+				getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+				getTechnicalFeedErrors().clear();
 				continue;
 			}
 			EnergizerProductModel pm = null;
@@ -118,6 +120,9 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 				setTechRecordError(getTechnicalFeedErrors().size());
 				recordFailed++;
 				setRecordFailed(recordFailed);
+
+				getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+				getTechnicalFeedErrors().clear();
 			}
 			if (pm != null)
 			{
