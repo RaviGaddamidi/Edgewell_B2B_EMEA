@@ -145,7 +145,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			}
 			emailAddress = emailService.getOrCreateEmailAddressForEmail(
 					configurationService.getConfiguration().getString("cronjobs.from.email",
-							Config.getParameter("fromEmailAddress.orderEmailSender")), "Customer Service");
+							Config.getParameter("fromEmailAddress.orderEmailSender")), "Order Portal Team");
 			synchronized (message)
 			{
 				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,

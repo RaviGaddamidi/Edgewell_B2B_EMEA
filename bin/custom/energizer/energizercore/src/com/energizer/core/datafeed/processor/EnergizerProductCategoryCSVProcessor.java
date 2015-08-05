@@ -92,6 +92,7 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 			//super.businessFeedErrors = new ArrayList<EnergizerCSVFeedError>();
 
 			final Map<String, String> csvValuesMap = record.toMap();
+			LOG.info("Processing record " + record);
 			validate(record);
 			if (!getTechnicalFeedErrors().isEmpty())
 			{
@@ -152,7 +153,7 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 					modelService.save(pm);
 				}
 
-				LOG.info("EnergizerProduct category information is saved");
+				LOG.info("EnergizerProduct " + csvValuesMap.get(CSV_HEADERS[0]) + " category information is saved");
 
 			}
 			succeedRecord++;

@@ -8,8 +8,10 @@ import de.hybris.platform.acceleratorservices.model.email.EmailAddressModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailMessageModel;
 import de.hybris.platform.cronjob.enums.CronJobResult;
 import de.hybris.platform.cronjob.enums.CronJobStatus;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
 import de.hybris.platform.servicelayer.cronjob.PerformResult;
+import de.hybris.platform.util.Config;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +46,9 @@ public class EnergizerOrphanedProductProcessor extends AbstractJobPerformable<En
 	@Resource
 	private EmailService emailService;
 
+	@Resource
+	private ConfigurationService configurationService;
+
 	private static final Logger LOG = Logger.getLogger(EnergizerOrphanedProductProcessor.class);
 
 	@Override
@@ -74,13 +79,17 @@ public class EnergizerOrphanedProductProcessor extends AbstractJobPerformable<En
 
 	private void sendEmail(final String strProducts, final String toEmail)
 	{
-
 		try
 		{
-			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(toEmail, "Hybris Test Mail");
+			final EmailAddressModel toAddress = emailService.getOrCreateEmailAddressForEmail(configurationService.getConfiguration()
+					.getString("energizer.customer.support.to.email"), "Order Portal Team");
 
-			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null, toAddress, "",
-					"Orphaned Products", "List of Energizer products orphaned : " + strProducts + "\n", null);
+			final EmailAddressModel fromEmailAddress = emailService.getOrCreateEmailAddressForEmail(configurationService
+					.getConfiguration().getString("cronjobs.from.email", Config.getParameter("fromEmailAddress.orderEmailSender")),
+					"Order Portal Team");
+
+			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null,
+					fromEmailAddress, "", "Orphaned Products", "List of products orphaned : \n" + strProducts + "\n", null);
 			emailService.send(message);
 		}
 		catch (final Exception e)
