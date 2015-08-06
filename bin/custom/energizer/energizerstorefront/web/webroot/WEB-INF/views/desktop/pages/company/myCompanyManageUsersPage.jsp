@@ -28,7 +28,7 @@
 					<a href="${manageUsersUrl}" class="button add"><spring:theme code="text.company.manageUser.button.create" text="Create New User"/></a>
 				</ycommerce:testId>
 			</div>
-		<!--	<div class="description"><spring:theme code="text.company.manageusers.subtitle" arguments="${b2bStore}"/></div> -->
+		
 			
 			
 				<c:if test="${not empty searchPageData.results}">
