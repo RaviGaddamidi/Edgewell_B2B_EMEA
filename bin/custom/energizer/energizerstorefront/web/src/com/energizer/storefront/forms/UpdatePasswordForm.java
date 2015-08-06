@@ -13,6 +13,7 @@
  */
 package com.energizer.storefront.forms;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -25,7 +26,7 @@ public class UpdatePasswordForm
 	private String newPassword;
 	private String checkNewPassword;
 
-    @Size(min = 1, message = "{profile.currentPassword.invalid}")
+	@Size(min = 1, message = "{profile.currentPassword.invalid}")
 	public String getCurrentPassword()
 	{
 		return currentPassword;
@@ -37,6 +38,7 @@ public class UpdatePasswordForm
 	}
 
 	@Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!$#%])(?=\\S+$).{6,}$", message = "{updatePwd.pwd.invalid}")
 	public String getNewPassword()
 	{
 		return newPassword;
@@ -47,7 +49,7 @@ public class UpdatePasswordForm
 		this.newPassword = newPassword;
 	}
 
-    @Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
+	@Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
 	public String getCheckNewPassword()
 	{
 		return checkNewPassword;
