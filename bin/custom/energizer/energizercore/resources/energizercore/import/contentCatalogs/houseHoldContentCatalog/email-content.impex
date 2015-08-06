@@ -23,7 +23,7 @@ INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;ac
 ;;DeliverySentEmailTemplate;Delivery Sent Email Template;true;deliverySentEmail;energizer-Email_Delivery_Sent_Subject;energizer-Email_Delivery_Sent_Body;EmailPage
 ;;OrderCancelledEmailTemplate;Order Cancelled Email Template;true;orderCancelledEmail;energizer-Email_Order_Cancelled_Subject;energizer-Email_Order_Cancelled_Body;EmailPage
 ;;OrderInProcessEmailTemplate;Order In Process Email Template;true;orderInProcessEmail;energizer-Email_Order_In_Process_Subject;energizer-Email_Order_In_Process_Body;EmailPage
-;;EnergizerPasswordExpiryEmailTemplate;Password Expiry Email Template;true;passwordExpiryEmail;energizer_Password_Expiry_Subject;energizer_Password_Expiry_Body;EmailPage
+;;EnergizerPasswordExpiryEmailTemplate;Password Expiry Email Template;true;passwordExpiryEmail;energizer_Password_Expiry_Subject;energizer_Email_Password_Expiry_Body;EmailPage
 ;;EnergizerPasswordExpiredEmailTemplate;Password Expired Email Template;true;passwordExpiredEmail;energizer_Password_Expired_Subject;energizer_Password_Expired_Body;EmailPage
 
 
@@ -229,7 +229,7 @@ INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)
 ;energizer-Email_Order_In_Process_Body;com.energizer.core.services.email.context.EnergizerGenericEmailContext
 ;energizer-Email_Order_In_Process_Subject;com.energizer.core.services.email.context.EnergizerGenericEmailContext
 ;energizer_Password_Expiry_Subject;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
-;energizer_Password_Expiry_Body;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
+;energizer_Email_Password_Expiry_Body;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
 ;energizer_Password_Expired_Subject;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
 ;energizer_Password_Expired_Body;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
 
