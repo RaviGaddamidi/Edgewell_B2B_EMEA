@@ -967,6 +967,19 @@
 	      class="com.energizer.services.order.EnergizerB2BPermissionService"
 	      parent="defaultB2BPermissionService">
 	</bean>
+	<!-- Redefined defaultProductModelUrlResolver to avoid looping of product url in apache.
+		the issue was if there is + symbol in product description, the + symbol will be encrypted in product url
+		and when this encrypted url passes thru apache, apache could not resolve the url as + symbol is a reserved 
+		character and request will end up in infinite loop
+   -->
+	<alias name="defaultProductModelUrlResolver" alias="productModelUrlResolver"/>
+	<bean id="defaultProductModelUrlResolver"
+			class="de.hybris.platform.commerceservices.url.impl.DefaultProductModelUrlResolver">
+		<property name="threadContextService" ref="threadContextService"/>
+		<property name="commerceCategoryService" ref="commerceCategoryService"/>
+		<property name="baseSiteService" ref="baseSiteService"/>
+		<property name="defaultPattern" value="/{category-path}/{product-code}/p/{product-code}"/>
+	</bean>
 	
 	<!--  approval process changes starts -->
 	<!-- <alias alias="b2BAbstractWorkflowAutomatedAction" name="energizerB2BAbstractWorkflowAutomatedAction"/> -->
