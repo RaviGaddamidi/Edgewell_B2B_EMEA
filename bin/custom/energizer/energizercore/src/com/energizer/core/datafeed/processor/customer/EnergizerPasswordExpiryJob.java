@@ -115,15 +115,20 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 							prepareEmail(energizerB2BCustomerModel, remainingDays);
 						}
 
-
 					}
 				}
-				else if ((calNotificationDate.compareTo(calPasswordModifiedDate) == 0))
-				{
 
-					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has been expired");
-					prepareEmail(energizerB2BCustomerModel, 0);
+				else
+				{
+					final Calendar calCurrentDate = Calendar.getInstance();
+					final int remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
+					if (remainingDays == 0)
+					{
+						LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has been expired");
+						prepareEmail(energizerB2BCustomerModel, 0);
+					}
 				}
+
 
 
 			}
