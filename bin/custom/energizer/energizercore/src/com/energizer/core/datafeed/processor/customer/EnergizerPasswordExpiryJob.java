@@ -118,7 +118,7 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 
 					}
 				}
-				else
+				else if ((calNotificationDate.compareTo(calPasswordModifiedDate) == 0))
 				{
 
 					LOG.info("Dear " + energizerB2BCustomerModel.getName() + " Your password has been expired");
