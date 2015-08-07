@@ -79,14 +79,12 @@ public class EnergizerPasswordNotificationUtil
 						final Integer remainingDays = calPasswordModifiedDate.getTime().getDate() - calCurrentDate.getTime().getDate();
 
 						LOG.info("Your Password will expire in " + remainingDays);
-						//if (remainingDays == 10 || remainingDays == 1)
-						//{
-						returnMessage = "account.password.expiry.notification";
-						daysCount = remainingDays.toString();
-						messageValue = "0";
-						//}
-
-
+						if (remainingDays <= 10 && remainingDays >= 1)
+						{
+							returnMessage = "account.password.expiry.notification";
+							daysCount = remainingDays.toString();
+							messageValue = "0";
+						}
 					}
 				}
 				else
