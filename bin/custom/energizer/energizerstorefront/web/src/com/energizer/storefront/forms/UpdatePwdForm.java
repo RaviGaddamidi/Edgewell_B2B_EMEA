@@ -13,10 +13,11 @@
  */
 package com.energizer.storefront.forms;
 
-import com.energizer.storefront.forms.validation.EqualAttributes;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.energizer.storefront.forms.validation.EqualAttributes;
 
 
 
@@ -35,6 +36,7 @@ public class UpdatePwdForm
 	/**
 	 * @return the pwd
 	 */
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!$#%])(?=\\S+$).{6,}$", message = "{updatePwd.pwd.invalid}")
 	@NotNull(message = "{updatePwd.pwd.invalid}")
 	@Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
 	public String getPwd()
