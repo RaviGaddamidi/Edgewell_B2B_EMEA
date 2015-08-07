@@ -25,6 +25,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.energizer.core.datafeed.processor.product.EnergizerProduct2CategoryRelationCSVProcessor;
 import com.energizer.core.model.EnergizerCronJobModel;
 
 
@@ -119,12 +120,18 @@ public class EnergizerCSVFeedCronJob extends AbstractJobPerformable<EnergizerCro
 				emailAttachmentList.clear();
 				if ((techfeedErrors != null && techfeedErrors.size() > 0) || (busfeedErrors != null && busfeedErrors.size() > 0))
 				{
-					energizerCSVProcessor.cleanup(type, file, cronjob, true);
+					if (!(energizerCSVProcessor instanceof EnergizerProduct2CategoryRelationCSVProcessor))
+					{
+						energizerCSVProcessor.cleanup(type, file, cronjob, true);
+					}
 					energizerCSVProcessor.flush();
 				}
 				else
 				{
-					energizerCSVProcessor.cleanup(type, file, cronjob, false);
+					if (!(energizerCSVProcessor instanceof EnergizerProduct2CategoryRelationCSVProcessor))
+					{
+						energizerCSVProcessor.cleanup(type, file, cronjob, false);
+					}
 					energizerCSVProcessor.flush();
 				}
 			}
