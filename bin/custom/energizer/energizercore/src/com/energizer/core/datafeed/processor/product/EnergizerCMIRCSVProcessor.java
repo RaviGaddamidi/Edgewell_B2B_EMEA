@@ -117,14 +117,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 					}
 				}
 
-				/*
-				 * if (!getTechnicalFeedErrors().isEmpty()) { csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
-				 * getBusinessFeedErrors().addAll(getTechnicalFeedErrors()); getTechnicalFeedErrors().clear(); continue; }
-				 */
-				/*
-				 * if (!getBusinessFeedErrors().isEmpty() && hasCustomerBusinessError) {
-				 * csvFeedErrorRecords.addAll(getBusinessFeedErrors()); continue; }
-				 */
 				LOG.info(" ENERGIZER_ACCOUNT_ID : " + csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID) + " "
 						+ csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID));
 
@@ -140,11 +132,13 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				catch (final Exception e)
 				{
 					LOG.error(e.getMessage());
+					continue;
 				}
 				if (energizerProduct == null)
 				{
-					LOG.warn(erpMaterialId + " EnergizerProduct does  not exist ");
-					//TO DO log into EnergizerCSVFeedError...so that it can be mailed					
+					LOG.error(erpMaterialId + " EnergizerProduct does  not exist ");
+					//TO DO log into EnergizerCSVFeedError...so that it can be mailed	
+					continue;
 				}
 				else
 				{

@@ -76,18 +76,13 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 				if (!getTechnicalFeedErrors().isEmpty())
 				{
 					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
-					techFeedErrorRecords.addAll(getTechnicalFeedErrors());
+					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
 					getTechnicalFeedErrors().clear();
 					continue;
 				}
-				if (!getBusinessFeedErrors().isEmpty())
-				{
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					businessFeedErrorRecords.addAll(getBusinessFeedErrors());
-					getBusinessFeedErrors().clear();
-					continue;
-				}
-				LOG.info("|| Start add or updating  EnergizerProductModel ******************** ");
+
+				LOG.info("|| Start add or updating  EnergizerProductModel for product :  "
+						+ (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
 				EnergizerProductModel existEnergizerProd = null;
 				try
 				{
@@ -103,13 +98,15 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 				{
 					final EnergizerProductModel energizerNewProd = modelService.create(EnergizerProductModel.class);
 					addUpdateProductDetails(energizerNewProd, catalogVersion, csvValuesMap);
-					LOG.info("|| EnergizerProductModel  saved successfully ********************");
+					LOG.info("|| EnergizerProductModel  " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
+							+ " saved successfully.");
 				}
 				else
 				{
 					addUpdateProductDetails(existEnergizerProd, catalogVersion, csvValuesMap);
 					modelService.saveAll();
-					LOG.info(" || EnergizerProductModel updated successfully ********************");
+					LOG.info(" || EnergizerProductModel " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
+							+ " updated successfully.");
 				}
 				succeedRecord++;
 				setRecordSucceeded(succeedRecord);
@@ -269,15 +266,16 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 					busError = new EnergizerCSVFeedError();
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
-					busError.setUserType(BUSINESS_USER);
+					techError = new EnergizerCSVFeedError();
+					techError.setLineNumber(record.getRecordNumber());
 					columnNames.add(columnHeader);
-					busError.setLineNumber(record.getRecordNumber());
-					busError.setColumnName(columnNames);
-					busError.setMessage(columnHeader + " column should be numeric");
+					techError.setUserType(TECHNICAL_USER);
+					techError.setColumnName(columnNames);
 					columnNumbers.add(columnNumber);
-					busError.setColumnNumber(columnNumbers);
-					getBusinessFeedErrors().add(busError);
-					setBusRecordError(getBusinessFeedErrors().size());
+					techError.setMessage(columnHeader + " column should be numeric");
+					techError.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(techError);
+					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
 				}
