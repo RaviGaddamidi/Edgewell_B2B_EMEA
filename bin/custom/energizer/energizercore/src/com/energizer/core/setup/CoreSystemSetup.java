@@ -51,8 +51,8 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	public static final String ACTIVATE_SOLR_CRON_JOBS = "activateSolrCronJobs";
 
 	//	public static final String ENERGIZER = "energizer";
-	  public static final String PERSONAL_CARE = "personalCare";
-	   public static final String HOUSEHOLD = "houseHold";
+	public static final String PERSONAL_CARE = "personalCare";
+	public static final String HOUSEHOLD = "houseHold";
 
 	@Resource
 	private ConfigurationService configurationService;
@@ -73,6 +73,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		importImpexFile(context, "/energizercore/import/delivery-modes.impex");
 		importImpexFile(context, "/energizercore/import/essentialdata-energizerCronjobs.impex");
 		importImpexFile(context, "/energizercore/import/themes.impex");
+		importImpexFile(context, "/energizercore/import/essentialdata-energizerpasswordquestions.impex");
 	}
 
 	/**

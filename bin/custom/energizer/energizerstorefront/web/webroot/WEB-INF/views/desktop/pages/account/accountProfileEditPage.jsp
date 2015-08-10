@@ -3,6 +3,7 @@
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/desktop/template" %>
 <%@ taglib prefix="theme" tagdir="/WEB-INF/tags/shared/theme" %>
 <%@ taglib prefix="nav" tagdir="/WEB-INF/tags/desktop/nav" %>
+
 <%@ taglib prefix="formElement" tagdir="/WEB-INF/tags/desktop/formElement" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -35,6 +36,10 @@
 			<formElement:formInputBox idKey="profile.lastName" labelKey="profile.lastName" path="lastName" inputCSS="text" mandatory="true"/>
 			<formElement:formInputBox idKey="profile.contactNumber" labelKey="profile.contactNumber" path="contactNumber" inputCSS="text" mandatory="true"/>
 
+			     <formElement:formSelectBox skipBlank="false" skipBlankMessageKey="form.select.empty" idKey="profile.passwordQuestion" labelKey="profile.passwordQuestion" path="passwordQuestion" mandatory="true" items="${passwordQuestionsList}"/>
+			  		   
+			   <formElement:formInputBox idKey="profile.passwordAnswer" labelKey="profile.passwordAnswer" path="passwordAnswer" inputCSS="text" mandatory="true"/>
+			
 			<div class="form-actions">
 				<button type="button" class="negative" onclick="window.location='${profileUrl}'"><spring:theme code="text.account.profile.cancel" text="Cancel"/></button>
 				<ycommerce:testId code="profilePage_SaveUpdatesButton">

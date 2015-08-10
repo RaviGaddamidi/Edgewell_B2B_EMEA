@@ -218,6 +218,7 @@ public interface ControllerConstants
 			{
 				String PasswordResetRequestPopup = "fragments/password/passwordResetRequestPopup";
 				String PasswordResetRequestPage = "fragments/password/passwordResetRequestPage";
+				String PasswordResetPage = "fragments/password/passwordResetPage";
 				String ForgotPasswordValidationMessage = "fragments/password/forgotPasswordValidationMessage";
 			}
 

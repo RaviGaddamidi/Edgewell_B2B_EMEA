@@ -317,4 +317,7 @@
 	<alias name="defaultUserRoleValidator" alias="userRoleValidator" />
 	<bean id="defaultUserRoleValidator" class="com.energizer.storefront.userform.validator.UserRoleValidator"/>
 	
+	<bean id="energizerPasswordNotificationUtil" class ="com.energizer.storefront.util.EnergizerPasswordNotificationUtil" autowire="byName">
+	</bean>
+	
 </beans>

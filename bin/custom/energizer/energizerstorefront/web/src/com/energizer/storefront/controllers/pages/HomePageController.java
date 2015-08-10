@@ -15,7 +15,9 @@ package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
-import com.energizer.storefront.controllers.util.GlobalMessages;
+import de.hybris.platform.servicelayer.session.SessionService;
+
+import javax.annotation.Resource;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.storefront.controllers.util.GlobalMessages;
+
+
 /**
  * Controller for home page.
  */
@@ -33,17 +38,49 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/")
 public class HomePageController extends AbstractPageController
 {
+	@Resource
+	protected SessionService sessionService;
+
+	/**
+	 * @return the sessionService
+	 */
+	@Override
+	public SessionService getSessionService()
+	{
+		return sessionService;
+	}
+
+	/**
+	 * @param sessionService
+	 *           the sessionService to set
+	 */
+	public void setSessionService(final SessionService sessionService)
+	{
+		this.sessionService = sessionService;
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String home(@RequestParam(value = "logout", defaultValue = "false") final boolean logout, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
 		if (logout)
 		{
-			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.INFO_MESSAGES_HOLDER,
-					"account.confirmation.signout.title");
+			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.INFO_MESSAGES_HOLDER, "account.confirmation.signout.title");
 			return REDIRECT_PREFIX + ROOT;
 		}
+		if (null != sessionService.getAttribute("passwordAlert"))
+		{
 
+			GlobalMessages.addMessage(model, "accErrorMsgs", (String) sessionService.getAttribute("passwordAlert"), new Object[]
+			{ sessionService.getAttribute("dayCount") });
+			sessionService.removeAttribute("passwordAlert");
+			sessionService.removeAttribute("dayCount");
+		}
+		if (null != sessionService.getAttribute("quesAnsAlert"))
+		{
+			GlobalMessages.addBusinessRuleMessage(model, (String) sessionService.getAttribute("quesAnsAlert"));
+			sessionService.removeAttribute("quesAnsAlert");
+		}
 		storeCmsPageInModel(model, getContentPageForLabelOrId(null));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(null));
 		updatePageTitle(model, getContentPageForLabelOrId(null));

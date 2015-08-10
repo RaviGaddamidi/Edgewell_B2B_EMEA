@@ -13,7 +13,10 @@
  */
 package com.energizer.storefront.controllers.pages;
 
+import de.hybris.platform.b2b.services.B2BUnitService;
+import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
@@ -33,11 +36,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.core.model.EnergizerB2BCustomerModel;
+import com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade;
+import com.energizer.facades.accounts.impl.DefaultEnergizerCompanyB2BCommerceFacade;
+import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.util.GlobalMessages;
 import com.energizer.storefront.forms.ForgottenPwdForm;
+import com.energizer.storefront.forms.ResetPwdForm;
 import com.energizer.storefront.forms.UpdatePwdForm;
 
 
@@ -64,6 +72,24 @@ public class PasswordResetPageController extends AbstractPageController
 
 	@Resource(name = "configurationService")
 	private ConfigurationService configurationService;
+
+	@Resource(name = "b2bCommerceFacade")
+	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+
+	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
+	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
+
+	@Resource(name = "b2bCustomerFacade")
+	protected CustomerFacade customerFacade;
+
+	@Resource(name = "defaultB2BUnitService")
+	private B2BUnitService defaultB2BUnitService;
+
+	@Resource(name = "defaultEnergizerCustomerReversePopulator")
+	protected EnergizerB2BCustomerReversePopulator energizerReversePopulator;
+
+	@Resource(name = "defaultEnergizerB2BPasswordQuestionsFacade")
+	private DefaultEnergizerB2BPasswordQuestionsFacade passwordQuestionsFacade;
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String getPasswordRequest(final Model model) throws CMSItemNotFoundException
@@ -95,6 +121,79 @@ public class PasswordResetPageController extends AbstractPageController
 		}
 	}
 
+
+	@RequestMapping(value = "/reset-password", method = RequestMethod.GET)
+	public String getPasswordResetPage(final Model model, @RequestParam(required = false) final String uid)
+			throws CMSItemNotFoundException
+	{
+		final ResetPwdForm resetPwdForm = new ResetPwdForm();
+		if (null != uid)
+		{
+			resetPwdForm.setEmail(uid);
+		}
+		//model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
+		model.addAttribute(resetPwdForm);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+		return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+	}
+
+
+	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+	public String passwordResetPage(@Valid final ResetPwdForm resetPwdForm, final BindingResult bindingResult, final Model model)
+			throws CMSItemNotFoundException
+	{
+		model.addAttribute(resetPwdForm);
+		final String forgottenPassExpValue = Config.getParameter(FORGOTTEN_PASSWORD_EXP_VALUE);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+
+		if (!bindingResult.hasErrors())
+		{
+			try
+			{
+				final EnergizerB2BCustomerModel customerModel = defaultEnergizerCompanyB2BCommerceFacade
+						.getExistingUserForUID(resetPwdForm.getEmail());
+
+
+				if (customerModel == null)
+				{
+					bindingResult.rejectValue("email", "profile.email.incorrect", new Object[] {}, "profile.email.incorrect");
+				}
+				else
+				{
+
+					getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
+					GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+							"account.confirmation.forgotten.password.link.sent", new Object[]
+							{ forgottenPassExpValue });
+					model.addAttribute(new ForgottenPwdForm());
+
+				}
+			}
+			catch (final Exception e)
+			{
+
+			}
+
+		}
+		if (bindingResult.hasErrors())
+		{
+			GlobalMessages.addErrorMessage(model, "form.global.error");
+			//model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
+			model.addAttribute(resetPwdForm);
+			storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
+			return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+		}
+
+		return ControllerConstants.Views.Fragments.Password.PasswordResetPage;
+	}
+
+
 	@RequestMapping(value = "/request-page", method = RequestMethod.GET)
 	public String getPasswordRequestPage(final Model model, @RequestParam(required = false) final String uid)
 			throws CMSItemNotFoundException
@@ -104,6 +203,7 @@ public class PasswordResetPageController extends AbstractPageController
 		{
 			forgottenPwdForm.setEmail(uid);
 		}
+		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 		model.addAttribute(forgottenPwdForm);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
@@ -120,31 +220,61 @@ public class PasswordResetPageController extends AbstractPageController
 		storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
-		if (bindingResult.hasErrors())
-		{
-			GlobalMessages.addErrorMessage(model, "form.global.error");
-			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
-		}
-		else
+
+		if (!bindingResult.hasErrors())
 		{
 			try
 			{
-				getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
-				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ forgottenPassExpValue });
-				model.addAttribute(new ForgottenPwdForm());
+				final EnergizerB2BCustomerModel customerModel = defaultEnergizerCompanyB2BCommerceFacade
+						.getExistingUserForUID(forgottenPwdForm.getEmail());
+
+
+				if (customerModel == null)
+				{
+					bindingResult.rejectValue("email", "profile.email.incorrect", new Object[] {}, "profile.email.incorrect");
+				}
+				else
+				{
+
+					if (!(customerModel.getPasswordQuestion()).equals(forgottenPwdForm.getPasswordQuestion()))
+					{
+						bindingResult.rejectValue("passwordQuestion", "profile.passwordQuestion.incorrect", new Object[] {},
+								"profile.passwordQuestion.incorrect");
+					}
+					else if (!(customerModel.getPasswordAnswer()).equals(forgottenPwdForm.getPasswordAnswer()))
+					{
+						bindingResult.rejectValue("passwordAnswer", "profile.passwordAnswer.incorrect", new Object[] {},
+								"profile.passwordAnswer.incorrect");
+					}
+
+					else
+					{
+						getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
+						GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+								"account.confirmation.forgotten.password.link.sent", new Object[]
+								{ forgottenPassExpValue });
+						model.addAttribute(new ForgottenPwdForm());
+					}
+				}
 			}
-			catch (final UnknownIdentifierException unknownIdentifierException)
+			catch (final Exception e)
 			{
-				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ forgottenPassExpValue });
-				model.addAttribute(new ForgottenPwdForm());
-				LOG.warn("Email: " + forgottenPwdForm.getEmail() + " does not exist in the database.");
+
 			}
+
+		}
+		if (bindingResult.hasErrors())
+		{
+			GlobalMessages.addErrorMessage(model, "form.global.error");
+			model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
+			model.addAttribute(forgottenPwdForm);
+			storeCmsPageInModel(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(UPDATE_PWD_CMS_PAGE));
+			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("forgottenPwd.title"));
 			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 		}
+
+		return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 	}
 
 	@RequestMapping(value = "/change", method = RequestMethod.GET)
@@ -179,7 +309,22 @@ public class PasswordResetPageController extends AbstractPageController
 			{
 				LOG.debug("The password link expriy time in seconds :"
 						+ configurationService.getConfiguration().getLong(EXP_IN_SECONDS, 1800));
-				getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
+
+
+				final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.updatingPassword(form.getPwd(), form.getToken());
+
+				if (!flag)
+				{
+					bindingResult.rejectValue("pwd", "profile.newPassword.match", new Object[] {}, "profile.newPassword.match");
+				}
+
+				if (bindingResult.hasErrors())
+				{
+					prepareErrorMessage(model, UPDATE_PWD_CMS_PAGE);
+					return ControllerConstants.Views.Pages.Password.PasswordResetChangePage;
+				}
+				//	getCustomerFacade().updatePassword(form.getToken(), form.getPwd());
+
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 						"account.confirmation.password.updated");
 				//adding a session attribute that will be removed in the StorefrontAuthenticationSuccessHandler.java once the successful login happens

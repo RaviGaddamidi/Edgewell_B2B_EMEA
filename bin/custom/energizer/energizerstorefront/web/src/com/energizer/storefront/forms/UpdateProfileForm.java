@@ -29,6 +29,8 @@ public class UpdateProfileForm
 	private String firstName;
 	private String lastName;
 	private String contactNumber;
+	private String passwordQuestion;
+	private String passwordAnswer;
 
 	@NotNull(message = "{profile.title.invalid}")
 	@Size(min = 1, max = 255, message = "{profile.title.invalid}")
@@ -92,4 +94,33 @@ public class UpdateProfileForm
 	{
 		this.contactNumber = contactNum;
 	}
+
+	//@NotNull(message = "{profile.passwordQuestion.invalid}")
+	//@Size(min = 1, max = 255, message = "{profile.passwordQuestion.invalid}")
+	public String getPasswordQuestion()
+	{
+		return passwordQuestion;
+	}
+
+
+	public void setPasswordQuestion(final String passwordQuestion)
+	{
+		this.passwordQuestion = passwordQuestion;
+	}
+
+	/* Password Answer is restricted to max 25 length */
+	//@NotNull(message = "{profile.passwordAnswer.invalid}")
+	//@Size(min = 1, max = 25, message = "{profile.passwordAnswer.invalid}")
+	//@NotBlank(message = "{profile.passwordAnswer.invalid}")
+	public String getPasswordAnswer()
+	{
+		return passwordAnswer;
+	}
+
+
+	public void setPasswordAnswer(final String passwordAnswer)
+	{
+		this.passwordAnswer = passwordAnswer;
+	}
+
 }
