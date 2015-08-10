@@ -178,7 +178,7 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 
 # Customer Registration Email Page
 INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved'];fromEmail[lang=en];fromName[lang=en]
-<<<<<<< HEAD
+
 ;;CustomerRegistrationEmail;Customer Registration Email;CustomerRegistrationEmailTemplate;true;;$emailid;Order Portal Team
 ;;ForgottenPasswordEmail;Forgotten Password Email;ForgottenPasswordEmailTemplate;true;;$emailid;Order Portal Team
 ;;OrderConfirmationEmail;Order Confirmation Email;OrderConfirmationEmailTemplate;true;;$emailid;Order Portal Team
@@ -191,7 +191,7 @@ INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemp
 ;;DeliverySentEmail;Delivery Sent Email;DeliverySentEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
 ;;OrderCancelledEmail;Order Cancelled Email;OrderCancelledEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
 ;;OrderInProcessEmail;Order In Process Email;OrderInProcessEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
-=======
+
 ;;CustomerRegistrationEmail;Customer Registration Email;CustomerRegistrationEmailTemplate;true;;$emailid;Customer Services Team
 ;;ForgottenPasswordEmail;Forgotten Password Email;ForgottenPasswordEmailTemplate;true;;$emailid;Customer Services Team
 ;;OrderConfirmationEmail;Order Confirmation Email;OrderConfirmationEmailTemplate;true;;$emailid;Customer Services Team
@@ -206,7 +206,7 @@ INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemp
 ;;OrderInProcessEmail;Order In Process Email;OrderInProcessEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
 ;;PasswordExpiryEmail;Password Expiry Email;EnergizerPasswordExpiryEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
 ;;PasswordExpiredEmail;Password expired Email;EnergizerPasswordExpiredEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
->>>>>>> CR_PasswordPolicy_DistributorPortal
+
 
 # CMS components velocity templates
 INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']

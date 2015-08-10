@@ -961,7 +961,7 @@
 					 value="#{configurationService.configuration.getProperty('guest.orderstatuspage.access.expiry.month')}"/>
 	</bean>
 	
-<<<<<<< HEAD
+
 	<bean id="findApprovers"
 	      class="com.energizer.core.actions.FindApprovers"
 	      parent="abstractSimpleB2BApproveOrderDecisionAction">
@@ -986,7 +986,7 @@
 		<property name="baseSiteService" ref="baseSiteService"/>
 		<property name="defaultPattern" value="/{category-path}/{product-code}/p/{product-code}"/>
 	</bean>
-=======
+
 	<bean id="energizerPasswordExpiryJob" class="com.energizer.core.datafeed.processor.customer.EnergizerPasswordExpiryJob"
 		autowire="byName" />
 	<bean id="defaultEnergizerPasswordExpiryFacade" class="com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordExpiryFacade"
@@ -994,7 +994,7 @@
 		
 		
 	
->>>>>>> CR_PasswordPolicy_DistributorPortal
+
 	
 	<!--  approval process changes starts -->
 	<!-- <alias alias="b2BAbstractWorkflowAutomatedAction" name="energizerB2BAbstractWorkflowAutomatedAction"/> -->

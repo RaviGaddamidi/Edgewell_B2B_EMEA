@@ -900,11 +900,11 @@ public class AccountPageController extends AbstractSearchPageController
 			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData, orderApprovalDecisionForm.getComments());
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
-<<<<<<< HEAD
-=======
+
+
 			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
-					b2bOrderApprovalData.getB2bOrderData().getCode(), orderApprovalDecisionForm.getComments());
->>>>>>> CR_PasswordPolicy_DistributorPortal
+					b2bOrderApprovalData, orderApprovalDecisionForm.getComments());
+
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
 			userService.setCurrentUser(userService.getUserForUID(user.getUid()));

@@ -97,9 +97,9 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					.getPermissionResults();
 			for (final B2BPermissionResultModel b2bPermissionResultModel : b2bPermissionResultModels)
 			{
-<<<<<<< HEAD
+
 				emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
-=======
+
 				if (emailSet.size() > 0)
 				{
 
@@ -113,7 +113,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
 				}
 
->>>>>>> CR_PasswordPolicy_DistributorPortal
+
 			}
 			emailList.addAll(emailSet);
 			b2bCustomerModelList = new ArrayList<B2BCustomerModel>();
