@@ -45,7 +45,7 @@
 				<table>
 					<tr>
 						<td headers="header1">
-							<input type="text" name="energizerMaterialID" size="20" placeholder="Energizer Product Code"/>
+							<input type="text" name="energizerMaterialID" size="20" placeholder="Edgewell Product Code"/>
 						</td>
 						<td headers="header1">
 							<div class="quickOrder_text_btw_txt">(or)</div>
@@ -74,7 +74,7 @@
 			<table class="orderListTable orderListTblFix">
 				<thead>
 					<tr>
-						<th id="header2"><spring:theme code="text.account.quickorder.productCode" text="Energizer Product Code"/></th>
+						<th id="header2"><spring:theme code="text.account.quickorder.productCode" text="Edgewell Product Code"/></th>
 						<th id="header2"><spring:theme code="text.account.quickorder.customerProductCode" text="Distributor Product Code"/></th>
 						<th id="header2"><spring:theme code="text.account.quickorder.unitOfMeasure" text="Unit Of Measure"/></th>
 						<th id="header4"><spring:theme code="text.account.quickorder.quantity" text="Quantity"/></th>
