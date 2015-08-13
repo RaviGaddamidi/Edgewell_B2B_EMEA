@@ -352,6 +352,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			stringWriter = new StringWriter();
 			marshaller.marshal(xmlRoot, stringWriter);
 			parsedXML = stringWriter.toString();
+			LOG.info("Simulate order request xml is as below ");
+			LOG.info(parsedXML);
 		}
 		catch (final JAXBException jaxbException)
 		{
@@ -556,6 +558,8 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			stringWriter = new StringWriter();
 			marshaller.marshal(xmlRoot, stringWriter);
 			parsedXML = stringWriter.toString();
+			LOG.info("Order create Request xml is as below ");
+			LOG.info(parsedXML);
 		}
 		catch (final JAXBException jaxbException)
 		{
