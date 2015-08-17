@@ -136,7 +136,7 @@
 			<table class="orderListTable">
 				<thead>
 					<tr>
-						<th id="header2"><spring:theme code="text.account.quickorder.productCode" text="Energizer Product Code"/></th>
+						<th id="header2"><spring:theme code="text.account.quickorder.productCode" text="Edgewell Product Code"/></th>
 						<th id="header2"><spring:theme code="text.account.quickorder.customerProductCode" text="Distributor Product Code"/></th>
 						<th id="header2"><spring:theme code="text.account.quickorder.unitOfMeasure" text="Unit Of Measure"/></th>
 						<th id="header4"><spring:theme code="text.account.quickorder.quantity" text="Quantity"/></th>
