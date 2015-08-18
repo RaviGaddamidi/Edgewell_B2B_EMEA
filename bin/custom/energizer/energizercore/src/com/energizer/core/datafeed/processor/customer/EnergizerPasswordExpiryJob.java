@@ -63,6 +63,12 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 	@Value("${passwordNotificationDays}")
 	int passwordNotificationDays;
 
+	@Value("${cronjobs.from.email}")
+	private String fromEmailID;
+
+	@Value("${fromEmailDisplayName.orderEmailSender}")
+	private String fromEmailDisplayName;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -147,8 +153,7 @@ public class EnergizerPasswordExpiryJob extends AbstractJobPerformable<Energizer
 
 		LOG.debug("basesite " + cmsSiteModels.get(0).getName());
 		contextmap.put("baseSite", cmsSiteModels.get(0));
-		final EmailAddressModel fromEmail = getEmailService().getOrCreateEmailAddressForEmail("ehpvalidation@gmail.com",
-				"ehpvalidation");
+		final EmailAddressModel fromEmail = getEmailService().getOrCreateEmailAddressForEmail(fromEmailID, fromEmailDisplayName);
 		final EmailAddressModel toEmail = getEmailService().getOrCreateEmailAddressForEmail(energizerB2BCustomerModel.getEmail(),
 				"EnergizerCustomer");
 		final List<EmailAddressModel> toAddress = new ArrayList<EmailAddressModel>();
