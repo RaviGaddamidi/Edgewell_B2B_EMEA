@@ -102,16 +102,22 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				//if any field empty --- don't process record
 				//if cmir price empty --- trigger email, chk if list price is also empty....if empty --- trigger email, don't process record if both empty				
+				final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
+				;
 				if (validate(record))
 				{
 					addErrors();
 					continue;
 				}
-				if (validateCMIRPrice(record))
+				if (validateCMIRPrice(record, error) && validateListPrice(record, error))
 				{
-					addErrors();
-					if (validateListPrice(record))
+					if (error != null)
 					{
+						getTechnicalFeedErrors().add(error);
+						setTechRecordError(getTechnicalFeedErrors().size());
+						long recordFailed = getRecordFailed();
+						recordFailed++;
+						setRecordFailed(recordFailed);
 						addErrors();
 						continue;
 					}
@@ -367,11 +373,10 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		return isEmptyRecord;
 	}
 
-	private boolean validateListPrice(final CSVRecord record)
+	private boolean validateListPrice(final CSVRecord record, final EnergizerCSVFeedError error)
 	{
 		boolean isEmptyListPrice = false;
 		Integer columnNumber = 0;
-		EnergizerCSVFeedError error = null;
 		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : record.toMap().keySet())
 		{
@@ -381,10 +386,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.MATERIAL_LIST_PRICE)
 					&& (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0))
 			{
-				long recordFailed = getRecordFailed();
 				final List<String> columnNames = new ArrayList<String>();
 				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				error = new EnergizerCSVFeedError();
 				error.setUserType(TECHNICAL_USER);
 				error.setLineNumber(record.getRecordNumber());
 				columnNames.add(columnHeader);
@@ -393,10 +396,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				error.setMessage(columnHeader + " column should be numeric and greater than 0");
 				columnNumbers.add(columnNumber);
 				error.setColumnNumber(columnNumbers);
-				getTechnicalFeedErrors().add(error);
-				setTechRecordError(getTechnicalFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
 				isEmptyListPrice = true;
 				break;
 			}
@@ -404,11 +403,10 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		return isEmptyListPrice;
 	}
 
-	private boolean validateCMIRPrice(final CSVRecord record)
+	private boolean validateCMIRPrice(final CSVRecord record, final EnergizerCSVFeedError error)
 	{
 		boolean isEmptyCMIRPrice = false;
 		Integer columnNumber = 0;
-		EnergizerCSVFeedError error = null;
 		setRecordFailed(getRecordFailed());
 		for (final String columnHeader : record.toMap().keySet())
 		{
@@ -418,10 +416,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_LIST_PRICE)
 					&& (!NumberUtils.isNumber(value) || Double.valueOf(value) <= 0.0))
 			{
-				long recordFailed = getRecordFailed();
 				final List<String> columnNames = new ArrayList<String>();
 				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				error = new EnergizerCSVFeedError();
 				error.setUserType(TECHNICAL_USER);
 				error.setLineNumber(record.getRecordNumber());
 				columnNames.add(columnHeader);
@@ -430,10 +426,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				error.setMessage(columnHeader + " column should be numeric and greater than 0");
 				columnNumbers.add(columnNumber);
 				error.setColumnNumber(columnNumbers);
-				getTechnicalFeedErrors().add(error);
-				setTechRecordError(getTechnicalFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
 				isEmptyCMIRPrice = true;
 				break;
 			}
