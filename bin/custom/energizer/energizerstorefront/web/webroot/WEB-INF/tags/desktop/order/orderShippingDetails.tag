@@ -16,8 +16,8 @@
 	<div class="headline"><spring:theme code="text.account.orderHistory.shippingDetaiils" text="Shipping Details"/></div>
 	
 		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.shippingDetaiils"/>&nbsp;: </p>	
-		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerNumber"/>&nbsp;:nbsp;${order.containerId}</p>
-		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.carrierName"/>&nbsp;:nbsp;${order.vesselNumber}</p>
+		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerNumber"/>&nbsp;:&nbsp;${order.containerId}</p>
+		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.carrierName"/>&nbsp;:&nbsp;${order.vesselNumber}</p>
 		<p class="reduce_space_cls"><spring:theme code="product.product.details.future.date" />&nbsp;:
 			<c:if test="${not empty order.requestedDeliveryDate }">
 				 ${DateTimeUtil.displayDate(order.requestedDeliveryDate)} 

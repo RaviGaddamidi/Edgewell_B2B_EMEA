@@ -33,7 +33,7 @@ public class EnergizerPasswordExpiryEmailContext extends EnergizerGenericEmailCo
 
 	public String getSecureResetPasswordUrl() throws UnsupportedEncodingException
 	{
-		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
+		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(),"", true,
 				"/USD/login/pw/request-page");
 	}
 
