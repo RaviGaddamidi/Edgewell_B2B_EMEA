@@ -236,7 +236,7 @@ public class EnergizerGenericEmailContext extends VelocityContext
 			setUrlEncodingAttributes(baseSite.getUid());
 			final SiteBaseUrlResolutionService siteBaseUrlResolutionService = getSiteBaseUrlResolutionService();
 			// Lookup the site specific URLs
-			put(BASE_URL, siteBaseUrlResolutionService.getWebsiteUrlForSite(baseSite, getUrlEncodingAttributes(), false, ""));
+			put(BASE_URL, siteBaseUrlResolutionService.getWebsiteUrlForSite(baseSite,"", false, ""));
 			put(BASE_THEME_URL, siteBaseUrlResolutionService.getWebsiteUrlForSite(baseSite, false, ""));
 			put(SECURE_BASE_URL, siteBaseUrlResolutionService.getWebsiteUrlForSite(baseSite, getUrlEncodingAttributes(), true, ""));
 			put(MEDIA_BASE_URL, siteBaseUrlResolutionService.getMediaUrlForSite(baseSite, false));

@@ -21,6 +21,10 @@
         <property name="firstCategoryNameList" type="java.util.List&lt;com.energizer.core.product.data.SolrFirstVariantCategoryEntryData&gt;"/>
     </bean>
     
+    <bean class="com.energizer.core.data.EnergizerPasswordQuestionsData">
+		<property name="code" type="String"/>
+		<property name="name" type="String"/>
+	</bean>
     
     <bean class="com.energizer.business.BusinessRuleError">
         <property name="type" type="String"/>

@@ -192,10 +192,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 							{
 								try
 								{
-									final Long quantity = (new Double(row.getCell(2).getNumericCellValue())).longValue();
+									final String val = row.getCell(2).toString().trim();
+									final Long quantity = new Double(val).longValue();
 									uploadData.setQuantity(quantity);
 								}
-								catch (final IllegalStateException ise)
+								catch (final Exception ise)
 								{
 									LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
 									GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
@@ -433,8 +434,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		return shipmentMap;
 	}
 
-	private String validateAndGetString(final Cell cell)
+	private String validateAndGetString(final Cell cell, final Model model)
 	{
-		return cell == null ? null : StringUtils.isBlank(cell.getStringCellValue()) ? null : cell.getStringCellValue();
+		return cell == null ? null : cell.toString();
 	}
 }

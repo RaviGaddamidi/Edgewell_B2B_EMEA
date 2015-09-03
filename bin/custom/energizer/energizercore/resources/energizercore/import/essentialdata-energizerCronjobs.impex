@@ -16,6 +16,7 @@ $interfaceTypeLeadTime = $config-interfaceType_LeadTime
 $interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrder
 $interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
 $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
+$interfaceTypePasswordExpiry = $config-interfaceType_EnergizerPasswordExpiry
 
 $technicalEmailAddress=$config-technical_EmailAddress
 $businessEmailAddress=$config-business_EmailAddress
@@ -39,6 +40,8 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 ;energizerProductHierarchyCSVProcessor;energizerCSVFeedCronJob;en;energizerProductHierarchyCSVProcessor;Product Hierarchy Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerOrphanedProductsCronJob;energizerOrphanedProductsJob;en;;Orphaned Products Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
+;energizerPasswordExpiryJob;energizerPasswordExpiryJob;en;energizerPasswordExpiryJob;Password Expiry Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+
 #--------------------------------------------------------------------------------------------------------------
 #				This is to send a email notification or registration email to B2BUnit Admin user     #
 #--------------------------------------------------------------------------------------------------------------
@@ -53,6 +56,7 @@ INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 # this is the trigger schedule for all the cron jobs
 #------------------------------------------------------------------
 INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
+;energizerPasswordExpiryJob;0 30 12 ? * *
 ;energizerCustomerCSVProcessor;0 0 1 ? * *
 ;energizerB2BUserCSVProcessor;0 15 1 ? * *
 ;energizerCustomerAddressCSVProcessor;0 30 1 ? * *

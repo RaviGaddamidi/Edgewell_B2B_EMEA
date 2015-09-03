@@ -23,7 +23,8 @@ INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;ac
 ;;DeliverySentEmailTemplate;Delivery Sent Email Template;true;deliverySentEmail;energizer-Email_Delivery_Sent_Subject;energizer-Email_Delivery_Sent_Body;EmailPage
 ;;OrderCancelledEmailTemplate;Order Cancelled Email Template;true;orderCancelledEmail;energizer-Email_Order_Cancelled_Subject;energizer-Email_Order_Cancelled_Body;EmailPage
 ;;OrderInProcessEmailTemplate;Order In Process Email Template;true;orderInProcessEmail;energizer-Email_Order_In_Process_Subject;energizer-Email_Order_In_Process_Body;EmailPage
-
+;;EnergizerPasswordExpiryEmailTemplate;Password Expiry Email Template;true;passwordExpiryEmail;energizer_Password_Expiry_Subject;energizer_Email_Password_Expiry_Body;EmailPage
+;;EnergizerPasswordExpiredEmailTemplate;Password Expired Email Template;true;passwordExpiredEmail;energizer_Password_Expired_Subject;energizer_Password_Expired_Body;EmailPage
 
 # Templates for CMS Cockpit Page Edit
 UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
@@ -113,6 +114,16 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 ;;TopContent-OrderInProcessEmail;TopContent;;EmailTopSlot;true
 ;;BottomContent-OrderInProcessEmail;BottomContent;;EmailBottomSlot;true
 
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='EnergizerPasswordExpiryEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;SiteLogo-PasswordExpiryEmail;SiteLogo;;SiteLogoSlot;true
+;;TopContent-PasswordExpiryEmail;TopContent;;EmailTopSlot;true
+;;BottomContent-PasswordExpiryEmail;BottomContent;;EmailBottomSlot;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='EnergizerPasswordExpiredEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;SiteLogo-PasswordExpiredEmail;SiteLogo;;SiteLogoSlot;true
+;;TopContent-PasswordExpiredEmail;TopContent;;EmailTopSlot;true
+;;BottomContent-PasswordExpiredEmail;BottomContent;;EmailBottomSlot;true
+
 
 # Create Content Slots
 INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
@@ -167,6 +178,7 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 
 # Customer Registration Email Page
 INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved'];fromEmail[lang=en];fromName[lang=en]
+
 ;;CustomerRegistrationEmail;Customer Registration Email;CustomerRegistrationEmailTemplate;true;;$emailid;Order Portal Team
 ;;ForgottenPasswordEmail;Forgotten Password Email;ForgottenPasswordEmailTemplate;true;;$emailid;Order Portal Team
 ;;OrderConfirmationEmail;Order Confirmation Email;OrderConfirmationEmailTemplate;true;;$emailid;Order Portal Team
@@ -179,6 +191,22 @@ INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemp
 ;;DeliverySentEmail;Delivery Sent Email;DeliverySentEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
 ;;OrderCancelledEmail;Order Cancelled Email;OrderCancelledEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
 ;;OrderInProcessEmail;Order In Process Email;OrderInProcessEmailTemplate;true;;orderportal@edgewell.com;Order Portal Team
+
+;;CustomerRegistrationEmail;Customer Registration Email;CustomerRegistrationEmailTemplate;true;;$emailid;Customer Services Team
+;;ForgottenPasswordEmail;Forgotten Password Email;ForgottenPasswordEmailTemplate;true;;$emailid;Customer Services Team
+;;OrderConfirmationEmail;Order Confirmation Email;OrderConfirmationEmailTemplate;true;;$emailid;Customer Services Team
+;;OrderPendingApprovalEmail;Order Pending Approval Email;OrderPendingApprovalEmailTemplate;true;;$emailid;Customer Services Team
+;;ReplenishmentOrderConfirmationEmail;Order Confirmation Email;ReplenishmentOrderConfirmationEmailTemplate;true;;$emailid;Customer Services Team
+;;ReplenishmentOrderPlacedEmail;Order Confirmation Email;ReplenishmentOrderPlacedEmailTemplate;true;;$emailid;Customer Services Team
+;;OrderApprovalRejectionEmail;Order Approval Rejection Email;OrderApprovalRejectionEmailTemplate;true;;$emailid;Customer Services Team
+;;QuoteOrderApproveEmail;Quote Order Approval Email;QuoteOrderApproveEmailTemplate;true;;$emailid;Customer Services Team
+;;QuoteOrderRejectEmail;Quote Order Rejection Email;QuoteOrderRejectEmailTemplate;true;;$emailid;Customer Services Team
+;;DeliverySentEmail;Delivery Sent Email;DeliverySentEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
+;;OrderCancelledEmail;Order Cancelled Email;OrderCancelledEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
+;;OrderInProcessEmail;Order In Process Email;OrderInProcessEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
+;;PasswordExpiryEmail;Password Expiry Email;EnergizerPasswordExpiryEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
+;;PasswordExpiredEmail;Password expired Email;EnergizerPasswordExpiredEmailTemplate;true;;customerservices@energizer.com;Customer Services Team
+
 
 # CMS components velocity templates
 INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
@@ -214,6 +242,10 @@ INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)
 ;energizer-Email_Order_Cancelled_Subject;com.energizer.core.services.email.context.EnergizerGenericEmailContext
 ;energizer-Email_Order_In_Process_Body;com.energizer.core.services.email.context.EnergizerGenericEmailContext
 ;energizer-Email_Order_In_Process_Subject;com.energizer.core.services.email.context.EnergizerGenericEmailContext
+;energizer_Password_Expiry_Subject;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
+;energizer_Email_Password_Expiry_Body;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
+;energizer_Password_Expired_Subject;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
+;energizer_Password_Expired_Body;com.energizer.core.services.email.context.EnergizerPasswordExpiryEmailContext
 
 
 # Preview Image for use in the CMS Cockpit
@@ -268,6 +300,10 @@ UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript
 ;energizer-Email_Order_Cancelled_Subject;"Order Cancelled Email Subject";$emailResource/email-orderCancelledSubject.vm
 ;energizer-Email_Order_In_Process_Body;"Order Cancelled Email Body";$emailResource/email-orderInProcessBody.vm
 ;energizer-Email_Order_In_Process_Subject;"Order Cancelled Email Subject";$emailResource/email-orderInProcessSubject.vm
+;energizer_Password_Expiry_Subject;"Password Expiry Subject";$emailResource/email-passwordExpirySubject.vm
+;energizer_Email_Password_Expiry_Body;"Password Expiry Body";$emailResource/email-passwordExpiryBody.vm
+;energizer_Password_Expired_Subject;"Password Expired Subject";$emailResource/email-passwordExpiredSubject.vm
+;energizer_Password_Expired_Body;"Pasword Expired Body";$emailResource/email-passwordExpiredBody.vm
 
 # Email Pages
 UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang]

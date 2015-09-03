@@ -81,6 +81,9 @@ import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade;
+import com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade;
+import com.energizer.facades.accounts.impl.DefaultEnergizerCompanyB2BCommerceFacade;
+import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator;
 import com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade;
 import com.energizer.facades.order.impl.DefaultEnergizerB2BOrderHistoryFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
@@ -183,6 +186,11 @@ public class AccountPageController extends AbstractSearchPageController
 	//Customization of orders
 	@Resource(name = "defaultEnergizerB2BOrderHistoryFacade")
 	private DefaultEnergizerB2BOrderHistoryFacade orderHistoryFacade;
+
+	@Resource(name = "defaultEnergizerB2BPasswordQuestionsFacade")
+	private DefaultEnergizerB2BPasswordQuestionsFacade passwordQuestionsFacade;
+
+
 	@Resource(name = "userService")
 	private UserService userService;
 
@@ -209,6 +217,12 @@ public class AccountPageController extends AbstractSearchPageController
 
 	@Resource(name = "b2bCommerceFacade")
 	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+
+	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
+	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
+
+	@Resource(name = "energizerCustomerReversePopulator")
+	protected EnergizerB2BCustomerReversePopulator defaultEnergizerB2BCustomerReversePopulator;
 
 	@ModelAttribute("comments")
 	public List<String> getApproverComments()
@@ -318,6 +332,7 @@ public class AccountPageController extends AbstractSearchPageController
 			}));
 		}
 
+
 		model.addAttribute("customerData", customerData);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -408,6 +423,9 @@ public class AccountPageController extends AbstractSearchPageController
 	@RequireHardLogIn
 	public String editProfile(final Model model) throws CMSItemNotFoundException
 	{
+
+		//LOG.info(" Password Questions List: " + passwordQuestionsFacade.getEnergizerPasswordQuestions().size());
+		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 		model.addAttribute("titleData", userFacade.getTitles());
 
 		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
@@ -418,6 +436,8 @@ public class AccountPageController extends AbstractSearchPageController
 		updateProfileForm.setFirstName(customerData.getFirstName());
 		updateProfileForm.setLastName(customerData.getLastName());
 		updateProfileForm.setContactNumber(customerData.getContactNumber());
+		updateProfileForm.setPasswordQuestion(customerData.getPasswordQuestion());
+		updateProfileForm.setPasswordAnswer(customerData.getPasswordAnswer());
 		model.addAttribute("updateProfileForm", updateProfileForm);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
@@ -443,11 +463,29 @@ public class AccountPageController extends AbstractSearchPageController
 		customerData.setUid(currentCustomerData.getUid());
 		customerData.setDisplayUid(currentCustomerData.getDisplayUid());
 		customerData.setContactNumber(updateProfileForm.getContactNumber());
+		LOG.info("Selected passwordQuestion: " + updateProfileForm.getPasswordQuestion());
+		LOG.info("Selected passwordAnswer: " + updateProfileForm.getPasswordAnswer());
+
+		if (updateProfileForm.getPasswordQuestion().equals("") || updateProfileForm.getPasswordQuestion().equals(null))
+		{
+			bindingResult.rejectValue("passwordQuestion", "profile.passwordQuestion.invalid", new Object[] {},
+					"profile.passwordQuestion.invalid");
+		}
+		if (updateProfileForm.getPasswordAnswer().equals("") || updateProfileForm.getPasswordAnswer().equals(null))
+		{
+			bindingResult.rejectValue("passwordAnswer", "profile.passwordAnswer.invalid", new Object[] {},
+					"profile.passwordAnswer.invalid");
+		}
+
+		customerData.setPasswordQuestion(updateProfileForm.getPasswordQuestion());
+		customerData.setPasswordAnswer(updateProfileForm.getPasswordAnswer());
 		model.addAttribute("titleData", userFacade.getTitles());
+		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 
 		if (bindingResult.hasErrors())
 		{
 			model.addAttribute("titleData", userFacade.getTitles());
+			model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 		}
 		else
@@ -501,12 +539,32 @@ public class AccountPageController extends AbstractSearchPageController
 			{
 				try
 				{
-					customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+
+					final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade
+							.validateCurrentPassword(updatePasswordForm.getCurrentPassword());
+
+					if (validCurrentPwd)
+					{
+						final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.changingPassword(
+								updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+
+						if (!flag)
+						{
+
+							bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
+									"profile.newPassword.match");
+						}
+					}
+					else
+					{
+						bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
+								"profile.currentPassword.invalid");
+					}
+					//customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
 				}
-				catch (final PasswordMismatchException localException)
+				catch (final Exception e)
 				{
-					bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
-							"profile.currentPassword.invalid");
+					LOG.debug("In AccountPage Controller: " + e.getMessage());
 				}
 
 			}
@@ -842,6 +900,11 @@ public class AccountPageController extends AbstractSearchPageController
 			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
 					b2bOrderApprovalData, orderApprovalDecisionForm.getComments());
 			b2bOrderApprovalData = orderFacade.setOrderApprovalDecision(b2bOrderApprovalData);
+
+
+			energizerB2BCheckoutFlowFacade.setOrderApprover((EnergizerB2BCustomerModel) userService.getCurrentUser(),
+					b2bOrderApprovalData, orderApprovalDecisionForm.getComments());
+
 
 			//suspecting the change of customer model to employee model enforcing the customer model in the current session
 			userService.setCurrentUser(userService.getUserForUID(user.getUid()));

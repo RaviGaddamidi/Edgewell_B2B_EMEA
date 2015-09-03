@@ -61,6 +61,14 @@
 		<property name="shippingPoint" type="java.lang.String" />
 		
 	</bean>
+	
+	
+	
+	<bean class="de.hybris.platform.commercefacades.user.data.CustomerData">
+		<property name="passwordQuestion" type="String"/>
+		<property name="passwordAnswer" type="String"/>
+	</bean>
+	
 	<bean class="de.hybris.platform.commercefacades.order.data.OrderHistoryData">
 		<property name="referenceNumber" type="String"/>
 		<property name="erpOrderCreator" type="String"/>
