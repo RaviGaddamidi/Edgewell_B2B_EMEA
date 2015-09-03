@@ -486,6 +486,4 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		this.hasCustomerListPriceTechnicalError = hasCustomerListPriceTechnicalError;
 	}
 
-
-
 }
