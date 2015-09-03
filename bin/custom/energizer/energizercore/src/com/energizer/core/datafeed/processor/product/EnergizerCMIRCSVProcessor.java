@@ -431,7 +431,6 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			}
 		}
 		return isEmptyCMIRPrice;
-
 	}
 
 	/**
