@@ -198,7 +198,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 								}
 								catch (final Exception ise)
 								{
-									LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
+									LOG.error("cannot convert " + row.getCell(2).toString() + " into number");
 									GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
 								}
 							}
@@ -434,8 +434,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		return shipmentMap;
 	}
 
-	private String validateAndGetString(final Cell cell, final Model model)
+	private String validateAndGetString(final Cell cell)
 	{
-		return cell == null ? null : cell.toString();
+	
+	return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
+		
 	}
 }
