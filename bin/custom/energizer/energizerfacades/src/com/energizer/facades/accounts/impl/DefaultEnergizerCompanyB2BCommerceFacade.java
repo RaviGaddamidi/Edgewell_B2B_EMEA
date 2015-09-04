@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -285,7 +286,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		EnergizerB2BCustomerModel customerModel = null;
 		try
 		{
-			customerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(email);
+			customerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(email.toLowercase());
 		}
 		catch (final UnknownIdentifierException e)
 		{
