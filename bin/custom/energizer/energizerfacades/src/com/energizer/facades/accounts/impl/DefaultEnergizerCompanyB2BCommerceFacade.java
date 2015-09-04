@@ -286,7 +286,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		EnergizerB2BCustomerModel customerModel = null;
 		try
 		{
-			customerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(email.toLowercase());
+			customerModel = (EnergizerB2BCustomerModel) userService.getUserForUID(email.toLowerCase());
 		}
 		catch (final UnknownIdentifierException e)
 		{
