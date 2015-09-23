@@ -41,6 +41,10 @@ public interface EnergizerProductDAO
 	List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	List<EnergizerShippingPointModel> getShippingPointName(final String shippingPointId);
+	
+	List<EnergizerCMIRModel> getAllEnergizerCMIRList();
+
+	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
 
 

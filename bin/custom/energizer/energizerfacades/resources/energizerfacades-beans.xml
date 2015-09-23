@@ -41,6 +41,7 @@
 		<property name="segmentName" type="java.lang.String" />
 		<property name="familyName" type="java.lang.String" />
 		<property name="groupName" type="java.lang.String" />
+		<property name="isActive" type="boolean" />
 	</bean>
 	<!-- ************ End Product Details Page Bean defination ******************* -->	
 	

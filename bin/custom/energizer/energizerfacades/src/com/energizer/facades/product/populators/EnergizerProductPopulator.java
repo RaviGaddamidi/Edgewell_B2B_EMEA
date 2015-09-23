@@ -93,6 +93,7 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 			{
 				productData.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId() == null ? EMPTY : energizerCMIRModel
 						.getCustomerMaterialId());
+				productData.setIsActive(energizerCMIRModel.getIsActive() == null ? true : energizerCMIRModel.getIsActive());
 			}
 			else
 			{

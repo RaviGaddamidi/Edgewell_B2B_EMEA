@@ -384,6 +384,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute type="java.lang.Boolean" qualifier="isActive">
+					<modifiers />
+					<persistence type="property" />
+					<defaultvalue>java.lang.Boolean.TRUE</defaultvalue>
+					</attribute>
 				</attributes>
 			</itemtype>
 
@@ -606,7 +611,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-
+                    <attribute type="java.lang.Boolean" qualifier="isActive">
+					<modifiers />
+					<persistence type="property" />
+					<defaultvalue>java.lang.Boolean.TRUE</defaultvalue>
+					</attribute>
 				</attributes>
 			</itemtype>
 

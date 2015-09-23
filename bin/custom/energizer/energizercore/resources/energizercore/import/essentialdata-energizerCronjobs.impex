@@ -42,6 +42,8 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 
 ;energizerPasswordExpiryJob;energizerPasswordExpiryJob;en;energizerPasswordExpiryJob;Password Expiry Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
+;energizerCMIRMonitorCronJob;energizerCMIRMonitorJob;en;;CMIR Monitor Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+
 #--------------------------------------------------------------------------------------------------------------
 #				This is to send a email notification or registration email to B2BUnit Admin user     #
 #--------------------------------------------------------------------------------------------------------------
@@ -70,6 +72,7 @@ INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 ;energizerOrphanedProductsCronJob;0 0 6 ? * *
 ;energizerProductConversionCSVProcessor;0 0 7 ? * *
 ;energizerSalesUOMCSVProcessor;0 30 7 ? * *
+;energizerCMIRMonitorCronJob;0 0 8 ? * 7
 ;energizerCMIRCSVProcessor;0 15 8 ? * *
 ;energizerLeadTimeCSVProcessor;0 30 8 ? * *
 ;energizerOrderUpdateCSVProcessor;0 0 9 ? * *

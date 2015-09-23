@@ -37,5 +37,9 @@ public interface EnergizerProductService
 	public List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	public String getShippingPointName(final String shippingPointId);
+	
+	public List<EnergizerCMIRModel> getAllEnergizerCMIRList();
+	
+	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialID, final String b2bUnitId);
 
 }

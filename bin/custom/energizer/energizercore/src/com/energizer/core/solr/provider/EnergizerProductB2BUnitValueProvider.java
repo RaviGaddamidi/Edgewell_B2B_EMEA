@@ -59,6 +59,13 @@ public class EnergizerProductB2BUnitValueProvider extends AbstractPropertyFieldV
 					if (unit instanceof EnergizerPriceRowModel && ((EnergizerPriceRowModel) unit).getB2bUnit() != null)
 					{
 						final EnergizerPriceRowModel castedUnit = (EnergizerPriceRowModel) unit;
+						LOG.info("enrPriceRowModel.getIsActive() = " + castedUnit.getIsActive());
+
+						if (!castedUnit.getIsActive())
+						{
+							LOG.info("NOT ACTIVE...");
+							continue;
+						}
 						final Collection<String> fieldNames = fieldNameProvider.getFieldNames(indexedProperty, null);
 
 						for (final String fieldName : fieldNames)

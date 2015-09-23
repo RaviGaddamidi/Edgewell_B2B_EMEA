@@ -689,6 +689,9 @@
 
 	<bean id="userManagementSendEMailJob" class="com.energizer.core.datafeed.processor.EnergizerUserManagementSendMailJob"
 		autowire="byName" />
+		
+	<bean id="energizerCMIRMonitorJob" class="com.energizer.core.datafeed.processor.product.EnergizerCMIRMonitorJob"
+		autowire="byName" />
 
 	<!-- ******** End Energizer Product data related Processor ********** -->
 

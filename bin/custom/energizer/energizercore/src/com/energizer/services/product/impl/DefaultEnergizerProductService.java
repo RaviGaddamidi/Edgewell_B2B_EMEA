@@ -227,4 +227,19 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 		final List<EnergizerProductModel> result = energizerProductDAO.getEnergizerProductListForSapCatgy(sapCatgyCode);
 		return result;
 	}
+	
+	@Override
+	public List<EnergizerCMIRModel> getAllEnergizerCMIRList()
+	{
+		final List<EnergizerCMIRModel> result = energizerProductDAO.getAllEnergizerCMIRList();
+
+		return result;
+	}
+
+	@Override
+	public List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialID, final String b2bUnitId)
+	{
+		final List<EnergizerPriceRowModel> result = energizerProductDAO.getAllEnergizerPriceRowForB2BUnit(erpMaterialID, b2bUnitId);
+		return result;
+	}
 }

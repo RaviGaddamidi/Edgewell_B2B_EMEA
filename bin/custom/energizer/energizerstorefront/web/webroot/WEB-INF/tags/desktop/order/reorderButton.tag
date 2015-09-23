@@ -13,6 +13,11 @@
 		<spring:theme code="checkout.blocked.order" text="Reorder"/>
 	</button>
 	</c:when>
+	<c:when test="${displayed == false}">
+	<button type="submit" class="positive right pad_right re-order" id="reorderButton" disabled="disabled">
+		<spring:theme code="text.order.reorderbutton" text="Reorder"/>
+	</button>
+	</c:when>
 	<c:otherwise>
 	<button type="submit" class="positive right pad_right re-order" id="reorderButton">
 		<spring:theme code="text.order.reorderbutton" text="Reorder"/>

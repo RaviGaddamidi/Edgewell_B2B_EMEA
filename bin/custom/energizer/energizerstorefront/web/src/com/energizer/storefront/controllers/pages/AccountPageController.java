@@ -284,7 +284,26 @@ public class AccountPageController extends AbstractSearchPageController
 		{
 			final OrderData orderDetails = orderFacade.getOrderDetailsForCode(orderCode);
 			//	orderFacade.getOrderHistoryForStatuses(statuses);
+            final List<OrderEntryData> entries = orderDetails.getEntries();
+			boolean flag = true;
+			String products = " ";
+			for (final OrderEntryData entry : entries)
+			{
+				if (entry.getProduct().isIsActive() == false)
+				{
+					products += (entry.getProduct().getErpMaterialID() + " ");
 
+					flag = false;
+
+				}
+			}
+			if (flag == false)
+			{
+				GlobalMessages.addMessage(model, "accErrorMsgs", "reorder.cmirinactive", new Object[]
+				{ products });
+			}
+
+			model.addAttribute("displayed", flag);
 			model.addAttribute("orderData", orderDetails);
 			model.addAttribute(new ReorderForm());
 
@@ -1323,7 +1342,15 @@ public class AccountPageController extends AbstractSearchPageController
 					Localization.getLocalizedString("quickorder.addtocart.nocmir"));
 		}
 		else
-		{
+		{   if (cmir.getIsActive() == false)
+			{
+				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
+						Localization.getLocalizedString("quickorder.cmirinactive"));
+
+			}
+			else
+			{
+				
 			if (quickOrderFacade.productExistsInList(cmir.getErpMaterialId(), quickOrder))
 			{
 				quickOrderFacade.addItemToQuickOrder(quickOrder, cmir.getErpMaterialId(), cmir.getCustomerMaterialId());
@@ -1359,6 +1386,8 @@ public class AccountPageController extends AbstractSearchPageController
 					GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
 							"quickorder.addtocart.cmir.badData");
 				}
+			
+			}
 			}
 
 		}

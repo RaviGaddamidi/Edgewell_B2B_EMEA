@@ -66,10 +66,25 @@ public class EnergizerProductCustomerMaterialDescriptionValueProvider extends Ab
 					if (unit instanceof EnergizerPriceRowModel && ((EnergizerPriceRowModel) unit).getB2bUnit() != null)
 					{
 
+						
+						final EnergizerPriceRowModel enrPriceRowModel = (EnergizerPriceRowModel) unit;
+						LOG.info(energizerProduct.getCode() + "enrPriceRowModel.getIsActive() = " + enrPriceRowModel.getIsActive());
+
+						if (!enrPriceRowModel.getIsActive())
+						{
+							LOG.info(energizerProduct.getCode() + "PRICE ROW NOT ACTIVE...");
+							continue;
+						}
 						final List<EnergizerCMIRModel> cmirList = energizerProductService.getEnergizerCMIRList(energizerProduct
 								.getCode());
 						for (final EnergizerCMIRModel cmir : cmirList)
 						{
+							if (!cmir.getIsActive())
+							{
+								LOG.info(energizerProduct.getCode() + "CMIR NOT ACTIVE..");
+								continue;
+							}
+							
 							if (indexedProperty.isLocalized())
 							{
 								final Collection<LanguageModel> languages = indexConfig.getLanguages();

@@ -47,7 +47,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 			{
 				final EnergizerCMIRModel cmirModelforMatIdAndCustId = energizerProductService.getEnergizerCMIRListForMatIdAndCustId(
 						energizerFileUploadModel.getMaterialId(), energizerFileUploadModel.getCustomerMaterialId());
-				if (cmirModelforMatIdAndCustId != null)
+				if (cmirModelforMatIdAndCustId != null && cmirModelforMatIdAndCustId.getIsActive() == true)
 				{
 					energizerFileUploadModel.setShippingPoint(cmirModelforMatIdAndCustId.getShippingPoint());
 					energizerFileUploadModel.setUom(cmirModelforMatIdAndCustId.getUom());
@@ -74,7 +74,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 				final EnergizerB2BUnitModel energizerB2BUnitModel = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
 				final EnergizerCMIRModel energizerCMIRModelforMatId = energizerProductService.getEnergizerCMIR(
 						energizerFileUploadModel.getMaterialId(), energizerB2BUnitModel.getUid());
-				if (energizerCMIRModelforMatId != null)
+				if (energizerCMIRModelforMatId != null && energizerCMIRModelforMatId.getIsActive() == true)
 				{
 					energizerFileUploadModel.setCustomerMaterialId(energizerCMIRModelforMatId.getCustomerMaterialId());
 					energizerFileUploadModel.setShippingPoint(energizerCMIRModelforMatId.getShippingPoint());
@@ -101,7 +101,7 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 				final EnergizerB2BUnitModel energizerB2BUnitModel = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
 				final EnergizerCMIRModel energizerCMIRModelforCustId = energizerProductService.getEnergizerCMIRforCustomerMaterialID(
 						energizerFileUploadModel.getCustomerMaterialId(), energizerB2BUnitModel.getUid());
-				if (energizerCMIRModelforCustId != null)
+				if (energizerCMIRModelforCustId != null && energizerCMIRModelforCustId.getIsActive() == true)
 				{
 					energizerFileUploadModel.setMaterialId(energizerCMIRModelforCustId.getErpMaterialId());
 					energizerFileUploadModel.setShippingPoint(energizerCMIRModelforCustId.getShippingPoint());
