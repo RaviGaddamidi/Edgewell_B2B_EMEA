@@ -20,7 +20,7 @@ import de.hybris.platform.orderprocessing.model.OrderProcessModel;
 import de.hybris.platform.processengine.model.BusinessProcessModel;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
-
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -67,7 +67,9 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
-
+	
+	@Resource
+	private ConfigurationService configurationService;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -144,9 +146,25 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			ccAddress.setDisplayName(getDisplayName());
 			emailMessageModel = super.createEmailMessage(emailSubject, emailBody, emailContext);
 			final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
+			
+			LOG.info("THE	ICS PROP VALS ARE" + "\t" + configurationService.getConfiguration().getString("ICS.EMAILID") + "\t"
+					+ configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
+
+			final EmailAddressModel ccIcsAddress1 = getEmailService().getOrCreateEmailAddressForEmail(
+					configurationService.getConfiguration().getString("ICS.EMAILID"),
+					configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
+			ccIcsAddress1.setEmailAddress(configurationService.getConfiguration().getString("ICS.EMAILID"));
+			ccIcsAddress1.setDisplayName(configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
+
+			
 			if (null != ccAddress)
 			{
 				ccEmails.add(ccAddress);
+			}
+			
+			if (null !=ccIcsAddress1)
+			{
+				ccEmails.add(ccIcsAddress1);
 			}
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getToEmail(),
