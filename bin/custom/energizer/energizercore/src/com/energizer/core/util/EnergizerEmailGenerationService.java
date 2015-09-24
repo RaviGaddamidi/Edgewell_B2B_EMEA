@@ -147,7 +147,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			emailMessageModel = super.createEmailMessage(emailSubject, emailBody, emailContext);
 			final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
 			
-			LOG.info("THE	ICS PROP VALS ARE" + "\t" + configurationService.getConfiguration().getString("ICS.EMAILID") + "\t"
+			LOG.info("THE ICS PROP VALS ARE" + "\t" + configurationService.getConfiguration().getString("ICS.EMAILID") + "\t"
 					+ configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
 
 			final EmailAddressModel ccIcsAddress1 = getEmailService().getOrCreateEmailAddressForEmail(
