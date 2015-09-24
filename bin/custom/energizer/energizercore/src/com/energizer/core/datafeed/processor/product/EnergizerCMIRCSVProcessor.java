@@ -277,6 +277,11 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				&& cmirModel.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
 		{
 			// record exists, just update other attributes
+			//check if record is active
+			if (!cmirModel.getIsActive())
+			{
+				return false;
+			}
 			LOG.debug("Product CMIR record exists for ERP_ID : " + cmirModel.getErpMaterialId() + " Customer Material ID : "
 					+ cmirModel.getCustomerMaterialId() + " B2B Unit ID : " + cmirModel.getB2bUnit().getUid());
 			return true;
@@ -309,6 +314,10 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		if (enrPriceRow != null
 				&& enrPriceRow.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
 		{
+			if (!enrPriceRow.getIsActive())
+			{
+				return false;
+			}
 			LOG.debug(" isENRPriceRowModelSame()... SAME PRICE ROW RECORD");
 			return true;
 		}
