@@ -693,6 +693,8 @@
 	<bean id="energizerCMIRMonitorJob" class="com.energizer.core.datafeed.processor.product.EnergizerCMIRMonitorJob"
 		autowire="byName" />
 
+	<bean id="energizerCustomerUsersListJob" class="com.energizer.core.datafeed.EnergizerCustomerUsersListJob"
+		autowire="byName" />
 	<!-- ******** End Energizer Product data related Processor ********** -->
 
 	<!-- ******** Start Energizer Order data related Processor ********** -->
