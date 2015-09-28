@@ -252,7 +252,15 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				final String productCode = entry.getProduct().getCode();
 				final ProductData product = productFacade.getProductForCodeAndOptions(productCode,
 						Arrays.asList(ProductOption.BASIC, ProductOption.PRICE));
-				entry.setProduct(product);
+				if (entry.getProduct().isIsActive() == true)
+				{
+					entry.setProduct(product);
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, "cart.cmirinactive");
+					return FORWARD_PREFIX + "/cart";
+				}
 			}
 		}
 
