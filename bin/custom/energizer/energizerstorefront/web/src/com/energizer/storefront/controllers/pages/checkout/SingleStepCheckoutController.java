@@ -247,6 +247,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
+			boolean flag = false;
+			String productWithCmirInActive = " ";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final String productCode = entry.getProduct().getCode();
