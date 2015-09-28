@@ -258,9 +258,17 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				}
 				else
 				{
-					GlobalMessages.addErrorMessage(model, "cart.cmirinactive");
-					return FORWARD_PREFIX + "/cart";
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					flag = true;
+
 				}
+
+			}
+			if (flag == true)
+			{
+				GlobalMessages.addMessage(model, "accErrorMsgs", "cart.cmirinactive", new Object[]
+				{ productWithCmirInActive });
+				return FORWARD_PREFIX + "/cart";
 			}
 		}
 
