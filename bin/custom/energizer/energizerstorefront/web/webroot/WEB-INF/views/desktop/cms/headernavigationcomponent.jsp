@@ -8,7 +8,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <sec:authorize ifAnyGranted="ROLE_CUSTOMERGROUP">
-    <li class="logged_in"><ycommerce:testId code="header_LoggedUser"><spring:theme code="header.welcome" arguments="${user.firstName},${user.lastName}" htmlEscape="true"/></ycommerce:testId></li>
+    <li class="logged_in"><ycommerce:testId code="header_LoggedUser"><spring:theme code="header.welcome" arguments="${user.firstName},${user.unit.name};${user.lastName},${user.unit.name}" argumentSeparator=";" htmlEscape="true"/></ycommerce:testId></li>
 </sec:authorize>
 <c:if test="${navigationNode.visible}">
     <c:forEach items="${navigationNode.links}" var="link">

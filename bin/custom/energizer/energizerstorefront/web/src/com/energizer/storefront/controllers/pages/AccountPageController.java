@@ -546,7 +546,79 @@ public class AccountPageController extends AbstractSearchPageController
 		return ControllerConstants.Views.Pages.Account.AccountChangePasswordPage;
 	}
 
+	//Updated for current password validation order
+	
 	@RequestMapping(value = "/update-password", method = RequestMethod.POST)
+	@RequireHardLogIn
+	public String updatePassword(@Valid final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult,
+			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	{
+
+			try
+			{
+
+				final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade
+						.validateCurrentPassword(updatePasswordForm.getCurrentPassword());
+				
+				if (validCurrentPwd)
+				{
+					
+					if (!bindingResult.hasErrors())
+						{
+					
+						if (updatePasswordForm.getNewPassword().equals(updatePasswordForm.getCheckNewPassword()))
+							{
+							final boolean flag = defaultEnergizerCompanyB2BCommerceFacade
+								.changingPassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
+
+							if (!flag)
+								{
+
+								bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
+									"profile.newPassword.match");
+								}
+							}
+						else
+							{
+							bindingResult.rejectValue("checkNewPassword", "validation.checkPwd.equals", new Object[] {},
+								"validation.checkPwd.equals");
+							}
+					
+						}
+					}
+					else
+						{
+						System.out.println("Paassword not  ok");
+						bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
+							"profile.currentPassword.invalid");
+						}
+				
+
+			}
+			catch (final Exception e)
+				{
+					LOG.debug("In AccountPage Controller: " + e.getMessage());
+				}
+			
+
+		if (bindingResult.hasErrors())
+		{
+			GlobalMessages.addErrorMessage(model, "form.global.error");
+			storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
+			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
+
+			model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.profile.updatePasswordForm"));
+			return ControllerConstants.Views.Pages.Account.AccountChangePasswordPage;
+		}
+		else
+		{
+			GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
+					"text.account.confirmation.password.updated");
+			return REDIRECT_TO_PROFILE_PAGE;
+		}
+	}
+	
+	/* @RequestMapping(value = "/update-password", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updatePassword(@Valid final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult,
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
@@ -609,7 +681,8 @@ public class AccountPageController extends AbstractSearchPageController
 					"text.account.confirmation.password.updated");
 			return REDIRECT_TO_PROFILE_PAGE;
 		}
-	}
+	} */
+	
 
 	@RequestMapping(value = "/address-book", method = RequestMethod.GET)
 	@RequireHardLogIn

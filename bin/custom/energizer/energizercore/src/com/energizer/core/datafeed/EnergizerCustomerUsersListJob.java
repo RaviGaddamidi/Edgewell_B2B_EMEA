@@ -43,7 +43,7 @@ public class EnergizerCustomerUsersListJob extends AbstractJobPerformable<CronJo
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable#perform(de.hybris.platform.cronjob.model.
 	 * CronJobModel )
 	 */
@@ -75,11 +75,19 @@ public class EnergizerCustomerUsersListJob extends AbstractJobPerformable<CronJo
 		{
 
 			e.printStackTrace();
+			LOG.info("Folder not found");
+			return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
+
 		}
 
 		return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
 	}
 
+	/**
+	 * @param energizerB2BUnitModels
+	 * @param path
+	 * @throws IOException
+	 */
 	public void writeToExcelfile(final List<EnergizerB2BUnitModel> energizerB2BUnitModels, final String path) throws IOException
 	{
 
@@ -104,7 +112,11 @@ public class EnergizerCustomerUsersListJob extends AbstractJobPerformable<CronJo
 
 		final Cell cell22 = row.createCell(2);
 		cell22.setCellStyle(style);
-		cell22.setCellValue("USERS CREATED DATE");
+		cell22.setCellValue("USERS EMAIL ID");
+
+		final Cell cell33 = row.createCell(3);
+		cell33.setCellStyle(style);
+		cell33.setCellValue("USERS CREATED DATE");
 
 		int rownum = 1;
 
@@ -120,6 +132,7 @@ public class EnergizerCustomerUsersListJob extends AbstractJobPerformable<CronJo
 				nameList = new HashSet<PrincipalModel>();
 				final PrincipalModel user = new PrincipalModel();
 				user.setName("-");
+				user.setUid("-");
 				user.setCreationtime(null);
 				nameList.add(user);
 			}
@@ -137,15 +150,18 @@ public class EnergizerCustomerUsersListJob extends AbstractJobPerformable<CronJo
 				cell1.setCellValue(s.getName());
 
 				final Cell cell2 = row.createCell(2);
+				cell2.setCellValue(s.getUid());
+				final Cell cell3 = row.createCell(3);
+
 
 				if (s.getCreationtime() != null)
 				{
-					cell2.setCellValue(s.getCreationtime().toString());
+					cell3.setCellValue(s.getCreationtime().toString());
 				}
 
 				else
 				{
-					cell2.setCellValue("-");
+					cell3.setCellValue("-");
 				}
 
 			}

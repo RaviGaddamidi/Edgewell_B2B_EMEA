@@ -243,6 +243,7 @@ public class EnergizerGenericEmailContext extends VelocityContext
 			put(MEDIA_SECURE_BASE_URL, siteBaseUrlResolutionService.getMediaUrlForSite(baseSite, true));
 
 			put(THEME, baseSite.getTheme() != null ? baseSite.getTheme().getCode() : null);
+			put("env", configurationService.getConfiguration().getString("mail.enviorment"));
 		}
 		put(FROM_EMAIL, emailPageModel.getFromEmail());
 

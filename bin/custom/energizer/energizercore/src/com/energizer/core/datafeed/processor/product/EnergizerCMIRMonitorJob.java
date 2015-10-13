@@ -156,7 +156,7 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 							/* c.getErpMaterialId(). */
 
 						}
-
+						csvUtils.getReader().close();
 						sendMail(cmirSetFromDB.toString(), arg0.getEmailAddress());
 
 					}
@@ -164,6 +164,7 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 					else
 					{
 						LOG.info("nothing to update");
+						csvUtils.getReader().close();
 					}
 
 
@@ -173,6 +174,7 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 				catch (final Exception e)
 				{
 					LOG.error("EXC CAUSED BY" + e);
+					csvUtils.getReader().close();
 				}
 			}
 
@@ -241,7 +243,7 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 		final EmailAddressModel fromaddress = emailService.getOrCreateEmailAddressForEmail(configurationService.getConfiguration()
 				.getString("cronjobs.from.email", Config.getParameter("fromEmailAddress.orderEmailSender")), "");
 		final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toaddress), null, null, fromaddress, "",
-				"list of cmirs to be deactivated", "" + cmirsList.toString(), null);
+				"(" + configurationService.getConfiguration().getString("mail.enviorment") + ")"+"list of cmirs to be deactivated", "" + cmirsList.toString(), null);
 		LOG.info("sending mail for list of cmirs to be deleted");
 		emailService.send(message);
 		LOG.info("mail send");

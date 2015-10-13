@@ -89,7 +89,7 @@ public class EnergizerOrphanedProductProcessor extends AbstractJobPerformable<En
 					"Order Portal Team");
 
 			final EmailMessageModel message = emailService.createEmailMessage(Arrays.asList(toAddress), null, null,
-					fromEmailAddress, "", "Orphaned Products", "List of products orphaned : \n" + strProducts + "\n", null);
+					fromEmailAddress, "", "Orphaned Products", "(" + configurationService.getConfiguration().getString("mail.enviorment") + ")"+"List of products orphaned : \n" + strProducts + "\n", null);
 			emailService.send(message);
 		}
 		catch (final Exception e)

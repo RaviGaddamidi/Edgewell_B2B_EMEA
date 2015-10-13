@@ -137,6 +137,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	protected EmailMessageModel createEmailMessage(final String emailSubject, final String emailBody,
 			final AbstractEmailContext<BusinessProcessModel> emailContext)
 	{
+		enviorment = configurationService.getConfiguration().getString("mail.enviorment");
 		EmailMessageModel emailMessageModel;
 		if (emailSubject.indexOf("approved") != -1)
 		{
@@ -173,7 +174,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
 			return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
-					emailContext.getFromEmail(), emailSubject, emailBody, null);
+					emailContext.getFromEmail(), "("+enviorment+")"+emailSubject, emailBody, null;
 
 		}//order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Edgewell Reference Number Pending Approval") != -1)
@@ -217,7 +218,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 				final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 						emailContext.getFromDisplayName());
 				return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
-						emailContext.getFromEmail(), emailSubject, emailBody, null);
+						emailContext.getFromEmail(), "("+enviorment+")"+emailSubject, emailBody, null);
 			}//end of if loop
 		}//end of order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Energizer Approval Failed for Reference no") != -1)
@@ -229,7 +230,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
 			return getEmailService().createEmailMessage(toEmails, new ArrayList<EmailAddressModel>(),
-					new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(), emailSubject, emailBody, null);
+					new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(),"("+enviorment+")"+emailSubject, emailBody, null);
 		}
 		else
 		{

@@ -26,7 +26,7 @@ public class UpdatePasswordForm
 	private String newPassword;
 	private String checkNewPassword;
 
-	@Size(min = 1, message = "{profile.currentPassword.invalid}")
+	//@Size(min = 1, message = "{profile.currentPassword.invalid}")
 	public String getCurrentPassword()
 	{
 		return currentPassword;
@@ -49,7 +49,7 @@ public class UpdatePasswordForm
 		this.newPassword = newPassword;
 	}
 
-	@Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
+	//@Size(min = 6, max = 255, message = "{updatePwd.pwd.invalid}")
 	public String getCheckNewPassword()
 	{
 		return checkNewPassword;

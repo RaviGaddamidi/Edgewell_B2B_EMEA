@@ -12,7 +12,10 @@
 		<div class="control-group error">
 			<jsp:doBody/>
 			<div class="help-inline">
-				<form:errors path="${not empty errorPath ? '' : path}"/>
+				<!--Added to display the error message in red color 			 -->
+			<font color="red">
+				<form:errors path="${not empty errorPath ? '' : path}" htmlEscape="false"/>
+			</font>
 			</div>
 		</div>
 	</c:when>

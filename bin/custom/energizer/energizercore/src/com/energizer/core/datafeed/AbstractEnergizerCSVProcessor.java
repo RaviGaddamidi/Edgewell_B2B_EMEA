@@ -58,6 +58,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	public final StringBuilder message = new StringBuilder(512);
 	public static final String COMMA = ",";
 
+	private String enviorment;
 	private static String CATALOG_NAME = "";
 	private static String VERSION = "";
 	private static String fileName = "";
@@ -133,6 +134,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		try
 		{
+			enviorment = configurationService.getConfiguration().getString("mail.enviorment");
 			setMailSubject("ERROR: Occurred in " + cronjob.getDisplayName().toUpperCase());
 			logErrors(cronjob, errors);
 			EmailMessageModel emailMessageModel = null;
@@ -149,7 +151,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			synchronized (message)
 			{
 				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
-						Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
+						Config.getParameter(EMAIL_REPLY_TO),"("+enviorment+")" getMailSubject(), message.toString(), emailAttachmentList);
 				emailService.send(emailMessageModel);
 			}
 			message.setLength(0);
@@ -642,4 +644,8 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		message.setLength(0);
 	}
 
+	public FileReader getReader()
+	{
+		return reader;
+	}
 }
