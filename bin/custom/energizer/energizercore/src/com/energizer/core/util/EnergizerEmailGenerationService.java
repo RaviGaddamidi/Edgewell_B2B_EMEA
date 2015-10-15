@@ -44,6 +44,8 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	private String salesPersonEmailId;
 
 	private String displayName;
+	
+	private String enviorment;
 
 	B2BUserGroupModel b2bUserGroupModel;
 
@@ -174,7 +176,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
 			return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
-					emailContext.getFromEmail(), "("+enviorment+")"+emailSubject, emailBody, null;
+					emailContext.getFromEmail(), "("+enviorment+")"+emailSubject, emailBody, null);
 
 		}//order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Edgewell Reference Number Pending Approval") != -1)

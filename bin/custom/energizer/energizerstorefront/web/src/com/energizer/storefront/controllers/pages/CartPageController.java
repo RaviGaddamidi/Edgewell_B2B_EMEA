@@ -300,12 +300,25 @@ public class CartPageController extends AbstractPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-
+            boolean flag = false;
+			String productWithCmirInActive="";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
 				uqf.setQuantity(entry.getQuantity());
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
+				if (entry.getProduct().isIsActive() == false)
+				{
+                    productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					flag = true;
+
+				}
+			}
+			if (flag == true)
+			{
+				GlobalMessages.addMessage(model, "accErrorMsgs", "cart.cmirinactive", new Object[]
+				{ productWithCmirInActive });
+				//return FORWARD_PREFIX + "/cart";
 			}
 		}
 

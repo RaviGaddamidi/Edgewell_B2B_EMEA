@@ -105,6 +105,7 @@
 		<property name="rejectedStatus" type="java.lang.String"/>
 		<property name="adjustedItemPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
 		<property name="isNewEntry" type="java.lang.String"/>
+		<property name="customerMaterialId" type="java.lang.String"/>
      </bean>
      
       <bean class="com.energizer.core.product.data.EnergizerFileUploadData">

@@ -138,6 +138,8 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 						{
 							LOG.info("cmirs getting disabled for moels having erpmaterialid-" + cmir.getErpMaterialId() + "\tcust_matid"
 									+ cmir.getCustomerMaterialId() + "\tb2bunit" + cmir.getB2bUnit());
+							if (cmir.getIsActive() == true)
+							{
 							cmir.setIsActive(false);
 							modelService.save(cmir);
 							final List<EnergizerPriceRowModel> energizerPriceRow = energizerProductService
@@ -154,6 +156,7 @@ public class EnergizerCMIRMonitorJob extends AbstractJobPerformable<EnergizerCro
 							}
 
 							/* c.getErpMaterialId(). */
+							}
 
 						}
 						csvUtils.getReader().close();

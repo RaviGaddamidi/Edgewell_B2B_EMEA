@@ -892,7 +892,14 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					
+					<attribute qualifier="customerMaterialId" type="java.lang.String">
+						<description>Customer Material Id</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
+				
 			</itemtype>
 
 			<itemtype code="EnergizerCategory" extends="Category"

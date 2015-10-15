@@ -151,7 +151,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			synchronized (message)
 			{
 				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
-						Config.getParameter(EMAIL_REPLY_TO),"("+enviorment+")" getMailSubject(), message.toString(), emailAttachmentList);
+						Config.getParameter(EMAIL_REPLY_TO),"("+enviorment+")" + getMailSubject(), message.toString(), emailAttachmentList);
 				emailService.send(emailMessageModel);
 			}
 			message.setLength(0);

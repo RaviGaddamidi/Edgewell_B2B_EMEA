@@ -78,14 +78,22 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	@Override
 	public EnergizerCMIRModel getEnergizerCMIR(final String erpMaterialId, final String b2bUnitId)
 	{
-		final EnergizerCMIRModel energizerCMIRModel = null;
+		EnergizerCMIRModel energizerCMIRModel = null;
 		final List<EnergizerCMIRModel> result = energizerProductDAO.getEnergizerCMIRList(erpMaterialId, b2bUnitId);
 		/*
 		 * if (result.isEmpty()) { throw new UnknownIdentifierException("EnergizerCMIR  code '" + erpMaterialId +
 		 * "' not found!"); } else if (result.size() > 1) { throw new AmbiguousIdentifierException("EnergizerCMIR code '"
 		 * + erpMaterialId + "' is not unique, " + result.size() + " EnergizerCMIR found!"); }
 		 */
-		return (result.isEmpty()) ? null : result.get(0);
+		 	for (EnergizerCMIRModel cmir : result)
+		{
+			if (cmir.getIsActive() == true)
+			{
+				energizerCMIRModel = cmir;
+				return energizerCMIRModel;
+			}
+		}
+		return (result.isEmpty()) ? null : result.get((result.size()) - 1);
 	}
 
 	/*
@@ -150,8 +158,17 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	{
 		final List<EnergizerCMIRModel> cmirList = energizerProductDAO.getEnergizerCMIRListForCustomerMaterialID(customerMaterialId,
 				b2bUnitId);
+		EnergizerCMIRModel energizerCMIRModel = null;
 		if (cmirList != null && cmirList.size() > 0)
 		{
+			for (EnergizerCMIRModel cmir : cmirList)
+			{
+				if (cmir.getIsActive() == true)
+				{
+					energizerCMIRModel = cmir;
+					return energizerCMIRModel;
+				}
+			}
 			return cmirList.get(0);
 		}
 		else

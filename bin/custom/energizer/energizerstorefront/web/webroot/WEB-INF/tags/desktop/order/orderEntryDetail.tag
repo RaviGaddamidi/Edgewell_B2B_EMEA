@@ -67,7 +67,9 @@
 	<ycommerce:testId code="orderDetails_MaterialId_label">${entry.product.code}</ycommerce:testId>
 </td>
 <td headers="header15" class="rejected">
-	<ycommerce:testId code="orderDetails_CMIRId_label">${entry.product.customerMaterialId}</ycommerce:testId>
+	<c:if test="${not empty entry.customerMaterialId}">
+	    <ycommerce:testId code="orderDetails_CMIRId_label">${entry.customerMaterialId}</ycommerce:testId>
+     </c:if>
 </td>
 	<td headers="header4" class="quantity" >
 		<ycommerce:testId code="orderDetails_productQuantity_label">${entry.quantity}</ycommerce:testId>

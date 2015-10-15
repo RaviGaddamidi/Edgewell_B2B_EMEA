@@ -22,6 +22,11 @@ public class EnergizerOrderEntryPopulator extends OrderEntryPopulator
 		addTotals(source, target);
 		//target.setAdjustedLinePrice(source.getAdjustedLinePrice());
 		target.setRejectedStatus(source.getRejectedStatus());
+		if (source.getCustomerMaterialId() != null)
+		{
+			target.setCustomerMaterialId(source.getCustomerMaterialId());
+
+		}
 		if (null != source.getIsNewEntry())
 		{
 			target.setIsNewEntry(source.getIsNewEntry());
