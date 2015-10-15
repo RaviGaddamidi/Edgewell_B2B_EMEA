@@ -123,6 +123,6 @@ public class B2BCustomerForm extends UpdateProfileForm
 
 	public void setEmail(final String email)
 	{
-		this.email = email;
+		this.email = email.toLowerCase();
 	}
 }
