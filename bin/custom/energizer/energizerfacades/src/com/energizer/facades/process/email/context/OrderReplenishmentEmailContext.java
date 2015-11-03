@@ -38,6 +38,10 @@ public class OrderReplenishmentEmailContext extends AbstractEmailContext<Repleni
 	public void init(final ReplenishmentProcessModel replenishmentProcessModel, final EmailPageModel emailPageModel)
 	{
 		super.init(replenishmentProcessModel, emailPageModel);
+		if (BASE_SITE != null)
+		{
+			super.put("env", configurationService.getConfiguration().getString("mail.enviorment"));
+		}
 		scheduledCartData = getScheduledCartConverter().convert(replenishmentProcessModel.getCartToOrderCronJob());
 	}
 

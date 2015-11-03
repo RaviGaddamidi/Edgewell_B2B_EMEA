@@ -44,6 +44,10 @@ public class OrderNotificationEmailContext extends AbstractEmailContext<OrderPro
 	{
 
 		super.init(orderProcessModel, emailPageModel);
+		if (BASE_SITE != null)
+		{
+			super.put("env", configurationService.getConfiguration().getString("mail.enviorment"));
+		}
 		userService.setCurrentUser(orderProcessModel.getOrder().getUser());
 		orderData = getOrderConverter().convert(orderProcessModel.getOrder());
 	}

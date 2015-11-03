@@ -220,6 +220,8 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 				if (existEnergizerOrder != null)
 				{
+					try
+					{
 					modelService.save(existEnergizerOrder);
 					final OrderEntryModel energizerOrderEntryModel = createOrUpdateOfflineOrderItem(existEnergizerOrder);
 					if (energizerOrderEntryModel != null)
@@ -242,6 +244,12 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 						{
 							modelService.save(currentEnergizerOrder);
 						}
+					}
+					}
+					
+					catch (final Exception exc)
+					{
+						LOG.error("Caught" + exc.getMessage());
 					}
 				}
 				succeedRecord++;

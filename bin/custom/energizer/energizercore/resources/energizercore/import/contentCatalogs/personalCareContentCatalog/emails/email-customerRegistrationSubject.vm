@@ -1,1 +1,1 @@
-﻿(${ctx.env})${ctx.messages.emailSubject}
+﻿${ctx.env}${ctx.messages.emailSubject}

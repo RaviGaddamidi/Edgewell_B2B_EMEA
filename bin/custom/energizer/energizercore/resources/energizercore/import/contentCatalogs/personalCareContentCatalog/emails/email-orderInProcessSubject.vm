@@ -1,1 +1,1 @@
-﻿(${ctx.env})${ctx.messages.getMessage('emailSubject', ${ctx.orderData.erpOrderNumber})}
+﻿${ctx.env}${ctx.messages.getMessage('emailSubject', ${ctx.orderData.erpOrderNumber})}

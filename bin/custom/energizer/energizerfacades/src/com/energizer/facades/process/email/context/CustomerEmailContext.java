@@ -46,6 +46,10 @@ public class CustomerEmailContext extends AbstractEmailContext<StoreFrontCustome
 	public void init(final StoreFrontCustomerProcessModel storeFrontCustomerProcessModel, final EmailPageModel emailPageModel)
 	{
 		super.init(storeFrontCustomerProcessModel, emailPageModel);
+		if (BASE_SITE != null)
+		{
+			super.put("env", configurationService.getConfiguration().getString("mail.enviorment"));
+		}
 		customerData = getCustomerConverter().convert(getCustomer(storeFrontCustomerProcessModel));
 	}
 

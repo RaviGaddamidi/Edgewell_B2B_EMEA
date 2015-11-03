@@ -63,7 +63,7 @@
 					
 						<div class="cntutil_wrapper_cls">
 							 
-									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/></div>
+									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/><div style="font-size:11px;color: blue; "><spring:theme code="basket.your.shopping.container.utilization1"/></div></div>
 				                      	<div id="volume_cont">
 				                      	<div class="divider_20"><span class="span_cls">40ft</span></div>
 				                      	<div class="divider_40"><span class="span_cls">20ft</span></div>
