@@ -87,6 +87,13 @@
 							<a href="${encodedUrl}"><spring:theme code="text.account.quickorder.link" text="Quick Order Form"/></a>
 						</ycommerce:testId>
 					</li>
+					
+					<li class='${selected eq 'catalogDownload' ? 'nav_selected' : ''}'>
+						<c:url value="/my_account/catalogDownload" var="encodedUrl" />
+						<ycommerce:testId code="myAccount_replenishment_navLink">
+							<a href="${encodedUrl}"><spring:theme code="text.account.profile.CatalogDownload" /></a>
+						</ycommerce:testId>
+					</li>
 				</sec:authorize>
 				
 				<!-- Added the below section, This is to allow the B2B View group users could able to view the all orders from their B2B Units.-->

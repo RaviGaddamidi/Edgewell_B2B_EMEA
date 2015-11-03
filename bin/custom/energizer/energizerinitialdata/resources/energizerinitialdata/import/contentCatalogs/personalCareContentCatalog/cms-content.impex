@@ -162,6 +162,7 @@ INSERT_UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];name;url
 #;;StoreFinderLink;Store Finder Link;/store-finder;StoreFinderLink;StoreFinderLink
 ;;QuickOrderPageLink;Quick Order;/my-account/quickorder;QuickOrderPageLink;QuickOrderPageLink
 ;;ExcelOrderPageLink;Excel Order;/my-account/excelfileupload;ExcelOrderPageLink;ExcelOrderPageLink
+;;CatalogDownloadPageLink;Catalog Download;/my_account/catalogDownload;CatalogDownloadPageLink;CatalogDownloadPageLink
 
 INSERT_UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];name;userGroups(uid);includeSubgroups;components(&componentRef)
 ;;CustomerGroupRestriction;Customer Group Restriction;b2bcustomergroup,b2badmingroup;true;MyAccountLink
@@ -179,11 +180,11 @@ INSERT_UPDATE CMSInverseRestriction;$contentCV[unique=true];uid[unique=true];nam
 
 # CMS User Group Restrictions
 UPDATE CMSUserGroupRestriction;$contentCV[unique=true];uid[unique=true];components(uid,$contentCV)[mode=append]
-;;CustomerGroupRestriction;QuickOrderPageLink,ExcelOrderPageLink
+;;CustomerGroupRestriction;QuickOrderPageLink,ExcelOrderPageLink,CatalogDownloadPageLink
 
 # CMS Navigation Nodes - Header
 INSERT_UPDATE CMSNavigationNode;uid[unique=true];$contentCV[unique=true];name;parent(uid, $contentCV);links(&linkRef);&nodeRef
-;HeaderLinksNode;;Header Links;SiteRootNode;UserLoginLink,MyAccountLink,MyCompanyLink,QuickOrderPageLink,ExcelOrderPageLink,LogoutLink;HeaderLinksNode
+;HeaderLinksNode;;Header Links;SiteRootNode;UserLoginLink,MyAccountLink,MyCompanyLink,QuickOrderPageLink,ExcelOrderPageLink,CatalogDownloadPageLink,LogoutLink;HeaderLinksNode
 
 # Header Navigation Component - Header
 INSERT_UPDATE HeaderNavigationComponent;$contentCV[unique=true];uid[unique=true];name;wrapAfter;link(uid, $contentCV);styleClass;navigationNode(&nodeRef);dropDownLayout(code)[default=AUTO];&componentRef

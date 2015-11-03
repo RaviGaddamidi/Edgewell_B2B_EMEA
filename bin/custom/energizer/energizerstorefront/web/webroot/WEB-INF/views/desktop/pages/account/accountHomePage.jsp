@@ -121,6 +121,24 @@
 					</ycommerce:testId>
 				</ul>
 			</div>
+			
+			<div class="tile column CatalogDownload">
+				<c:url value="/my_account/catalogDownload" var="encodedUrl" />
+				<div class="headline">
+					<a href="${encodedUrl}"> <spring:theme
+							code="text.account.profile.CatalogDownload" text="Catalog Download" />
+					</a>
+				</div>
+				<ul>
+					<ycommerce:testId code="myAccount_options_profile_groupbox">
+						<c:url value="/my_account/catalogDownload" var="encodedUrl" />
+						<li><a href="${encodedUrl}"> <spring:theme
+									code="text.account.catalogDownload" text="Catalog Download" />
+						</a></li>
+					</ycommerce:testId>
+				</ul>
+				
+			</div>
 		</sec:authorize>
 		<%--
 		Order history is requried for everyone in the group/unit 

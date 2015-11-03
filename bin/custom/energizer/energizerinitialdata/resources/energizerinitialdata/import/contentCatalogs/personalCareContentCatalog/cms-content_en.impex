@@ -44,6 +44,7 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;StoreFinderLink;Store Locator
 ;;QuickOrderPageLink;Quick Order
 ;;ExcelOrderPageLink;Excel Order
+;;CatalogDownloadPageLink;Catalog Download
 ;;AboutUSLink;About US
 #;;CopyRightLink;©2015 Energizer
 #;;TrademarkLink;Trademark

@@ -567,6 +567,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 				}
 			}
 			energizerOrderEntry.setUnit(existUnit);
+			energizerOrderEntry.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId());
 			energizerOrderEntry.setItemTotalShipment(itemTotalShipment);
 
 			if (unitPrice != null && itemTotalDiscount != null)

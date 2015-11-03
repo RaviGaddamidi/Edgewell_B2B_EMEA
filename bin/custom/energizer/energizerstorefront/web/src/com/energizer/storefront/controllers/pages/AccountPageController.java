@@ -289,7 +289,7 @@ public class AccountPageController extends AbstractSearchPageController
 			String cmir = " ";
 			for (final OrderEntryData entry : entries)
 			{
-				if (entry.getProduct().isIsActive() == false || entry.getProduct().getCustomerMaterialId() != entry.getCustomerMaterialId())
+				if (entry.getProduct().isIsActive() == false || !entry.getProduct().getCustomerMaterialId().contains(entry.getCustomerMaterialId()))
 				{
 					cmir += (entry.getCustomerMaterialId() + " ");
 
@@ -1466,6 +1466,10 @@ public class AccountPageController extends AbstractSearchPageController
 
 		//add it to the list if the product passes the business rules
 		//or show messages on screen about the error as a result of a business rule validation failure
+		   if (quickOrder.getLineItems().size() == 0)
+		{
+			quickOrder.setCurrentShippingPointId(null);
+		}
 		session.setAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE, quickOrder);
 		model.addAttribute("orderform", quickOrder);
 

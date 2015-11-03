@@ -361,6 +361,16 @@
 
 	<!-- ************ End Product Details Page Bean defination ******************* -->
 
+	<!-- Catalog Download  -->
+	<bean id="defaultEnergizerCatalogDownloadFacade"
+		class="com.energizer.facades.catalogdownload.impl.DefaultEnergizerCatalogDownloadFacade"/>
+		<bean id="advancedTypeExportScriptGenerator"
+		class="com.energizer.facades.catalogdownload.AdvancedTypeExportScriptGenerator" scope="prototype">
+		
+		</bean>
+	<!-- End of Catalog Download  -->
+
+	
 	<!-- Start View order history -->
 	<bean id="defaultEnergizerB2BOrderHistoryFacade"
 		class="com.energizer.facades.order.impl.DefaultEnergizerB2BOrderHistoryFacade"/>

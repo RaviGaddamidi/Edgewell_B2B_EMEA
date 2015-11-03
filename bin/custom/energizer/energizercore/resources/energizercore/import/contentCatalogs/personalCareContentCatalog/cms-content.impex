@@ -810,6 +810,7 @@ INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTe
 ;;manageUnitApprovers;Manage Units Approvers Page;CompanyPageTemplate;manageUnitApprovers
 ;;quickorderpage;Quick Order Page;AccountPageTemplate;quickorderpage
 ;;excelupload;Excel File Upload;AccountPageTemplate;my-excelupload
+;;catalogdownload;Catalog Download;AccountPageTemplate;catalogdownloadpage
 ;;productentries;Product Entries;AccountPageTemplate;my-productentries
 
 # Product Details Page

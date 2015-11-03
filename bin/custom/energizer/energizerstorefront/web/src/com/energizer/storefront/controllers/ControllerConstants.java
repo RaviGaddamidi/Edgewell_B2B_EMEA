@@ -92,6 +92,7 @@ public interface ControllerConstants
 				String AccountQuickOrderPage = "pages/account/accountQuickOrderPage";
 				String AccountExcelUpload = "pages/account/accountExcelUpload";
 				String AccountExcelUploadEntries = "pages/account/accountProductEntries";
+				String AccountCatalogDownload = "pages/account/accountCatalogDownload";
 			}
 
 			interface Checkout
