@@ -22,7 +22,7 @@ import de.hybris.platform.core.model.c2l.LanguageModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.orderscheduling.model.CartToOrderCronJobModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
-
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import org.springframework.beans.factory.annotation.Required;
 
 
@@ -33,16 +33,17 @@ public class OrderReplenishmentEmailContext extends AbstractEmailContext<Repleni
 {
 	private Converter<CartToOrderCronJobModel, ScheduledCartData> scheduledCartConverter;
 	private ScheduledCartData scheduledCartData;
-
+	protected ConfigurationService configurationService;
+	
 	@Override
 	public void init(final ReplenishmentProcessModel replenishmentProcessModel, final EmailPageModel emailPageModel)
 	{
 		super.init(replenishmentProcessModel, emailPageModel);
+		scheduledCartData = getScheduledCartConverter().convert(replenishmentProcessModel.getCartToOrderCronJob());
 		if (BASE_SITE != null)
 		{
 			super.put("env", configurationService.getConfiguration().getString("mail.enviorment"));
 		}
-		scheduledCartData = getScheduledCartConverter().convert(replenishmentProcessModel.getCartToOrderCronJob());
 	}
 
 	@Override
@@ -77,5 +78,16 @@ public class OrderReplenishmentEmailContext extends AbstractEmailContext<Repleni
 	protected LanguageModel getEmailLanguage(final ReplenishmentProcessModel replenishmentProcessModel)
 	{
 		return replenishmentProcessModel.getCartToOrderCronJob().getCart().getUser().getSessionLanguage();
+	}
+	
+	protected ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	@Required
+	public void setConfigurationService(final ConfigurationService configurationService)
+	{
+		this.configurationService = configurationService;
 	}
 }

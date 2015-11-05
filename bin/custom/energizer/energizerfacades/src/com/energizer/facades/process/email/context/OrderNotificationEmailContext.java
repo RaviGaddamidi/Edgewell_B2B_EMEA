@@ -23,6 +23,7 @@ import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.orderprocessing.model.OrderProcessModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 
 import javax.annotation.Resource;
 
@@ -39,17 +40,19 @@ public class OrderNotificationEmailContext extends AbstractEmailContext<OrderPro
 	@Resource
 	private UserService userService;
 
+	protected ConfigurationService configurationService;
+	
 	@Override
 	public void init(final OrderProcessModel orderProcessModel, final EmailPageModel emailPageModel)
 	{
 
 		super.init(orderProcessModel, emailPageModel);
+		userService.setCurrentUser(orderProcessModel.getOrder().getUser());
+		orderData = getOrderConverter().convert(orderProcessModel.getOrder());
 		if (BASE_SITE != null)
 		{
 			super.put("env", configurationService.getConfiguration().getString("mail.enviorment"));
 		}
-		userService.setCurrentUser(orderProcessModel.getOrder().getUser());
-		orderData = getOrderConverter().convert(orderProcessModel.getOrder());
 	}
 
 	@Override
@@ -84,5 +87,16 @@ public class OrderNotificationEmailContext extends AbstractEmailContext<OrderPro
 	protected LanguageModel getEmailLanguage(final OrderProcessModel orderProcessModel)
 	{
 		return orderProcessModel.getOrder().getLanguage();
+	}
+	
+	protected ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	@Required
+	public void setConfigurationService(final ConfigurationService configurationService)
+	{
+		this.configurationService = configurationService;
 	}
 }

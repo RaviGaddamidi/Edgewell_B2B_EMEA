@@ -22,7 +22,7 @@ import de.hybris.platform.core.model.c2l.LanguageModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
-
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Required;
@@ -85,5 +85,15 @@ public class CustomerEmailContext extends AbstractEmailContext<StoreFrontCustome
 	protected LanguageModel getEmailLanguage(final StoreFrontCustomerProcessModel businessProcessModel)
 	{
 		return businessProcessModel.getLanguage();
+	}
+	protected ConfigurationService getConfigurationService()
+	{
+	return configurationService;
+	}
+
+	@Required
+	public void setConfigurationService(final ConfigurationService configurationService)
+	{
+	this.configurationService = configurationService;
 	}
 }
