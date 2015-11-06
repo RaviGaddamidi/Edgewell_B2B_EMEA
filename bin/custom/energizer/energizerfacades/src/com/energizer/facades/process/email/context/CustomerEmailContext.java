@@ -35,7 +35,7 @@ public class CustomerEmailContext extends AbstractEmailContext<StoreFrontCustome
 {
 	private Converter<UserModel, CustomerData> customerConverter;
 	private CustomerData customerData;
-
+	protected ConfigurationService configurationService;
 	public String getSecureRequestResetPasswordUrl() throws UnsupportedEncodingException
 	{
 		return getSiteBaseUrlResolutionService().getWebsiteUrlForSite(getBaseSite(), getUrlEncodingAttributes(), true,
