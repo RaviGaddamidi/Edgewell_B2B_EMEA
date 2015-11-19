@@ -12,14 +12,19 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -48,6 +53,8 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 	@Autowired
 	private ConfigurationService configurationService;
 
+	private static final int BUFFER_SIZE = 4096;
+
 
 	@Override
 	public String generateScript()
@@ -63,6 +70,7 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 
 		if (StringUtils.isNotBlank(exportDir))
 		{
+
 			final File dir = new File(System.getProperty("user.home") + "\\" + exportDir);
 			try
 			{
@@ -77,7 +85,6 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 				{
 					final Path dirPath = Paths.get(dir.getAbsolutePath());
 					copyExportedMediaFile(dirPath, result.getExportedData());
-					//copyExportedMediaFile(dirPath, result.getExportedMedia());
 				}
 				else
 				{
@@ -110,7 +117,6 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 		LOG.info("fieldSeparator:" + fieldSeparator);
 		ArrayList arList = null;
 		ArrayList al = null;
-		//final String fName = "test.csv";
 		String thisLine;
 		final int count = 0;
 
@@ -129,12 +135,11 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 				final String strar[] = thisLine.split(fieldSeparator.toString());
 				for (int j = 1; j < strar.length; j++)
 				{
+
 					if (strar[j].equals("orderingUnit"))
 					{
-						al.add("Quantity");
+						al.add("quantity");
 					}
-
-
 
 					else
 					{
@@ -184,7 +189,7 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 
 			final FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "\\" + exportDownloadDir + "\\"
 					+ "catalogDownload.xls");
-			//final FileOutputStream fileOut = new FileOutputStream("D:\\Desktop" + "catalogDownload.xls");
+
 			hwb.write(fileOut);
 			fileOut.close();
 			fis.close();
@@ -204,8 +209,7 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 		catch (final Exception ex)
 		{
 			ex.printStackTrace();
-		} //main method ends
-
+		}
 	}
 
 	@Override
@@ -219,6 +223,85 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 		return sb.toString();
 	}
 
+	@Override
+	public void saveFile(final HttpServletRequest request, final HttpServletResponse response)
+	{
+
+		final String exportDir = configurationService.getConfiguration().getString("catalogdownload.downloadPath");
+		final ServletContext context = request.getServletContext();
+
+
+		final String fullPath = System.getProperty("user.home") + "\\" + exportDir + "\\" + "catalogDownload.xls";
+		final File downloadFile = new File(fullPath);
+		FileInputStream inputStream = null;
+		try
+		{
+			inputStream = new FileInputStream(downloadFile);
+		}
+		catch (final FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+
+		String mimeType = context.getMimeType(fullPath);
+		if (mimeType == null)
+		{
+			mimeType = "application/octet-stream";
+		}
+		LOG.info("MIME type: " + mimeType);
+
+		// set content attributes for the response
+		response.setContentType(mimeType);
+		response.setContentLength((int) downloadFile.length());
+
+
+		// set headers for the response
+		final String headerKey = "Content-Disposition";
+		final String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+		response.setHeader(headerKey, headerValue);
+
+		OutputStream outStream = null;
+		try
+		{
+			outStream = response.getOutputStream();
+		}
+		catch (final IOException e)
+		{
+			// YTODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final byte[] buffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+
+		// write bytes read from the input stream into the output stream
+		try
+		{
+			while ((bytesRead = inputStream.read(buffer)) != -1)
+			{
+				outStream.write(buffer, 0, bytesRead);
+			}
+		}
+		catch (final IOException e)
+		{
+			// YTODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try
+		{
+
+			inputStream.close();
+			outStream.close();
+		}
+		catch (final IOException e)
+		{
+			e.printStackTrace();
+
+		}
+
+
+	}
 
 
 }

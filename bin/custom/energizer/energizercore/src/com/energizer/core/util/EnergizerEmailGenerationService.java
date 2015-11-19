@@ -178,7 +178,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					emailContext.getFromEmail(), emailSubject, emailBody, null);
 
 		}//order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Energizer Reference Number Pending Approval") != -1)
+		else if (emailSubject.indexOf("Edgewell Reference Number Pending Approval") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			if (null != emailList && emailList.size() > 0)
