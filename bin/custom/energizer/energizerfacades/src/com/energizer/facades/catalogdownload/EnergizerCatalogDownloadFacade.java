@@ -9,6 +9,9 @@ import de.hybris.platform.servicelayer.impex.ExportResult;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 
 /**
@@ -27,6 +30,9 @@ public interface EnergizerCatalogDownloadFacade
 	public void convertCSVToExcel(final String fileName, final String filePath, final Character fieldSeparator);
 
 	public String findRealMediaPath(final ImpExMediaModel impexModel);
+
+	public void saveFile(final HttpServletRequest request, final HttpServletResponse response);
+
 
 
 }

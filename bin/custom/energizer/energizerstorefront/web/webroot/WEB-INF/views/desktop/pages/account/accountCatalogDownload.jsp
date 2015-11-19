@@ -13,18 +13,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<template:page pageTitle="${pageTitle}">
 
-    <div id="breadcrumb" class="breadcrumb">
-		<breadcrumb:breadcrumb breadcrumbs="${breadcrumbs}"/>
-	</div>
-	<div id="globalMessages">
-		<common:globalMessages/>
-	</div>
-	<nav:accountNav selected="catalogDownload" />
-	
-		
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Download Page</title>
+</head>
+<body>
+    
+</body>
+</html>
 
-
-</template:page>
 

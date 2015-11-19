@@ -1,7 +1,6 @@
 
-
 /**
- * 
+ *
  */
 package com.energizer.core.util;
 
@@ -18,9 +17,10 @@ import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceServi
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.orderprocessing.model.OrderProcessModel;
 import de.hybris.platform.processengine.model.BusinessProcessModel;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
-import de.hybris.platform.servicelayer.config.ConfigurationService;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author m1023278
- * 
+ *
  */
 public class EnergizerEmailGenerationService extends DefaultEmailGenerationService
 {
@@ -44,7 +44,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	private String salesPersonEmailId;
 
 	private String displayName;
-	
+
 	private String enviorment;
 
 	B2BUserGroupModel b2bUserGroupModel;
@@ -69,12 +69,13 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
-	
+
 	@Resource
 	private ConfigurationService configurationService;
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.acceleratorservices.email.impl.DefaultEmailGenerationService#generate(de.hybris.platform.
 	 * processengine.model.BusinessProcessModel, de.hybris.platform.acceleratorservices.model.cms2.pages.EmailPageModel)
 	 */
@@ -101,9 +102,6 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					.getPermissionResults();
 			for (final B2BPermissionResultModel b2bPermissionResultModel : b2bPermissionResultModels)
 			{
-
-				emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
-
 				if (emailSet.size() > 0)
 				{
 
@@ -117,7 +115,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 					emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
 				}
 
-
+				emailSet.add(b2bPermissionResultModel.getApprover().getEmail());
 			}
 			emailList.addAll(emailSet);
 			b2bCustomerModelList = new ArrayList<B2BCustomerModel>();
@@ -139,8 +137,9 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	protected EmailMessageModel createEmailMessage(final String emailSubject, final String emailBody,
 			final AbstractEmailContext<BusinessProcessModel> emailContext)
 	{
-		enviorment = configurationService.getConfiguration().getString("mail.enviorment");
 		EmailMessageModel emailMessageModel;
+		enviorment = configurationService.getConfiguration().getString("mail.enviorment");
+		LOG.info("THE ENVIORMENT IS" + enviorment);
 		if (emailSubject.indexOf("approved") != -1)
 		{
 			final EmailAddressModel ccAddress = getEmailService().getOrCreateEmailAddressForEmail(getSalesPersonEmailId(),
@@ -149,7 +148,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			ccAddress.setDisplayName(getDisplayName());
 			emailMessageModel = super.createEmailMessage(emailSubject, emailBody, emailContext);
 			final List<EmailAddressModel> ccEmails = new ArrayList<EmailAddressModel>();
-			
+
 			LOG.info("THE ICS PROP VALS ARE" + "\t" + configurationService.getConfiguration().getString("ICS.EMAILID") + "\t"
 					+ configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
 
@@ -159,16 +158,16 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			ccIcsAddress1.setEmailAddress(configurationService.getConfiguration().getString("ICS.EMAILID"));
 			ccIcsAddress1.setDisplayName(configurationService.getConfiguration().getString("ICS.DISPLAYNAME"));
 
-			
 			if (null != ccAddress)
 			{
 				ccEmails.add(ccAddress);
 			}
-			
-			if (null !=ccIcsAddress1)
+
+			if (null != ccIcsAddress1)
 			{
 				ccEmails.add(ccIcsAddress1);
 			}
+
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			final EmailAddressModel toAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getToEmail(),
 					emailContext.getToDisplayName());
@@ -176,17 +175,17 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
 			return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
-					emailContext.getFromEmail(), enviorment+emailSubject, emailBody, null);
+					emailContext.getFromEmail(), emailSubject, emailBody, null);
 
 		}//order pending approval email : add List of reviewers in cc address field
-		else if (emailSubject.indexOf("Edgewell Reference Number Pending Approval") != -1)
+		else if (emailSubject.indexOf("Energizer Reference Number Pending Approval") != -1)
 		{
 			final List<EmailAddressModel> toEmails = new ArrayList<EmailAddressModel>();
 			if (null != emailList && emailList.size() > 0)
 			{
-				// get the list of approver emails and search for the same in the EmailAddress table by flexiblesearchquery, 
+				// get the list of approver emails and search for the same in the EmailAddress table by flexiblesearchquery,
 				//if emailAddress is found then that is the cc address and set the email id
-				//if no emailaddress create the new EmailAddressModel and make it as cc address 
+				//if no emailaddress create the new EmailAddressModel and make it as cc address
 				//add the cc address to list of EmailAddressModel
 				for (int i = 0; i < emailList.size(); i++)
 				{
@@ -220,7 +219,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 				final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 						emailContext.getFromDisplayName());
 				return getEmailService().createEmailMessage(toEmails, ccEmails, new ArrayList<EmailAddressModel>(), fromAddress,
-						emailContext.getFromEmail(), enviorment+emailSubject, emailBody, null);
+						emailContext.getFromEmail(), emailSubject, emailBody, null);
 			}//end of if loop
 		}//end of order pending approval email : add List of reviewers in cc address field
 		else if (emailSubject.indexOf("Energizer Approval Failed for Reference no") != -1)
@@ -232,7 +231,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 			final EmailAddressModel fromAddress = getEmailService().getOrCreateEmailAddressForEmail(emailContext.getFromEmail(),
 					emailContext.getFromDisplayName());
 			return getEmailService().createEmailMessage(toEmails, new ArrayList<EmailAddressModel>(),
-					new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(),enviorment+emailSubject, emailBody, null);
+					new ArrayList<EmailAddressModel>(), fromAddress, emailContext.getFromEmail(), emailSubject, emailBody, null);
 		}
 		else
 		{

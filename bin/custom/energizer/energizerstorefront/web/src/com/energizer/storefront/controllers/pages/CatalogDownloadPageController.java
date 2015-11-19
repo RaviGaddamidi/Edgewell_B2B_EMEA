@@ -16,6 +16,8 @@ import de.hybris.platform.util.CSVConstants;
 import java.io.StringBufferInputStream;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.energizer.facades.catalogdownload.EnergizerCatalogDownloadFacade;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
 
 
 /**
@@ -58,16 +58,14 @@ public class CatalogDownloadPageController extends AbstractSearchPageController
 	private ConfigurationService configurationService;
 
 
+
+
 	@RequestMapping(value = "/catalogDownload")
 	//, method = RequestMethod.POST)
 	@RequireHardLogIn
-	public String downloadCatalog(final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	public void downloadCatalog(final Model model, final RedirectAttributes redirectAttributes, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
 	{
-
-		storeCmsPageInModel(model, getContentPageForLabelOrId(CATALOG_DOWNLOAD_PAGE));
-		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CATALOG_DOWNLOAD_PAGE));
-		model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.catalogDownload"));
-		model.addAttribute("metaRobots", "no-index,no-follow");
 
 		LOG.info("catalog Download");
 
@@ -104,16 +102,8 @@ public class CatalogDownloadPageController extends AbstractSearchPageController
 			if (result.isSuccessful())
 			{
 				defaultEnergizerCatalogDownloadFacade.copyExportedMediaToExportDir(result);
-				GlobalMessages.addErrorMessage(model, "catalog.download.success");
-
-				//"Catalog is Successfully downloaded to your Download Folder");
-
-				/*
-				 * cron.setExportedData(result.getExportedData()); cron.setExportedMedia(result.getExportedMedia());
-				 * modelService.save(cron);
-				 */
+				defaultEnergizerCatalogDownloadFacade.saveFile(request, response);
 			}
-
 
 		}
 		catch (final Exception e)
@@ -123,12 +113,9 @@ public class CatalogDownloadPageController extends AbstractSearchPageController
 			e.printStackTrace();
 		}
 
-		return ControllerConstants.Views.Pages.Account.AccountCatalogDownload;
+
 
 	}
-
-
-
 
 
 }

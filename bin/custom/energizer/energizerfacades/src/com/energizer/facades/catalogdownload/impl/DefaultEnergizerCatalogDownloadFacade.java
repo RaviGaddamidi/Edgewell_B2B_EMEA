@@ -129,7 +129,17 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 				final String strar[] = thisLine.split(fieldSeparator.toString());
 				for (int j = 1; j < strar.length; j++)
 				{
-					al.add(strar[j]);
+					if (strar[j].equals("orderingUnit"))
+					{
+						al.add("Quantity");
+					}
+
+
+
+					else
+					{
+						al.add(strar[j]);
+					}
 				}
 				arList.add(al);
 				System.out.println();
@@ -176,6 +186,7 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 					+ "catalogDownload.xls");
 			//final FileOutputStream fileOut = new FileOutputStream("D:\\Desktop" + "catalogDownload.xls");
 			hwb.write(fileOut);
+			fileOut.close();
 			fis.close();
 			final File file = new File(fileName);
 
@@ -188,7 +199,6 @@ public class DefaultEnergizerCatalogDownloadFacade implements EnergizerCatalogDo
 				System.out.println("Delete operation is failed.");
 			}
 
-			fileOut.close();
 			System.out.println("Your excel file has been generated");
 		}
 		catch (final Exception ex)
