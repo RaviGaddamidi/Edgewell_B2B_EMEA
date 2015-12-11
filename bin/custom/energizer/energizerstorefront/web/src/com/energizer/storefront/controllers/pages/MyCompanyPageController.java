@@ -134,6 +134,9 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected static final String EDIT_COSTCENTER_URL = "/my-company/organization-management/manage-costcenters/update";
 	protected static final String REDIRECT_TO_MANAGE_USERS = FORWARD_PREFIX + "/my-company/organization-management/manage-users/";
 	protected final static String DEFAULT_PASSWORD = "energizer.default.password";
+	protected final static String DEFAULT_PACKING_OPTION = "energizer.default.packingOption";
+
+
 	@Resource(name = "customerAccountService")
 	protected CustomerAccountService customerAccountService;
 
@@ -294,6 +297,12 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUnitsDetailsBreadcrumbs(unit);
 		model.addAttribute("breadcrumbs", breadcrumbs);
 
+		/*
+		 * final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split( new
+		 * Character(',').toString()));
+		 */
+
+		final String packingData = Config.getParameter(DEFAULT_PACKING_OPTION);
 		B2BUnitData unitData = companyB2BCommerceFacade.getUnitForUid(unit);
 		if (unitData == null)
 		{
@@ -305,6 +314,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			GlobalMessages.addInfoMessage(model, "b2bunit.disabled.infomsg");
 		}
 
+		model.addAttribute("packingType", packingData);
 		model.addAttribute("unit", unitData);
 		model.addAttribute("user", customerFacade.getCurrentCustomer());
 		model.addAttribute("metaRobots", "no-index,no-follow");

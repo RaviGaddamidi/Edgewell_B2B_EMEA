@@ -57,6 +57,27 @@
 			</c:choose>
 			<!--   Start Code changes for order flag check -->			
 			<cart:cartItems cartData="${cartData}"/>
+			
+			   <div>
+			
+			     <label ><spring:theme code="container.height" /></label>
+			     <select id="containerHeight" name="containerHeight" title="Container Height">
+                 <c:forEach var="contHgt" items="${containerHeightList}">
+						<c:set var="containerHeight" value="${contHgt}" />
+						<option value="${containerHeight}">${containerHeight}</option>
+				 </c:forEach>
+			     </select>
+					&nbsp;&nbsp;
+				 <label ><spring:theme code="packing.type" /></label>
+				 <select id="packingOption" name="packingOption">
+			     <c:forEach var="item" items="${packingOptionList}">
+						 <c:set var="packingOption" value="${item}" />
+						 <option value="${packingOption}">${packingOption}</option>
+				  </c:forEach>
+				  </select>
+					
+				</div>
+					<br><br>
 
 				<div class="clearfix fixthis_row_cls">
 					<div class="span-16">

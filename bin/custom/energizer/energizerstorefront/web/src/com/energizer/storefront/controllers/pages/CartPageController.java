@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -24,12 +24,14 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.commercefacades.user.UserFacade;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.ControllerConstants.Views;
 import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.UpdateProfileForm;
 import com.energizer.storefront.forms.UpdateQuantityForm;
 import com.energizer.storefront.variants.VariantSortStrategy;
 
@@ -95,6 +98,9 @@ public class CartPageController extends AbstractPageController
 	@Deprecated
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
+
+	@Resource(name = "userFacade")
+	protected UserFacade userFacade;
 
 	@Resource(name = "cartFacade")
 	private de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade b2bCartFacade;
@@ -300,8 +306,9 @@ public class CartPageController extends AbstractPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-            boolean flag = false;
-			String productWithCmirInActive="";
+
+			boolean flag = false;
+			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
@@ -309,7 +316,7 @@ public class CartPageController extends AbstractPageController
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
 				if (entry.getProduct().isIsActive() == false)
 				{
-                    productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
 					flag = true;
 
 				}
@@ -325,11 +332,36 @@ public class CartPageController extends AbstractPageController
 		/** Energizer Container Utilization service */
 		cartData = energizerCartService.calCartContainerUtilization(cartData);
 
-		model.addAttribute("cartData", cartData);
 
+		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
+				new Character(',').toString()));
+		//containerHeightList.add("20 ft");
+		//containerHeightList.add("40 ft");
+
+		final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(
+				new Character(',').toString()));
+
+		/*
+		 * final List<String> packingOption = new ArrayList<String>(); packingOption.add("two wooden base layer ");
+		 * packingOption.add("two slip sheets"); packingOption.add("wooden base layer and a slip sheet");
+		 */
+
+		model.addAttribute("containerHeightList", containerHeightList);
+		model.addAttribute("packingOptionList", packingOptionsList);
+
+		model.addAttribute("cartData", cartData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 	}
+
+	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
+	@RequireHardLogIn
+	public void updateProfile(@Valid final UpdateProfileForm updateProfileForm, final BindingResult bindingResult,
+			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	{
+		LOG.info("for container utilization");
+	}
+
 
 	protected void reverseCartProductsOrder(final List<OrderEntryData> entries)
 	{
