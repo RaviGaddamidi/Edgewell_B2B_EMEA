@@ -183,18 +183,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 						if (materialId != null || customerMaterailId != null)
 						{
-							uploadData = new EnergizerFileUploadData();
-
-							uploadData.setMaterialId(materialId);
-							uploadData.setCustomerMaterialId(customerMaterailId);
+							
+							 uploadData = new EnergizerFileUploadData();
 
 							if (row.getCell(2) != null)
 							{
 								try
 								{
+									
 									final String val = row.getCell(2).toString().trim();
 									final Long quantity = new Double(val).longValue();
-									uploadData.setQuantity(quantity);
+									if (quantity > 0)
+									{
+										uploadData.setCustomerMaterialId(customerMaterailId);
+										uploadData.setMaterialId(materialId);
+										uploadData.setQuantity(quantity);
+
+									}
+									
 								}
 								catch (final Exception ise)
 								{
