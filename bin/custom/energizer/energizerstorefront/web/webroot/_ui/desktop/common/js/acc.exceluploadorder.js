@@ -19,7 +19,7 @@ $(document).ready(function(){
 			
 			 try{
 				 qty=$(this).val();
-				 if(qty != null && qty>0)
+				 if(qty != null && qty>=0)
 					{
 					 qty=parseInt(qty);
 						$.ajax({
