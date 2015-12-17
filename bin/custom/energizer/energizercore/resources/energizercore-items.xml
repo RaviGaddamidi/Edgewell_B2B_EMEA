@@ -429,6 +429,22 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					
+					<attribute qualifier="packageLength" type="MetricUnit">
+						<description>length of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="packageWidth" type="MetricUnit">
+						<description>width of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="packageHeight" type="MetricUnit">
+						<description>height of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 

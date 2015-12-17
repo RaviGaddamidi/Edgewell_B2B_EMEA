@@ -85,6 +85,14 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	public static final String LAYER = "LAY";
 	public static final String PALLET = "PAL";
 
+	// Constants for Package Dimensions including length , breadth and height
+
+	public static final String LENGTH = "Length";
+	public static final String WIDTH = "Width";
+	public static final String HEIGHT = "Height";
+	public static final String UNIT = "Unit";
+	public static final String ALTERNATIVEUNIT = "AlternativeUnit";
+	
 	private EnergizerCoreConstants()
 	{
 		super();
