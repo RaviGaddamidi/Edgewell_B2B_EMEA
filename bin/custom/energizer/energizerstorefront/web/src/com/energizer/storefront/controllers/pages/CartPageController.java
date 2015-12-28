@@ -69,6 +69,7 @@ import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.ControllerConstants.Views;
 import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.ContainerUtilizationForm;
 import com.energizer.storefront.forms.UpdateProfileForm;
 import com.energizer.storefront.forms.UpdateQuantityForm;
 import com.energizer.storefront.variants.VariantSortStrategy;
@@ -91,6 +92,7 @@ public class CartPageController extends AbstractPageController
 	protected static final Logger LOG = Logger.getLogger(CartPageController.class);
 
 	private static final String CART_CMS_PAGE = "cartPage";
+	private static final String REDIRECT_TO_CART_PAGE = REDIRECT_PREFIX + "/cart";
 
 	private static final String CONTINUE_URL = "continueUrl";
 	public static final String SUCCESSFUL_MODIFICATION_CODE = "success";
@@ -145,11 +147,40 @@ public class CartPageController extends AbstractPageController
 	@Resource
 	private CartService cartService;
 
+	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
+
+	String containerHeight, packingOption;
+
+
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String showCart(final Model model) throws CMSItemNotFoundException
 	{
 		prepareDataForPage(model);
 		return Views.Pages.Cart.CartPage;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	@RequireHardLogIn
+	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	{
+
+		if (bindingErrors.hasErrors())
+		{
+			getViewWithBindingErrorMessages(model, bindingErrors);
+		}
+
+
+		cartEntryBusinessRulesService.clearErrors();
+
+		LOG.info(" Inside updateContainerUtil method");
+		LOG.info("Container Height: " + containerUtilizationForm.getContainerHeight());
+		LOG.info("Packing Option: " + containerUtilizationForm.getPackingType());
+		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
+		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
+
+		return REDIRECT_TO_CART_PAGE;
 	}
 
 	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
@@ -227,6 +258,9 @@ public class CartPageController extends AbstractPageController
 		return false;
 	}
 
+
+
+
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@RequireHardLogIn
@@ -282,7 +316,24 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
+
+		//LOG.info(" Container Height: " + containerUtilizationForm.getContainerHeight());
+		//LOG.info(" Packing Type: " + containerUtilizationForm.getPackingType());
+
+		//final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
+
+		/** Energizer Container Utilization service */
+		//contUtilForm.setContainerHeight(Config.getParameter("energizer.default.containerHeight"));
+		//contUtilForm.setPackingType(Config.getParameter("energizer.default.packingOption"));
+		containerHeight = contUtilForm.getContainerHeight();
+		packingOption = contUtilForm.getPackingType();
+
+		LOG.info(" Container Height: " + containerHeight);
+		LOG.info(" Packing Type: " + packingOption);
+
+		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
+				packingOption);
+
 		if (cartData.isIsContainerFull())
 		{
 
@@ -330,24 +381,37 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		cartData = energizerCartService.calCartContainerUtilization(cartData);
+		//	contUtilForm.setContainerHeight(Config.getParameter("energizer.default.containerHeight"));
+		//	contUtilForm.setPackingType(Config.getParameter("energizer.default.packingOption"));
+
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
+		{
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
+		}
+		else
+		{
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+
+			packingOption = Config.getParameter("energizer.default.packingOption");
+		}
+
+		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption);
 
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
-		//containerHeightList.add("20 ft");
-		//containerHeightList.add("40 ft");
+
 
 		final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(
 				new Character(',').toString()));
 
-		/*
-		 * final List<String> packingOption = new ArrayList<String>(); packingOption.add("two wooden base layer ");
-		 * packingOption.add("two slip sheets"); packingOption.add("wooden base layer and a slip sheet");
-		 */
 
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
+
+		model.addAttribute("containerUtilizationForm", contUtilForm);
+
 
 		model.addAttribute("cartData", cartData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));

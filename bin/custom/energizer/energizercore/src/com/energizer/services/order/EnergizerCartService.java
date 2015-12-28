@@ -13,6 +13,6 @@ import de.hybris.platform.commercefacades.order.data.CartData;
 public interface EnergizerCartService
 {
 
-	public CartData calCartContainerUtilization(CartData cartData);
+		public CartData calCartContainerUtilization(CartData cartData, String containerHeight, String packingOption);
 
 }

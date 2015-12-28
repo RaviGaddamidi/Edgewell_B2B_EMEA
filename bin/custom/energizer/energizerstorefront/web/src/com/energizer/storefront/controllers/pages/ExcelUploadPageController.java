@@ -1,5 +1,6 @@
 /**
- * 
+ *
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -62,7 +63,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- * 
+ *
  */
 
 @Controller
@@ -192,13 +193,14 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 							{
 								try
 								{
+
 									final String val = row.getCell(2).toString().trim();
 									final Long quantity = new Double(val).longValue();
 									uploadData.setQuantity(quantity);
 								}
 								catch (final Exception ise)
 								{
-									LOG.error("cannot convert " + row.getCell(2).toString() + " into number");
+									LOG.error("cannot convert " + row.getCell(2).getStringCellValue() + " into number");
 									GlobalMessages.addErrorMessage(model, "text.account.excelUpload.badDataForQuantity");
 								}
 							}
@@ -302,7 +304,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 				if (orderEntry != null)
 				{
-					orderEntry.setQuantity(energizerFileUploadData.getQuantity());
 
 					model.addAttribute("cartShippingPoint",
 							orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
@@ -394,7 +395,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
 			}
 		}
-		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
+		//	final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
+		final CartData cartDataUpdationforContainer = null;
 		model.addAttribute("cartData", cartDataUpdationforContainer);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
@@ -411,8 +413,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody
-	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{
@@ -436,8 +437,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	private String validateAndGetString(final Cell cell)
 	{
-	
-	return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
-		
+		return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
 	}
+
 }

@@ -1,4 +1,5 @@
 <%@ page trimDirectiveWhitespaces="true" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/desktop/template" %>
 <%@ taglib prefix="cart" tagdir="/WEB-INF/tags/desktop/cart" %>
@@ -12,9 +13,11 @@
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/desktop/nav/breadcrumb" %>
 <%@ taglib prefix="ycommerce" uri="http://hybris.com/tld/ycommercetags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="formElement" tagdir="/WEB-INF/tags/desktop/formElement" %>
 
 <spring:theme text="Your Shopping Cart" var="title" code="cart.page.title"/>
 <c:url value="/checkout/single" var="checkoutUrl"/>
+<c:url var="containerUrl" value="/cart" />
 
 <template:page pageTitle="${pageTitle}">
 
@@ -55,38 +58,57 @@
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
 			</c:choose>
+			
+		
 			<!--   Start Code changes for order flag check -->			
 			<cart:cartItems cartData="${cartData}"/>
 			
-			   <div>
-			
-			     <label ><spring:theme code="container.height" /></label>
-			     <select id="containerHeight" name="containerHeight" title="Container Height">
-                 <c:forEach var="contHgt" items="${containerHeightList}">
-						<c:set var="containerHeight" value="${contHgt}" />
-						<option value="${containerHeight}">${containerHeight}</option>
-				 </c:forEach>
-			     </select>
-					&nbsp;&nbsp;
-				 <label ><spring:theme code="packing.type" /></label>
-				 <select id="packingOption" name="packingOption">
-			     <c:forEach var="item" items="${packingOptionList}">
-						 <c:set var="packingOption" value="${item}" />
-						 <option value="${packingOption}">${packingOption}</option>
-				  </c:forEach>
-				  </select>
+			<div >
+			<form:form  name="containerform" action="cart" id="containeroptimization" method="post" commandName ="containerUtilizationForm" >
+		 
+			  <label ><spring:theme code="container.height" /></label> 
+			   <form:select path="containerHeight">
+   
+                   <form:options items="${containerHeightList}" />
+               </form:select>
 					
-				</div>
+					
+				 &nbsp;&nbsp;<label ><spring:theme code="packing.type" /></label>
+				 <form:select path="packingType">
+   
+                   <form:options items="${packingOptionList}" />
+               </form:select>
+				 
+				
+					
+					<button id ="container_Optamization"  style="position:absolute;left:900px;" class="positive"  type="submit"  ><spring:theme code="basket.your.shopping.container.optimization" /></button> 
+					
+					<!--  <div class="form-actions"">
+					<ycommerce:testId code="update_button" >
+						<button class="positive" type="submit"  >
+							<spring:theme code="basket.your.shopping.container.optimization" />
+						</button>
+					</ycommerce:testId>
+				</div>-->
+					
+					</form:form>
+					
+					</div>
+					
 					<br><br>
-
+					
+	
 				<div class="clearfix fixthis_row_cls">
+				<br><br><br><br>
 					<div class="span-16">
 					
 						<div class="cntutil_wrapper_cls">
+				
 							 
-									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/><div style="font-size:11px;color: blue; "><spring:theme code="basket.your.shopping.container.utilization1"/></div></div>
+							 
+									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/></div>
 				                      	<div id="volume_cont">
-				                      	<div class="divider_20"><span class="span_cls">40ftHC</span></div>
+				                        <div class="divider_20"><span class="span_cls">40ftHC</span></div>
 				                      	<div class="divider_40"><span class="span_cls">20ft</span></div>
 				                    	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
@@ -114,6 +136,7 @@
 					<div class="span-8 last">
 						<cart:ajaxCartTotals/>
 						<cart:cartTotals cartData="${cartData}" showTaxEstimate="true"/> 
+						
 					</div>
 				</div>
 		

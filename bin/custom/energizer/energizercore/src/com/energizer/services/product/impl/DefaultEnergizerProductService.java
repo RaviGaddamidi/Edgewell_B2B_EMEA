@@ -37,7 +37,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerCMIR(java.lang.String)
 	 */
 	@Override
@@ -71,7 +71,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerCMIR(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -100,7 +100,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerProductConversion(java.lang.String)
 	 */
 	@Override
@@ -150,7 +150,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.services.product.EnergizerProductService#getEnergizerCMIRforCustomerMaterialID(java.lang.String,
 	 * java.lang.String)
@@ -208,7 +208,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerCMIRList(java.lang.String)
 	 */
 	@Override
@@ -222,7 +222,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerOrphanedProductList()
 	 */
 	@Override
@@ -235,7 +235,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -248,7 +248,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -272,5 +272,14 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	{
 		final List<EnergizerPriceRowModel> result = energizerProductDAO.getAllEnergizerPriceRowForB2BUnit(erpMaterialID, b2bUnitId);
 		return result;
+	}
+
+	public List<EnergizerProductConversionFactorModel> getAllEnergizerProductConversion(final String erpMaterialId)
+	{
+
+
+		return energizerProductDAO.getEnergizerProductConversionLst(erpMaterialId);
+
+
 	}
 }
