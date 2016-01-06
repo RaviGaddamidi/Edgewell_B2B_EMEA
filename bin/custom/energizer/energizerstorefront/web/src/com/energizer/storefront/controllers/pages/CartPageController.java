@@ -180,7 +180,8 @@ public class CartPageController extends AbstractPageController
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
 
-		return REDIRECT_TO_CART_PAGE;
+		prepareDataForPage(model);
+		return Views.Pages.Cart.CartPage;
 	}
 
 	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
@@ -397,6 +398,20 @@ public class CartPageController extends AbstractPageController
 		}
 
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption);
+		final List<String> message = energizerCartService.messages();
+		if (message != null)
+		{
+			for (final String messages : message)
+			{
+
+				GlobalMessages.addErrorMessage(model, messages);
+			}
+		}
+
+		final List<String> product = energizerCartService.productNotAddedToCart();
+
+
+
 
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
@@ -411,7 +426,7 @@ public class CartPageController extends AbstractPageController
 		model.addAttribute("packingOptionList", packingOptionsList);
 
 		model.addAttribute("containerUtilizationForm", contUtilForm);
-
+		model.addAttribute("productList", product);
 
 		model.addAttribute("cartData", cartData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));

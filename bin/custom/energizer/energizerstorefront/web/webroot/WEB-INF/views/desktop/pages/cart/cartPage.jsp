@@ -140,6 +140,61 @@
 					</div>
 				</div>
 		
+		   <!-- displaying products that cannot be added to the cart -->
+		     <c:if test="${not empty productList}">
+		     
+		       <div>
+		       
+		       <spring:theme code="Following product cannot be added to the container with the selected Packing type and container height " />
+		       <br/><br/>
+		       <table  cellspacing="10" cellpadding="10" border="1">
+			<thead>
+				<tr>
+					
+										
+										<th id="header1">
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<spring:theme
+										code=" ErpMaterialterialId " />
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										</th> 
+						
+									
+						
+										<th id="header2">
+										<spring:theme code=" UOM "/>
+										</th>
+										
+					</tr>
+			
+			</thead>
+			
+			<tbody>
+			<c:forEach items="${productList}" var="productList1">
+			<tr>
+			
+			<td headers="header1">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			  <c:out value="${productList1}"  escapeXml="false"></c:out>
+			 
+			  &nbsp;&nbsp;&nbsp;&nbsp;
+			
+			</td>
+			
+			
+			<td headers="header2">
+			  <c:out value="PAL"/>
+			</td>
+			 
+			</tr>
+			</c:forEach>
+			</tbody>
+			
+			</table>
+		       
+		       </div>
+		       </c:if>
 			<!--   Start Code changes for order flag check  for continueShop button -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">

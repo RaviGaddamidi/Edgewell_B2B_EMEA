@@ -12,10 +12,12 @@ import de.hybris.platform.commercefacades.order.data.CartRestorationData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
 import de.hybris.platform.servicelayer.session.SessionService;
+import de.hybris.platform.util.Config;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -37,12 +40,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
@@ -56,7 +61,9 @@ import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.ControllerConstants.Views;
 import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.ContainerUtilizationForm;
 import com.energizer.storefront.forms.ExcelUploadForm;
 import com.energizer.storefront.forms.UpdateQuantityForm;
 
@@ -78,6 +85,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	private static final String CART_CMS_PAGE = "cartPage";
 	private static final String CONTINUE_URL = "continueUrl";
 	private static final String EXCEL_ORDER_AJAX_CALL = "/excelUpload/updateOrderQuantity";
+	private static final String CART = "/cart";
 
 	@Resource(name = "accountBreadcrumbBuilder")
 	private ResourceBreadcrumbBuilder accountBreadcrumbBuilder;
@@ -109,6 +117,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@Resource
 	EnergizerProductService energizerProductService;
+
+	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
+
+	String containerHeight, packingOption;
 
 	@Value("${excelFileSize}")
 	private String excelFileSize;
@@ -284,7 +296,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		}
 		if (cartEntryBusinessRulesService.getErrors() != null && !cartEntryBusinessRulesService.getErrors().isEmpty())
 		{
-			cartEntryBusinessRulesService.getErrors().clear();
+			//			cartEntryBusinessRulesService.getErrors().clear();R
 		}
 
 		if (shipmentMap.containsKey(shipmentPoint))
@@ -387,16 +399,73 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-
+			boolean flag = false;
+			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
 				uqf.setQuantity(entry.getQuantity());
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
+				if (entry.getProduct().isIsActive() == false)
+				{
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					flag = true;
+
+				}
+			}
+			if (flag == true)
+			{
+				GlobalMessages.addMessage(model, "accErrorMsgs", "cart.cmirinactive", new Object[]
+				{ productWithCmirInActive });
+				//return FORWARD_PREFIX + "/cart";
+			}
+
+		}
+
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
+		{
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
+		}
+		else
+		{
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+
+			packingOption = Config.getParameter("energizer.default.packingOption");
+		}
+		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(),
+				containerHeight, packingOption);
+		//final CartData cartDataUpdationforContainer = null;
+
+		final List<String> message = energizerCartService.messages();
+		if (message != null)
+		{
+			for (final String messages : message)
+			{
+
+				GlobalMessages.addErrorMessage(model, messages);
 			}
 		}
-		//	final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
-		final CartData cartDataUpdationforContainer = null;
+		final List<String> product = energizerCartService.productNotAddedToCart();
+
+		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
+				new Character(',').toString()));
+
+
+		final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(
+				new Character(',').toString()));
+
+		contUtilForm.setContainerHeight(containerHeight);
+		contUtilForm.setPackingType(packingOption);
+
+
+
+		model.addAttribute("containerHeightList", containerHeightList);
+		model.addAttribute("packingOptionList", packingOptionsList);
+		model.addAttribute("productList", product);
+		model.addAttribute("containerUtilizationForm", contUtilForm);
+
+
 		model.addAttribute("cartData", cartDataUpdationforContainer);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
@@ -438,6 +507,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	private String validateAndGetString(final Cell cell)
 	{
 		return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
+	}
+
+	@RequestMapping(value = CART, method = RequestMethod.POST)
+	@RequireHardLogIn
+	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	{
+
+		cartEntryBusinessRulesService.clearErrors();
+
+		LOG.info(" Inside updateContainerUtil method");
+		LOG.info("Container Height: " + containerUtilizationForm.getContainerHeight());
+		LOG.info("Packing Option: " + containerUtilizationForm.getPackingType());
+		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
+		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
+
+		prepareDataForPage(model);
+		return Views.Pages.Cart.CartPage;
 	}
 
 }

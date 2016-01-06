@@ -10,7 +10,6 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.user.UserService;
-import de.hybris.platform.util.Config;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -36,7 +35,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class DefaultEnergizerCartService implements EnergizerCartService
 {
@@ -72,6 +71,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 	boolean nonPalletProductsExists = false;
 
+	List<String> message = new ArrayList<String>();
+
+	List<String> products = null;
+
 
 	ArrayList<EnergizerProductPalletHeight> productsListA = new ArrayList<EnergizerProductPalletHeight>();
 	final ArrayList<EnergizerProductPalletHeight> sortedProductsListA = new ArrayList<EnergizerProductPalletHeight>();
@@ -96,7 +99,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		fourtyFeetContainerVolume = fourtyFeetContainerVolume.setScale(2, BigDecimal.ROUND_UP);
 		fourtyFeetContainerWeight = fourtyFeetContainerWeight.setScale(2, BigDecimal.ROUND_UP);
 
-		if (packingOption.equals(Config.getParameter("2 SLIP SHEETS")))
+		if (packingOption.equals("2 SLIP SHEETS"))
 		{
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData);
 		}
@@ -124,6 +127,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		double totalPalletHeight = 0;
 		double availableHeight = 0.0;
 		int totalPalletsCount = 0;
+		message.clear();
+
+		products = new ArrayList<String>();
 
 		if (containerHeight.equals("20FT"))
 		{
@@ -146,12 +152,16 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		palletCount = getPalletsCountOfProductsInCart(cartData);
 
+
+
 		LOG.info("Pallet count:" + palletCount);
 
 		if (volume > 100 || palletCount > totalPalletsCount)
 		{
 			//Display an error message "Reduce the products in the cart"
 			LOG.info("Either volume is greater than 100 or pallet count is greater than" + totalPalletsCount);
+			message.add("Please reduce  products fom the cart");
+
 		}
 		else
 		{
@@ -184,6 +194,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				{
 					//Display an error message "Reduce the products in the cart"
 					LOG.info(" Reduce the products in the cart!!! ");
+					message.add("Please reduce  products fom the cart");
 
 				}
 				else
@@ -194,6 +205,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						if (floorSpaceCount >= (totalPalletsCount / 2))
 						{
 							LOG.info("Some products cannot be double stacked");
+							message.add("Some of the products cannot be double stacked");
 							break;
 						}
 						else
@@ -247,8 +259,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 							productsListB.add(productsListA.get(0));
+							//	final long noOfcasesinHighestPallet = noOfCases(productsListA.get(minIndex).getErpMaterialId());
+							final double volumeOfHighestPallet = volumeOfHighestPallet(productsListA.get(minIndex).getErpMaterialId());
+							final double percentageVolumeOfHighestPallet = getPercentage(new BigDecimal(0),
+									new BigDecimal(volumeOfHighestPallet), containerHeight).getPercentVolumeUses();
+							LOG.info("volume of single product:" + volumeOfHighestPallet);
 							productsListA.remove(productsListA.get(0));
 							LOG.info("Available Height:" + availableHeight);
+							availableVolume = availableVolume - percentageVolumeOfHighestPallet;
 
 							/*
 							 * tempVolume = getVolume(productsListA.get(maxIndex)); numberOfCases =
@@ -260,6 +278,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							if (containerHeight.equals("20FT"))
 							{
 								LOG.info("Please select the different container height!!!");
+								message.add("Please select the different container height");
 								break;
 							}
 						}
@@ -272,14 +291,22 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			{
 				LOG.info("The list of products which are not added to the cart: ");
 
+				String productList = "";
+
+
+
+
 				for (final Iterator iterator = productsListA.iterator(); iterator.hasNext();)
 				{
 					final EnergizerProductPalletHeight tempEnergizerProductPalletHeight = (EnergizerProductPalletHeight) iterator
 							.next();
+					productList += tempEnergizerProductPalletHeight.getErpMaterialId() + " ";
 
+					products.add(tempEnergizerProductPalletHeight.getErpMaterialId());
 					LOG.info(" ERP MaterialID: " + tempEnergizerProductPalletHeight.getErpMaterialId());
 
 				}
+				message.add("Products " + productList + "cannot be added to the container with selected packingtype");
 			}
 
 			LOG.info("******************* The final data is as below: *****************");
@@ -288,7 +315,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			LOG.info(" Available Volume: " + availableVolume);
 
 		}
-		cartData.setTotalProductVolumeInPercent(volume);
+
+
+		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 		cartData.setTotalProductWeightInPercent(weight);
 		return cartData;
 	}
@@ -296,9 +325,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	/**
 	 * As discussed with Kalyan, we need to show height in cms only 1 inch = 2.54cms Need to store the values in
 	 * local.properties file.
-	 * 
+	 *
 	 * 20ft container - 10 floorSpaceCount 40ft container - 20 floorSpaceCount
-	 * 
+	 *
 	 */
 	public double getAvailableHeight(final String packingOption, final String containerHeight)
 	{
@@ -421,7 +450,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			BigDecimal totalCartWt = new BigDecimal(0);
 			/**
 			 * # Container volume in M3 and weight in KG ##########################################
-			 * 
+			 *
 			 * twenty.feet.container.volume=30.44056 twenty.feet.container.weight=15961.90248
 			 * fourty.feet.container.volume=70.62209 fourty.feet.container.weight=18234.3948
 			 */
@@ -529,7 +558,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	}
 
 	/**
-	 * 
+	 *
 	 * @param totalCartWt
 	 * @param totalCartVolume
 	 * @return
@@ -756,12 +785,12 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		long multiplierForPAL = 0;
 		for (final EnergizerProductConversionFactorModel UOM : energizerProductConversionFactorModel)
 		{
-			if (UOM.equals("PAL"))
+			if (UOM.getAlternateUOM().equals("PAL"))
 			{
 				multiplierForPAL = UOM.getConversionMultiplier();
 				continue;
 			}
-			if (UOM.equals("CASE"))
+			if (UOM.getAlternateUOM().equals("CASE"))
 			{
 				multiplierForCase = UOM.getConversionMultiplier();
 				continue;
@@ -776,16 +805,31 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	{
 		final List<EnergizerProductConversionFactorModel> energizerProductConversionFactorModel = energizerProductService
 				.getAllEnergizerProductConversion(erpMaterialId);
+		final String measuringUnit;
+		final double volume;
 		for (final EnergizerProductConversionFactorModel UOM : energizerProductConversionFactorModel)
 		{
-			if (UOM.equals("PAL"))
+			if (UOM.getAlternateUOM().equals("PAL"))
 			{
-				return UOM.getPackageVolume().getMeasurement();
+				measuringUnit = UOM.getPackageVolume().getMeasuringUnits();
+				volume = UOM.getPackageVolume().getMeasurement();
+				return EnergizerWeightOrVolumeConverter.getConversionValue(measuringUnit, new BigDecimal(volume)).doubleValue();
+				//return UOM.getPackageVolume().getMeasurement();
 			}
 
 
 		}
 		return 0;
+	}
+
+	public List<String> messages()
+	{
+		return message;
+	}
+
+	public List<String> productNotAddedToCart()
+	{
+		return products;
 	}
 
 }
