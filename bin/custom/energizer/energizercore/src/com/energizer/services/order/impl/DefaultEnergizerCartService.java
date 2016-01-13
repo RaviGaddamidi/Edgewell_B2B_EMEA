@@ -73,12 +73,13 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 	List<String> message = new ArrayList<String>();
 
-	List<String> products = null;
+	List<EnergizerProductPalletHeight> products = null;
+
 
 
 	ArrayList<EnergizerProductPalletHeight> productsListA = new ArrayList<EnergizerProductPalletHeight>();
 	final ArrayList<EnergizerProductPalletHeight> sortedProductsListA = new ArrayList<EnergizerProductPalletHeight>();
-	final ArrayList<EnergizerProductPalletHeight> productsListB = new ArrayList<EnergizerProductPalletHeight>();
+	ArrayList<EnergizerProductPalletHeight> productsListB = new ArrayList<EnergizerProductPalletHeight>();
 
 
 	@Override
@@ -101,6 +102,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		if (packingOption.equals("2 SLIP SHEETS"))
 		{
+			message = null;
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData);
 		}
 		else
@@ -118,18 +120,21 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	{
 
 		double availableVolume = 100;
+		double availableWeight = 100;
+		double availableHeight = 0;
 		double volumeOfNonPalletProducts = 0;
-		//final String packingOption = null;
+		double weightOfNonPalletProducts = 0;
 		int floorSpaceCount = 0;
 		double volume = 0;
 		double weight = 0;
 		long palletCount = 0;
 		double totalPalletHeight = 0;
-		double availableHeight = 0.0;
 		int totalPalletsCount = 0;
+		double productWeight = 0;
 		message.clear();
 
-		products = new ArrayList<String>();
+		products = new ArrayList<EnergizerProductPalletHeight>();
+		productsListB = new ArrayList<EnergizerProductPalletHeight>();
 
 		if (containerHeight.equals("20FT"))
 		{
@@ -172,9 +177,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				volumeOfNonPalletProducts = getPercentage(getWeightOfProductsInCart(cartData, "WEIGHTOFNONPALLETPRODUCTS"),
 						getVolumeOfProductsInCart(cartData, "VOLUMEOFNONPALLETPRODUCTS"), containerHeight).getPercentVolumeUses();
 
-
+				weightOfNonPalletProducts = getPercentage(getWeightOfProductsInCart(cartData, "WEIGHTOFNONPALLETPRODUCTS"),
+						getVolumeOfProductsInCart(cartData, "VOLUMEOFNONPALLETPRODUCTS"), containerHeight).getPercentWeightUses();
 
 				availableVolume = availableVolume - volumeOfNonPalletProducts;
+				availableWeight = availableWeight - weightOfNonPalletProducts;
 				LOG.info("available volume after deleting volume of non pallet products" + availableVolume);
 			}
 
@@ -236,18 +243,23 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 						if ((availableHeight > totalPalletHeight))
 						{
+
 							//LOG.info("first element  :" + productsListA.get(0).getErpMaterialId());
 							if ((productsListA.size() != 1))
 							{
+								productWeight = productWeight + weightOfGivenMaterial(productsListA.get(maxIndex - 1).getErpMaterialId())
+										+ weightOfGivenMaterial(productsListA.get(minIndex - 1).getErpMaterialId());
 								productsListA.remove(maxIndex - 1); // removeHighestLowestPalletList(productsListA, maxIndex);;
 								productsListA.remove(minIndex - 1);
 
 							}
 							else
 							{
+								productWeight = productWeight + weightOfGivenMaterial(productsListA.get(maxIndex - 1).getErpMaterialId());
 								productsListA.remove(maxIndex - 1);
 							}
 							availableVolume = availableVolume - 5;
+
 							availableHeight = availableHeight - totalPalletHeight;
 							LOG.info("Available volume:" + availableVolume);
 							LOG.info("Available Height:" + availableHeight);
@@ -264,6 +276,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							final double percentageVolumeOfHighestPallet = getPercentage(new BigDecimal(0),
 									new BigDecimal(volumeOfHighestPallet), containerHeight).getPercentVolumeUses();
 							LOG.info("volume of single product:" + volumeOfHighestPallet);
+							productWeight = productWeight + weightOfGivenMaterial(productsListA.get(0).getErpMaterialId());
 							productsListA.remove(productsListA.get(0));
 							LOG.info("Available Height:" + availableHeight);
 							availableVolume = availableVolume - percentageVolumeOfHighestPallet;
@@ -302,7 +315,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							.next();
 					productList += tempEnergizerProductPalletHeight.getErpMaterialId() + " ";
 
-					products.add(tempEnergizerProductPalletHeight.getErpMaterialId());
+					products.add(tempEnergizerProductPalletHeight);
 					LOG.info(" ERP MaterialID: " + tempEnergizerProductPalletHeight.getErpMaterialId());
 
 				}
@@ -316,9 +329,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		}
 
-
+		availableWeight = availableWeight
+				- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
 		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
-		cartData.setTotalProductWeightInPercent(weight);
+		cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 		return cartData;
 	}
 
@@ -822,14 +836,40 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		return 0;
 	}
 
+	public double weightOfGivenMaterial(final String erpMaterialId)
+	{
+		final List<EnergizerProductConversionFactorModel> energizerProductConversionFactorModel = energizerProductService
+				.getAllEnergizerProductConversion(erpMaterialId);
+		final String measuringUnit;
+		final double weight;
+		for (final EnergizerProductConversionFactorModel UOM : energizerProductConversionFactorModel)
+		{
+			if (UOM.getAlternateUOM().equals("PAL"))
+			{
+				measuringUnit = UOM.getPackageWeight().getMeasuringUnits();
+				weight = UOM.getPackageWeight().getMeasurement();
+				return EnergizerWeightOrVolumeConverter.getConversionValue(measuringUnit, new BigDecimal(weight)).doubleValue();
+				//return UOM.getPackageVolume().getMeasurement();
+			}
+
+
+		}
+		return 0;
+	}
+
 	public List<String> messages()
 	{
 		return message;
 	}
 
-	public List<String> productNotAddedToCart()
+	public List<EnergizerProductPalletHeight> productNotAddedToCart()
 	{
 		return products;
+	}
+
+	public List<EnergizerProductPalletHeight> productsNotDoublestacked()
+	{
+		return productsListB;
 	}
 
 }

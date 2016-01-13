@@ -29,6 +29,7 @@ import de.hybris.platform.commerceservices.order.CommerceCartModificationExcepti
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.Config;
@@ -39,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -60,6 +62,7 @@ import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationS
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.util.EnergizerProductPalletHeight;
 import com.energizer.facades.flow.impl.SessionOverrideB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
@@ -150,6 +153,8 @@ public class CartPageController extends AbstractPageController
 	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
 
 	String containerHeight, packingOption;
+
+	private Converter<ProductModel, ProductData> productConverter;
 
 
 
@@ -408,11 +413,9 @@ public class CartPageController extends AbstractPageController
 			}
 		}
 
-		final List<String> product = energizerCartService.productNotAddedToCart();
+		final List<EnergizerProductPalletHeight> productList = energizerCartService.productNotAddedToCart();
 
-
-
-
+		final List<EnergizerProductPalletHeight> productsNotDoubleStacked = energizerCartService.productsNotDoublestacked();
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
@@ -426,7 +429,9 @@ public class CartPageController extends AbstractPageController
 		model.addAttribute("packingOptionList", packingOptionsList);
 
 		model.addAttribute("containerUtilizationForm", contUtilForm);
-		model.addAttribute("productList", product);
+		model.addAttribute("productList", new TreeSet<EnergizerProductPalletHeight>(productList));
+		model.addAttribute("productsNotDoubleStacked", new TreeSet<EnergizerProductPalletHeight>(productsNotDoubleStacked));
+		//model.addAttribute("data", data);
 
 		model.addAttribute("cartData", cartData);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));

@@ -143,49 +143,40 @@
 		   <!-- displaying products that cannot be added to the cart -->
 		     <c:if test="${not empty productList}">
 		     
-		       <div>
+		       <div style="width:100%;margin-bottom: 30px;">
 		       
-		       <spring:theme code="Following product cannot be added to the container with the selected Packing type and container height " />
+		       <spring:theme code="product.notadded.container" />
 		       <br/><br/>
-		       <table  cellspacing="10" cellpadding="10" border="1">
+		       <table style="width:100%;" cellspacing="10" cellpadding="10" border="1">
 			<thead>
 				<tr>
 					
 										
-										<th id="header1">
+										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
 										&nbsp;&nbsp;&nbsp;&nbsp;
 										<spring:theme
 										code=" ErpMaterialterialId " />
 										&nbsp;&nbsp;&nbsp;&nbsp;
 										</th> 
 						
-									
-						
-										<th id="header2">
-										<spring:theme code=" UOM "/>
-										</th>
 										
 					</tr>
 			
 			</thead>
 			
 			<tbody>
-			<c:forEach items="${productList}" var="productList1">
-			<tr>
+			<c:forEach items="${productList}" var="productList">
+			<tr style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;">
 			
-			<td headers="header1">
+			<td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			
-			  <c:out value="${productList1}"  escapeXml="false"></c:out>
+			  <c:out value="${productList.erpMaterialId}"  escapeXml="false"></c:out>
 			 
 			  &nbsp;&nbsp;&nbsp;&nbsp;
 			
 			</td>
 			
-			
-			<td headers="header2">
-			  <c:out value="PAL"/>
-			</td>
 			 
 			</tr>
 			</c:forEach>
@@ -195,6 +186,50 @@
 		       
 		       </div>
 		       </c:if>
+	<!-- displaying product  -->	
+	
+	<c:if test="${not empty productsNotDoubleStacked}">
+		     
+		       <div style="width:100%;margin-bottom: 30px;">
+		       
+		       <spring:theme code="product.notdoublestacked" />
+		       <br/><br/>
+		       <table  style="width:100%;" cellspacing="10" cellpadding="10" border="1">
+			<thead>
+				<tr>
+					
+										
+										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<spring:theme
+										code=" ERPMATERIALID " />
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										</th> 
+						
+					</tr>
+				</thead>
+			
+			<tbody >
+			<c:forEach items="${productsNotDoubleStacked}" var="productList">
+			<tr style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;">
+			
+			        <td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
+			         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			           <c:out value="${productList.erpMaterialId}"  escapeXml="false"></c:out>
+			            &nbsp;&nbsp;&nbsp;&nbsp;
+			         </td>
+			
+			 
+			</tr>
+			</c:forEach>
+			</tbody>
+			
+			</table>
+		       
+		       </div>
+		       </c:if>
+	       
+		       
 			<!--   Start Code changes for order flag check  for continueShop button -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
