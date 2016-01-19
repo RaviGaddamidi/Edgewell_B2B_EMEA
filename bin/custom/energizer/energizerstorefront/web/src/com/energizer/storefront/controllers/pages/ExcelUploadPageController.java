@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -54,7 +53,6 @@ import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.product.data.EnergizerFileUploadData;
-import com.energizer.core.util.EnergizerProductPalletHeight;
 import com.energizer.facades.order.EnergizerExcelUploadFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
 import com.energizer.services.order.EnergizerCartService;
@@ -397,6 +395,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	protected void createProductList(final Model model) throws CMSItemNotFoundException
 	{
 		final CartData cartData = cartFacade.getSessionCart();
+		boolean errorMessages = false;
 
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
@@ -440,17 +439,20 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		//final CartData cartDataUpdationforContainer = null;
 
 		final List<String> message = energizerCartService.messages();
-		if (message != null)
+		if (message.size() != 0)
 		{
 			for (final String messages : message)
 			{
 
 				GlobalMessages.addErrorMessage(model, messages);
 			}
+			errorMessages = true;
 		}
-		final List<EnergizerProductPalletHeight> product = energizerCartService.productNotAddedToCart();
+		final HashMap productList = energizerCartService.productNotAddedToCart();
 
-		final List<EnergizerProductPalletHeight> productsNotDoubleStacked = energizerCartService.productsNotDoublestacked();
+
+		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
+
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
@@ -466,8 +468,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
-		model.addAttribute("productList", new TreeSet<EnergizerProductPalletHeight>(product));
-		model.addAttribute("productsNotDoubleStacked", new TreeSet<EnergizerProductPalletHeight>(productsNotDoubleStacked));
+		model.addAttribute("errorMessages", errorMessages);
+
+		model.addAttribute("containerUtilizationForm", contUtilForm);
+		model.addAttribute("productList", productList);
+		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		model.addAttribute("containerUtilizationForm", contUtilForm);
 
 

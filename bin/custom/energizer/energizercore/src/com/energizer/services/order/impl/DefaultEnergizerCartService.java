@@ -15,8 +15,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -75,6 +79,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 	List<EnergizerProductPalletHeight> products = null;
 
+	HashMap doubleStackMap = null;
 
 
 	ArrayList<EnergizerProductPalletHeight> productsListA = new ArrayList<EnergizerProductPalletHeight>();
@@ -102,23 +107,23 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		if (packingOption.equals("2 SLIP SHEETS"))
 		{
-			message = null;
+			message.clear();
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData);
+			products.clear();
+			doubleStackMap = new HashMap();
 		}
 		else
 		{
 			cartDataTemp = calCartContainerUtilizationWithSlipSheetsWoodenBase(cartData, containerHeight, packingOption);
 		}
 
-
 		return cartDataTemp;
 	}
-
 
 	public CartData calCartContainerUtilizationWithSlipSheetsWoodenBase(final CartData cartData, final String containerHeight,
 			final String packingOption)
 	{
-
+		doubleStackMap = new HashMap();
 		double availableVolume = 100;
 		double availableWeight = 100;
 		double availableHeight = 0;
@@ -166,6 +171,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			//Display an error message "Reduce the products in the cart"
 			LOG.info("Either volume is greater than 100 or pallet count is greater than" + totalPalletsCount);
 			message.add("Please reduce  products fom the cart");
+			cartData.setIsContainerFull(true);
 
 		}
 		else
@@ -276,6 +282,12 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							final double percentageVolumeOfHighestPallet = getPercentage(new BigDecimal(0),
 									new BigDecimal(volumeOfHighestPallet), containerHeight).getPercentVolumeUses();
 							LOG.info("volume of single product:" + volumeOfHighestPallet);
+
+							if (!doubleStackMap.containsKey(productsListA.get(0).getErpMaterialId()))
+							{
+								doubleStackMap = getPossibleDoubleStackedProducts(productsListA.get(0).getErpMaterialId(),
+										availableHeight);
+							}
 							productWeight = productWeight + weightOfGivenMaterial(productsListA.get(0).getErpMaterialId());
 							productsListA.remove(productsListA.get(0));
 							LOG.info("Available Height:" + availableHeight);
@@ -304,31 +316,49 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			{
 				LOG.info("The list of products which are not added to the cart: ");
 
-				String productList = "";
-
-
-
+				//String productList = "";
 
 				for (final Iterator iterator = productsListA.iterator(); iterator.hasNext();)
 				{
 					final EnergizerProductPalletHeight tempEnergizerProductPalletHeight = (EnergizerProductPalletHeight) iterator
 							.next();
-					productList += tempEnergizerProductPalletHeight.getErpMaterialId() + " ";
+
+					//	productList += tempEnergizerProductPalletHeight.getErpMaterialId() + " ";
+
 
 					products.add(tempEnergizerProductPalletHeight);
 					LOG.info(" ERP MaterialID: " + tempEnergizerProductPalletHeight.getErpMaterialId());
 
 				}
-				message.add("Products " + productList + "cannot be added to the container with selected packingtype");
+				message.add("Below mentioned products cannot be added to the container with selected packing type");
 			}
 
 			LOG.info("******************* The final data is as below: *****************");
 			LOG.info("FloorSpace count: " + floorSpaceCount);
 			LOG.info(" Available Height: " + availableHeight);
-			LOG.info(" Available Volume: " + availableVolume);
+			LOG.info(" After filling container Available Volume: " + availableVolume);
 
 		}
 
+		LOG.info("******************************** Possible Double Stacked Products *******************************");
+
+		LOG.info("Map size : " + doubleStackMap.size());
+
+		final Set doubleStackMapEntrySet = doubleStackMap.entrySet();
+		//doubleStackMapEntrySet.isEmpty()
+
+		for (final Iterator iterator = doubleStackMapEntrySet.iterator(); iterator.hasNext();)
+		{
+			final Map.Entry mapEntry = (Map.Entry) iterator.next();
+			LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
+		}
+
+		/*
+		 * final Iterator<Integer> keySetIterator = doubleStackMap.keySet().iterator(); while (keySetIterator.hasNext()) {
+		 * final Integer key = keySetIterator.next(); LOG.info("key: " + key + " value: " + doubleStackMap.get(key)); }
+		 */
+
+		LOG.info("*********************** End *******************************************8");
 		availableWeight = availableWeight
 				- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
 		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
@@ -452,6 +482,68 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		return palletsCount;
 	}
 
+	public HashMap getPossibleDoubleStackedProducts(final String cartERPMaterialID, final double availableHeight)
+	{
+		String cmirUom = null;
+		final Set<EnergizerProductModel> erpMaterialIDSetFromDB = new HashSet<EnergizerProductModel>();
+		List<EnergizerProductModel> energizerERPMaterialIDList = null;
+		final List possibleDoubleStackList = new ArrayList();
+		final HashMap possibleDoubleStackMap = new HashMap();
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		energizerERPMaterialIDList = energizerProductService.getEnergizerERPMaterialID();
+
+		erpMaterialIDSetFromDB.addAll(energizerERPMaterialIDList);
+		LOG.info(" Possible stacking erpMaterialIDs: " + erpMaterialIDSetFromDB.size() + " " + erpMaterialIDSetFromDB);
+		for (final EnergizerProductModel energizerProductModel : erpMaterialIDSetFromDB)
+		{
+			//final EnergizerProductModel energizerProductModel = iterator.next();
+			LOG.info(energizerProductModel.getCode());
+			/*
+			 * final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(
+			 * energizerProductModel.getCode(), b2bUnit.getUid());
+			 */
+
+			final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(energizerProductModel.getCode(),
+					b2bUnit.getUid());
+
+			if (energizerCMIRModel != null)
+			{
+				final EnergizerProductConversionFactorModel energizerProductConversionFactorModel = energizerProductService
+						.getEnergizerProductConversion(energizerProductModel.getCode(), b2bUnit.getUid());
+
+				cmirUom = energizerCMIRModel.getUom();
+
+				final String alternateUOM = energizerProductConversionFactorModel.getAlternateUOM();
+
+				if (cmirUom.equals("PAL") && cmirUom.equals(alternateUOM))
+				{
+
+					/*
+					 * final EnergizerProductConversionFactorModel energizerProductConversionFactorModel =
+					 * energizerProductService .getEnergizerProductConversion(energizerProductModel.getCode(),
+					 * b2bUnit.getUid());
+					 */
+
+					final double palletHeight = energizerProductConversionFactorModel.getPackageHeight().getMeasurement();
+
+					if (palletHeight <= availableHeight && possibleDoubleStackList.size() < 5)
+					{
+						possibleDoubleStackList.add(energizerProductModel.getCode());
+						possibleDoubleStackMap.put(cartERPMaterialID, possibleDoubleStackList);
+					}
+				}
+			}
+
+
+		}
+		if (possibleDoubleStackMap.size() == 0)
+		{
+			possibleDoubleStackMap.put(cartERPMaterialID, 0);
+		}
+
+		return possibleDoubleStackMap;
+	}
 
 
 	public CartData calCartContainerUtilizationWithSlipsheets(final CartData cartData)
@@ -862,14 +954,41 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		return message;
 	}
 
-	public List<EnergizerProductPalletHeight> productNotAddedToCart()
+	public HashMap productNotAddedToCart()
 	{
-		return products;
+
+		final List possibleDoubleStackList = new ArrayList();
+		final HashMap possibleDoubleStackMap = new HashMap();
+		int size = 0;
+
+		for (final EnergizerProductPalletHeight energizerProductModel : products)
+		{
+
+			if (!possibleDoubleStackMap.containsKey(energizerProductModel.getErpMaterialId()))
+			{
+
+				size = 1;
+
+				possibleDoubleStackMap.put(energizerProductModel.getErpMaterialId(), size);
+			}
+			else
+			{
+				size = (int) possibleDoubleStackMap.get(energizerProductModel.getErpMaterialId());
+				size++;
+				possibleDoubleStackMap.put(energizerProductModel.getErpMaterialId(), size);
+			}
+
+
+		}
+
+
+
+		return possibleDoubleStackMap;
 	}
 
-	public List<EnergizerProductPalletHeight> productsNotDoublestacked()
+	public HashMap productsNotDoublestacked123()
 	{
-		return productsListB;
+		return doubleStackMap;
 	}
 
 }

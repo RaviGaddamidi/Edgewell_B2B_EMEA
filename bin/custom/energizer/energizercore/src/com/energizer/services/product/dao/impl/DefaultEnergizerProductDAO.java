@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.services.product.dao.impl;
 
@@ -22,7 +22,7 @@ import com.energizer.services.product.dao.EnergizerProductDAO;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  *         anitha.shastry added method getOrphanedProductList()
  */
 public class DefaultEnergizerProductDAO implements EnergizerProductDAO
@@ -33,7 +33,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getMoq()
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getEnergizerCMIRList(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -98,7 +98,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getEnergizerProductConversionLst(java.lang.String)
 	 */
 	@Override
@@ -120,7 +120,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerCMIRListForCustomerMaterialID(java.lang.String,
 	 * java.lang.String)
@@ -165,7 +165,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerOrphanedProductList()
 	 */
 	@Override
@@ -183,7 +183,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -232,7 +232,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		return flexibleSearchService.<EnergizerShippingPointModel> search(retreiveQuery).getResult();
 
 	}
-	
+
 	@Override
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList()
 	{
@@ -243,7 +243,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(querystring);
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
-	
+
 	@Override
 	public List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId)
 	{
@@ -258,6 +258,30 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		query.addQueryParameter("b2bUnitId", b2bUnitId);
 
 		return flexibleSearchService.<EnergizerPriceRowModel> search(query).getResult();
+
+	}
+
+
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerERPMaterialIDList()
+	 */
+	@Override
+	public List<EnergizerProductModel> getEnergizerERPMaterialIDList()
+	{
+		//final String queryString = "select * from {EnergizerProduct as enrproduct}";
+
+		final String queryString = //
+		"SELECT {p:" + EnergizerProductModel.PK + "}" //
+				+ "FROM {" + EnergizerProductModel._TYPECODE + " AS p}";
+
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString); //
+
+		System.out.println(" Query results: " + flexibleSearchService.<EnergizerProductModel> search(query).getResult());
+
+		return flexibleSearchService.<EnergizerProductModel> search(query).getResult();
 
 	}
 

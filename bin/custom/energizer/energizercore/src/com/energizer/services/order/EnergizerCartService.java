@@ -5,6 +5,7 @@ package com.energizer.services.order;
 
 import de.hybris.platform.commercefacades.order.data.CartData;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.energizer.core.util.EnergizerProductPalletHeight;
@@ -21,7 +22,7 @@ public interface EnergizerCartService
 
 	public List<String> messages();
 
-	public List<EnergizerProductPalletHeight> productNotAddedToCart();
+	public HashMap productNotAddedToCart();
 
-	public List<EnergizerProductPalletHeight> productsNotDoublestacked();
+	public HashMap productsNotDoublestacked123();
 }

@@ -46,6 +46,66 @@
 		<cms:component component="${feature}"/>
 	</cms:pageSlot>
 	
+	<!-- displaying products that cannot be added to the cart -->
+		     <c:if test="${not empty productList}">
+		     
+		       <div style="width:100%;margin-bottom: 30px;">
+		       	      
+		       <br/><br/>
+		       <table style="width:100%;" cellspacing="10" cellpadding="10" border="1">
+			<thead>
+				<tr>
+										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<spring:theme
+										code=" ErpMaterialterialId " />
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										</th> 
+										
+										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<spring:theme
+										code=" QUANTITY" />
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										</th> 
+																
+					</tr>
+			
+			</thead>
+			
+			<tbody>
+			<c:forEach items="${productList}" var="productList">
+			<tr style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;">
+			
+			<td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			  <c:out value="${productList.key}"  escapeXml="false"></c:out>
+			 
+			  &nbsp;&nbsp;&nbsp;&nbsp;
+			
+			</td>
+			
+			<td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			  <c:out value="${productList.value}"  escapeXml="false"></c:out>
+			 
+			  &nbsp;&nbsp;&nbsp;&nbsp;
+			
+			</td>
+			
+			 
+			</tr>
+			</c:forEach>
+			</tbody>
+			
+			</table>
+		       
+		       </div>
+		       </c:if>
+		
+	
 	<c:if test="${not empty cartData.entries}">
 		<spring:url value="${continueUrl}" var="continueShoppingUrl" htmlEscape="true"/>
 
@@ -54,12 +114,15 @@
 				<c:when test="${cartData.isOrderBlocked }">
 					<button id ="checkoutButton_top" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
 				</c:when>
+				<c:when test="${errorMessages}">
+					<button id ="checkoutButton_tops" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>			
+				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
 			</c:choose>
 			
-		
+			
 			<!--   Start Code changes for order flag check -->			
 			<cart:cartItems cartData="${cartData}"/>
 			
@@ -95,9 +158,7 @@
 					
 					</div>
 					
-					<br><br>
 					
-	
 				<div class="clearfix fixthis_row_cls">
 				<br><br><br><br>
 					<div class="span-16">
@@ -139,54 +200,8 @@
 						
 					</div>
 				</div>
-		
-		   <!-- displaying products that cannot be added to the cart -->
-		     <c:if test="${not empty productList}">
-		     
-		       <div style="width:100%;margin-bottom: 30px;">
-		       
-		       <spring:theme code="product.notadded.container" />
-		       <br/><br/>
-		       <table style="width:100%;" cellspacing="10" cellpadding="10" border="1">
-			<thead>
-				<tr>
-					
-										
-										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
-										&nbsp;&nbsp;&nbsp;&nbsp;
-										<spring:theme
-										code=" ErpMaterialterialId " />
-										&nbsp;&nbsp;&nbsp;&nbsp;
-										</th> 
-						
-										
-					</tr>
-			
-			</thead>
-			
-			<tbody>
-			<c:forEach items="${productList}" var="productList">
-			<tr style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;">
-			
-			<td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			
-			  <c:out value="${productList.erpMaterialId}"  escapeXml="false"></c:out>
-			 
-			  &nbsp;&nbsp;&nbsp;&nbsp;
-			
-			</td>
-			
-			 
-			</tr>
-			</c:forEach>
-			</tbody>
-			
-			</table>
-		       
-		       </div>
-		       </c:if>
-	<!-- displaying product  -->	
+
+	<!-- displaying product  that cannot be double stacked-->	
 	
 	<c:if test="${not empty productsNotDoubleStacked}">
 		     
@@ -205,6 +220,13 @@
 										code=" ERPMATERIALID " />
 										&nbsp;&nbsp;&nbsp;&nbsp;
 										</th> 
+										
+										<th style="border-bottom:1px dotted #a5a5a5;height:30px;line-height:30px;text-transform:uppercase;font-weight:bold;font-size:1em;text-align:center;">
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<spring:theme
+										code=" Matching Products " />
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										</th> 
 						
 					</tr>
 				</thead>
@@ -215,10 +237,17 @@
 			
 			        <td headers="header3" style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
 			         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			           <c:out value="${productList.erpMaterialId}"  escapeXml="false"></c:out>
+			           <c:out value="${productList.key}"  escapeXml="false"></c:out>
 			            &nbsp;&nbsp;&nbsp;&nbsp;
 			         </td>
 			
+			         
+                     <td style="vertical-align:top;border-bottom:1px dotted #a5a5a5;padding:20px 0 0 0;width:80px;text-align:center;">
+			         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			           <c:out value="${productList.value}"  escapeXml="false"></c:out>
+			            &nbsp;&nbsp;&nbsp;&nbsp;
+			         </td>
+	
 			 
 			</tr>
 			</c:forEach>
@@ -236,6 +265,9 @@
 					<!-- a class="button continueShop-button" disabled="disabled" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a-->
 					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
 				</c:when>
+				<c:when test="${errorMessages}">
+					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
+				</c:when>
 				<c:otherwise>
 					<!-- a class="button continueShop-button"  style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a>-->
 					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" ><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
@@ -248,6 +280,9 @@
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
 					<button id ="checkoutButton_bottom" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
+				</c:when>
+				<c:when test="${errorMessages}">
+					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>			
 				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_bottom" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>

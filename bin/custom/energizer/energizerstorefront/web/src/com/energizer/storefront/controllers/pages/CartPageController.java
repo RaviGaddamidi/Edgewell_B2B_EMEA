@@ -14,6 +14,7 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorservices.controllers.page.PageType;
+import de.hybris.platform.acceleratorservices.customer.CustomerLocationService;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.CartFacade;
@@ -38,9 +39,9 @@ import de.hybris.platform.util.localization.Localization;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -62,7 +63,6 @@ import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationS
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
-import com.energizer.core.util.EnergizerProductPalletHeight;
 import com.energizer.facades.flow.impl.SessionOverrideB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
@@ -125,6 +125,9 @@ public class CartPageController extends AbstractPageController
 	@Resource(name = "b2bProductFacade")
 	private ProductFacade productFacade;
 
+	@Resource(name = "customerLocationService")
+	private CustomerLocationService customerLocationService;
+
 	@Resource
 	EnergizerCartService energizerCartService;
 
@@ -155,6 +158,8 @@ public class CartPageController extends AbstractPageController
 	String containerHeight, packingOption;
 
 	private Converter<ProductModel, ProductData> productConverter;
+
+
 
 
 
@@ -274,6 +279,7 @@ public class CartPageController extends AbstractPageController
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
 			final BindingResult bindingErrors) throws CMSItemNotFoundException
 	{
+		final boolean errorMessages = false;
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
@@ -331,14 +337,25 @@ public class CartPageController extends AbstractPageController
 		/** Energizer Container Utilization service */
 		//contUtilForm.setContainerHeight(Config.getParameter("energizer.default.containerHeight"));
 		//contUtilForm.setPackingType(Config.getParameter("energizer.default.packingOption"));
-		containerHeight = contUtilForm.getContainerHeight();
-		packingOption = contUtilForm.getPackingType();
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
+		{
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
+		}
+		else
+		{
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+
+			packingOption = Config.getParameter("energizer.default.packingOption");
+		}
+
 
 		LOG.info(" Container Height: " + containerHeight);
 		LOG.info(" Packing Type: " + packingOption);
 
 		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
 				packingOption);
+
 
 		if (cartData.isIsContainerFull())
 		{
@@ -353,12 +370,15 @@ public class CartPageController extends AbstractPageController
 		}
 
 		cartData.setBusinesRuleErrors(businessRuleErrors);
+
 		return cartData;
+
 	}
 
 	protected void createProductList(final Model model) throws CMSItemNotFoundException
 	{
 		CartData cartData = cartFacade.getSessionCart();
+		boolean errorMessages = false;
 
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
@@ -404,18 +424,21 @@ public class CartPageController extends AbstractPageController
 
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption);
 		final List<String> message = energizerCartService.messages();
-		if (message != null)
+		if (message.size() != 0)
 		{
 			for (final String messages : message)
 			{
 
 				GlobalMessages.addErrorMessage(model, messages);
 			}
+			errorMessages = true;
 		}
 
-		final List<EnergizerProductPalletHeight> productList = energizerCartService.productNotAddedToCart();
+		final HashMap productList = energizerCartService.productNotAddedToCart();
 
-		final List<EnergizerProductPalletHeight> productsNotDoubleStacked = energizerCartService.productsNotDoublestacked();
+
+		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
+
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
@@ -427,15 +450,20 @@ public class CartPageController extends AbstractPageController
 
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
+		model.addAttribute("errorMessages", errorMessages);
 
 		model.addAttribute("containerUtilizationForm", contUtilForm);
-		model.addAttribute("productList", new TreeSet<EnergizerProductPalletHeight>(productList));
-		model.addAttribute("productsNotDoubleStacked", new TreeSet<EnergizerProductPalletHeight>(productsNotDoubleStacked));
+		model.addAttribute("productList", productList);
+		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		//model.addAttribute("data", data);
 
 		model.addAttribute("cartData", cartData);
+
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
+		model.addAttribute("pageType", PageType.CART.name());
+		model.addAttribute("Link", "/my-account");
 	}
 
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
@@ -508,5 +536,7 @@ public class CartPageController extends AbstractPageController
 		return orderEntry;
 
 	}
+
+
 
 }
