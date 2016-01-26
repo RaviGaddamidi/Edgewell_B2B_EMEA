@@ -47,6 +47,8 @@ public interface EnergizerProductDAO
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
 	List<EnergizerProductModel> getEnergizerERPMaterialIDList();
+	
+	public EnergizerProductModel getProductWithCode(final String code);
 
 
 }

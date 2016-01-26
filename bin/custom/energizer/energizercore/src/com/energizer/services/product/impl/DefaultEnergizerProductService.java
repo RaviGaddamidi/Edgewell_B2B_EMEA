@@ -292,4 +292,10 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 
 	}
+	
+	@Override
+	public EnergizerProductModel getProductWithCode(final String code)
+	{
+		return energizerProductDAO.getProductWithCode(code);
+	}
 }

@@ -17,6 +17,9 @@ import de.hybris.platform.acceleratorservices.controllers.page.PageType;
 import de.hybris.platform.acceleratorservices.customer.CustomerLocationService;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.cms2.model.pages.AbstractPageModel;
+import de.hybris.platform.cms2.model.pages.PageTemplateModel;
+import de.hybris.platform.cms2.servicelayer.services.CMSPageService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.CartModificationData;
@@ -25,8 +28,14 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.commercefacades.search.data.SearchStateData;
 import de.hybris.platform.commercefacades.user.UserFacade;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
+import de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData;
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
+import de.hybris.platform.commerceservices.search.pagedata.PaginationData;
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.converters.Converters;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
@@ -63,14 +72,17 @@ import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationS
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.facades.flow.impl.SessionOverrideB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
+import com.energizer.storefront.breadcrumb.impl.SearchBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.ControllerConstants.Views;
+import com.energizer.storefront.controllers.pages.AbstractSearchPageController.ShowMode;
 import com.energizer.storefront.controllers.util.GlobalMessages;
 import com.energizer.storefront.forms.ContainerUtilizationForm;
 import com.energizer.storefront.forms.UpdateProfileForm;
@@ -153,13 +165,18 @@ public class CartPageController extends AbstractPageController
 	@Resource
 	private CartService cartService;
 
+	@Resource(name = "cmsPageService")
+	private CMSPageService cmsPageService;
+
 	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
 
 	String containerHeight, packingOption;
 
+	@Resource(name = "productConverter")
 	private Converter<ProductModel, ProductData> productConverter;
 
-
+	@Resource(name = "searchBreadcrumbBuilder")
+	private SearchBreadcrumbBuilder searchBreadcrumbBuilder;
 
 
 
@@ -173,15 +190,15 @@ public class CartPageController extends AbstractPageController
 	@RequestMapping(method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes)
+			throws CMSItemNotFoundException
 	{
 
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
 		}
-
-
+		
 		cartEntryBusinessRulesService.clearErrors();
 
 		LOG.info(" Inside updateContainerUtil method");
@@ -536,7 +553,5 @@ public class CartPageController extends AbstractPageController
 		return orderEntry;
 
 	}
-
-
 
 }

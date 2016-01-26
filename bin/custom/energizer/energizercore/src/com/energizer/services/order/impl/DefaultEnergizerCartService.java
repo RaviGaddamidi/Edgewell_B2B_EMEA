@@ -487,7 +487,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		String cmirUom = null;
 		final Set<EnergizerProductModel> erpMaterialIDSetFromDB = new HashSet<EnergizerProductModel>();
 		List<EnergizerProductModel> energizerERPMaterialIDList = null;
-		final List possibleDoubleStackList = new ArrayList();
+		final List<String> possibleDoubleStackList = new ArrayList();
 		final HashMap possibleDoubleStackMap = new HashMap();
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
@@ -507,7 +507,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(energizerProductModel.getCode(),
 					b2bUnit.getUid());
 
-			if (energizerCMIRModel != null)
+			if (energizerCMIRModel != null && energizerCMIRModel.getIsActive())
 			{
 				final EnergizerProductConversionFactorModel energizerProductConversionFactorModel = energizerProductService
 						.getEnergizerProductConversion(energizerProductModel.getCode(), b2bUnit.getUid());
@@ -519,15 +519,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				if (cmirUom.equals("PAL") && cmirUom.equals(alternateUOM))
 				{
 
-					/*
-					 * final EnergizerProductConversionFactorModel energizerProductConversionFactorModel =
-					 * energizerProductService .getEnergizerProductConversion(energizerProductModel.getCode(),
-					 * b2bUnit.getUid());
-					 */
-
 					final double palletHeight = energizerProductConversionFactorModel.getPackageHeight().getMeasurement();
 
-					if (palletHeight <= availableHeight && possibleDoubleStackList.size() < 5)
+					if (palletHeight <= availableHeight)
 					{
 						possibleDoubleStackList.add(energizerProductModel.getCode());
 						possibleDoubleStackMap.put(cartERPMaterialID, possibleDoubleStackList);

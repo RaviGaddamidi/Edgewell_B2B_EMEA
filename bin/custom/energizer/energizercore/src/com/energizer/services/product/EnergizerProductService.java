@@ -45,4 +45,6 @@ public interface EnergizerProductService
 	public List<EnergizerProductConversionFactorModel> getAllEnergizerProductConversion(final String erpMaterialId);
 
 	public List<EnergizerProductModel> getEnergizerERPMaterialID();
+	
+	public EnergizerProductModel getProductWithCode(final String code);
 }

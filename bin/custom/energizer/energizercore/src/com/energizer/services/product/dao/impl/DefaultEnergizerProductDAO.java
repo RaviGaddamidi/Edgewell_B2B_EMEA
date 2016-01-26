@@ -284,6 +284,19 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		return flexibleSearchService.<EnergizerProductModel> search(query).getResult();
 
 	}
+	
+	@Override
+	public EnergizerProductModel getProductWithCode(final String code)
+	{
+		// YTODO Auto-generated method stub
+		final String queryString = "select {product.PK} from " + "{EnergizerProduct as product}" + " WHERE"
+				+ " {product.code}=?code ";
+
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
+		query.addQueryParameter("code", code);
+		return flexibleSearchService.<EnergizerProductModel> search(query).getResult().get(0);
+
+	}
 
 
 
