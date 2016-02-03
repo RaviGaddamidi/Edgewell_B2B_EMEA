@@ -114,6 +114,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		}
 		else
 		{
+			message.clear();
+			if (products != null && products.size() > 0)
+			{
+				products.clear();
+			}
 			cartDataTemp = calCartContainerUtilizationWithSlipSheetsWoodenBase(cartData, containerHeight, packingOption);
 		}
 
@@ -190,7 +195,6 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				availableWeight = availableWeight - weightOfNonPalletProducts;
 				LOG.info("available volume after deleting volume of non pallet products" + availableVolume);
 			}
-
 
 			//sortedProductsListA = getSortPalletsHeightOfProductsInDecreasingOrder(productsListA);
 			Collections.sort(productsListA);
@@ -312,6 +316,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				LOG.info("*************** The floorSpace count loop ends******************");
 			}
 
+
 			if (productsListA.size() > 0)
 			{
 				LOG.info("The list of products which are not added to the cart: ");
@@ -398,12 +403,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 	/**
-	*
-	*
-	*
-	*
-	*
-	**/
+	 *
+	 * @param cartData
+	 * @return
+	 */
 	public long getPalletsCountOfProductsInCart(final CartData cartData)
 	{
 		long palletsCount = 0;
@@ -524,17 +527,17 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					if (palletHeight <= availableHeight)
 					{
 						possibleDoubleStackList.add(energizerProductModel.getCode());
-						possibleDoubleStackMap.put(cartERPMaterialID, possibleDoubleStackList);
+						if (possibleDoubleStackList.size() > 0)
+						{
+							possibleDoubleStackMap.put(cartERPMaterialID, possibleDoubleStackList);
+						}
 					}
 				}
 			}
 
 
 		}
-		if (possibleDoubleStackMap.size() == 0)
-		{
-			possibleDoubleStackMap.put(cartERPMaterialID, 0);
-		}
+
 
 		return possibleDoubleStackMap;
 	}
@@ -984,5 +987,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	{
 		return doubleStackMap;
 	}
+
+
 
 }

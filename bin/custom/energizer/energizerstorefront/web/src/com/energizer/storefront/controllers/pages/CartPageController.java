@@ -17,8 +17,6 @@ import de.hybris.platform.acceleratorservices.controllers.page.PageType;
 import de.hybris.platform.acceleratorservices.customer.CustomerLocationService;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
-import de.hybris.platform.cms2.model.pages.AbstractPageModel;
-import de.hybris.platform.cms2.model.pages.PageTemplateModel;
 import de.hybris.platform.cms2.servicelayer.services.CMSPageService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
@@ -28,14 +26,8 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
-import de.hybris.platform.commercefacades.search.data.SearchStateData;
 import de.hybris.platform.commercefacades.user.UserFacade;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
-import de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData;
-import de.hybris.platform.commerceservices.search.pagedata.PageableData;
-import de.hybris.platform.commerceservices.search.pagedata.PaginationData;
-import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import de.hybris.platform.converters.Converters;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
@@ -50,7 +42,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -72,7 +67,6 @@ import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationS
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
-import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.facades.flow.impl.SessionOverrideB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
@@ -82,7 +76,6 @@ import com.energizer.storefront.breadcrumb.impl.SearchBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.ControllerConstants.Views;
-import com.energizer.storefront.controllers.pages.AbstractSearchPageController.ShowMode;
 import com.energizer.storefront.controllers.util.GlobalMessages;
 import com.energizer.storefront.forms.ContainerUtilizationForm;
 import com.energizer.storefront.forms.UpdateProfileForm;
@@ -190,15 +183,14 @@ public class CartPageController extends AbstractPageController
 	@RequestMapping(method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes)
-			throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
 	{
 
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
 		}
-		
+
 		cartEntryBusinessRulesService.clearErrors();
 
 		LOG.info(" Inside updateContainerUtil method");
@@ -296,7 +288,8 @@ public class CartPageController extends AbstractPageController
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
 			final BindingResult bindingErrors) throws CMSItemNotFoundException
 	{
-		final boolean errorMessages = false;
+		boolean errorMessages = false;
+
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
@@ -386,15 +379,92 @@ public class CartPageController extends AbstractPageController
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
 		}
 
+		final List<String> message = energizerCartService.messages();
+
+
+		if (message.size() != 0)
+		{
+			for (final String messages : message)
+			{
+
+				GlobalMessages.addErrorMessage(model, messages);
+				businessRuleErrors.add(messages);
+			}
+			errorMessages = true;
+		}
+
+		final HashMap productList = energizerCartService.productNotAddedToCart();
+
+		if (productList != null && productList.size() > 0)
+		{
+			final Set doubleStackMapEntrySet = productList.entrySet();
+			//doubleStackMapEntrySet.isEmpty()
+			String tempList = "ERPMaterialID		:		Quantity";
+			businessRuleErrors.add(tempList);
+			for (final Iterator iterator = doubleStackMapEntrySet.iterator(); iterator.hasNext();)
+			{
+				tempList = null;
+				final Map.Entry mapEntry = (Map.Entry) iterator.next();
+				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
+				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
+				businessRuleErrors.add(tempList);
+			}
+		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 
+		/*
+		 * final Session session = sessionService.getCurrentSession(); HashMap productNotAddedList =
+		 * session.getAttribute("productList"); if (productNotAddedList != null && productNotAddedList.size() > 0) {
+		 * productNotAddedList.clear(); productNotAddedList = productList; session.setAttribute("productList",
+		 * productNotAddedList); } else { session.setAttribute("productList", productList); }
+		 */
+
+
+		/*
+		 * final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
+		 * model.addAllAttributes(productList);
+		 */
+
+		/*
+		 * final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
+		 * new Character(',').toString()));
+		 *
+		 *
+		 * final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split( new
+		 * Character(',').toString()));
+		 *
+		 *
+		 * model.addAttribute("containerHeightList", containerHeightList); model.addAttribute("packingOptionList",
+		 * packingOptionsList);
+		 */
+
+		/*
+		 * model.addAttribute("errorMessages", errorMessages);
+		 *
+		 * model.addAttribute("containerUtilizationForm", contUtilForm); model.addAttribute("productList", productList);
+		 * model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
+		 */
+
+		//model.addAttribute("data", data);
+
+		/*
+		 * model.addAttribute("cartData", cartData);
+		 *
+		 * storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE)); setUpMetaDataForContentPage(model,
+		 * getContentPageForLabelOrId(CART_CMS_PAGE)); model.addAttribute(WebConstants.BREADCRUMBS_KEY,
+		 * resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart")); model.addAttribute("pageType",
+		 * PageType.CART.name());
+		 */
+
 		return cartData;
+
 
 	}
 
 	protected void createProductList(final Model model) throws CMSItemNotFoundException
 	{
 		CartData cartData = cartFacade.getSessionCart();
+		final List<String> businessRuleErrors = new ArrayList<String>();
 		boolean errorMessages = false;
 
 		reverseCartProductsOrder(cartData.getEntries());
@@ -447,12 +517,31 @@ public class CartPageController extends AbstractPageController
 			{
 
 				GlobalMessages.addErrorMessage(model, messages);
+				businessRuleErrors.add(messages);
 			}
 			errorMessages = true;
 		}
 
 		final HashMap productList = energizerCartService.productNotAddedToCart();
 
+		if (productList != null && productList.size() > 0)
+		{
+			final Set productNotAddedMapEntrySet = productList.entrySet();
+			//doubleStackMapEntrySet.isEmpty()
+			String tempList = "ERPMaterialID		:		Quantity";
+			GlobalMessages.addErrorMessage(model, tempList);
+			businessRuleErrors.add(tempList);
+			for (final Iterator iterator = productNotAddedMapEntrySet.iterator(); iterator.hasNext();)
+			{
+				tempList = null;
+				final Map.Entry mapEntry = (Map.Entry) iterator.next();
+				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
+				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
+				GlobalMessages.addErrorMessage(model, tempList);
+				businessRuleErrors.add(tempList);
+			}
+		}
+		cartData.setBusinesRuleErrors(businessRuleErrors);
 
 		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
 
@@ -470,7 +559,7 @@ public class CartPageController extends AbstractPageController
 		model.addAttribute("errorMessages", errorMessages);
 
 		model.addAttribute("containerUtilizationForm", contUtilForm);
-		model.addAttribute("productList", productList);
+		//	model.addAttribute("productList", productList);
 		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		//model.addAttribute("data", data);
 

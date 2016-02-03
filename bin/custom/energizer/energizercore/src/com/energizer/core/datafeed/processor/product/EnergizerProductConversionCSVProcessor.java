@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.core.datafeed.processor.product;
 
@@ -31,14 +31,14 @@ import com.energizer.core.model.MetricUnitModel;
 
 
 /**
- * 
+ *
  * This processors imports the product conversion.
- * 
+ *
  * Sample file will look like
- * 
+ *
  * ERPMaterialID,AlternateUOM,BaseUOMMultiplier,VolumeInUOM,VolumeUOM,WeightInUOM,WeightUOM 3, EA, 1, 0.311, CDM,
  * 126.552 ,G
- * 
+ *
  * Total column count : 7
  */
 public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -58,6 +58,8 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	private UnitService defaultUnitService;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerProductConversionCSVProcessor.class);
+
+	private static final String ENERGIZER_PRODUCT_CONVERSION = "feedprocessor.energizerOrderUpdateFeed.mandatory";
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -139,10 +141,11 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 						energizerProductConversionModel = modelService.create(EnergizerProductConversionFactorModel.class);
 						energizerProductConversionModel
 								.setErpMaterialId(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).trim());
-						energizerProductConversionModel.setAlternateUOM(csvValuesMap.get(EnergizerCoreConstants.ALTERNATE_UOM).trim()); //PALLET, LAYER, CASE				
+						energizerProductConversionModel.setAlternateUOM(csvValuesMap.get(EnergizerCoreConstants.ALTERNATE_UOM).trim()); //PALLET, LAYER, CASE
 						tmpFactorList.add(energizerProductConversionModel);
 					}
 					this.addUpdateRecord(energizerProductConversionModel, csvValuesMap);
+
 					energizerProduct.setProductConversionFactors(tmpFactorList);
 					modelService.saveAll();
 					succeedRecord++;
@@ -196,9 +199,45 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		packageWeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.WEIGHT_UOM).trim());
 
 		conversionModel.setPackageWeight(packageWeightMetric);
+		if (conversionModel.getAlternateUOM().equals("PAL") || conversionModel.getAlternateUOM().equals("CS"))
+		{
+			MetricUnitModel packageLengthMetric = conversionModel.getPackageLength();
+			if (packageLengthMetric == null)
+			{
+				packageLengthMetric = modelService.create(MetricUnitModel.class);
+			}
+			packageLengthMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.LENGTH).trim()));
+			packageLengthMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+
+			conversionModel.setPackageLength(packageLengthMetric);
+
+			MetricUnitModel packageWidthMetric = conversionModel.getPackageWidth();
+			if (packageWidthMetric == null)
+			{
+				packageWidthMetric = modelService.create(MetricUnitModel.class);
+			}
+			packageWidthMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.WIDTH).trim()));
+			packageWidthMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+
+			conversionModel.setPackageWidth(packageWidthMetric);
+
+			MetricUnitModel packageHeightMetric = conversionModel.getPackageHeight();
+			if (packageHeightMetric == null)
+			{
+				packageHeightMetric = modelService.create(MetricUnitModel.class);
+			}
+			packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim()));
+			packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+
+			conversionModel.setPackageWidth(packageWidthMetric);
+
+		}
+
 
 		LOG.info("Ending method addUpdateRecord.....");
 	}
+
+
 
 	private boolean isModelSame(final EnergizerProductConversionFactorModel conversionModel, final Map<String, String> csvValuesMap)
 	{
@@ -214,8 +253,10 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		return false;
 	}
 
+
+
 	/**
-	 * 
+	 *
 	 * @param record
 	 * @return
 	 */
@@ -223,19 +264,29 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	{
 		EnergizerCSVFeedError error = null;
 		final Map<String, String> map = record.toMap();
+		boolean flag = false;
 
+		if (map.get(EnergizerCoreConstants.ALTERNATE_UOM).trim().equals("PAL")
+				|| map.get(EnergizerCoreConstants.ALTERNATE_UOM).trim().equals("CS"))
+		{
+			flag = true;
+		}
 		Integer columnNumber = 0;
 		setRecordFailed(getRecordFailed());
 
 		for (final String columnHeader : map.keySet())
 		{
+
 			columnNumber++;
 			long recordFailed = getRecordFailed();
 			setTotalRecords(record.getRecordNumber());
 			final String value = map.get(columnHeader).trim();
 
-			if (value.isEmpty())
+
+
+			if (flag && value.isEmpty())
 			{
+
 				final List<String> columnNames = new ArrayList<String>();
 				final List<Integer> columnNumbers = new ArrayList<Integer>();
 				error = new EnergizerCSVFeedError();
@@ -251,6 +302,32 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 				recordFailed++;
 				setRecordFailed(recordFailed);
 			}
+
+			else if ((columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ALTERNATE_UOM)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.BASE_UOM_MULTIPLIER)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_UOM)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM) || columnHeader
+						.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_UOM)) && value.isEmpty())
+			{
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error = new EnergizerCSVFeedError();
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setUserType(TECHNICAL_USER);
+				error.setColumnName(columnNames);
+				columnNumbers.add(columnNumber);
+				error.setMessage(columnHeader + " column should not be empty");
+				error.setColumnNumber(columnNumbers);
+				getTechnicalFeedErrors().add(error);
+				setTechRecordError(getTechnicalFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
+
+			}
+
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.BASE_UOM_MULTIPLIER))
 			{
@@ -274,10 +351,13 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 			}
 
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.VOLUME_IN_UOM)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM))
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WEIGHT_IN_UOM)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LENGTH)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.WIDTH)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.HEIGHT))
 			{
-				//if (uomValue.equalsIgnoreCase(EnergizerCoreConstants.EA) || uomValue.equalsIgnoreCase(EnergizerCoreConstants.CASE))
-				//{
+
+
 				if (!NumberUtils.isNumber(value) || new BigDecimal(value).compareTo(BigDecimal.ZERO) == 0)
 				{
 					final List<String> columnNames = new ArrayList<String>();
@@ -294,9 +374,11 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 					setTechRecordError(getTechnicalFeedErrors().size());
 					recordFailed++;
 					setRecordFailed(recordFailed);
+
 				}
-				//}
 			}
+
+
 		}
 	}
 }
