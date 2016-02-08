@@ -104,9 +104,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 		LOG.info("Starting process method  of EnergizerSalesUOMCSVProcessor.............");
 		try
 		{
-			EnergizerCategoryModel energizerSubCategory = null;
 			EnergizerProductModel energizerProduct = null;
-			final List<EnergizerCMIRModel> cmirList;
 
 			packgingUnits = new ArrayList<String>();
 			//packgingUnits.add(EnergizerCoreConstants.EA);
@@ -126,6 +124,7 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 				LOG.info(" CSV Record number: " + uomRecord.getRecordNumber());
 				LOG.info(" CSV Record: " + uomRecord.toMap());
 
+				EnergizerCategoryModel energizerSubCategory = null;
 				final Map<String, String> csvValuesMap = uomRecord.toMap();
 
 				final String customerId = csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_ID).trim();
@@ -233,10 +232,11 @@ public class EnergizerSalesUOMCSVProcessor extends AbstractEnergizerCSVProcessor
 						continue;
 					}
 
-					final List<ProductModel> products = productService.getProductsForCategory(energizerSubCategory);
+					List<ProductModel> products = productService.getProductsForCategory(energizerSubCategory);
 					if (products == null || products.isEmpty())
 					{
 						LOG.info("No Products found for the sub-category : " + energizerSubCategory);
+						continue;
 					}
 
 					if (customerId.isEmpty())
