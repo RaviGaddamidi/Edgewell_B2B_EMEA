@@ -32,6 +32,7 @@ import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.Config;
@@ -48,6 +49,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -156,6 +158,11 @@ public class CartPageController extends AbstractPageController
 	private B2BCommerceUserService b2bCommerceUserService;
 
 	@Resource
+	private ModelService modelService;
+	//@Resource(name = "energizerCompanyB2BCommerceFacade")
+	//protected EnergizerCompanyB2BCommerceFacade energizerCompanyB2BCommerceFacade;
+
+	@Resource
 	private CartService cartService;
 
 	@Resource(name = "cmsPageService")
@@ -172,18 +179,24 @@ public class CartPageController extends AbstractPageController
 	private SearchBreadcrumbBuilder searchBreadcrumbBuilder;
 
 
+	boolean enableButton = false;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String showCart(final Model model) throws CMSItemNotFoundException
 	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
+		model.addAttribute("enableButton", enableButton);
 		return Views.Pages.Cart.CartPage;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
+			throws CMSItemNotFoundException
 	{
 
 		if (bindingErrors.hasErrors())
@@ -191,15 +204,31 @@ public class CartPageController extends AbstractPageController
 			getViewWithBindingErrorMessages(model, bindingErrors);
 		}
 
+		final String str = request.getParameter("choice");
+		if (str != null && str.equals("Yes"))
+		{
+			LOG.info("Enable radio button :");
+			enableButton = true;
+		}
+
+		if (str != null && str.equals("No"))
+		{
+			LOG.info("radio button value:");
+			enableButton = false;
+		}
+
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
+		b2bUnit.setEnableContainerOptimization(enableButton);
+		modelService.save(b2bUnit);
 		cartEntryBusinessRulesService.clearErrors();
 
-		LOG.info(" Inside updateContainerUtil method");
-		LOG.info("Container Height: " + containerUtilizationForm.getContainerHeight());
-		LOG.info("Packing Option: " + containerUtilizationForm.getPackingType());
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
 
 		prepareDataForPage(model);
+		model.addAttribute("enableButton", enableButton);
 		return Views.Pages.Cart.CartPage;
 	}
 
@@ -288,7 +317,10 @@ public class CartPageController extends AbstractPageController
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
 			final BindingResult bindingErrors) throws CMSItemNotFoundException
 	{
-		boolean errorMessages = false;
+		//boolean errorMessages = false;
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 
 		if (bindingErrors.hasErrors())
 		{
@@ -320,6 +352,7 @@ public class CartPageController extends AbstractPageController
 		}
 		else
 		{
+
 			final CartModificationData cartModification = b2bCartFacade.updateOrderEntry(getOrderEntryData(form.getQuantity(),
 					productCode, entryNumber));
 
@@ -339,14 +372,6 @@ public class CartPageController extends AbstractPageController
 
 		/** Energizer Container Utilization service */
 
-		//LOG.info(" Container Height: " + containerUtilizationForm.getContainerHeight());
-		//LOG.info(" Packing Type: " + containerUtilizationForm.getPackingType());
-
-		//final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
-
-		/** Energizer Container Utilization service */
-		//contUtilForm.setContainerHeight(Config.getParameter("energizer.default.containerHeight"));
-		//contUtilForm.setPackingType(Config.getParameter("energizer.default.packingOption"));
 		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
 		{
 			containerHeight = contUtilForm.getContainerHeight();
@@ -362,10 +387,9 @@ public class CartPageController extends AbstractPageController
 
 		LOG.info(" Container Height: " + containerHeight);
 		LOG.info(" Packing Type: " + packingOption);
-
+		LOG.info(" Enable/Disable " + enableButton);
 		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
-				packingOption);
-
+				packingOption, enableButton);
 
 		if (cartData.isIsContainerFull())
 		{
@@ -382,7 +406,7 @@ public class CartPageController extends AbstractPageController
 		final List<String> message = energizerCartService.messages();
 
 
-		if (message.size() != 0)
+		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
 			{
@@ -390,7 +414,7 @@ public class CartPageController extends AbstractPageController
 				GlobalMessages.addErrorMessage(model, messages);
 				businessRuleErrors.add(messages);
 			}
-			errorMessages = true;
+
 		}
 
 		final HashMap productList = energizerCartService.productNotAddedToCart();
@@ -428,19 +452,19 @@ public class CartPageController extends AbstractPageController
 		/*
 		 * final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 		 * new Character(',').toString()));
-		 *
-		 *
+		 * 
+		 * 
 		 * final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split( new
 		 * Character(',').toString()));
-		 *
-		 *
+		 * 
+		 * 
 		 * model.addAttribute("containerHeightList", containerHeightList); model.addAttribute("packingOptionList",
 		 * packingOptionsList);
 		 */
 
 		/*
 		 * model.addAttribute("errorMessages", errorMessages);
-		 *
+		 * 
 		 * model.addAttribute("containerUtilizationForm", contUtilForm); model.addAttribute("productList", productList);
 		 * model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		 */
@@ -449,7 +473,7 @@ public class CartPageController extends AbstractPageController
 
 		/*
 		 * model.addAttribute("cartData", cartData);
-		 *
+		 * 
 		 * storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE)); setUpMetaDataForContentPage(model,
 		 * getContentPageForLabelOrId(CART_CMS_PAGE)); model.addAttribute(WebConstants.BREADCRUMBS_KEY,
 		 * resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart")); model.addAttribute("pageType",
@@ -509,9 +533,13 @@ public class CartPageController extends AbstractPageController
 			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
 
-		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption);
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+
+		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
 		final List<String> message = energizerCartService.messages();
-		if (message.size() != 0)
+		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
 			{

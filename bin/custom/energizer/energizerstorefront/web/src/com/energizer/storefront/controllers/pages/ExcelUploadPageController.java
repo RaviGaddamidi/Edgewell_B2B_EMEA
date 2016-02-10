@@ -5,6 +5,7 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorservices.controllers.page.PageType;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
@@ -12,6 +13,7 @@ import de.hybris.platform.commercefacades.order.data.CartRestorationData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
 import de.hybris.platform.servicelayer.session.SessionService;
+import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.Config;
 
 import java.io.FileNotFoundException;
@@ -24,8 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
@@ -51,6 +55,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
+import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.product.data.EnergizerFileUploadData;
 import com.energizer.facades.order.EnergizerExcelUploadFacade;
@@ -116,11 +121,19 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	EnergizerCartService energizerCartService;
 
 	@Resource
+	private UserService userService;
+
+	@Resource
+	private B2BCommerceUserService b2bCommerceUserService;
+
+	@Resource
 	EnergizerProductService energizerProductService;
 
 	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
 
 	String containerHeight, packingOption;
+
+	boolean enableButton = false;
 
 	@Value("${excelFileSize}")
 	private String excelFileSize;
@@ -373,7 +386,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				}
 			}
 		}
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
+		model.addAttribute("enableButton", enableButton);
 		shipmentMap.clear();
 		return ControllerConstants.Views.Pages.Cart.CartPage;
 	}
@@ -395,6 +412,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	protected void createProductList(final Model model) throws CMSItemNotFoundException
 	{
 		final CartData cartData = cartFacade.getSessionCart();
+		final List<String> businessRuleErrors = new ArrayList<String>();
 		boolean errorMessages = false;
 
 		reverseCartProductsOrder(cartData.getEntries());
@@ -434,12 +452,20 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
+
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableContOptimization = b2bUnit.getEnableContainerOptimization();
+
+		LOG.info(" Enable Container Optimization value: " + enableContOptimization);
+
+
 		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(),
-				containerHeight, packingOption);
+				containerHeight, packingOption, enableContOptimization);
 		//final CartData cartDataUpdationforContainer = null;
 
 		final List<String> message = energizerCartService.messages();
-		if (message.size() != 0)
+		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
 			{
@@ -449,7 +475,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			errorMessages = true;
 		}
 		final HashMap productList = energizerCartService.productNotAddedToCart();
-
+		if (productList != null && productList.size() > 0)
+		{
+			final Set productNotAddedMapEntrySet = productList.entrySet();
+			//doubleStackMapEntrySet.isEmpty()
+			String tempList = "ERPMaterialID		:		Quantity";
+			GlobalMessages.addErrorMessage(model, tempList);
+			businessRuleErrors.add(tempList);
+			for (final Iterator iterator = productNotAddedMapEntrySet.iterator(); iterator.hasNext();)
+			{
+				tempList = null;
+				final Map.Entry mapEntry = (Map.Entry) iterator.next();
+				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
+				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
+				GlobalMessages.addErrorMessage(model, tempList);
+				businessRuleErrors.add(tempList);
+			}
+		}
+		cartData.setBusinesRuleErrors(businessRuleErrors);
 
 		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
 
@@ -470,10 +513,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		model.addAttribute("packingOptionList", packingOptionsList);
 		model.addAttribute("errorMessages", errorMessages);
 
-		model.addAttribute("containerUtilizationForm", contUtilForm);
+
 		model.addAttribute("productList", productList);
 		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		model.addAttribute("containerUtilizationForm", contUtilForm);
+		model.addAttribute("enableButton", enableButton);
 
 
 		model.addAttribute("cartData", cartDataUpdationforContainer);
@@ -522,14 +566,26 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	@RequestMapping(value = CART, method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
+			throws CMSItemNotFoundException
 	{
 
+		final String str = request.getParameter("choice");
+		if (str != null && str.equals("Yes"))
+		{
+			LOG.info("Enable radio button :");
+			enableButton = true;
+
+		}
+
+		if (str != null && str.equals("No"))
+		{
+			LOG.info("radio button value:");
+			enableButton = false;
+		}
 		cartEntryBusinessRulesService.clearErrors();
 
-		LOG.info(" Inside updateContainerUtil method");
-		LOG.info("Container Height: " + containerUtilizationForm.getContainerHeight());
-		LOG.info("Packing Option: " + containerUtilizationForm.getPackingType());
+
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
 

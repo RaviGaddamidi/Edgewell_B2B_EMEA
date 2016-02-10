@@ -197,6 +197,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute  qualifier="enableContainerOptimization" type="java.lang.Boolean">
+					<modifiers />
+					<persistence type="property" />
+					<defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
+					</attribute>
 					<attribute qualifier="distributionChannel" type="java.lang.String">
 						<description>Distribution Channel</description>
 						<modifiers />
