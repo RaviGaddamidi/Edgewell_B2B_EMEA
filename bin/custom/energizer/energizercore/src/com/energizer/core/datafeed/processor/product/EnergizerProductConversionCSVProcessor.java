@@ -6,6 +6,7 @@ package com.energizer.core.datafeed.processor.product;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
@@ -56,10 +57,15 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	private CommonI18NService defaultCommonI18NService;
 	@Resource
 	private UnitService defaultUnitService;
+	@Resource
+	ConfigurationService configurationService;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerProductConversionCSVProcessor.class);
 
 	private static final String ENERGIZER_PRODUCT_CONVERSION = "feedprocessor.energizerOrderUpdateFeed.mandatory";
+
+	private static final String REDUCED_INCHES_FROM_HEIGHT = "reduced.height";
+	private Double reducedHeightInInches;
 
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -175,6 +181,9 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	private void addUpdateRecord(final EnergizerProductConversionFactorModel conversionModel,
 			final Map<String, String> csvValuesMap) throws Exception
 	{
+
+		reducedHeightInInches = configurationService.getConfiguration().getDouble(REDUCED_INCHES_FROM_HEIGHT, null);
+		LOG.info("Reduced Height :" + reducedHeightInInches);
 		LOG.info("Entering method addUpdateRecord.....");
 
 		conversionModel.setConversionMultiplier(Integer.parseInt(csvValuesMap.get(EnergizerCoreConstants.BASE_UOM_MULTIPLIER)
@@ -226,10 +235,11 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 			{
 				packageHeightMetric = modelService.create(MetricUnitModel.class);
 			}
-			packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim()));
+			packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim())
+					- reducedHeightInInches);
 			packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
 
-			conversionModel.setPackageWidth(packageWidthMetric);
+			conversionModel.setPackageHeight(packageHeightMetric);
 
 		}
 

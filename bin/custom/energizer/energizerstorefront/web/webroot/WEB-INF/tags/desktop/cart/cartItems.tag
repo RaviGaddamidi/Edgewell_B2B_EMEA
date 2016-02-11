@@ -39,8 +39,10 @@
 				<th id="header8"><spring:theme code="basket.page.unitPrice" /></th>
 				<th id="header9"><spring:theme code="basket.page.quantity" /></th>
 				<th id="header10"><spring:theme code="basket.page.total" /></th>
+				<c:if test="${enableButton}">
 				<th id="header11"><spring:theme
 						code="basket.page.doubleStackProduct" /></th>
+						</c:if>
 			</tr>
 		</thead>
 		<tbody>
@@ -197,6 +199,7 @@
 								displayFreeForZero="true" />
 						</ycommerce:testId></td>
 
+                 <c:if test="${enableButton}">
 					<td headers="header11" class="doubleStackProduct">
 					<c:choose>
 					<c:when test="${not empty productsNotDoubleStacked}">
@@ -221,6 +224,7 @@
 						<c:otherwise> NO product is required for double stacking</c:otherwise>
 						</c:choose>
 						</td>
+						</c:if>
 
 				</tr>
 

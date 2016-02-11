@@ -178,6 +178,8 @@ public class CartPageController extends AbstractPageController
 	@Resource(name = "searchBreadcrumbBuilder")
 	private SearchBreadcrumbBuilder searchBreadcrumbBuilder;
 
+	boolean enableForB2BUnit = false;
+
 
 	boolean enableButton = false;
 
@@ -187,8 +189,10 @@ public class CartPageController extends AbstractPageController
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
 	}
 
@@ -198,6 +202,9 @@ public class CartPageController extends AbstractPageController
 			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
 			throws CMSItemNotFoundException
 	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 
 		if (bindingErrors.hasErrors())
 		{
@@ -216,12 +223,14 @@ public class CartPageController extends AbstractPageController
 			LOG.info("radio button value:");
 			enableButton = false;
 		}
+		if (enableButton)
+		{
 
-		final String userId = userService.getCurrentUser().getUid();
-		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+			b2bUnit.setEnableContainerOptimization(enableButton);
+			modelService.save(b2bUnit);
+		}
 
-		b2bUnit.setEnableContainerOptimization(enableButton);
-		modelService.save(b2bUnit);
+
 		cartEntryBusinessRulesService.clearErrors();
 
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
@@ -229,6 +238,7 @@ public class CartPageController extends AbstractPageController
 
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
 	}
 
@@ -320,7 +330,7 @@ public class CartPageController extends AbstractPageController
 		//boolean errorMessages = false;
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		//	final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 
 		if (bindingErrors.hasErrors())
 		{
@@ -535,7 +545,7 @@ public class CartPageController extends AbstractPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
 		final List<String> message = energizerCartService.messages();

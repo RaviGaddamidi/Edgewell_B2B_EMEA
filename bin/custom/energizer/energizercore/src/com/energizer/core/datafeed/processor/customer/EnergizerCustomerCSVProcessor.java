@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.core.datafeed.processor.customer;
 
@@ -56,14 +56,14 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 
 
 /**
- * 
+ *
  * This processors imports the customer address .
- * 
+ *
  * Sample file will look like
- * 
+ *
  * CustomerID,SalesOrg,DistributionChannel,Division,Customername,OrderType,DeletionFlag,Status,Currency,
  * MinimumOrderValue,DefaultLanguage 1006, 1000, 10, 10, tyfg, ZOR, 1, 1, USD, 10, EN
- * 
+ *
  * Total column count : 11
  */
 public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -160,7 +160,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public EnergizerCustomerCSVProcessor()
 	{
@@ -226,6 +226,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						energizeB2BUnit.setMaxUserLimit(maxUserLimit);
 						energizeB2BUnit.setBuyerSpecificID(csvValuesMap.get(CUSTOMER_ID).trim());
 						energizeB2BUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
+						energizeB2BUnit.setEnableContainerOptimization(false);
 						try
 						{
 							modelService.save(energizeB2BUnit);

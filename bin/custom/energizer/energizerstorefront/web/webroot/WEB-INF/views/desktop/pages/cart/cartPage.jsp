@@ -58,7 +58,7 @@ function submitForm() {
 			
 				<br>
 				
-				
+				<c:if test="${enableForB2BUnit}">
 				<form id="form" name="form" action="cart" method="post"  >
 				  <c:choose>
 				<c:when test="${enableButton}">  
@@ -80,6 +80,7 @@ function submitForm() {
                  
                  </c:choose>
                  </form>
+                 
                  <br><br>
                  <div >
                  <c:if test="${enableButton}">
@@ -112,6 +113,8 @@ function submitForm() {
 					
 					</form:form>
 					
+					
+					</c:if>
 					</div>
 					</c:if>
 					
@@ -128,7 +131,7 @@ function submitForm() {
 				</c:otherwise>
 			</c:choose>
 			<!--   Start Code changes for order flag check -->			
-			<cart:cartItems cartData="${cartData}"/>
+			<cart:cartItems cartData="${cartData}" />
 
 				<div class="clearfix fixthis_row_cls">
 					<div class="span-16">
