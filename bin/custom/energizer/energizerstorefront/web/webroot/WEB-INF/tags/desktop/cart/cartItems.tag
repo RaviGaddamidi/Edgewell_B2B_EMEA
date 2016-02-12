@@ -214,14 +214,14 @@
 							      <a style="color:#228b22;" href="${getDoubleStackProducts}?productID=${doubleStackProducts.value} "> CLICK HERE </a>
 							  </c:when>
 							  
-							 <c:otherwise>NO product is required for double stacking</c:otherwise>
+							 <c:otherwise><spring:theme code="product.doublestacking.notavailable" /></c:otherwise>
 											
 							 </c:choose>
 						 
 				         </c:forEach> 		
 				        			
 						</c:when> 
-						<c:otherwise> NO product is required for double stacking</c:otherwise>
+						<c:otherwise><spring:theme code="product.doublestacking.notrequired" /></c:otherwise>
 						</c:choose>
 						</td>
 						</c:if>

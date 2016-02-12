@@ -135,6 +135,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	boolean enableButton = false;
 
+	boolean enableForB2BUnit = false;
+
 	@Value("${excelFileSize}")
 	private String excelFileSize;
 
@@ -388,9 +390,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		}
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		shipmentMap.clear();
 		return ControllerConstants.Views.Pages.Cart.CartPage;
 	}
@@ -455,13 +459,13 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableContOptimization = b2bUnit.getEnableContainerOptimization();
+		//final boolean enableContOptimization = b2bUnit.getEnableContainerOptimization();
 
-		LOG.info(" Enable Container Optimization value: " + enableContOptimization);
+		LOG.info(" Enable Container Optimization value: " + enableButton);
 
 
 		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(),
-				containerHeight, packingOption, enableContOptimization);
+				containerHeight, packingOption, enableButton);
 		//final CartData cartDataUpdationforContainer = null;
 
 		final List<String> message = energizerCartService.messages();
@@ -563,13 +567,20 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
 	}
 
+
+	/*
+	 * Redirect to /my-cart/cart page ,once action is performed on /my-cart/addtoCart Page...
+	 */
+
 	@RequestMapping(value = CART, method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
 			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
 			throws CMSItemNotFoundException
 	{
-
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		final String str = request.getParameter("choice");
 		if (str != null && str.equals("Yes"))
 		{
@@ -590,6 +601,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
 
 		prepareDataForPage(model);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
 	}
 

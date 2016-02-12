@@ -25,7 +25,6 @@ function submitForm() {
 </script>
 
 
-
 	<spring:theme code="basket.add.to.cart" var="basketAddToCart"/>
 	<spring:theme code="cart.page.checkout" var="checkoutText"/>
 	<div id="breadcrumb" class="breadcrumb">
@@ -44,7 +43,6 @@ function submitForm() {
 	
 	<input name="isOrderBlocked" type="hidden" id="isOrderBlocked" value="${cartData.isOrderBlocked }"><br/>	
 
-	
 	<cms:pageSlot position="TopContent" var="feature" element="div" class="span-24">
 		<cms:component component="${feature}"/>
 	</cms:pageSlot>
@@ -54,54 +52,42 @@ function submitForm() {
 		
 		 <!--  Adding container optimizationbutton and 2 radio buttons -->
             
-               
-			
-				<br>
-				
+   				<br>
 				<c:if test="${enableForB2BUnit}">
-				<form id="form" name="form" action="cart" method="post"  >
-				  <c:choose>
+				
+		 <form id="form" name="form" action="cart" method="post" >
+		     <c:choose>
+				  
 				<c:when test="${enableButton}">  
-				
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  checked="checked">Enable Container Optimization<br>
-				
-				<input type="radio" name="choice" value="No"   onclick="submitForm()" >Disable Container Optimization 
-			
-                 
-                 </c:when>
+     				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  checked="checked"><spring:theme code="enable.radiobutton"/><br>
+					<input type="radio" name="choice" value="No"   onclick="submitForm()" ><spring:theme code="disable.radiobutton"/> 
+                </c:when>
+ 
                  <c:otherwise>
-                 
-                 
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  >Enable Container Optimization<br>
-				
-				<input type="radio" name="choice" value="No"  checked="checked" onclick="submitForm()" >Disable Container Optimization 
-                 
+     				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  ><spring:theme code="enable.radiobutton"/><br>
+					<input type="radio" name="choice" value="No"  checked="checked" onclick="submitForm()" ><spring:theme code="disable.radiobutton"/> 
                  </c:otherwise>
                  
-                 </c:choose>
-                 </form>
+            </c:choose>
+         </form>
                  
                  <br><br>
-                 <div >
+                 <div>
                  <c:if test="${enableButton}">
-			<form:form  name="containerform" action="cart" id="containeroptimization" method="post" commandName ="containerUtilizationForm" >
-		 
-			  <label ><spring:theme code="container.height" /></label> 
-			   <form:select path="containerHeight">
-   
-                   <form:options items="${containerHeightList}" />
-               </form:select>
+                 
+			   <form:form  name="containerform" action="cart" id="containeroptimization" method="post" commandName ="containerUtilizationForm" >
+		            <label ><spring:theme code="container.height" /></label> 
+			        <form:select path="containerHeight">
+                        <form:options items="${containerHeightList}" />
+                    </form:select>
 					
-					
-				 &nbsp;&nbsp;<label ><spring:theme code="packing.type" /></label>
-				 <form:select path="packingType">
-   
-                   <form:options items="${packingOptionList}" />
-               </form:select>
+					 &nbsp;&nbsp;
+					 <label ><spring:theme code="packing.type" /></label>
+				     <form:select path="packingType">
+                          <form:options items="${packingOptionList}" />
+                      </form:select>
 				 
-				
-					
-					<!-- <button id ="container_Optamization"  style="position:absolute;left:900px;" class="positive"  type="submit"  ><spring:theme code="basket.your.shopping.container.optimization" /></button> --> 
+	<!-- <button id ="container_Optamization"  style="position:absolute;left:900px;" class="positive"  type="submit"  ><spring:theme code="basket.your.shopping.container.optimization" /></button> --> 
 					<br>
 					<div class="form-actions"">
 					<ycommerce:testId code="update_button" >
@@ -109,18 +95,16 @@ function submitForm() {
 							<spring:theme code="basket.your.shopping.container.optimization" />
 						</button>
 					</ycommerce:testId>
-				</div>
+				  </div>
 					
-					</form:form>
-					
+			   </form:form>
 					
 					</c:if>
 					</div>
 					</c:if>
 					
           
-
-			<!--   Start Code changes for order flag check -->
+        <!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
 					<button id ="checkoutButton_top" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
@@ -147,8 +131,7 @@ function submitForm() {
 				                        <div style="height: 69px;" id="volume_utilization"></div>                                                                           
 				                    </div>                                                   
 							
-								
-							
+															
 									<div id="weight_cont">
 				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.totalProductWeightInPercent}</span>%</div>
 				                       <div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.weight"/></div>                                                                             

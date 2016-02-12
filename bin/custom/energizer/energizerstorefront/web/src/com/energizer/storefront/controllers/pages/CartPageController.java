@@ -188,7 +188,7 @@ public class CartPageController extends AbstractPageController
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
@@ -230,9 +230,7 @@ public class CartPageController extends AbstractPageController
 			modelService.save(b2bUnit);
 		}
 
-
 		cartEntryBusinessRulesService.clearErrors();
-
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
 
@@ -254,7 +252,6 @@ public class CartPageController extends AbstractPageController
 			// No session cart or empty session cart. Bounce back to the cart page.
 			return REDIRECT_PREFIX + "/cart";
 		}
-
 
 		orderBusinessRulesService.validateBusinessRules(cartFacade.getSessionCart());
 		if (orderBusinessRulesService.hasErrors())
@@ -317,9 +314,6 @@ public class CartPageController extends AbstractPageController
 		return false;
 	}
 
-
-
-
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@RequireHardLogIn
@@ -362,7 +356,6 @@ public class CartPageController extends AbstractPageController
 		}
 		else
 		{
-
 			final CartModificationData cartModification = b2bCartFacade.updateOrderEntry(getOrderEntryData(form.getQuantity(),
 					productCode, entryNumber));
 
@@ -390,10 +383,8 @@ public class CartPageController extends AbstractPageController
 		else
 		{
 			containerHeight = Config.getParameter("energizer.default.containerHeight");
-
 			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
-
 
 		LOG.info(" Container Height: " + containerHeight);
 		LOG.info(" Packing Type: " + packingOption);
@@ -403,28 +394,23 @@ public class CartPageController extends AbstractPageController
 
 		if (cartData.isIsContainerFull())
 		{
-
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_EXCEEDED));
 		}
 
 		if (cartData.isIsOrderBlocked())
 		{
-
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
 		}
 
 		final List<String> message = energizerCartService.messages();
 
-
 		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
 			{
-
 				GlobalMessages.addErrorMessage(model, messages);
 				businessRuleErrors.add(messages);
 			}
-
 		}
 
 		final HashMap productList = energizerCartService.productNotAddedToCart();
@@ -446,52 +432,7 @@ public class CartPageController extends AbstractPageController
 		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 
-		/*
-		 * final Session session = sessionService.getCurrentSession(); HashMap productNotAddedList =
-		 * session.getAttribute("productList"); if (productNotAddedList != null && productNotAddedList.size() > 0) {
-		 * productNotAddedList.clear(); productNotAddedList = productList; session.setAttribute("productList",
-		 * productNotAddedList); } else { session.setAttribute("productList", productList); }
-		 */
-
-
-		/*
-		 * final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
-		 * model.addAllAttributes(productList);
-		 */
-
-		/*
-		 * final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
-		 * new Character(',').toString()));
-		 * 
-		 * 
-		 * final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split( new
-		 * Character(',').toString()));
-		 * 
-		 * 
-		 * model.addAttribute("containerHeightList", containerHeightList); model.addAttribute("packingOptionList",
-		 * packingOptionsList);
-		 */
-
-		/*
-		 * model.addAttribute("errorMessages", errorMessages);
-		 * 
-		 * model.addAttribute("containerUtilizationForm", contUtilForm); model.addAttribute("productList", productList);
-		 * model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
-		 */
-
-		//model.addAttribute("data", data);
-
-		/*
-		 * model.addAttribute("cartData", cartData);
-		 * 
-		 * storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE)); setUpMetaDataForContentPage(model,
-		 * getContentPageForLabelOrId(CART_CMS_PAGE)); model.addAttribute(WebConstants.BREADCRUMBS_KEY,
-		 * resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart")); model.addAttribute("pageType",
-		 * PageType.CART.name());
-		 */
-
 		return cartData;
-
 
 	}
 
@@ -504,7 +445,6 @@ public class CartPageController extends AbstractPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-
 			boolean flag = false;
 			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
@@ -516,7 +456,6 @@ public class CartPageController extends AbstractPageController
 				{
 					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
 					flag = true;
-
 				}
 			}
 			if (flag == true)
@@ -528,8 +467,6 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		//	contUtilForm.setContainerHeight(Config.getParameter("energizer.default.containerHeight"));
-		//	contUtilForm.setPackingType(Config.getParameter("energizer.default.packingOption"));
 
 		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
 		{
@@ -539,21 +476,17 @@ public class CartPageController extends AbstractPageController
 		else
 		{
 			containerHeight = Config.getParameter("energizer.default.containerHeight");
-
 			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
-
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
 		final List<String> message = energizerCartService.messages();
 		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
 			{
-
 				GlobalMessages.addErrorMessage(model, messages);
 				businessRuleErrors.add(messages);
 			}
@@ -583,31 +516,22 @@ public class CartPageController extends AbstractPageController
 
 		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
 
-
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
-
 
 		final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(
 				new Character(',').toString()));
 
-
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
 		model.addAttribute("errorMessages", errorMessages);
-
 		model.addAttribute("containerUtilizationForm", contUtilForm);
-		//	model.addAttribute("productList", productList);
 		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
-		//model.addAttribute("data", data);
-
 		model.addAttribute("cartData", cartData);
-
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
 		model.addAttribute("pageType", PageType.CART.name());
-		model.addAttribute("Link", "/my-account");
 	}
 
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
@@ -617,7 +541,6 @@ public class CartPageController extends AbstractPageController
 	{
 		LOG.info("for container utilization");
 	}
-
 
 	protected void reverseCartProductsOrder(final List<OrderEntryData> entries)
 	{
@@ -637,9 +560,7 @@ public class CartPageController extends AbstractPageController
 			final CartRestorationData restorationData = (CartRestorationData) sessionService
 					.getAttribute(WebConstants.CART_RESTORATION);
 			model.addAttribute("restorationData", restorationData);
-
 		}
-
 		createProductList(model);
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
 		model.addAttribute("pageType", PageType.CART.name());
@@ -665,7 +586,6 @@ public class CartPageController extends AbstractPageController
 
 	protected OrderEntryData getOrderEntryData(final long quantity, final String productCode, final Integer entryNumber)
 	{
-
 		final OrderEntryData orderEntry = new OrderEntryData();
 		orderEntry.setQuantity(quantity);
 		orderEntry.setProduct(new ProductData());
@@ -676,9 +596,7 @@ public class CartPageController extends AbstractPageController
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
 		orderEntry.getProduct().setUom(energizerCMIR.getUom());
-
 		return orderEntry;
 
 	}
-
 }
