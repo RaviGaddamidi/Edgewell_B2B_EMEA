@@ -50,8 +50,8 @@ public class EnergizerProductPalletHeight implements Comparable
 	@Override
 	public int compareTo(final Object o)
 	{
-		final double comparePalletHeight = ((EnergizerProductPalletHeight) o).getPalletHeight();
 
-		return (int) (comparePalletHeight - this.palletHeight);
+		final double comparePalletHeight = ((EnergizerProductPalletHeight) o).getPalletHeight();
+		return (int) ((comparePalletHeight * 1000) - (this.palletHeight * 1000));
 	}
 }
