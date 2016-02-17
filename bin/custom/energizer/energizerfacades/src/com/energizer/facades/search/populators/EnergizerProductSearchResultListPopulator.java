@@ -67,9 +67,11 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 		final String productCode = source.getValues().get("code").toString();
 		final EnergizerProductModel energizerProductModel = (EnergizerProductModel) productService.getProductForCode(productCode);
 
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
 		if (null != energizerProductModel)
 		{
-
 			productData.setObsolete((energizerProductModel.getObsolete() == null ? false : energizerProductModel.getObsolete()));
 
 			if (null != energizerProductModel.getDescription())
@@ -83,8 +85,6 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 
 		}
 
-		final String userId = userService.getCurrentUser().getUid();
-		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final EnergizerCMIRModel energizerCMIRModel = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
 		if (null != energizerCMIRModel)
 		{
@@ -112,6 +112,17 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 			}
 
 		}
+		if (productData.getMoq() == null || productData.getMoq() == 0)
+		{
+			productData.setMoq(energizerProductModel.getMinOrderQuantity());
+		}
+
+		if (productData.getUom() == null || productData.getUom().isEmpty())
+		{
+			productData.setUom(energizerProductModel.getUnit().getCode());
+		}
+
+
 		final EnergizerProductConversionFactorModel energizerProductConversionFactorModel = energizerProductService
 				.getEnergizerProductConversion(productCode, b2bUnit.getUid());
 

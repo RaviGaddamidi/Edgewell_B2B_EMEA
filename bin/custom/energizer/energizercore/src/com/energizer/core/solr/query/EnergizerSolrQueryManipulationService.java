@@ -39,6 +39,6 @@ public interface EnergizerSolrQueryManipulationService
 
 	public String getSolrQueryForCategorySearch(final String sortCode, final String existingQuery);
 
-	public String getSolrQueryForTextSearchPage(final String sortCode, final String existingQuery);
+	public String getSolrQueryForTextSearchPage(final String sortCode, final String existingQuery, final String b2bunitCatalogType);
 
 }

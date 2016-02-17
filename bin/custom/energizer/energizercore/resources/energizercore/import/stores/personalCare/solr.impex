@@ -102,7 +102,8 @@ INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[
 #;$solrIndexedType; customerMaterialDescription                   ;string ;            ;    ; true   ;    ;true;true;energizerCustomerMaterialDescriptionValueProvider;
 #;$solrIndexedType; code                   ;string ;            ;    ;    ; true   ;true;true;energizerCustomerMaterialIDValueProvider;
 ;$solrIndexedType; name                   ;text   ;sortabletext;    ;true; true   ;true;true;energizerCustomerMaterialDescriptionValueProvider;
-
+;$solrIndexedType; region        ;string ;            ;    ;    ; true   ;    ;    ;energizerProductRegionValueProvider;
+;$solrIndexedType; country        ;string ;            ;    ;    ; true   ;    ;    ;energizerProductCountryValueProvider;
 
 
 
@@ -181,3 +182,5 @@ INSERT_UPDATE SolrIndexedProperty;solrIndexedType(identifier)[unique=true];name[
 #;$solrIndexedType; customerMaterialDescription;95;true;Customer Material;Group;false;true
 ;$solrIndexedType; shippingPoint;94;true;Shipping Point;Shipping Point;true;true
 ;$solrIndexedType; searchAttribute ;93;true;Segment;Segmento;true;false
+;$solrIndexedType; region ;-1000;false;Region;true;true
+;$solrIndexedType; country ;-1000;false;Country;true;true

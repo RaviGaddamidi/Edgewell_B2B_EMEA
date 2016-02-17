@@ -142,6 +142,8 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerProd.setCatalogVersion(catalogVersion);
 		energizerProd.setApprovalStatus(ArticleApprovalStatus.APPROVED);
 		energizerProd.setCode(productMaterialId);
+		energizerProd.setMinOrderQuantity(1);
+		energizerProd.setUnit(defaultUnitService.getUnitForCode("PAL"));
 
 		// Assigning The Category
 		try

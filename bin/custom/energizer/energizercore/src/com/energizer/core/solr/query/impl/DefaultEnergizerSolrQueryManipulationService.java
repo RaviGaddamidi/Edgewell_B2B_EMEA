@@ -6,11 +6,17 @@ package com.energizer.core.solr.query.impl;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.servicelayer.user.UserService;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
+
 import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerRegionModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationServiceTest;
+import com.energizer.services.product.dao.EnergizerProductDAO;
 
 
 
@@ -29,6 +35,11 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 
 	@Resource(name = "userService")
 	private UserService userService;
+
+	@Resource(name = "energizerProductDAO")
+	private EnergizerProductDAO energizerProductDAO;
+
+	private static final Logger LOG = Logger.getLogger(DefaultEnergizerSolrQueryManipulationService.class);
 
 
 	/**
@@ -130,9 +141,6 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 					retVal = retVal + QUERY_CONNECTOR + b2bUnit;
 				}
 			}
-
-
-
 		}
 		return retVal;
 	}
@@ -149,9 +157,9 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 	 * @return String
 	 */
 	@Override
-	public String getSolrQueryForTextSearchPage(final String sortCode, final String existingQuery)
+	public String getSolrQueryForTextSearchPage(final String sortCode, final String existingQuery, final String b2bunitCatalogType)
 	{
-		final String b2bUnit = getB2BUnitInSolrQuery();
+		//final String b2bUnit = getB2BUnitInSolrQuery();
 		final EnergizerB2BUnitModel b2bUnitModel = getB2BUnitForLoggedInUser();
 		String retVal = EMPTY_STRING;
 		if (b2bUnitModel == null)
@@ -159,6 +167,204 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 			return retVal;
 		}
 
+		if (b2bunitCatalogType != null && b2bunitCatalogType.equalsIgnoreCase("generic"))
+		{
+			retVal = getGenericCatalogQuery(sortCode, existingQuery);
+		}
+
+		/*
+		 * else if (b2bunitCatalogType != null && b2bunitCatalogType.equalsIgnoreCase("genericpluscmir")) { retVal =
+		 * getGenericCMIRQuery(sortCode, existingQuery); }
+		 */
+
+		else
+		{
+			//cmir only
+			retVal = getCMIRCatalogQuery(sortCode, existingQuery);
+		}
+		return retVal;
+	}
+
+	private String getGenericCMIRQuery(final String sortCode, final String existingQuery)
+	{
+		String retVal = EMPTY_STRING;
+		final EnergizerB2BUnitModel b2bUnitModel = getB2BUnitForLoggedInUser();
+		final String b2bUnit = "(" + B2B_UNIT_SEARCHQUERY_PREFIX + QUERY_CONNECTOR + "" + b2bUnitModel.getUid() + ")";
+		//final String regionStr = "(prdtRegion:" + b2bUnitModel.getDistributorRegion() + " AND  b2bunit:*) OR b2bunit:"
+		//		+ b2bUnitModel.getUid();
+		final java.util.List<EnergizerRegionModel> regions = energizerProductDAO.getCountryRegion(b2bUnitModel
+				.getDistributorCountry());
+		String regionStr = "";
+		if (regions != null && !regions.isEmpty())
+		{
+			for (final EnergizerRegionModel region : regions)
+			{
+				final List<String> countries = region.getCountryList();
+				if (countries != null && !countries.isEmpty())
+				{
+					if (countries.contains(b2bUnitModel.getDistributorCountry()))
+					{
+						regionStr = "region" + QUERY_CONNECTOR + "" + region.getRegionName() + "";
+					}
+				}
+
+			}
+		}
+		String countryStr = "";
+		if (energizerProductDAO.hasCountryGenericCatalog(b2bUnitModel.getDistributorCountry()))
+		{
+			countryStr = "country" + QUERY_CONNECTOR + "" + b2bUnitModel.getDistributorCountry() + "";
+		}
+
+		//String countryStr = "country" + QUERY_CONNECTOR + b2bUnitModel.getDistributorCountry();
+		if (!regionStr.isEmpty())
+		{
+			countryStr += " " + regionStr;
+		}
+
+		//String searchQuery = countryStr + " " + b2bUnit;
+		String searchQuery = "" + countryStr + "";
+
+		//final String regionStr = "(prdtRegion_string_mv%3ANA+AND++b2bunit_string_mv%3A*)+OR+b2bunit_string_mv%3A0000001003";
+
+		if (existingQuery == null || existingQuery.isEmpty())
+		{
+			if (sortCode != null)
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR
+						+ searchQuery;
+			}
+			else
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX
+						+ QUERY_CONNECTOR + searchQuery;
+			}
+		}
+		else
+		{
+			if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+				retVal = existingQuery + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX + QUERY_CONNECTOR + searchQuery;
+
+			}
+			if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+
+				retVal = existingQuery + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR + searchQuery;
+			}
+			else if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+
+				retVal = existingQuery;
+
+				if (existingQuery.indexOf(regionStr) == -1)
+				{
+					retVal = retVal + QUERY_CONNECTOR + searchQuery;
+				}
+
+			}
+			else if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+
+				retVal = existingQuery;
+
+				if (existingQuery.indexOf(regionStr) == -1)
+				{
+					retVal = retVal + QUERY_CONNECTOR + searchQuery;
+				}
+
+			}
+		}
+		LOG.info(" getGenericCMIRQuery == " + retVal);
+		return retVal;
+	}
+
+	private String getGenericCatalogQuery(final String sortCode, final String existingQuery)
+	{
+		String retVal = EMPTY_STRING;
+		final EnergizerB2BUnitModel b2bUnitModel = getB2BUnitForLoggedInUser();
+
+		final java.util.List<EnergizerRegionModel> regions = energizerProductDAO.getCountryRegion(b2bUnitModel
+				.getDistributorCountry());
+		String regionStr = "";
+		if (regions != null && !regions.isEmpty())
+		{
+			for (final EnergizerRegionModel region : regions)
+			{
+				final List<String> countries = region.getCountryList();
+				if (countries != null && !countries.isEmpty())
+				{
+					if (countries.contains(b2bUnitModel.getDistributorCountry()))
+					{
+						regionStr = "region" + QUERY_CONNECTOR + region.getRegionName();
+					}
+				}
+
+			}
+		}
+
+		String countryStr = "country" + QUERY_CONNECTOR + b2bUnitModel.getDistributorCountry();
+		if (!regionStr.isEmpty())
+		{
+			countryStr += QUERY_CONNECTOR + regionStr;
+		}
+
+		if (existingQuery == null || existingQuery.isEmpty())
+		{
+			if (sortCode != null)
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR
+						+ countryStr;
+			}
+			else
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX
+						+ QUERY_CONNECTOR + countryStr;
+			}
+		}
+		else
+		{
+			if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+				retVal = existingQuery + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX + QUERY_CONNECTOR + countryStr;
+
+			}
+			if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+
+				retVal = existingQuery + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR + countryStr;
+			}
+			else if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+
+				retVal = existingQuery;
+
+				if (existingQuery.indexOf(regionStr) == -1)
+				{
+					retVal = retVal + QUERY_CONNECTOR + countryStr;
+				}
+
+			}
+			else if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+
+				retVal = existingQuery;
+
+				if (existingQuery.indexOf(regionStr) == -1)
+				{
+					retVal = retVal + QUERY_CONNECTOR + countryStr;
+				}
+
+			}
+		}
+		LOG.info(" getGenericCatalogQuery == " + retVal);
+		return retVal;
+	}
+
+	private String getCMIRCatalogQuery(final String sortCode, final String existingQuery)
+	{
+		final String b2bUnit = getB2BUnitInSolrQuery();
+		String retVal = EMPTY_STRING;
 		if (existingQuery == null || existingQuery.isEmpty())
 		{
 			if (sortCode != null)
@@ -170,9 +376,7 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 			{
 				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX
 						+ QUERY_CONNECTOR + b2bUnit;
-
 			}
-
 		}
 		else
 		{
@@ -208,12 +412,9 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 				}
 
 			}
-
-
 		}
-
+		LOG.info(" getCMIRCatalogQuery == " + retVal);
 		return retVal;
 	}
-
 
 }

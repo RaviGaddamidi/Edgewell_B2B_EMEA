@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.initialdata.setup;
 
@@ -45,7 +45,7 @@ import com.energizer.initialdata.constants.EnergizerInitialDataConstants;
 
 /**
  * This class provides hooks into the system's initialization and update processes.
- * 
+ *
  * @see "https://wiki.hybris.com/display/release4/Hooks+for+Initialization+and+Update+Process"
  */
 @SystemSetup(extension = EnergizerInitialDataConstants.EXTENSIONNAME)
@@ -61,6 +61,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	//	public static final String ENERGIZER = "energizer";
 	public static final String PERSONAL_CARE = "personalCare";
 	public static final String HOUSEHOLD = "houseHold";
+	public static final String PERSONAL_CARE_NA = "personalCareNA";
 
 	@Resource
 	private ConfigurationService configurationService;
@@ -86,7 +87,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	/**
 	 * Implement this method to create initial objects. This method will be called by system creator during
 	 * initialization and system update. Be sure that this method can be called repeatedly.
-	 * 
+	 *
 	 * @param context
 	 *           the context provides the selected parameters and values
 	 */
@@ -99,7 +100,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	/**
 	 * Implement this method to create data that is used in your project. This method will be called during the system
 	 * initialization.
-	 * 
+	 *
 	 * @param context
 	 *           the context provides the selected parameters and values
 	 */
@@ -118,6 +119,11 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE, PERSONAL_CARE,
 					Collections.singletonList(PERSONAL_CARE));
+
+
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE_NA, PERSONAL_CARE_NA,
+					Collections.singletonList(PERSONAL_CARE_NA));
+
 
 			final ImportData powertoolsImportData = new ImportData();
 			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
@@ -145,7 +151,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 	/**
 	 * Use this method to import a standard setup store.
-	 * 
+	 *
 	 * @param context
 	 *           the context provides the selected parameters and values
 	 * @param storeName
@@ -266,7 +272,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 		importImpexFile(context, "/" + importDirectory + "/import/productCatalogs/" + catalogName
 				+ "ProductCatalog/categories.impex", false);
 
-		//Load Categories for Multidimensional Products 
+		//Load Categories for Multidimensional Products
 		importImpexFile(context, "/" + importDirectory + "/import/productCatalogs/" + catalogName
 				+ "ProductCatalog/dimension-categories.impex", false);
 		importImpexFile(context, "/" + importDirectory + "/import/productCatalogs/" + catalogName
@@ -386,7 +392,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 	/**
 	 * Imports Common Data
-	 * 
+	 *
 	 * @param context
 	 * @param importDirectory
 	 * @author m9005673

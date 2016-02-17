@@ -51,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.facades.search.B2BProductSearchFacade;
 import com.energizer.storefront.breadcrumb.impl.SearchBreadcrumbBuilder;
@@ -117,8 +118,9 @@ public class SearchPageController extends AbstractSearchPageController
 		if (StringUtils.isNotBlank(searchText))
 		{
 			//need to handle the solr query to enforce the b2bunit restriction on the catalog before it proceeds to the OOTB solr search
-			searchText = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(null, searchText);
+			searchText = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(null, searchText, "");
 
+			LOG.info(" SEARCH TEXT =" + searchText);
 			final PageableData pageableData = createPageableData(0, getSearchPageSize(), null, ShowMode.Page);
 			final SearchStateData searchState = new SearchStateData();
 			final SearchQueryData searchQueryData = new SearchQueryData();
@@ -148,6 +150,7 @@ public class SearchPageController extends AbstractSearchPageController
 				storeContinueUrl(request);
 				populateModel(model, searchPageData, ShowMode.Page);
 				storeCmsPageInModel(model, getContentPageForLabelOrId(SEARCH_CMS_PAGE_ID));
+				LOG.info(" SEARCH TEXT IN ELSE =" + searchText);
 				updatePageTitle(searchText, model);
 			}
 			getRequestContextData(request).setSearch(searchPageData);
@@ -178,11 +181,65 @@ public class SearchPageController extends AbstractSearchPageController
 			@RequestParam(value = "text", required = false) final String searchText, final HttpServletRequest request,
 			final Model model) throws CMSItemNotFoundException
 	{
-		//need to handle the solr query to enforce the b2bunit restriction on the catalog before it proceeds to the OOTB solr search
-		searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery);
+		final EnergizerB2BUnitModel loggedinB2BUnit = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
+		ProductSearchPageData<SearchStateData, ProductData> searchPageData = null;
+		if (loggedinB2BUnit != null)
+		{
+			if (loggedinB2BUnit.getCatalogType() != null
+					&& (loggedinB2BUnit.getCatalogType().equalsIgnoreCase("generic") || loggedinB2BUnit.getCatalogType()
+							.equalsIgnoreCase("cmir")))
+			{
+				searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery,
+						loggedinB2BUnit.getCatalogType());
+				searchPageData = performSearch(searchQuery, page, showMode, sortCode, getSearchPageSize(), false);
+			}
+			else
+			{
+				//generic and cmir
+				searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery, "generic");
+				searchPageData = performSearch(searchQuery, page, showMode, sortCode, getSearchPageSize(), false);
 
-		final ProductSearchPageData<SearchStateData, ProductData> searchPageData = performSearch(searchQuery, page, showMode,
-				sortCode, getSearchPageSize(), false);
+				searchQuery = "";
+				searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery, "cmir");
+
+				ProductSearchPageData<SearchStateData, ProductData> searchPageDatacmirs = performSearch(searchQuery, page, showMode,
+						sortCode, getSearchPageSize(), false);
+				if (searchPageData.getResults() != null)
+				{
+					if (searchPageDatacmirs.getResults() != null)
+					{
+						for (ProductData cmirRec : searchPageDatacmirs.getResults())
+						{
+							boolean matchFound = false;
+							for (ProductData genericRec : searchPageData.getResults())
+							{
+								if (cmirRec.getCode().equals(genericRec.getCode()))
+								{
+									matchFound = true;
+									break;
+								}
+							}
+							if (!matchFound)
+							{
+								searchPageData.getResults().add(cmirRec);
+							}
+						}
+						//searchPageData.getResults().addAll(searchPageDatacmirs.getResults());						
+
+						for (ProductData t : searchPageData.getResults())
+						{
+							LOG.info("******RECORDS -- " + t.getCode());
+						}
+						searchPageData.getPagination().setTotalNumberOfResults(searchPageData.getResults().size());
+					}
+				}
+				else
+				{
+					LOG.info("NO GENERIC RECS");
+					searchPageData = searchPageDatacmirs;
+				}
+			}
+		}
 
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("userLocation", customerLocationService.getUserLocation());
@@ -200,6 +257,15 @@ public class SearchPageController extends AbstractSearchPageController
 		}
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, searchBreadcrumbBuilder.getBreadcrumbs(null, searchPageData));
 		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
+
+		/*
+		 * Map<String, Object> map = model.asMap();
+		 * 
+		 * for (Map.Entry<String, Object> entry : map.entrySet()) { System.out.println(entry.getKey() + "/" +
+		 * entry.getValue()); }
+		 */
+
+
 		addMetaData(model, "search.meta.description.results", searchText, "search.meta.description.on", PageType.PRODUCTSEARCH,
 				"no-index,follow");
 
@@ -212,7 +278,20 @@ public class SearchPageController extends AbstractSearchPageController
 		final PageableData pageableData = createPageableData(page, pageSize, sortCode, showMode);
 		final SearchStateData searchState = new SearchStateData();
 		final SearchQueryData searchQueryData = new SearchQueryData();
-		searchQueryData.setValue(XSSFilterUtil.filter(searchQuery));
+
+		String escapedString = XSSFilterUtil.filter(searchQuery);
+		/*
+		 * String escapedString = ClientUtils.escapeQueryChars(searchQuery); if (escapedString != null) { escapedString =
+		 * escapedString.replace("\\ ", " "); // don't escape spaces escapedString = escapedString.replace("\\\"", "\"");
+		 * // don't escape double quotes escapedString = escapedString.replace("\\(", "("); // don't escape parens
+		 * escapedString = escapedString.replace("\\)", ")"); // don't escape parens }
+		 */
+		escapedString.replace("\\ ", " ");
+
+		searchQueryData.setValue(escapedString);
+
+		LOG.info(" SEARCH TEXT AFTER ESCAPE = ****" + escapedString);
+
 		searchState.setQuery(searchQueryData);
 
 		final ProductSearchPageData<SearchStateData, ProductData> pageData = solrProductSearchFacade.textSearch(searchState,
@@ -236,7 +315,7 @@ public class SearchPageController extends AbstractSearchPageController
 
 		//add b2bunit
 		//addB2BUnitToExistingSearchQuery(searchQuery);
-
+		LOG.info("productListerSearchResults " + searchQuery);
 		final ProductSearchPageData<SearchStateData, ProductData> searchPageData = performAdvancedSearch(searchQuery,
 				isOnlyProductIds, isCreateOrderForm, page, showMode, sortCode, searchResultType, model);
 
@@ -435,7 +514,7 @@ public class SearchPageController extends AbstractSearchPageController
 		/**
 		 * Added the functionality to filter out products associated to the current parent B2Bunit
 		 */
-		term = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(null, term);
+		term = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(null, term, "");
 
 		final PageableData pageableData = createPageableData(0, getSearchPageSize(), null, ShowMode.Page);
 		final SearchStateData searchState = new SearchStateData();

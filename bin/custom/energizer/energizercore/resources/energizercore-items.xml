@@ -19,6 +19,8 @@
 			autocreate="true" type="list" />
 		<collectiontype elementtype="EnergizerProductConversionFactor"
 			code="EnergizerProductConversionFactorList" autocreate="true" type="list" />
+		<!-- <collectiontype elementtype="EnergizerProduct"
+			code="EnergizerProductList" autocreate="true" type="list" />  -->		
 
 	</collectiontypes>
 
@@ -58,6 +60,18 @@
 				<modifiers read="true" write="true" search="true" partof="true"/>
 			</targetElement>
 		</relation>
+		
+		<!-- <relation code="ProductRegionRelation" 
+			autocreate="true" generate="false" localized="false">
+		    <deployment table="en_ProductRegionRel" typecode="10214" />
+		    <sourceElement type="EnergizerRegionGenericProducts" cardinality="many"
+		        navigable="false" />
+		    <targetElement type="EnergizerProduct" qualifier="productList"
+		        collectiontype="set" cardinality="many" ordered="true">
+		        <modifiers read="true" write="true" search="true"
+		            optional="true" />
+		    </targetElement>
+		</relation>  -->
 	</relations>
 	<itemtypes>
 		<!-- Add your item definitions here -->
@@ -252,6 +266,16 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="catalogType" type="java.lang.String">
+						<description>catalog type for the distributor - generic/cmir/genericpluscmir</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>					
+					<attribute qualifier="distributorCountry" type="java.lang.String">
+						<description>country to which the distributor belongs - USA/Canada etc.</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 
 				</attributes>
 			</itemtype>
@@ -340,9 +364,9 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+										
 				</attributes>
-			</itemtype>
-
+			</itemtype>			
 
 			<itemtype code="EnergizerCMIR" extends="GenericItem"
 				autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.EnergizerCMIR">
@@ -956,6 +980,48 @@
 					</attribute>
 				</attributes>
 			</itemtype>
+		
+			<itemtype code="EnergizerRegion" extends="GenericItem" 
+				autocreate="true" generate="true" 
+				jaloclass="com.energizer.core.jalo.EnergizerRegion">
+				<description>Region record for a Product</description>
+				<deployment table="en_region" typecode="10212" />
+				<attributes>
+					<attribute qualifier="regionName" type="java.lang.String">
+						<description>Region Name</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="countryList" type="StringList">
+						<description>list of countries in the region ex - USA,Canada for NA region</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>			
+				</attributes>
+			</itemtype>
+			
+			<itemtype code="EnergizerRegionGenericProducts" extends="GenericItem"
+				autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.EnergizerRegionGenericProducts">
+				<description>Generic products for a Region/Country</description>
+				<deployment table="en_regiongenericerps" typecode="10213" />
+				<attributes>
+					<attribute qualifier="regionName" type="java.lang.String">
+						<description>Region Name</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="country" type="java.lang.String">
+						<description>Country Name</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="products" type="StringList">
+						<description>list of generic products in the country/region</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>										
+				</attributes>
+			</itemtype>		
 
 		</typegroup>
 

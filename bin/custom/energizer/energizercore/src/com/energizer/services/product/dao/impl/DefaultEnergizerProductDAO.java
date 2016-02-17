@@ -16,6 +16,8 @@ import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerPriceRowModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.core.model.EnergizerRegionGenericProductsModel;
+import com.energizer.core.model.EnergizerRegionModel;
 import com.energizer.core.model.EnergizerShippingPointModel;
 import com.energizer.services.product.dao.EnergizerProductDAO;
 
@@ -232,7 +234,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		return flexibleSearchService.<EnergizerShippingPointModel> search(retreiveQuery).getResult();
 
 	}
-	
+
 	@Override
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList()
 	{
@@ -243,7 +245,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(querystring);
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
-	
+
 	@Override
 	public List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId)
 	{
@@ -263,4 +265,35 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getCountryRegion(java.lang.String)
+	 */
+	@Override
+	public List<EnergizerRegionModel> getCountryRegion(final String country)
+	{
+		final FlexibleSearchQuery retreiveQuery = new FlexibleSearchQuery("SELECT {pk} FROM {EnergizerRegion}");
+		//retreiveQuery.addQueryParameter("regionName", regionName);
+		return flexibleSearchService.<EnergizerRegionModel> search(retreiveQuery).getResult();
+	}
+
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.services.product.dao.EnergizerProductDAO#hasCountryGenericCatalog(java.lang.String)
+	 */
+	@Override
+	public Boolean hasCountryGenericCatalog(final String b2bunitCountry)
+	{
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(
+				"select *  from {EnergizerRegionGenericProducts} where {country}=?b2bunitCountry");
+		query.addQueryParameter("b2bunitCountry", b2bunitCountry);
+
+		final List<EnergizerRegionGenericProductsModel> genericProductsList = flexibleSearchService
+				.<EnergizerRegionGenericProductsModel> search(query).getResult();
+		return (genericProductsList == null || genericProductsList.isEmpty()) ? false : true;
+	}
 }

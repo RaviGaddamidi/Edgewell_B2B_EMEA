@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.setup;
 
@@ -39,7 +39,7 @@ import com.energizer.core.constants.EnergizerCoreConstants;
 
 /**
  * This class provides hooks into the system's initialization and update processes.
- * 
+ *
  * @see "https://wiki.hybris.com/display/release4/Hooks+for+Initialization+and+Update+Process"
  */
 @SystemSetup(extension = EnergizerCoreConstants.EXTENSIONNAME)
@@ -53,7 +53,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	//	public static final String ENERGIZER = "energizer";
 	public static final String PERSONAL_CARE = "personalCare";
 	public static final String HOUSEHOLD = "houseHold";
-
+	public static final String PERSONAL_CARE_NA = "personalCareNA";
 	@Resource
 	private ConfigurationService configurationService;
 
@@ -61,7 +61,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 	/**
 	 * This method will be called by system creator during initialization and system update. Be sure that this method can
 	 * be called repeatedly.
-	 * 
+	 *
 	 * @param context
 	 *           the context provides the selected parameters and values
 	 */
@@ -97,7 +97,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 	/**
 	 * This method will be called during the system initialization.
-	 * 
+	 *
 	 * @param context
 	 *           the context provides the selected parameters and values
 	 */
@@ -117,10 +117,12 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 			importContentCatalog(context, PERSONAL_CARE);
 
+			importContentCatalog(context, PERSONAL_CARE_NA);
+
 			executeCatalogSyncJob(context, PERSONAL_CARE);
 
 			importStore(context, PERSONAL_CARE);
-
+			importStore(context, PERSONAL_CARE_NA);
 			createAndActivateSolrIndex(context, PERSONAL_CARE);
 
 			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
@@ -212,6 +214,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 			logInfo(context, "Executing catalogs sync job  [" + catalogName + "]");
 			syncCronJobResult = super.executeCatalogSyncJob(context, personalcare + "Catalog");
 			logInfo(context, "Executed catalogs sync job  [" + catalogName + "]");
+			//syncCronJobResult = super.executeCatalogSyncJob(context, personalcare + "Catalog");
 		}
 		if (syncCatalogs && household)
 		{

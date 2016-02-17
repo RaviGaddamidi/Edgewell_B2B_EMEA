@@ -655,6 +655,14 @@
 		<property name="fieldNameProvider" ref="solrFieldNameProvider" />
 		<property name="energizerProductService" ref="energizerProductService" />
 	</bean>
+	
+	<bean id="energizerProductRegionValueProvider" class="com.energizer.core.solr.provider.EnergizerProductRegionValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider" />
+	</bean>
+	
+	<bean id="energizerProductCountryValueProvider" class="com.energizer.core.solr.provider.EnergizerProductCountryValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider" />
+	</bean>
 
 
 	<bean id="energizerSolrQueryManipulationService" class="com.energizer.core.solr.query.impl.DefaultEnergizerSolrQueryManipulationService">

@@ -124,6 +124,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	private final String DEFAULT_LANGUAGE = "DefaultLanguage";
 	private final String MINIMUM_ORDER_VALUE = "MinimumOrderValue";
 	private final String DATE_FORMAT = "MM/dd/yyyy";
+	private final String COUNTRY = "Country";
+	private final String CATALOG_TYPE = "CatalogType";
 
 	/**
 	 * @return the b2bCostCenterDatas
@@ -226,6 +228,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						energizeB2BUnit.setMaxUserLimit(maxUserLimit);
 						energizeB2BUnit.setBuyerSpecificID(csvValuesMap.get(CUSTOMER_ID).trim());
 						energizeB2BUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
+						energizeB2BUnit.setDistributorCountry(csvValuesMap.get(COUNTRY).trim());
+						energizeB2BUnit.setCatalogType(csvValuesMap.get(CATALOG_TYPE).trim());
 						try
 						{
 							modelService.save(energizeB2BUnit);
@@ -266,6 +270,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						final boolean blockStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
 						b2bUnit.setOrderBlock(blockStatus);
 						b2bUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
+						b2bUnit.setDistributorCountry(csvValuesMap.get(COUNTRY).trim());
+						b2bUnit.setCatalogType(csvValuesMap.get(CATALOG_TYPE).trim());
 						try
 						{
 							final CurrencyModel currencyModel = commonI18NService.getCurrency(csvValuesMap.get(CURRENCY).trim());

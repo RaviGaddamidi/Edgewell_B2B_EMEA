@@ -33,7 +33,7 @@ public class XSSFilterUtil
 		}
 		String sanitized = value;
 		sanitized = sanitized.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-		sanitized = sanitized.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
+		//sanitized = sanitized.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
 		sanitized = sanitized.replaceAll("'", "&#39;");
 		sanitized = sanitized.replaceAll("eval\\((.*)\\)", "");
 		sanitized = sanitized.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");

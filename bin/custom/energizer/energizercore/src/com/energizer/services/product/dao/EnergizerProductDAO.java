@@ -9,6 +9,7 @@ import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerPriceRowModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
 import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.core.model.EnergizerRegionModel;
 import com.energizer.core.model.EnergizerShippingPointModel;
 
 
@@ -41,12 +42,14 @@ public interface EnergizerProductDAO
 	List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	List<EnergizerShippingPointModel> getShippingPointName(final String shippingPointId);
-	
+
 	List<EnergizerCMIRModel> getAllEnergizerCMIRList();
 
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
+	List<EnergizerRegionModel> getCountryRegion(final String country);
 
+	Boolean hasCountryGenericCatalog(final String country);
 
 
 }

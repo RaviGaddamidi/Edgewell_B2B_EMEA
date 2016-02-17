@@ -28,6 +28,8 @@
 			<typeref type="EnergizerAddress" description="energizer.address.description" />
 			<typeref type="MetricUnit" description="energizer.metricunit.description" />
 			<typeref type="EnergizerShippingPoint" description="energizer.shippingpoint.description" />
+			<typeref type="EnergizerRegion" description="energizer.region.description" />
+			<typeref type="EnergizerRegionGenericProducts" description="energizer.regiongenericproducts.description" />
 		</group>
 		
 	</explorertree>
