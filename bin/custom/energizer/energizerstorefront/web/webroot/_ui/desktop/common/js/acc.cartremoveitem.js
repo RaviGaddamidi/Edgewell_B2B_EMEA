@@ -157,7 +157,7 @@ ACC.cartremoveitem = {
 
                   $('.qty').on("blur", function ()
                               {                 
-                        
+                       
                         var entryNum = $(this).parent().find('input[name=entryNumber]').val();                             
                         var $form = $('#updateCartForm' + entryNum);                      
                         var initialCartQuantity = $form.find('input[name=initialQuantity]').val();                        
@@ -374,6 +374,8 @@ ACC.cartremoveitem = {
 
             refreshCartData: function(cartData, entryNum, productCode, quantity) 
             {     
+            	
+            	$('#containerHeightLine').text(cartData.containerHeight);
                   // if cart is empty, we need to reload the whole page
                   if (cartData.entries.length == 0)
                   {

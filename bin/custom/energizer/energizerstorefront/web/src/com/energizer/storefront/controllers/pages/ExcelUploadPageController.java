@@ -388,10 +388,16 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				}
 			}
 		}
+
+
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
+		if (b2bUnit.getEnableContainerOptimization() == false)
+		{
+			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
@@ -468,7 +474,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				containerHeight, packingOption, enableButton);
 		//final CartData cartDataUpdationforContainer = null;
 
-		final List<String> message = energizerCartService.messages();
+		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
 		{
 			for (final String messages : message)
@@ -478,7 +484,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			}
 			errorMessages = true;
 		}
-		final HashMap productList = energizerCartService.productNotAddedToCart();
+		final HashMap productList = energizerCartService.getProductNotAddedToCart();
 		if (productList != null && productList.size() > 0)
 		{
 			final Set productNotAddedMapEntrySet = productList.entrySet();
@@ -498,15 +504,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 
-		final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
+		final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
 
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
 				new Character(',').toString()));
 
+		final List<String> packingOptionsList;
+		if (containerHeight.equals("20FT"))
+		{
+			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions.20FT").split(
+					new Character(',').toString()));
+		}
+		else
+		{
 
-		final List<String> packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(
-				new Character(',').toString()));
+			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
+		}
+
 
 		contUtilForm.setContainerHeight(containerHeight);
 		contUtilForm.setPackingType(packingOption);
@@ -593,6 +608,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		{
 			LOG.info("radio button value:");
 			enableButton = false;
+		}
+		if (b2bUnit.getEnableContainerOptimization() == false)
+		{
+			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
 		cartEntryBusinessRulesService.clearErrors();
 

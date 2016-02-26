@@ -201,24 +201,31 @@
 
                  <c:if test="${enableButton}">
 					<td headers="header11" class="doubleStackProduct">
-					<c:choose>
-					<c:when test="${not empty productsNotDoubleStacked}">
-							<c:forEach items="${productsNotDoubleStacked}"
-								var="doubleStackProducts">
-						<c:set var="erpMaterialId" value="${entry.product.erpMaterialID}"> </c:set>
-												 
-						    <c:choose>
-						    
-						  
-							 <c:when test="${doubleStackProducts.key == erpMaterialId}">
-							      <a style="color:#228b22;" href="${getDoubleStackProducts}?productID=${doubleStackProducts.value} "> CLICK HERE </a>
-							  </c:when>
-							  
-							 <c:otherwise><spring:theme code="product.doublestacking.notavailable" /></c:otherwise>
-											
-							 </c:choose>
-						 
-				         </c:forEach> 		
+					<c:set var="erpMaterialId" value="${entry.product.erpMaterialID}"> </c:set>
+					
+					<c:set var="contains" value="false" />
+                 <c:forEach var="item" items="${productsNotDoubleStacked}">
+                <c:if test="${item.key eq erpMaterialId}">
+                   <c:set var="contains" value="true" />
+                   
+                     </c:if>
+                      </c:forEach>
+                      
+                      <c:choose>
+					
+					<c:when test="${contains == true}">
+					                     
+                      <c:choose>
+                                            
+                         <c:when test="${empty productsNotDoubleStacked.get(erpMaterialId)}">
+                          <spring:theme code="product.doublestacking.notavailable" />
+                          </c:when>
+                      
+                     
+                      <c:otherwise><a style="color:#228b22;" href="${getDoubleStackProducts}?productID=${productsNotDoubleStacked.get(erpMaterialId)}"> CLICK HERE </a></c:otherwise>
+                      
+                      </c:choose>
+                      					
 				        			
 						</c:when> 
 						<c:otherwise><spring:theme code="product.doublestacking.notrequired" /></c:otherwise>

@@ -19,11 +19,11 @@ public interface EnergizerCartService
 	public CartData calCartContainerUtilization(CartData cartData, String containerHeight, String packingOption,
 			boolean enableButton);
 
-	public List<String> messages();
+	public List<String> getMessages();
 
-	public HashMap productNotAddedToCart();
+	public HashMap getProductNotAddedToCart();
 
-	public HashMap productsNotDoublestacked123();
+	public HashMap getProductsNotDoublestacked();
 
 
 }

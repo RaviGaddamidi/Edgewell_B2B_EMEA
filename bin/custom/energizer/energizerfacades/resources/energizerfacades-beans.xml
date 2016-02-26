@@ -54,6 +54,7 @@
 		<property name="businesRuleErrors" type="java.util.List&lt;String>"/>
 		<property name="isContainerFull" type="boolean" />
 		<property name="isOrderBlocked" type="boolean" />
+		<property name="containerHeight" type="java.lang.String" />
 	</bean>
 	<!-- ************ End CartData Bean defination ******************* -->	
 
