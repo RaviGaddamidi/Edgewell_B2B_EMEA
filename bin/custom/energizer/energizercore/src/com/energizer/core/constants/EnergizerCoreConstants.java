@@ -87,10 +87,10 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 
 	// Constants for Package Dimensions including length , breadth and height
 
-	public static final String LENGTH = "Length";
-	public static final String WIDTH = "Width";
+	public static final String LENGTH = "LengthInUOM";
+	public static final String WIDTH = "WidthInUOM";
 	public static final String HEIGHT = "HeightInUOM";
-	public static final String UNIT = "HeightUOM";
+	public static final String UNIT = "DimensionUOM";
 	public static final String ALTERNATIVEUNIT = "AlternativeUnit";
 
 	private EnergizerCoreConstants()
