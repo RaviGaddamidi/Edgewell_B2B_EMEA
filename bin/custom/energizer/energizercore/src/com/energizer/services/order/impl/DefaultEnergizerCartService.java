@@ -697,7 +697,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		final ContainerData containerData = new ContainerData();
 		if (containerHeight.equals("20FT"))
 		{
-			containerData.setContainerType("twentyFeetContainer");
+			containerData.setContainerType("20FT");
 			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(twentyFeetContainerVolume, 2,
 					RoundingMode.HALF_EVEN).doubleValue();
 			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(twentyFeetContainerWeight, 2,
@@ -708,7 +708,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		}
 		else
 		{
-			containerData.setContainerType("fourtyFeetContainer");
+			containerData.setContainerType("40FT");
 			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(fourtyFeetContainerVolume, 2,
 					RoundingMode.HALF_EVEN).doubleValue();
 			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(fourtyFeetContainerWeight, 2,
