@@ -256,24 +256,34 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								productWeight = productWeight
 										+ getWeightOfGivenMaterial(productsListA.get(maxIndex - 1).getErpMaterialId())
 										+ getWeightOfGivenMaterial(productsListA.get(minIndex - 1).getErpMaterialId());
+
+
 								productsListA.remove(maxIndex - 1); // removeHighestLowestPalletList(productsListA, maxIndex);;
 								productsListA.remove(minIndex - 1);
+
+								if (containerHeight.equals("20FT"))
+								{
+									availableVolume = availableVolume - 10;
+								}
+								if (containerHeight.equals("40FT"))
+								{
+									availableVolume = availableVolume - 5;
+								}
 							}
 							else
 							{
+
 								productWeight = productWeight
 										+ getWeightOfGivenMaterial(productsListA.get(maxIndex - 1).getErpMaterialId());
+								final double volumeOfSinglePallet = getVolumeOfHighestPallet(productsListA.get(0).getErpMaterialId());
+								final double percentageVolumeOfSinglePallet = getPercentage(new BigDecimal(0),
+										new BigDecimal(volumeOfSinglePallet), containerHeight).getPercentVolumeUses();
+								availableVolume = availableVolume - percentageVolumeOfSinglePallet;
+
 								productsListA.remove(maxIndex - 1);
 							}
 
-							if (containerHeight.equals("20FT"))
-							{
-								availableVolume = availableVolume - 10;
-							}
-							if (containerHeight.equals("40FT"))
-							{
-								availableVolume = availableVolume - 5;
-							}
+
 							availableHeight = availableHeight - totalPalletHeight;
 							LOG.info("Available volume:" + availableVolume);
 							LOG.info("Available Height:" + availableHeight);
@@ -301,6 +311,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 							LOG.info("Available Height:" + availableHeight);
 							availableVolume = availableVolume - percentageVolumeOfHighestPallet;
+							LOG.info("Available volume:" + availableVolume);
 						}
 						else
 						{
