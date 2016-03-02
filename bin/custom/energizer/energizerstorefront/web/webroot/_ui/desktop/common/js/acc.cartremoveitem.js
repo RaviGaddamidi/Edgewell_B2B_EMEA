@@ -1,6 +1,25 @@
 var isContainerfull;
 ACC.cartremoveitem = {
             isOrderBlocked: false,
+            highlightQtyInputBox: function ()
+            {     
+                  $(".prdCode").each(function(){
+                        if(ACC.cartremoveitem.checkProductID($(this).text().trim())){
+                              $($(this).parent().find(".quantity .qty")).css("border","1px solid #ff0000");
+                        }
+                  });
+            },
+            checkProductID:function(prodId){
+                  var isMatching = false;
+                  $(".prod_det").each(function(){
+                  //$(".productsNotAdded tbody td:first").each(function(){
+                        if($(this).text().trim() == prodId ){
+                              isMatching = true;
+                              return false;
+                        }
+                  });
+                  return isMatching;
+            },
             bindAll: function ()
             {     
                   this.bindCartRemoveProduct();
@@ -36,7 +55,7 @@ ACC.cartremoveitem = {
                               {
                                     ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, 0);
                               },
-                              error: function() 
+                              error: function(xht, textStatus, ex) 
                               {
                                     alert("Failed to remove quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
                               }
@@ -99,7 +118,7 @@ ACC.cartremoveitem = {
                               url: ACC.config.contextPath + '/cart/getProductVariantMatrix',
                               data: {productCode: firstVariantCode},
                               type: method,
-                              success: function(data) 
+                             success: function(data) 
                               {
                                     grid.html(data);
 
@@ -157,7 +176,7 @@ ACC.cartremoveitem = {
 
                   $('.qty').on("blur", function ()
                               {                 
-                       
+                        
                         var entryNum = $(this).parent().find('input[name=entryNumber]').val();                             
                         var $form = $('#updateCartForm' + entryNum);                      
                         var initialCartQuantity = $form.find('input[name=initialQuantity]').val();                        
@@ -167,24 +186,27 @@ ACC.cartremoveitem = {
                         
                         if(initialCartQuantity != newCartQuantity)
                         {     
+                              
                               ACC.track.trackUpdateCart(productCode, initialCartQuantity, newCartQuantity);
                               var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-                              
+                            //  alert("Qty Blur Success called"+$form.attr("action"));
                               $.ajax({
                                     url: $form.attr("action"),
                                     data: $form.serialize(),
                                     type: method,
                                     success: function(data) 
                                     {   
+                                          //  alert("Qty Blur Success called"+data);
                                           ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, newCartQuantity);
                                           if(newCartQuantity % moq == 0)
                                           {                                         
                                           initialCartQuantity = newCartQuantity;
                                           $form.find('input[name=initialQuantity]').val(initialCartQuantity);
-                                          }                                         
+                                          }    
                                     },
-                                    error: function() 
+                                    error: function(xht, textStatus, ex) 
                                     {
+                                          
                                           alert("Failed to update quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
                                     }
 
@@ -192,7 +214,7 @@ ACC.cartremoveitem = {
                         }
                               });
 
-            },
+           },
 
             getProductQuantity: function(gridContainer, mapData) 
             {
@@ -373,17 +395,16 @@ ACC.cartremoveitem = {
                   
 
             refreshCartData: function(cartData, entryNum, productCode, quantity) 
-            {     
-            	
-            	$('#containerHeightLine').text(cartData.containerHeight);
+            {                 
+                  //alert("refreshCartData: "+cartData.entries.length);
+                  $('#containerHeightLine').text(cartData.containerHeight);                  
                   // if cart is empty, we need to reload the whole page
                   if (cartData.entries.length == 0)
                   {
                         location.reload();
                   }
                   else
-                  {     
-                        
+                  {                         
                         var form;   
                         var removeItem = false;
                         var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
@@ -484,13 +505,15 @@ ACC.cartremoveitem = {
 
                         // refresh mini cart    
                         ACC.minicart.refreshMiniCartCount();
-
+                    //    alert("refreshMiniCartCount Called");
                         $('#orderTotals').next().remove();
                         $('#orderTotals').remove();
                         $("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));      
                         
                         ACC.cartremoveitem.getErrors(cartData, entryNum, productCode, quantity);
-                                                            
+                        if($(".form-actions .positive").length !== 0){
+                              $(".form-actions .positive").click(); 
+                        }                       
                   }
                   
                   $('#weight_txt').val(totalProductWeightInPercent);
@@ -510,7 +533,7 @@ ACC.cartremoveitem = {
             var getVolTxt = $("#volume_txt").val();
             var getWeightTxt = $("#weight_txt").val();
             var weightCont = $("#weight_cont").height();    
-            
+           
             var errorsDiv = $('#businesRuleErrors').show(); 
             var errorMsg = "";
             
@@ -682,5 +705,8 @@ $(document).ready(function ()
             
       ACC.cartremoveitem.bindCartData();        
       ACC.cartremoveitem.bindAll();
+      if($("#productsNotAddedToCart").css('display') !== 'none'){
+        ACC.cartremoveitem.highlightQtyInputBox();
+      }
       
             });

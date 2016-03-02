@@ -32,6 +32,28 @@
 		<common:globalMessages/>
 	</div>
 	
+	<c:if test="${not empty cartData.productsNotAddedToCart}">
+	<div id="productsNotAddedToCart" class="alert negative"><spring:theme code="product.notadded.container"/></div>
+	<div >
+	<table style="padding: 0px; border-collapse: collapse;" class="productsNotAdded alert negative" border="1">
+		<thead class="alert negative">
+			<tr>
+			<th class="alert negative" id="header1" colspan="2"><spring:theme code="errorMessages.erpmaterialid"/></th>
+
+				<th id="header2" colspan="2"><spring:theme code="errorMessages.Quantity"/></th>
+			</tr>
+			</thead>
+			<tbody class="alert negative">
+				<c:forEach items="${cartData.productsNotAddedToCart}" var="entry">
+				<tr><td class="alert negative prod_det" colspan="2" headers="header1">${entry.key}</td>
+				 <td headers="header2" colspan="2">&nbsp;&nbsp;${entry.value}</td></tr>
+			 </c:forEach>
+			</tbody>
+			</table>
+	
+	</div>	 
+	</c:if>
+	
 	<cart:cartRestoration/>
 	<cart:cartValidation/>
 	
@@ -56,18 +78,18 @@
 				  <c:choose>
 				<c:when test="${enableButton}">  
 				
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  checked="checked">Enable Container Optimization<br>
+				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  checked="checked"><spring:theme code="enable.containerOptimization"/><br>
 				
-				<input type="radio" name="choice" value="No"   onclick="submitForm()" >Disable Container Optimization 
+				<input type="radio" name="choice" value="No"   onclick="submitForm()" ><spring:theme code="disable.containerOptimization"/>
 			
                  
                  </c:when>
                  <c:otherwise>
                  
                  
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  >Enable Container Optimization<br>
+				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  ><spring:theme code="enable.containerOptimization"/><br>
 				
-				<input type="radio" name="choice" value="No"  checked="checked" onclick="submitForm()" >Disable Container Optimization 
+				<input type="radio" name="choice" value="No"  checked="checked" onclick="submitForm()" ><spring:theme code="disable.containerOptimization"/> 
                  
                  </c:otherwise>
                  
@@ -100,16 +122,18 @@
 				</div>
 					
 					</form:form>
-					
-					
-					</c:if>
+				</c:if>
 				</div>	
           
 
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
-				<c:when test="${cartData.isOrderBlocked }">
-					<button id ="checkoutButton_top" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
+				<c:when test="${cartData.isOrderBlocked}">
+					<button id ="checkoutButton_top" class="checkoutButtonRed positive right" data-checkout-url="${checkoutUrl}" type="button"  disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>
+				</c:when>
+				
+				<c:when test="${ not empty cartData.productsNotAddedToCart}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				
 				<c:otherwise>
@@ -129,8 +153,7 @@
 									<div class="cnt_utl_cls"><spring:theme code="basket.your.shopping.container.utilization"/><div style="font-size:11px;color: blue; ">
 									<spring:theme code="basket.your.shopping.container.utilization1"/></div></div>
 				                      	<div id="volume_cont">
-				                      	 	
-				                      	 	  <div class="divider_20"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>     	
+				                      	 	 <div class="divider_20"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>     	
 				                    	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
 				                        <div style="height: 69px;" id="volume_utilization"></div>                                                                           
@@ -177,6 +200,10 @@
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
 					<button id ="checkoutButton_bottom" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
+				</c:when>
+				
+				<c:when test="${ not empty cartData.productsNotAddedToCart}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				
 				<c:otherwise>

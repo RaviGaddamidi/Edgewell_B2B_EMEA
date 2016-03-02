@@ -43,10 +43,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -415,24 +412,10 @@ public class CartPageController extends AbstractPageController
 			}
 		}
 
-		final HashMap productList = energizerCartService.getProductNotAddedToCart();
-
-		if (productList != null && productList.size() > 0)
-		{
-			final Set doubleStackMapEntrySet = productList.entrySet();
-			//doubleStackMapEntrySet.isEmpty()
-			String tempList = "ERPMaterialID		:		Quantity";
-			businessRuleErrors.add(tempList);
-			for (final Iterator iterator = doubleStackMapEntrySet.iterator(); iterator.hasNext();)
-			{
-				tempList = null;
-				final Map.Entry mapEntry = (Map.Entry) iterator.next();
-				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
-				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
-				businessRuleErrors.add(tempList);
-			}
-		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
+
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 
 		return cartData;
 
@@ -494,27 +477,18 @@ public class CartPageController extends AbstractPageController
 			}
 			errorMessages = true;
 		}
-
-		final HashMap productList = energizerCartService.getProductNotAddedToCart();
-
-		if (productList != null && productList.size() > 0)
-		{
-			final Set productNotAddedMapEntrySet = productList.entrySet();
-			//doubleStackMapEntrySet.isEmpty()
-			String tempList = "ERPMaterialID		:		Quantity";
-			GlobalMessages.addErrorMessage(model, tempList);
-			businessRuleErrors.add(tempList);
-			for (final Iterator iterator = productNotAddedMapEntrySet.iterator(); iterator.hasNext();)
-			{
-				tempList = null;
-				final Map.Entry mapEntry = (Map.Entry) iterator.next();
-				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
-				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
-				GlobalMessages.addErrorMessage(model, tempList);
-				businessRuleErrors.add(tempList);
-			}
-		}
 		cartData.setBusinesRuleErrors(businessRuleErrors);
+		/*
+		 * final HashMap productList = energizerCartService.getProductNotAddedToCart();
+		 *
+		 * if (productList != null && productList.size() > 0) { final Set productNotAddedMapEntrySet =
+		 * productList.entrySet(); //doubleStackMapEntrySet.isEmpty() String tempList = "ERPMaterialID		:		Quantity";
+		 * GlobalMessages.addErrorMessage(model, tempList); businessRuleErrors.add(tempList); for (final Iterator iterator
+		 * = productNotAddedMapEntrySet.iterator(); iterator.hasNext();) { tempList = null; final Map.Entry mapEntry =
+		 * (Map.Entry) iterator.next(); LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue()); tempList
+		 * = mapEntry.getKey() + "		:		" + mapEntry.getValue(); GlobalMessages.addErrorMessage(model, tempList);
+		 * businessRuleErrors.add(tempList); } } cartData.setBusinesRuleErrors(businessRuleErrors);
+		 */
 
 		final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
 
@@ -533,7 +507,9 @@ public class CartPageController extends AbstractPageController
 			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
 		}
 
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
 		model.addAttribute("errorMessages", errorMessages);

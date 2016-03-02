@@ -332,7 +332,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					products.add(tempEnergizerProductPalletHeight);
 					LOG.info(" ERP MaterialID: " + tempEnergizerProductPalletHeight.getErpMaterialId());
 				}
-				message.add("Below mentioned products cannot be added to the container with selected packing type");
+				//message.add("Below mentioned products cannot be added to the container with selected packing type");
 			}
 
 			LOG.info("******************* The final data is as below: *****************");

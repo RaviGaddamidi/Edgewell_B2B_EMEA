@@ -55,6 +55,9 @@
 		<property name="isContainerFull" type="boolean" />
 		<property name="isOrderBlocked" type="boolean" />
 		<property name="containerHeight" type="java.lang.String" />
+		<property name="floorSpaceCount" type="java.lang.Integer" />
+		<property name="productsNotAddedToCart" type="java.util.Map&lt;String,java.lang.Integer>" />
+		<property name="productsNotDoubleStacked" type="java.util.Map&lt;String,java.util.List>" />
 	</bean>
 	<!-- ************ End CartData Bean defination ******************* -->	
 
