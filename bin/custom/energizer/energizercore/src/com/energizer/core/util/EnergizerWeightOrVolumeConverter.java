@@ -84,7 +84,7 @@ public class EnergizerWeightOrVolumeConverter
 
 	private static BigDecimal convertCubicCMtoMeterCube(final BigDecimal CubicCM)
 	{
-		final BigDecimal valueInMeterCube = CubicCM.multiply(new BigDecimal(0.0000001));
+		final BigDecimal valueInMeterCube = CubicCM.multiply(new BigDecimal(0.000001));
 		return valueInMeterCube;
 
 	}
