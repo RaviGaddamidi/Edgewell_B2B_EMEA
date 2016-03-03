@@ -124,11 +124,12 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				containerHeight = null;
 			}
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData, containerHeight);
-			doubleStackMap = new HashMap();
+			//cartDataTemp.setDisableFloorSpaceGraphics(true);
 		}
 		else
 		{
 			cartDataTemp = calCartContainerUtilizationWithSlipSheetsWoodenBase(cartData, containerHeight, packingOption);
+			cartDataTemp.setEnableFloorSpaceGraphics(true);
 		}
 
 		return cartDataTemp;
@@ -143,6 +144,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		double availableHeight = 0;
 		double volumeOfNonPalletProducts = 0;
 		double weightOfNonPalletProducts = 0;
+		double filledFloorSpaceCount = 0;
 		int floorSpaceCount = 0;
 		double volume = 0;
 		double weight = 0;
@@ -185,8 +187,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		{
 			//Display an error message "Reduce the products in the cart"
 			LOG.info("Either volume is greater than 100 or pallet count is greater than" + totalPalletsCount);
-			message.add("Please reduce  products fom the cart");
-			cartData.setIsContainerFull(true);
+			message
+					.add("Dear Customer, your order will not fit in one container. You can order maximum "
+							+ totalPalletsCount
+							+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+			//cartData.setTotalProductVolumeInPercent(100.00);
+			availableVolume = 0;
+			floorSpaceCount = totalPalletsCount / 2;
+			cartData.setIsFloorSpaceFull(true);
 		}
 		else
 		{
@@ -344,6 +352,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					LOG.info(" ERP MaterialID: " + tempEnergizerProductPalletHeight.getErpMaterialId());
 				}
 				//message.add("Below mentioned products cannot be added to the container with selected packing type");
+				cartData.setIsFloorSpaceFull(true);
 			}
 
 			LOG.info("******************* The final data is as below: *****************");
@@ -366,6 +375,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		LOG.info("*********************** End *******************************************8");
 		availableWeight = availableWeight
 				- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
+
+
+		filledFloorSpaceCount = Math.round(totalPalletsCount / 2);
+		filledFloorSpaceCount = Math.round(floorSpaceCount / filledFloorSpaceCount);
+		filledFloorSpaceCount = Math.round(filledFloorSpaceCount * 10);
+
+		cartData.setFloorSpaceCount(floorSpaceCount);
+		//cartData.setTotalFloorSpaceCountPercent((Math.round(filledFloorSpaceCount * 100.0) / 100.0));
 		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 		cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 		return cartData;

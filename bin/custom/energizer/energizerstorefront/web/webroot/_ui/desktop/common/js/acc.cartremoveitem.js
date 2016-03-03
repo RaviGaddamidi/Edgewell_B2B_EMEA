@@ -74,7 +74,7 @@ ACC.cartremoveitem = {
                                                             
                                                             
                         var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-                        $.ajax({
+                       $.ajax({
                               url: $form.attr("action"),
                               data: $form.serialize(),
                               type: method,
@@ -118,7 +118,7 @@ ACC.cartremoveitem = {
                               url: ACC.config.contextPath + '/cart/getProductVariantMatrix',
                               data: {productCode: firstVariantCode},
                               type: method,
-                             success: function(data) 
+                              success: function(data) 
                               {
                                     grid.html(data);
 
@@ -189,14 +189,14 @@ ACC.cartremoveitem = {
                               
                               ACC.track.trackUpdateCart(productCode, initialCartQuantity, newCartQuantity);
                               var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-                            //  alert("Qty Blur Success called"+$form.attr("action"));
+                             
                               $.ajax({
                                     url: $form.attr("action"),
                                     data: $form.serialize(),
                                     type: method,
                                     success: function(data) 
                                     {   
-                                          //  alert("Qty Blur Success called"+data);
+                                           
                                           ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, newCartQuantity);
                                           if(newCartQuantity % moq == 0)
                                           {                                         
@@ -214,7 +214,7 @@ ACC.cartremoveitem = {
                         }
                               });
 
-           },
+            },
 
             getProductQuantity: function(gridContainer, mapData) 
             {
@@ -505,7 +505,7 @@ ACC.cartremoveitem = {
 
                         // refresh mini cart    
                         ACC.minicart.refreshMiniCartCount();
-                    //    alert("refreshMiniCartCount Called");
+                       
                         $('#orderTotals').next().remove();
                         $('#orderTotals').remove();
                         $("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));      
@@ -569,7 +569,7 @@ ACC.cartremoveitem = {
                   $("#checkoutButton_bottom").attr("disabled",true);    
                   $("#continueButton_bottom").attr("disabled",true);    
                   
-                  errorMsg = "Dear Customer, You have exceeded the limit. Please adjust the cart. <br>";
+                  errorMsg = "Dear Customer, your order will not fit in one container. Please, adjust the cart and/or place multiple orders. <br>";
             }     
             
             if(isOrderBlocked=='true'){

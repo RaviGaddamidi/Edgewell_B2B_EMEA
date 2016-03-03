@@ -507,8 +507,8 @@ public class CartPageController extends AbstractPageController
 			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
 		}
 
-		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
