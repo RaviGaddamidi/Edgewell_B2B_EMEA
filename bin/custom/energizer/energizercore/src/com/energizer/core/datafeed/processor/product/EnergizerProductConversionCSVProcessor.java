@@ -265,9 +265,13 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 			{
 				packageHeightMetric = modelService.create(MetricUnitModel.class);
 			}
-			packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim())
-					- reducedHeightInInches);
-			packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+			if (conversionModel.getAlternateUOM().equals("PAL"))
+			{
+			    LOG.info("Uom: " + conversionModel.getAlternateUOM());
+				packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim())
+						- reducedHeightInInches);
+				packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+			}
 
 			conversionModel.setPackageHeight(packageHeightMetric);
 

@@ -40,7 +40,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class DefaultEnergizerCartService implements EnergizerCartService
 {
@@ -140,7 +140,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			final String packingOption)
 	{
 		doubleStackMap = new HashMap();
-		floorSpaceProductMap = new HashMap<Integer, Integer>();
+		//floorSpaceProductMap = new HashMap<Integer, Integer>();
 		double availableVolume = 100;
 		double availableWeight = 100;
 		double availableHeight = 0;
@@ -270,7 +270,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 								productsListA.remove(maxIndex - 1); // removeHighestLowestPalletList(productsListA, maxIndex);;
 								productsListA.remove(minIndex - 1);
-								floorSpaceProductMap.put(floorSpaceCount, 2);
+								//floorSpaceProductMap.put(floorSpaceCount, 2);
 
 								if (containerHeight.equals("20FT"))
 								{
@@ -292,7 +292,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								availableVolume = availableVolume - percentageVolumeOfSinglePallet;
 
 								productsListA.remove(maxIndex - 1);
-								floorSpaceProductMap.put(floorSpaceCount, 1);
+								//		floorSpaceProductMap.put(floorSpaceCount, 1);
 							}
 
 
@@ -378,18 +378,18 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		LOG.info("*********************** End *******************************************8");
 
-		LOG.info("******************************** Floor Space Information *******************************");
-		LOG.info("FloorSpaceProductsMap size : " + floorSpaceProductMap.size());
-
-		final Set floorSpaceProductMapEntrySet = floorSpaceProductMap.entrySet();
-
-		for (final Iterator iterator = floorSpaceProductMapEntrySet.iterator(); iterator.hasNext();)
-		{
-			final Map.Entry mapEntry = (Map.Entry) iterator.next();
-			LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
-		}
-
-		LOG.info("*********************** End *******************************************8");
+		/*
+		 * LOG.info("******************************** Floor Space Information *******************************");
+		 * LOG.info("FloorSpaceProductsMap size : " + floorSpaceProductMap.size());
+		 *
+		 * final Set floorSpaceProductMapEntrySet = floorSpaceProductMap.entrySet();
+		 *
+		 * for (final Iterator iterator = floorSpaceProductMapEntrySet.iterator(); iterator.hasNext();) { final Map.Entry
+		 * mapEntry = (Map.Entry) iterator.next(); LOG.info("key: " + mapEntry.getKey() + " value: " +
+		 * mapEntry.getValue()); }
+		 *
+		 * LOG.info("*********************** End *******************************************8");
+		 */
 
 
 
@@ -402,7 +402,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		filledFloorSpaceCount = Math.round(filledFloorSpaceCount * 10);
 
 		cartData.setFloorSpaceCount(floorSpaceCount);
-		cartData.setFloorSpaceProductsMap(floorSpaceProductMap);
+		//	cartData.setFloorSpaceProductsMap(floorSpaceProductMap);
 		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 		cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 		return cartData;
@@ -411,9 +411,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	/**
 	 * As discussed with Kalyan, we need to show height in cms only 1 inch = 2.54cms Need to store the values in
 	 * local.properties file.
-	 * 
+	 *
 	 * 20ft container - 10 floorSpaceCount 40ft container - 20 floorSpaceCount
-	 * 
+	 *
 	 */
 	public double getAvailableHeight(final String packingOption, final String containerHeight)
 	{
@@ -447,7 +447,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 	/**
-	 * 
+	 *
 	 * @param cartData
 	 * @return
 	 */
@@ -590,7 +590,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			BigDecimal totalCartWt = new BigDecimal(0);
 			/**
 			 * # Container volume in M3 and weight in KG ##########################################
-			 * 
+			 *
 			 * twenty.feet.container.volume=30.44056 twenty.feet.container.weight=15961.90248
 			 * fourty.feet.container.volume=70.62209 fourty.feet.container.weight=18234.3948
 			 */
@@ -698,7 +698,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	}
 
 	/**
-	 * 
+	 *
 	 * @param totalCartWt
 	 * @param totalCartVolume
 	 * @return

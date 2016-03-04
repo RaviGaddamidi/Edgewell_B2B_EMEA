@@ -134,6 +134,9 @@
 				<c:when test="${ not empty cartData.productsNotAddedToCart}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
+				<c:when test="${cartData.isFloorSpaceFull}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
@@ -154,7 +157,6 @@
 				                      <div id="floorSpace_cont">
 				                      		<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>  
 				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
-				                	   	<div id="cnt_floorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.floorSpaceProductsMap}</span></div>
 				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
 				                      </div>   
@@ -191,18 +193,9 @@
 					</div>
 				</div>
 				<div class="clearfix fixthis_row_cls">
-				<c:if test="${cartData.enableFloorSpaceGraphics}"> 
 				<div style="font-weight: bold;font-size: 1.2em;"><span style="padding-left:180px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
 							 <div align="left" style="font-size:11px;color: blue; ">
-									<spring:theme code="basket.your.shopping.container.utilization1"/></div></div>
-				</c:if>	
-				
-				<c:if test="${ not cartData.enableFloorSpaceGraphics}"> 		
-					<div style="font-weight: bold;font-size: 1.2em;"><span style="padding-left:90px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
-							 <div align="left" style="font-size:11px;color: blue; ">
-									<spring:theme code="basket.your.shopping.container.utilization1"/></div></div>
-				</c:if>		
-				</div>
+									<spring:theme code="basket.your.shopping.container.utilization1"/></div></div></div>
 				
 				
 		
@@ -226,6 +219,9 @@
 					<button id ="checkoutButton_bottom" class="checkoutButtonRed positive right" type="button" data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.blocked.order" /></button>			
 				</c:when>
 				<c:when test="${ not empty cartData.productsNotAddedToCart}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
+				<c:when test="${cartData.isFloorSpaceFull}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				<c:otherwise>
