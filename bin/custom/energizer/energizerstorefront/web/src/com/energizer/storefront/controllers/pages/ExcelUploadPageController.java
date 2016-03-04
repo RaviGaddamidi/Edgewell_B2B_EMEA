@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -75,7 +74,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- *
+ * 
  */
 
 @Controller
@@ -484,27 +483,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			}
 			errorMessages = true;
 		}
-		final HashMap productList = energizerCartService.getProductNotAddedToCart();
-		if (productList != null && productList.size() > 0)
-		{
-			final Set productNotAddedMapEntrySet = productList.entrySet();
-			//doubleStackMapEntrySet.isEmpty()
-			String tempList = "ERPMaterialID		:		Quantity";
-			GlobalMessages.addErrorMessage(model, tempList);
-			businessRuleErrors.add(tempList);
-			for (final Iterator iterator = productNotAddedMapEntrySet.iterator(); iterator.hasNext();)
-			{
-				tempList = null;
-				final Map.Entry mapEntry = (Map.Entry) iterator.next();
-				LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue());
-				tempList = mapEntry.getKey() + "		:		" + mapEntry.getValue();
-				GlobalMessages.addErrorMessage(model, tempList);
-				businessRuleErrors.add(tempList);
-			}
-		}
-		cartData.setBusinesRuleErrors(businessRuleErrors);
 
-		final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
+		cartData.setBusinesRuleErrors(businessRuleErrors);
 
 
 		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
@@ -526,15 +506,16 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		contUtilForm.setContainerHeight(containerHeight);
 		contUtilForm.setPackingType(packingOption);
 
-
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
 		model.addAttribute("errorMessages", errorMessages);
 
 
-		model.addAttribute("productList", productList);
-		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
+		//model.addAttribute("productList", productList);
+		//model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		model.addAttribute("containerUtilizationForm", contUtilForm);
 		model.addAttribute("enableButton", enableButton);
 
@@ -555,7 +536,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody
+	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{
