@@ -231,7 +231,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 									}
 
-									uploadData.setQuantity(quantity);
+
 								}
 								catch (final Exception ise)
 								{
