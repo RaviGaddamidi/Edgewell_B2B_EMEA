@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -36,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -212,8 +214,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 						{
 							uploadData = new EnergizerFileUploadData();
 
-							uploadData.setMaterialId(materialId);
-							uploadData.setCustomerMaterialId(customerMaterailId);
+
 
 							if (row.getCell(2) != null)
 							{
@@ -222,6 +223,14 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 									final String val = row.getCell(2).toString().trim();
 									final Long quantity = new Double(val).longValue();
+									if (quantity > 0)
+									{
+										uploadData.setCustomerMaterialId(customerMaterailId);
+										uploadData.setMaterialId(materialId);
+										uploadData.setQuantity(quantity);
+
+									}
+
 									uploadData.setQuantity(quantity);
 								}
 								catch (final Exception ise)
@@ -310,7 +319,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		}
 		if (cartEntryBusinessRulesService.getErrors() != null && !cartEntryBusinessRulesService.getErrors().isEmpty())
 		{
-			//			cartEntryBusinessRulesService.getErrors().clear();R
+			cartEntryBusinessRulesService.getErrors().clear();
 		}
 
 		if (shipmentMap.containsKey(shipmentPoint))
@@ -330,7 +339,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 				if (orderEntry != null)
 				{
-
+					orderEntry.setQuantity(energizerFileUploadData.getQuantity());
 					model.addAttribute("cartShippingPoint",
 							orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
 
@@ -560,7 +569,15 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	private String validateAndGetString(final Cell cell)
 	{
-		return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
+		final DataFormatter formatter = new DataFormatter(Locale.US);
+		final org.apache.poi.ss.util.CellReference ref = new org.apache.poi.ss.util.CellReference(cell);
+		if (cell != null && !(StringUtils.isBlank(formatter.formatCellValue(cell))))
+		{
+			LOG.info("The value of " + ref.formatAsString() + " is " + formatter.formatCellValue(cell));
+		}
+
+		return cell == null ? null : StringUtils.isBlank(formatter.formatCellValue(cell)) ? null : formatter.formatCellValue(cell);
+
 	}
 
 
