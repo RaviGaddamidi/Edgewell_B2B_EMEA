@@ -57,7 +57,53 @@ $(document).ready(function(){
 
 	}	
 
-
 	fillThis();
+	renderFloorSpaceBlock();
 });
 
+function renderFloorSpaceBlock(){
+	var mapData = $("#cnt_floorSpaceProducts #utl_vol").text();
+	var floorSpaceMap = (mapData.substring(1,mapData.length-1)).split(",");
+	
+	var totalBlock = parseInt($("#containerHeightLine").text())/2;
+	var usedBlock = floorSpaceMap.length;
+	var remainingBlock = totalBlock - usedBlock;
+	var totalHeight = parseInt($("#floorSpace_cont").css("height"));
+	var individualBlockHeight = totalHeight/totalBlock;
+	var bottomPosition = 0;
+	var isFloorSpaceFull = $("#floorSpaceFull").text();	
+	
+	for(var bCount=1; bCount<=totalBlock; bCount++){
+		var blockBGColor = ""; 
+		if(isFloorSpaceFull == 'true'){
+			blockBGColor = "rgb(255, 87, 87)"
+		}else if(bCount<=usedBlock){
+			console.log()
+			var cCount = bCount;
+			var noOfItems = parseInt((((floorSpaceMap[cCount - 1]).split("="))[1]).trim());
+			blockBGColor = getColor(noOfItems);			
+		}else{
+			blockBGColor = "#ffd799";
+		}
+		var blockDiv = '<div style="height: '+individualBlockHeight+'px; border-top: 1px solid #000000; background-color: '+blockBGColor+'; width: 100%; position: absolute; bottom:'+bottomPosition+'px;"></div>';
+		$("#floorSpace_cont").prepend(blockDiv);
+		bottomPosition = bottomPosition + individualBlockHeight;
+	}
+}
+
+function getColor(noOfItem){
+	var blockColor = "";
+	switch(noOfItem){
+		case 1:
+			blockColor = "lightgreen";
+			break;
+		case 2:
+			blockColor = "lightblue";
+			break;
+		default:
+			blockColor = "#33cc33";
+			break
+	}
+	
+	return blockColor;
+}

@@ -812,6 +812,7 @@ INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;masterTe
 ;;excelupload;Excel File Upload;AccountPageTemplate;my-excelupload
 ;;catalogdownload;Catalog Download;AccountPageTemplate;catalogdownloadpage
 ;;productentries;Product Entries;AccountPageTemplate;my-productentries
+;;getDoubleStackedProducts;Double Stacked List Page;SearchResultsListPageTemplate;getDoubleStackedProducts
 
 # Product Details Page
 INSERT_UPDATE ProductPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']

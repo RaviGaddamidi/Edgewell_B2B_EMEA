@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -28,11 +28,16 @@ import de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageDat
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.PaginationData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.converters.Converters;
+import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.servicelayer.dto.converter.Converter;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.util.Config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,8 +56,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.facades.search.B2BProductSearchFacade;
+import com.energizer.services.order.EnergizerCartService;
+import com.energizer.services.product.EnergizerProductService;
+import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.impl.SearchBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
@@ -109,6 +118,18 @@ public class SearchPageController extends AbstractSearchPageController
 
 	@Resource(name = "energizerSolrQueryManipulationService")
 	private EnergizerSolrQueryManipulationService energizerSolrQueryManipulationService;
+
+	@Resource
+	EnergizerCartService energizerCartService;
+
+	@Resource
+	private ModelService modelService;
+
+	@Resource(name = "energizerProductService")
+	EnergizerProductService energizerProductService;
+
+	@Resource(name = "productConverter")
+	private Converter<ProductModel, ProductData> productConverter;
 
 	@RequestMapping(method = RequestMethod.GET, params = "!q")
 	public String textSearch(@RequestParam(value = "text", defaultValue = StringUtils.EMPTY) String searchText,
@@ -511,5 +532,72 @@ public class SearchPageController extends AbstractSearchPageController
 		{
 			model.addAttribute(IS_SHOW_ALLOWED, false);
 		}
+	}
+
+	@RequestMapping(value = "/getDoubleStackProducts", method = RequestMethod.GET)
+	@RequireHardLogIn
+	public String getDoubleStackProducts(@RequestParam(value = "page", defaultValue = "0") final int page,
+			@RequestParam(value = "show", defaultValue = "Page") final ShowMode showMode,
+			@RequestParam(value = "sort", required = false) final String sortCode,
+			@RequestParam(value = "text", required = false) final String searchText, final HttpServletRequest request,
+			final Model model, @RequestParam("productID") final List productID) throws CMSItemNotFoundException
+
+	{
+
+
+		LOG.info("for doubleStacking Products");
+		//final HashMap productsNotDoubleStacked = energizerCartService.productsNotDoublestacked123();
+
+		final List<EnergizerProductModel> productModelList = new ArrayList<EnergizerProductModel>();
+
+
+
+		for (final Iterator iterator = productID.iterator(); iterator.hasNext();)
+		{
+			final String productCode = ((String) iterator.next()).replaceAll("\\[", "").replaceAll("\\]", "");
+
+
+			LOG.info("In loop, productCode " + productCode);
+			if (!productCode.equals("0"))
+			{
+
+				final EnergizerProductModel product = energizerProductService.getProductWithCode(productCode);
+
+				productModelList.add(product);
+			}
+		}
+		LOG.info(" Products list size: " + productModelList.size());
+
+		final ProductSearchPageData<SearchStateData, ProductData> searchPageData = new ProductSearchPageData<SearchStateData, ProductData>();
+		final PageableData pageableData = createPageableData(page, getSearchPageSize(), sortCode, showMode);
+		final PaginationData paginationData = new PaginationData();
+		paginationData.setPageSize(getSearchPageSize());
+		paginationData.setNumberOfPages(page);
+		paginationData.setSort(sortCode);
+		paginationData.setTotalNumberOfResults(productModelList.size());
+
+		searchPageData.setPagination(paginationData);
+		searchPageData.setResults(Converters.convertAll(productModelList, productConverter));
+
+		LOG.info(" Search Results: " + searchPageData.getResults().size());
+
+
+
+		LOG.info("Value 1: " + searchPageData.getPagination().getTotalNumberOfResults());
+		LOG.info(" Value 2 " + searchPageData.getPagination().getPageSize());
+		LOG.info(" value 3 " + isShowAllAllowed(searchPageData));
+
+		populateModel(model, searchPageData, showMode);
+		model.addAttribute("userLocation", customerLocationService.getUserLocation());
+
+
+		storeCmsPageInModel(model, getContentPageForLabelOrId(SEARCH_CMS_PAGE_ID));
+		//model.addAttribute("breadcrumbs", searchBreadcrumbBuilder.getBreadcrumbs(null, searchPageData));
+		model.addAttribute("metaRobots", "no-index,no-follow");
+		model.addAttribute(ACTIVE_B2BUNIT, energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser());
+
+
+		return getViewForPage(model);
+
 	}
 }

@@ -9,13 +9,15 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorservices.controllers.page.PageType;
+import de.hybris.platform.acceleratorservices.customer.CustomerLocationService;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.cms2.servicelayer.services.CMSPageService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.CartModificationData;
@@ -24,21 +26,27 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.commercefacades.user.UserFacade;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.servicelayer.dto.converter.Converter;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -63,10 +71,13 @@ import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.breadcrumb.ResourceBreadcrumbBuilder;
+import com.energizer.storefront.breadcrumb.impl.SearchBreadcrumbBuilder;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
 import com.energizer.storefront.controllers.ControllerConstants.Views;
 import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.ContainerUtilizationForm;
+import com.energizer.storefront.forms.UpdateProfileForm;
 import com.energizer.storefront.forms.UpdateQuantityForm;
 import com.energizer.storefront.variants.VariantSortStrategy;
 
@@ -88,6 +99,7 @@ public class CartPageController extends AbstractPageController
 	protected static final Logger LOG = Logger.getLogger(CartPageController.class);
 
 	private static final String CART_CMS_PAGE = "cartPage";
+	private static final String REDIRECT_TO_CART_PAGE = REDIRECT_PREFIX + "/cart";
 
 	private static final String CONTINUE_URL = "continueUrl";
 	public static final String SUCCESSFUL_MODIFICATION_CODE = "success";
@@ -95,6 +107,9 @@ public class CartPageController extends AbstractPageController
 	@Deprecated
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
+
+	@Resource(name = "userFacade")
+	protected UserFacade userFacade;
 
 	@Resource(name = "cartFacade")
 	private de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade b2bCartFacade;
@@ -113,6 +128,9 @@ public class CartPageController extends AbstractPageController
 
 	@Resource(name = "b2bProductFacade")
 	private ProductFacade productFacade;
+
+	@Resource(name = "customerLocationService")
+	private CustomerLocationService customerLocationService;
 
 	@Resource
 	EnergizerCartService energizerCartService;
@@ -137,12 +155,87 @@ public class CartPageController extends AbstractPageController
 	private B2BCommerceUserService b2bCommerceUserService;
 
 	@Resource
+	private ModelService modelService;
+	//@Resource(name = "energizerCompanyB2BCommerceFacade")
+	//protected EnergizerCompanyB2BCommerceFacade energizerCompanyB2BCommerceFacade;
+
+	@Resource
 	private CartService cartService;
+
+	@Resource(name = "cmsPageService")
+	private CMSPageService cmsPageService;
+
+	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
+
+	String containerHeight, packingOption;
+
+	@Resource(name = "productConverter")
+	private Converter<ProductModel, ProductData> productConverter;
+
+	@Resource(name = "searchBreadcrumbBuilder")
+	private SearchBreadcrumbBuilder searchBreadcrumbBuilder;
+
+	boolean enableForB2BUnit = false;
+
+
+	boolean enableButton = false;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String showCart(final Model model) throws CMSItemNotFoundException
 	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		if (b2bUnit.getEnableContainerOptimization() == false)
+		{
+			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
+		model.addAttribute("enableButton", enableButton);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
+		return Views.Pages.Cart.CartPage;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	@RequireHardLogIn
+	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
+			throws CMSItemNotFoundException
+	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
+
+		if (bindingErrors.hasErrors())
+		{
+			getViewWithBindingErrorMessages(model, bindingErrors);
+		}
+
+		final String str = request.getParameter("choice");
+		if (str != null && str.equals("Yes"))
+		{
+			LOG.info("Enable radio button :");
+			enableButton = true;
+		}
+
+		if (str != null && str.equals("No"))
+		{
+			LOG.info("radio button value:");
+			enableButton = false;
+		}
+		if (b2bUnit.getEnableContainerOptimization() == false)
+		{
+			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
+
+
+		cartEntryBusinessRulesService.clearErrors();
+		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
+		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
+
+		prepareDataForPage(model);
+		model.addAttribute("enableButton", enableButton);
+		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
 	}
 
@@ -158,7 +251,6 @@ public class CartPageController extends AbstractPageController
 			// No session cart or empty session cart. Bounce back to the cart page.
 			return REDIRECT_PREFIX + "/cart";
 		}
-
 
 		orderBusinessRulesService.validateBusinessRules(cartFacade.getSessionCart());
 		if (orderBusinessRulesService.hasErrors())
@@ -228,6 +320,11 @@ public class CartPageController extends AbstractPageController
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
 			final BindingResult bindingErrors) throws CMSItemNotFoundException
 	{
+		//boolean errorMessages = false;
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		//	final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
@@ -276,32 +373,65 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart());
+
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
+		{
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
+		}
+		else
+		{
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+			packingOption = Config.getParameter("energizer.default.packingOption");
+		}
+
+		LOG.info(" Container Height: " + containerHeight);
+		LOG.info(" Packing Type: " + packingOption);
+		LOG.info(" Enable/Disable " + enableButton);
+		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
+				packingOption, enableButton);
+
 		if (cartData.isIsContainerFull())
 		{
-
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_EXCEEDED));
 		}
 
 		if (cartData.isIsOrderBlocked())
 		{
-
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
 		}
 
+		final List<String> message = energizerCartService.getMessages();
+
+		if (message != null && message.size() > 0)
+		{
+			for (final String messages : message)
+			{
+				GlobalMessages.addErrorMessage(model, messages);
+				businessRuleErrors.add(messages);
+			}
+		}
+
 		cartData.setBusinesRuleErrors(businessRuleErrors);
+
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
+
 		return cartData;
+
 	}
 
 	protected void createProductList(final Model model) throws CMSItemNotFoundException
 	{
 		CartData cartData = cartFacade.getSessionCart();
+		final List<String> businessRuleErrors = new ArrayList<String>();
+		boolean errorMessages = false;
 
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-            boolean flag = false;
-			String productWithCmirInActive="";
+			boolean flag = false;
+			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
@@ -309,9 +439,8 @@ public class CartPageController extends AbstractPageController
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
 				if (entry.getProduct().isIsActive() == false)
 				{
-                    productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
 					flag = true;
-
 				}
 			}
 			if (flag == true)
@@ -323,12 +452,82 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		cartData = energizerCartService.calCartContainerUtilization(cartData);
 
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
+		{
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
+		}
+		else
+		{
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+			packingOption = Config.getParameter("energizer.default.packingOption");
+		}
+
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
+		final List<String> message = energizerCartService.getMessages();
+		if (message != null && message.size() > 0)
+		{
+			for (final String messages : message)
+			{
+				GlobalMessages.addErrorMessage(model, messages);
+				businessRuleErrors.add(messages);
+			}
+			errorMessages = true;
+		}
+		cartData.setBusinesRuleErrors(businessRuleErrors);
+		/*
+		 * final HashMap productList = energizerCartService.getProductNotAddedToCart();
+		 *
+		 * if (productList != null && productList.size() > 0) { final Set productNotAddedMapEntrySet =
+		 * productList.entrySet(); //doubleStackMapEntrySet.isEmpty() String tempList = "ERPMaterialID		:		Quantity";
+		 * GlobalMessages.addErrorMessage(model, tempList); businessRuleErrors.add(tempList); for (final Iterator iterator
+		 * = productNotAddedMapEntrySet.iterator(); iterator.hasNext();) { tempList = null; final Map.Entry mapEntry =
+		 * (Map.Entry) iterator.next(); LOG.info("key: " + mapEntry.getKey() + " value: " + mapEntry.getValue()); tempList
+		 * = mapEntry.getKey() + "		:		" + mapEntry.getValue(); GlobalMessages.addErrorMessage(model, tempList);
+		 * businessRuleErrors.add(tempList); } } cartData.setBusinesRuleErrors(businessRuleErrors);
+		 */
+
+		final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
+
+		final List<String> containerHeightList = Arrays.asList(Config.getParameter("possibleContainerHeights").split(
+				new Character(',').toString()));
+
+		final List<String> packingOptionsList;
+		if (containerHeight.equals("20FT"))
+		{
+			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions.20FT").split(
+					new Character(',').toString()));
+		}
+		else
+		{
+
+			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
+		}
+
+
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
+		model.addAttribute("containerHeightList", containerHeightList);
+		model.addAttribute("packingOptionList", packingOptionsList);
+		model.addAttribute("errorMessages", errorMessages);
+		model.addAttribute("containerUtilizationForm", contUtilForm);
+		model.addAttribute("productsNotDoubleStacked", productsNotDoubleStacked);
 		model.addAttribute("cartData", cartData);
-
 		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
+		model.addAttribute("pageType", PageType.CART.name());
+	}
+
+	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
+	@RequireHardLogIn
+	public void updateProfile(@Valid final UpdateProfileForm updateProfileForm, final BindingResult bindingResult,
+			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	{
+		LOG.info("for container utilization");
 	}
 
 	protected void reverseCartProductsOrder(final List<OrderEntryData> entries)
@@ -349,9 +548,7 @@ public class CartPageController extends AbstractPageController
 			final CartRestorationData restorationData = (CartRestorationData) sessionService
 					.getAttribute(WebConstants.CART_RESTORATION);
 			model.addAttribute("restorationData", restorationData);
-
 		}
-
 		createProductList(model);
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
 		model.addAttribute("pageType", PageType.CART.name());
@@ -377,7 +574,6 @@ public class CartPageController extends AbstractPageController
 
 	protected OrderEntryData getOrderEntryData(final long quantity, final String productCode, final Integer entryNumber)
 	{
-
 		final OrderEntryData orderEntry = new OrderEntryData();
 		orderEntry.setQuantity(quantity);
 		orderEntry.setProduct(new ProductData());
@@ -388,9 +584,7 @@ public class CartPageController extends AbstractPageController
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
 		orderEntry.getProduct().setUom(energizerCMIR.getUom());
-
 		return orderEntry;
 
 	}
-
 }

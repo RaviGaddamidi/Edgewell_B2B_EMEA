@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.constants;
 
@@ -21,7 +21,7 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 {
 	public static final String EXTENSIONNAME = "energizercore";
 
-	// Constants for ProductCSVProcessor 
+	// Constants for ProductCSVProcessor
 	public static final String ERPMATERIAL_ID = "ERPMaterialID";
 	public static final String PRODUCT_GROUP = "Product Group";
 	public static final String LIST_PRICE = "ListPrice";
@@ -30,7 +30,7 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	public static final String LANGUAGE = "Language";
 	public static final String PRODUCT_DESCRIPTION = "ProductDesription";
 
-	// Constants for EnergizerMediaCSVProcessor 
+	// Constants for EnergizerMediaCSVProcessor
 	public static final String THUMBNAIIL_PATH = "ThumnailPath";
 	public static final String DISPLAY_IMAGE_PATH = "DisplayImagePath";
 
@@ -84,6 +84,14 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	public static final String CASE = "CS";
 	public static final String LAYER = "LAY";
 	public static final String PALLET = "PAL";
+
+	// Constants for Package Dimensions including length , breadth and height
+
+	public static final String LENGTH = "LengthInUOM";
+	public static final String WIDTH = "WidthInUOM";
+	public static final String HEIGHT = "HeightInUOM";
+	public static final String UNIT = "DimensionUOM";
+	public static final String ALTERNATIVEUNIT = "AlternativeUnit";
 
 	private EnergizerCoreConstants()
 	{

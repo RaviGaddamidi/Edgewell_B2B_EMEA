@@ -69,6 +69,16 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	}
 
 
+	public List<EnergizerProductModel> getEnergizerERPMaterialID()
+	{
+
+		final List<EnergizerProductModel> result = energizerProductDAO.getEnergizerERPMaterialIDList();
+
+
+		return result;
+	}
+
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -272,5 +282,20 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	{
 		final List<EnergizerPriceRowModel> result = energizerProductDAO.getAllEnergizerPriceRowForB2BUnit(erpMaterialID, b2bUnitId);
 		return result;
+	}
+
+	public List<EnergizerProductConversionFactorModel> getAllEnergizerProductConversion(final String erpMaterialId)
+	{
+
+
+		return energizerProductDAO.getEnergizerProductConversionLst(erpMaterialId);
+
+
+	}
+	
+	@Override
+	public EnergizerProductModel getProductWithCode(final String code)
+	{
+		return energizerProductDAO.getProductWithCode(code);
 	}
 }

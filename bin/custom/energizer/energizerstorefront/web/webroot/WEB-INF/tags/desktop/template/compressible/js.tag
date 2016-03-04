@@ -99,6 +99,7 @@
 
 <script type="text/javascript" src="${commonResourcePath}/js/acc.quickorder.js"></script>
 <script type="text/javascript" src="${commonResourcePath}/js/acc.exceluploadorder.js"></script>
+<script type="text/javascript" src="${commonResourcePath}/js/acc.cartPage.js"></script>
 
 
 <%-- AddOn JavaScript files --%>

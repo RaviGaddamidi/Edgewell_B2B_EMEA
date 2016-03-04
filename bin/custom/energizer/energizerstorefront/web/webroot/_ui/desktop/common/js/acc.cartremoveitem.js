@@ -1,349 +1,374 @@
 var isContainerfull;
 ACC.cartremoveitem = {
-		isOrderBlocked: false,
-		bindAll: function ()
-		{	
-			this.bindCartRemoveProduct();
-		},
-		bindCartData : function()
-		{
-			ACC.cartremoveitem.getCartData();
-		},
-		
-		bindCartRemoveProduct: function ()
-		{
+            isOrderBlocked: false,
+            highlightQtyInputBox: function ()
+            {     
+                  $(".prdCode").each(function(){
+                        if(ACC.cartremoveitem.checkProductID($(this).text().trim())){
+                              $($(this).parent().find(".quantity .qty")).css("border","1px solid #ff0000");
+                        }
+                  });
+            },
+            checkProductID:function(prodId){
+                  var isMatching = false;
+                  $(".prod_det").each(function(){
+                  //$(".productsNotAdded tbody td:first").each(function(){
+                        if($(this).text().trim() == prodId ){
+                              isMatching = true;
+                              return false;
+                        }
+                  });
+                  return isMatching;
+            },
+            bindAll: function ()
+            {     
+                  this.bindCartRemoveProduct();
+            },
+            bindCartData : function()
+            {
+                  ACC.cartremoveitem.getCartData();
+            },
+            
+            bindCartRemoveProduct: function ()
+            {
+                  
+                  $('.submitRemoveProduct').on("click", function ()
+                  {     
+                        
+                        var entryNum = $(this).attr('id').split("_")[1];
+                        var $form = $('#updateCartForm' + entryNum);
+                        var initialCartQuantity = $form.find('input[name=initialQuantity]');
+                        var cartQuantity = $form.find('input[name=quantity]');
+                        var productCode = $form.find('input[name=productCode]').val(); 
 
-			$('.submitRemoveProduct').on("click", function ()
-					{	
-				var entryNum = $(this).attr('id').split("_")[1];
-				var $form = $('#updateCartForm' + entryNum);
-				var initialCartQuantity = $form.find('input[name=initialQuantity]');
-				var cartQuantity = $form.find('input[name=quantity]');
-				var productCode = $form.find('input[name=productCode]').val(); 
+                        cartQuantity.val(0);
+                        initialCartQuantity.val(0);
 
-				cartQuantity.val(0);
-				initialCartQuantity.val(0);
+                        ACC.track.trackRemoveFromCart(productCode, initialCartQuantity, cartQuantity.val());
 
-				ACC.track.trackRemoveFromCart(productCode, initialCartQuantity, cartQuantity.val());
+                        var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
+                        $.ajax({
+                              url: $form.attr("action"),
+                              data: $form.serialize(),
+                              type: method,
+                              success: function(data) 
+                              {
+                                    ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, 0);
+                              },
+                              error: function(xht, textStatus, ex) 
+                              {
+                                    alert("Failed to remove quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
+                              }
 
-				var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-				$.ajax({
-					url: $form.attr("action"),
-					data: $form.serialize(),
-					type: method,
-					success: function(data) 
-					{
-						ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, 0);
-					},
-					error: function() 
-					{
-						alert("Failed to remove quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
-					}
+                        });
 
-				});
+                              });
+                  //this function is doing the same as onBlur()         
+            /*$('.qty').on("change", function ()
+                  {     
+                        alert(" Testing ");
+                        var entryNum = $(this).attr('id').split("_")[1];                        
+                        var $form = $('#updateCartForm' + entryNum);                      
+                        var cartQuantity = $form.find('input[name=quantity]').val();                        
+                        var productCode = $form.find('input[name=productCode]').val();                                                            
+                                                            
+                                                            
+                        var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
+                       $.ajax({
+                              url: $form.attr("action"),
+                              data: $form.serialize(),
+                              type: method,
+                              success: function(data) 
+                              {     
+                                    ACC.cartremoveitem.getErrors(data, entryNum, productCode, cartQuantity);
+                                    
+                              },
+                              error: function() 
+                              {
+                                    alert("Failed to remove quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
+                              }
 
-					});
-					
-		$('.qty').on("change", function ()
-			{			
-				var entryNum = $(this).attr('id').split("_")[1];				
-				var $form = $('#updateCartForm' + entryNum);				
-				var cartQuantity = $form.find('input[name=quantity]').val();				
-				var productCode = $form.find('input[name=productCode]').val();										
-										
-										
-				var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-				$.ajax({
-					url: $form.attr("action"),
-					data: $form.serialize(),
-					type: method,
-					success: function(data) 
-					{	 
-						ACC.cartremoveitem.getErrors(data, entryNum, productCode, cartQuantity);
-						
-					},
-					error: function() 
-					{
-						alert("Failed to remove quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
-					}
+                        });
+                  });*/
 
-				});
-			});
+                  $('.updateQuantityProduct').on("click", function (event)
+                              { 
+                        event.preventDefault();
 
-			$('.updateQuantityProduct').on("click", function (event)
-					{ 
-				event.preventDefault();
+                        var prodid  = $(this).attr('id').split("_"); 
+                        var form    = $('#updateCartForm' + prodid[1]);
+                        var productCode = form.find('input[name=productCode]').val(); 
+                        var grid = $('#grid_' + prodid[1]);
+                        grid.addClass("cboxGrid");
 
-				var prodid	= $(this).attr('id').split("_"); 
-				var form	= $('#updateCartForm' + prodid[1]);
-				var productCode = form.find('input[name=productCode]').val(); 
-				var grid = $('#grid_' + prodid[1]);
-				grid.addClass("cboxGrid");
+                        var strSubEntries = grid.data("sub-entries");
+                        var arrSubEntries= strSubEntries.split(',');          
+                        var firstVariantCode = arrSubEntries[0].split(':')[0];
 
-				var strSubEntries = grid.data("sub-entries");
-				var arrSubEntries= strSubEntries.split(',');		
-				var firstVariantCode = arrSubEntries[0].split(':')[0];
+                        var mapCodeQuantity = new Object();
+                        
+                        for (var i = 0; i < arrSubEntries.length; i++)
+                        {
+                              var arrValue = arrSubEntries[i].split(":");
+                              mapCodeQuantity[arrValue[0]] = arrValue[1];
+                        }
 
-				var mapCodeQuantity = new Object();
-				
-				for (var i = 0; i < arrSubEntries.length; i++)
-				{
-					var arrValue = arrSubEntries[i].split(":");
-					mapCodeQuantity[arrValue[0]] = arrValue[1];
-				}
+                        var method = "GET";
+                        $.ajax({
+                              url: ACC.config.contextPath + '/cart/getProductVariantMatrix',
+                              data: {productCode: firstVariantCode},
+                              type: method,
+                              success: function(data) 
+                              {
+                                    grid.html(data);
 
-				var method = "GET";
-				$.ajax({
-					url: ACC.config.contextPath + '/cart/getProductVariantMatrix',
-					data: {productCode: firstVariantCode},
-					type: method,
-					success: function(data) 
-					{
-						grid.html(data);
+                                    var $gridContainer = grid.find(".product-grid-container");      
+                                    var numGrids = $gridContainer.length;
 
-						var $gridContainer = grid.find(".product-grid-container");	
-						var numGrids = $gridContainer.length;
+                                    for (var i = 0; i < numGrids; i++)
+                                    {
+                                          ACC.cartremoveitem.getProductQuantity($gridContainer.eq(i), mapCodeQuantity);
+                                    }
 
-						for (var i = 0; i < numGrids; i++)
-						{
-							ACC.cartremoveitem.getProductQuantity($gridContainer.eq(i), mapCodeQuantity);
-						}
+                                    $.colorbox({
+                                          html:      grid.clone(true).show(),
+                                          scroll:    true,
+                                          //width:     "80%",
+                                          //height:    "80%",
+                                          onCleanup: function() { 
+                                                // remove the cloned grid
+                                                grid.empty(); 
 
-						$.colorbox({
-							html:      grid.clone(true).show(),
-							scroll:    true,
-							//width:     "80%",
-							//height:    "80%",
-							onCleanup: function() { 
-								// remove the cloned grid
-								grid.empty(); 
+                                                strSubEntries = '';
+                                                $.each(mapCodeQuantity, function(key, value) {
+                                                      if (value != undefined)
+                                                      {
+                                                            strSubEntries = strSubEntries + key + ":"+ value+",";
+                                                      }
+                                                });
 
-								strSubEntries = '';
-								$.each(mapCodeQuantity, function(key, value) {
-									if (value != undefined)
-									{
-										strSubEntries = strSubEntries + key + ":"+ value+",";
-									}
-								});
+                                                grid.data('sub-entries', strSubEntries);
+                                          }
+                                    });         
 
-								grid.data('sub-entries', strSubEntries);
-							}
-						});		
+                                    ACC.cartremoveitem.coreTableActions(prodid[1], mapCodeQuantity);
+                              },
+                              error: function(xht, textStatus, ex) 
+                              {
+                                    alert("Failed to get variant matrix. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
+                              }
 
-						ACC.cartremoveitem.coreTableActions(prodid[1], mapCodeQuantity);
-					},
-					error: function(xht, textStatus, ex) 
-					{
-						alert("Failed to get variant matrix. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
-					}
+                        });         
 
-				});		
+                        //grid.show();          
+                              });
 
-				//grid.show();		
-					});
+                  $('.qty').on("keypress", function (e)
+                              { 
+                        
+                        var $input = $(this);
+                        if ((e.keyCode || e.which) == 13) // Enter was hit
+                        {     
+                              e.preventDefault();
+                              $input.blur();
+                        }
+                              });
 
-			$('.qty').on("keypress", function (e)
-					{ 
-				var $input = $(this);
-				if ((e.keyCode || e.which) == 13) // Enter was hit
-				{ 	
-					e.preventDefault();
-					$input.blur();
-				}
-					});
+                  $('.qty').on("blur", function ()
+                              {                 
+                        
+                        var entryNum = $(this).parent().find('input[name=entryNumber]').val();                             
+                        var $form = $('#updateCartForm' + entryNum);                      
+                        var initialCartQuantity = $form.find('input[name=initialQuantity]').val();                        
+                        var newCartQuantity = $form.find('input[name=quantity]').val();                        
+                        var productCode = $form.find('input[name=productCode]').val();       
+                        var moq =    $form.find('input[name=moq]').val();           
+                        
+                        if(initialCartQuantity != newCartQuantity)
+                        {     
+                              
+                              ACC.track.trackUpdateCart(productCode, initialCartQuantity, newCartQuantity);
+                              var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
+                             
+                              $.ajax({
+                                    url: $form.attr("action"),
+                                    data: $form.serialize(),
+                                    type: method,
+                                    success: function(data) 
+                                    {   
+                                           
+                                          ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, newCartQuantity);
+                                          if(newCartQuantity % moq == 0)
+                                          {                                         
+                                          initialCartQuantity = newCartQuantity;
+                                          $form.find('input[name=initialQuantity]').val(initialCartQuantity);
+                                          }    
+                                    },
+                                    error: function(xht, textStatus, ex) 
+                                    {
+                                          
+                                          alert("Failed to update quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
+                                    }
 
-			$('.qty').on("blur", function ()
-					{ 			
-					
-				var entryNum = $(this).parent().find('input[name=entryNumber]').val();					
-				var $form = $('#updateCartForm' + entryNum);				
-				var initialCartQuantity = $form.find('input[name=initialQuantity]').val();				
-				var newCartQuantity = $form.find('input[name=quantity]').val();				
-				var productCode = $form.find('input[name=productCode]').val(); 	
-				var moq = 	 $form.find('input[name=moq]').val(); 		
-				
-				if(initialCartQuantity != newCartQuantity)
-				{ 	
-					ACC.track.trackUpdateCart(productCode, initialCartQuantity, newCartQuantity);
-					var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
-					
-					$.ajax({
-						url: $form.attr("action"),
-						data: $form.serialize(),
-						type: method,
-						success: function(data) 
-						{   
-							ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, newCartQuantity);
-							if(newCartQuantity % moq == 0)
-							{							
-							initialCartQuantity = newCartQuantity;
-							$form.find('input[name=initialQuantity]').val(initialCartQuantity);
-							}							
-						},
-						error: function() 
-						{
-							alert("Failed to update quantity. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
-						}
+                              });
+                        }
+                              });
 
-					});
-				}
-					});
+            },
 
-		},
+            getProductQuantity: function(gridContainer, mapData) 
+            {
+                  var skus          = jQuery.map(gridContainer.find("input[type='hidden'].sku"), function(o) {return o.value});
+                  var quantities    = jQuery.map(gridContainer.find("input[type='textbox'].sku-quantity"), function(o) {return o});
 
-		getProductQuantity: function(gridContainer, mapData) 
-		{
-			var skus          = jQuery.map(gridContainer.find("input[type='hidden'].sku"), function(o) {return o.value});
-			var quantities    = jQuery.map(gridContainer.find("input[type='textbox'].sku-quantity"), function(o) {return o});
+                  var totalPrice = 0.0;
+                  var totalQuantity = 0.0;
 
-			var totalPrice = 0.0;
-			var totalQuantity = 0.0;
+                  $.each(skus, function(index, skuId) 
+                              { 
+                        var quantity = mapData[skuId];
+                        if (quantity != undefined)
+                        {
+                              quantities[index].value = quantity;
+                              totalQuantity += parseFloat(quantity);
 
-			$.each(skus, function(index, skuId) 
-					{ 
-				var quantity = mapData[skuId];
-				if (quantity != undefined)
-				{
-					quantities[index].value = quantity;
-					totalQuantity += parseFloat(quantity);
+                              var indexPattern = "[0-9]+";
+                              var currentIndex = parseInt(quantities[index].id.match(indexPattern));
 
-					var indexPattern = "[0-9]+";
-					var currentIndex = parseInt(quantities[index].id.match(indexPattern));
+                              var currentPrice = $("input[id='productPrice["+currentIndex+"]']").val();
+                              totalPrice += parseFloat(currentPrice) * parseInt(quantity);
+                        }
+                              });
 
-					var currentPrice = $("input[id='productPrice["+currentIndex+"]']").val();
-					totalPrice += parseFloat(currentPrice) * parseInt(quantity);
-				}
-					});
+                  var subTotalValue = Currency.formatMoney(Number(totalPrice).toFixed(2), Currency.money_format[ACC.common.currentCurrency]);
+                  var avgPriceValue = 0.0;
+                  if (totalQuantity > 0)
+                  {
+                        avgPriceValue = Currency.formatMoney(Number(totalPrice/totalQuantity).toFixed(2), Currency.money_format[ACC.common.currentCurrency]);
+                  }
 
-			var subTotalValue = Currency.formatMoney(Number(totalPrice).toFixed(2), Currency.money_format[ACC.common.currentCurrency]);
-			var avgPriceValue = 0.0;
-			if (totalQuantity > 0)
-			{
-				avgPriceValue = Currency.formatMoney(Number(totalPrice/totalQuantity).toFixed(2), Currency.money_format[ACC.common.currentCurrency]);
-			}
+                  gridContainer.parent().find('#quantity').html(totalQuantity);
+                  gridContainer.parent().find("#avgPrice").html(avgPriceValue)
+                  gridContainer.parent().find("#subtotal").html(subTotalValue);
 
-			gridContainer.parent().find('#quantity').html(totalQuantity);
-			gridContainer.parent().find("#avgPrice").html(avgPriceValue)
-			gridContainer.parent().find("#subtotal").html(subTotalValue);
+                  var $inputQuantityValue = gridContainer.parent().find('#quantityValue');
+                  var $inputAvgPriceValue = gridContainer.parent().find('#avgPriceValue');
+                  var $inputSubtotalValue = gridContainer.parent().find('#subtotalValue');
 
-			var $inputQuantityValue = gridContainer.parent().find('#quantityValue');
-			var $inputAvgPriceValue = gridContainer.parent().find('#avgPriceValue');
-			var $inputSubtotalValue = gridContainer.parent().find('#subtotalValue');
+                  $inputQuantityValue.val(totalQuantity);
+                  $inputAvgPriceValue.val(Number(totalPrice/totalQuantity).toFixed(2));
+                  $inputSubtotalValue.val(Number(totalPrice).toFixed(2));
 
-			$inputQuantityValue.val(totalQuantity);
-			$inputAvgPriceValue.val(Number(totalPrice/totalQuantity).toFixed(2));
-			$inputSubtotalValue.val(Number(totalPrice).toFixed(2));
+            }, 
 
-		}, 
+            coreTableActions: function(productCode, mapCodeQuantity)  
+            {
+                  var skuQuantityClass = '.sku-quantity';
 
-		coreTableActions: function(productCode, mapCodeQuantity)  
-		{
-			var skuQuantityClass = '.sku-quantity';
+                  var quantityBefore = 0;
+                  var quantityAfter = 0;
 
-			var quantityBefore = 0;
-			var quantityAfter = 0;
+                  var grid = $('#grid_' + productCode);
 
-			var grid = $('#grid_' + productCode);
+                  grid.on('click', skuQuantityClass, function(event) {
+                        $(this).select();
+                  });
 
-			grid.on('click', skuQuantityClass, function(event) {
-				$(this).select();
-			});
+                  grid.on('focusin', skuQuantityClass, function(event) {
+                        quantityBefore = jQuery.trim(this.value);
+                        if (quantityBefore == "") {
+                              quantityBefore = 0;
+                              this.value = 0;
+                        }
+                  });
 
-			grid.on('focusin', skuQuantityClass, function(event) {
-				quantityBefore = jQuery.trim(this.value);
-				if (quantityBefore == "") {
-					quantityBefore = 0;
-					this.value = 0;
-				}
-			});
+                  grid.on('focusout', skuQuantityClass, function(event) {
+                        var indexPattern           = "[0-9]+";
+                        var currentIndex           = parseInt($(this).attr("id").match(indexPattern));
+                        var $gridGroup             = $(this).parents('.orderForm_grid_group');
+                        var $closestQuantityValue  = $gridGroup.find('#quantityValue');
+                        var $closestAvgPriceValue  = $gridGroup.find('#avgPriceValue');
+                        var $closestSubtotalValue  = $gridGroup.find('#subtotalValue');
 
-			grid.on('focusout', skuQuantityClass, function(event) {
-				var indexPattern           = "[0-9]+";
-				var currentIndex           = parseInt($(this).attr("id").match(indexPattern));
-				var $gridGroup             = $(this).parents('.orderForm_grid_group');
-				var $closestQuantityValue  = $gridGroup.find('#quantityValue');
-				var $closestAvgPriceValue  = $gridGroup.find('#avgPriceValue');
-				var $closestSubtotalValue  = $gridGroup.find('#subtotalValue');
+                        var currentQuantityValue   = $closestQuantityValue.val();
+                        var currentSubtotalValue   = $closestSubtotalValue.val();
 
-				var currentQuantityValue   = $closestQuantityValue.val();
-				var currentSubtotalValue   = $closestSubtotalValue.val();
+                        var currentPrice = $("input[id='productPrice["+currentIndex+"]']").val();
+                        var variantCode = $("input[id='cartEntries["+currentIndex+"].sku']").val();
 
-				var currentPrice = $("input[id='productPrice["+currentIndex+"]']").val();
-				var variantCode = $("input[id='cartEntries["+currentIndex+"].sku']").val();
+                        quantityAfter = jQuery.trim(this.value);
 
-				quantityAfter = jQuery.trim(this.value);
+                        if (isNaN(jQuery.trim(this.value))) {
+                              this.value = 0;
+                        }
 
-				if (isNaN(jQuery.trim(this.value))) {
-					this.value = 0;
-				}
+                        if (quantityAfter == "") {
+                              quantityAfter = 0;
+                              this.value = 0;
+                        }
 
-				if (quantityAfter == "") {
-					quantityAfter = 0;
-					this.value = 0;
-				}
+                        if (quantityBefore == 0) {
+                              $closestQuantityValue.val(parseInt(currentQuantityValue) + parseInt(quantityAfter));
+                              $closestSubtotalValue.val(parseFloat(currentSubtotalValue) + parseFloat(currentPrice) * parseInt(quantityAfter));
+                        } else {
+                              $closestQuantityValue.val(parseInt(currentQuantityValue) + (parseInt(quantityAfter) - parseInt(quantityBefore)));
+                              $closestSubtotalValue.val(parseFloat(currentSubtotalValue) + parseFloat(currentPrice) * (parseInt(quantityAfter) - parseInt(quantityBefore)));
+                        }
 
-				if (quantityBefore == 0) {
-					$closestQuantityValue.val(parseInt(currentQuantityValue) + parseInt(quantityAfter));
-					$closestSubtotalValue.val(parseFloat(currentSubtotalValue) + parseFloat(currentPrice) * parseInt(quantityAfter));
-				} else {
-					$closestQuantityValue.val(parseInt(currentQuantityValue) + (parseInt(quantityAfter) - parseInt(quantityBefore)));
-					$closestSubtotalValue.val(parseFloat(currentSubtotalValue) + parseFloat(currentPrice) * (parseInt(quantityAfter) - parseInt(quantityBefore)));
-				}
+                        if (parseInt($closestQuantityValue.val()) > 0) {
+                              $closestAvgPriceValue.val(parseFloat($closestSubtotalValue.val()) / parseInt($closestQuantityValue.val()));
+                        } else {
+                              $closestAvgPriceValue.val(0);
+                        }
 
-				if (parseInt($closestQuantityValue.val()) > 0) {
-					$closestAvgPriceValue.val(parseFloat($closestSubtotalValue.val()) / parseInt($closestQuantityValue.val()));
-				} else {
-					$closestAvgPriceValue.val(0);
-				}
+                        $closestQuantityValue.parent().find('#quantity').html($closestQuantityValue.val());
+                        $closestAvgPriceValue.parent().find('#avgPrice').html(ACC.productorderform.formatTotalsCurrency($closestAvgPriceValue.val()));
+                        $closestSubtotalValue.parent().find('#subtotal').html(ACC.productorderform.formatTotalsCurrency($closestSubtotalValue.val()));
 
-				$closestQuantityValue.parent().find('#quantity').html($closestQuantityValue.val());
-				$closestAvgPriceValue.parent().find('#avgPrice').html(ACC.productorderform.formatTotalsCurrency($closestAvgPriceValue.val()));
-				$closestSubtotalValue.parent().find('#subtotal').html(ACC.productorderform.formatTotalsCurrency($closestSubtotalValue.val()));
+                        if (quantityBefore != quantityAfter)
+                        {
+                              var method = "POST";
+                              $.ajax({
+                                    url: ACC.config.contextPath + '/cart/update',
+                                    data: {productCode: variantCode, quantity: quantityAfter, entryNumber: -1},
+                                    type: method,
+                                    success: function(data) 
+                                    {
+                                          ACC.cartremoveitem.refreshCartData(data, -1, productCode, null);
+                                          mapCodeQuantity[variantCode] = quantityAfter;
+                                    },
+                                    error: function(xht, textStatus, ex) 
+                                    {
+                                          alert("Failed to get variant matrix. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
+                                    }
 
-				if (quantityBefore != quantityAfter)
-				{
-					var method = "POST";
-					$.ajax({
-						url: ACC.config.contextPath + '/cart/update',
-						data: {productCode: variantCode, quantity: quantityAfter, entryNumber: -1},
-						type: method,
-						success: function(data) 
-						{
-							ACC.cartremoveitem.refreshCartData(data, -1, productCode, null);
-							mapCodeQuantity[variantCode] = quantityAfter;
-						},
-						error: function(xht, textStatus, ex) 
-						{
-							alert("Failed to get variant matrix. Error details [" + xht + ", " + textStatus + ", " + ex + "]");
-						}
+                              });
+                        }
 
-					});
-				}
+                  }); 
 
-			}); 
-
-		},
-		
-		getErrors: function(cartData, entryNum, productCode, quantity)
-		{			
-			if (cartData.entries.length == 0)
-			{
-				location.reload();
-			}
-			else
-			{	
-				var errorsDiv = $('#businesRuleErrors');
-				
-				errorsDiv.html('');
-				$("#businesRuleErrors").show();		
-				var isContainerFullFlag = cartData.isContainerFull;				
-				$('#isContainerFull').val(isContainerFullFlag);
-				
-				ACC.cartremoveitem.fillThis();
-				
-				var errorSize = cartData.businesRuleErrors.length;				
-				var errors ="";								
-				if(errorSize > 0)
+            },
+            
+            getErrors: function(cartData, entryNum, productCode, quantity)
+            {                 
+                  if (cartData.entries.length == 0)
+                  {
+                        location.reload();
+                  }
+                  else
+                  {     
+                        var errorsDiv = $('#businesRuleErrors');
+                        
+                        errorsDiv.html('');
+                        $("#businesRuleErrors").show();           
+                        var isContainerFullFlag = cartData.isContainerFull;                     
+                        $('#isContainerFull').val(isContainerFullFlag);
+                        
+                        ACC.cartremoveitem.fillThis();
+                        
+                        var errorSize = cartData.businesRuleErrors.length;                      
+                        var errors ="";                                             
+                        if(errorSize > 0)
                 {
                       $('#businesRuleErrors').fadeIn("fast");
                       for (var i = 0; i < errorSize; i++)
@@ -365,317 +390,323 @@ ACC.cartremoveitem = {
                 }
                 $('#validationErrors').fadeOut(5000);
 
-			}		
-		},
-			
+                  }           
+            },
+                  
 
-		refreshCartData: function(cartData, entryNum, productCode, quantity) 
-		{	
-			// if cart is empty, we need to reload the whole page
-			if (cartData.entries.length == 0)
-			{
-				location.reload();
-			}
-			else
-			{	
-				
-				var form;	
-				var removeItem = false;
-				var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
-				var totalProductVolumeInPercent = cartData.totalProductVolumeInPercent;
-				ACC.cartremoveitem.isOrderBlocked =cartData.isOrderBlocked;
-								
-				if (entryNum == -1) // grouped item
-				{   
-					var editLink = $('#QuantityProduct_' + productCode);
-					form = editLink.closest('form');
+            refreshCartData: function(cartData, entryNum, productCode, quantity) 
+            {                 
+                  //alert("refreshCartData: "+cartData.entries.length);
+                  $('#containerHeightLine').text(cartData.containerHeight);                  
+                  // if cart is empty, we need to reload the whole page
+                  if (cartData.entries.length == 0)
+                  {
+                        location.reload();
+                  }
+                  else
+                  {                         
+                        var form;   
+                        var removeItem = false;
+                        var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
+                        var totalProductVolumeInPercent = cartData.totalProductVolumeInPercent;
+                        ACC.cartremoveitem.isOrderBlocked =cartData.isOrderBlocked;
+                                                
+                        if (entryNum == -1) // grouped item
+                        {   
+                              var editLink = $('#QuantityProduct_' + productCode);
+                              form = editLink.closest('form');
 
-					var quantity = 0;
-					var entryPrice = 0;
-					for (var i = 0; i < cartData.entries.length; i++)
-					{
-						var entry = cartData.entries[i];
-						if (entry.product.code == productCode)
-						{			
-							quantity = entry.quantity;
-							entryPrice = entry.totalPrice;
-							break;
-						}
-					}
+                              var quantity = 0;
+                              var entryPrice = 0;
+                              for (var i = 0; i < cartData.entries.length; i++)
+                              {
+                                    var entry = cartData.entries[i];
+                                    if (entry.product.code == productCode)
+                                    {                 
+                                          quantity = entry.quantity;
+                                          entryPrice = entry.totalPrice;
+                                          break;
+                                    }
+                              }
 
-					if (quantity == 0)
-					{
-						removeItem = true;
-						form.parent().parent().remove();
-					}
-					else
-					{
-					
-						form.find(".qty").html(quantity);
-						form.parent().parent().find(".total").html(entryPrice.formattedValue);
+                              if (quantity == 0)
+                              {
+                                    removeItem = true;
+                                    form.parent().parent().remove();
+                              }
+                              else
+                              {
+                              
+                                    form.find(".qty").html(quantity);
+                                    form.parent().parent().find(".total").html(entryPrice.formattedValue);
 
-						$('#weight_txt').val(totalProductWeightInPercent);
-						$('#volume_txt').val(totalProductVolumeInPercent);	
-						
-						var isContainerFullFlag = cartData.isContainerFull;						
-						$('#isContainerFull').val(isContainerFullFlag);								
+                                    $('#weight_txt').val(totalProductWeightInPercent);
+                                    $('#volume_txt').val(totalProductVolumeInPercent);      
+                                    
+                                    var isContainerFullFlag = cartData.isContainerFull;                                    
+                                    $('#isContainerFull').val(isContainerFullFlag);                                           
 
-						ACC.cartremoveitem.fillThis();
+                                    ACC.cartremoveitem.fillThis();
 
-					}
+                              }
 
-				}
-				else //ungrouped item
-				{	
-					form = $('#updateCartForm' + entryNum);
+                        }
+                        else //ungrouped item
+                        {     
+                              form = $('#updateCartForm' + entryNum);
 
-					if (quantity == 0)
-					{
-						removeItem = true;
-						form.parent().parent().remove();
-					}
-					else
-					{
-						for (var i = 0; i < cartData.entries.length; i++)
-						{
-							var entry = cartData.entries[i];
-							if (entry.entryNumber == entryNum)
-							{				
-								form.find('input[name=quantity]').val(entry.quantity);
-								form.parent().parent().find(".total").html(entry.totalPrice.formattedValue);
+                              if (quantity == 0)
+                              {
+                                    removeItem = true;
+                                    form.parent().parent().remove();
+                              }
+                              else
+                              {
+                                    for (var i = 0; i < cartData.entries.length; i++)
+                                    {
+                                          var entry = cartData.entries[i];
+                                          if (entry.entryNumber == entryNum)
+                                          {                       
+                                                form.find('input[name=quantity]').val(entry.quantity);
+                                                form.parent().parent().find(".total").html(entry.totalPrice.formattedValue);
 
-								$('#weight_txt').val(totalProductWeightInPercent);
-								$('#volume_txt').val(totalProductVolumeInPercent);	
+                                                $('#weight_txt').val(totalProductWeightInPercent);
+                                                $('#volume_txt').val(totalProductVolumeInPercent);    
 
-								var isContainerFullFlag = cartData.isContainerFull;									
-								$('#isContainerFull').val(isContainerFullFlag);
-				
-								ACC.cartremoveitem.fillThis();
+                                                var isContainerFullFlag = cartData.isContainerFull;                                                     
+                                                $('#isContainerFull').val(isContainerFullFlag);
+                        
+                                                ACC.cartremoveitem.fillThis();
 
-							}
-						}
-					}
-				}
+                                          }
+                                    }
+                              }
+                        }
 
-				// remove item, need to update other items' entry numbers
-				if (removeItem === true)
-				{	
-					$('.cartItem').each(function(index)
-							{
-						form = $(this).find('.quantity').children().first();
-						var productCode = form.find('input[name=productCode]').val(); 
+                        // remove item, need to update other items' entry numbers
+                        if (removeItem === true)
+                        {     
+                              $('.cartItem').each(function(index)
+                                          {
+                                    form = $(this).find('.quantity').children().first();
+                                    var productCode = form.find('input[name=productCode]').val(); 
 
-						for (var i = 0; i < cartData.entries.length; i++)
-						{
-							var entry = cartData.entries[i];
-							if (entry.product.code == productCode)
-							{				
-								form.find('input[name=entryNumber]').val(entry.entryNumber);
-								break;
-							}
-						}
-							});
-				}
+                                    for (var i = 0; i < cartData.entries.length; i++)
+                                    {
+                                          var entry = cartData.entries[i];
+                                          if (entry.product.code == productCode)
+                                          {                       
+                                                form.find('input[name=entryNumber]').val(entry.entryNumber);
+                                                break;
+                                          }
+                                    }
+                                          });
+                        }
 
-				// refresh mini cart 	
-				ACC.minicart.refreshMiniCartCount();
+                        // refresh mini cart    
+                        ACC.minicart.refreshMiniCartCount();
+                       
+                        $('#orderTotals').next().remove();
+                        $('#orderTotals').remove();
+                        $("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));      
+                        
+                        ACC.cartremoveitem.getErrors(cartData, entryNum, productCode, quantity);
+                        if($(".form-actions .positive").length !== 0){
+                              $(".form-actions .positive").click(); 
+                        }                       
+                  }
+                  
+                  $('#weight_txt').val(totalProductWeightInPercent);
+                  $('#volume_txt').val(totalProductVolumeInPercent);    
+                  
+                  var isContainerFullFlag = cartData.isContainerFull;                                 
+                  $('#isContainerFull').val(isContainerFullFlag);                                           
 
-				$('#orderTotals').next().remove();
-				$('#orderTotals').remove();
-				$("#ajaxCart").html($("#cartTotalsTemplate").tmpl({data: cartData}));	
-				
-				ACC.cartremoveitem.getErrors(cartData, entryNum, productCode, quantity);
-										
-			}
-			
-			$('#weight_txt').val(totalProductWeightInPercent);
-			$('#volume_txt').val(totalProductVolumeInPercent);	
-			
-			var isContainerFullFlag = cartData.isContainerFull;						
-			$('#isContainerFull').val(isContainerFullFlag);								
+                  ACC.cartremoveitem.fillThis();
+                  
+            },
+            getCartData : function()
+            {
+            var contHeight = $("#volume_cont").height();
+            var isContainerFull = $('#isContainerFull').val();
+            var isOrderBlocked = $('#isOrderBlocked').val();
+            var getVolTxt = $("#volume_txt").val();
+            var getWeightTxt = $("#weight_txt").val();
+            var weightCont = $("#weight_cont").height();    
+           
+            var errorsDiv = $('#businesRuleErrors').show(); 
+            var errorMsg = "";
+            
+            if(isContainerFull == 'true')
+            {
+                  
+                  if(getVolTxt < 100){
+                        contHeight = (contHeight*getVolTxt)/100;
+                        $("#volume_utilization").css('background-color', '#33cc33'); 
+                        $("#utl_vol").text(getVolTxt);
+                  }
+                  else{
+                        $("#volume_utilization").css('background-color', '#FF5757');       
+                        $("#utl_vol").text(100);
+                  }                             
+                  
+                  if(getWeightTxt <100){
+                        weightCont = (weightCont*getWeightTxt)/100;
+                        $("#weight_utilization").css('background-color', '#33cc33');       
+                        $("#utl_wt").text(getWeightTxt);
+                  }
+                  else{
+                        $("#weight_utilization").css('background-color', '#FF5757');       
+                        $("#utl_wt").text(100);
+                  }                             
+                  
+                        
+            
+                  $("#weight_utilization").css('height', weightCont);         
+                  $("#volume_utilization").css('height', contHeight); 
+            
+                  $("#checkoutButton_top").attr("disabled", true);
+                  $("#checkoutButton_bottom").attr("disabled",true);    
+                  $("#continueButton_bottom").attr("disabled",true);    
+                  
+                  errorMsg = "Dear Customer, your order will not fit in one container. Please, adjust the cart and/or place multiple orders. <br>";
+            }     
+            
+            if(isOrderBlocked=='true'){
+                  errorMsg =errorMsg + " Dear Customer, You order has been blocked. Please contact Customer Care <br>"
 
-			ACC.cartremoveitem.fillThis();
-			
-		},
-		getCartData : function()
-		{
-		var contHeight = $("#volume_cont").height();
-		var isContainerFull = $('#isContainerFull').val();
-		var isOrderBlocked = $('#isOrderBlocked').val();
-		var getVolTxt = $("#volume_txt").val();
-		var getWeightTxt = $("#weight_txt").val();
-		var weightCont = $("#weight_cont").height(); 	
-		
-		var errorsDiv = $('#businesRuleErrors').show();	
-		var errorMsg = "";
-		
-		if(isContainerFull == 'true')
-		{
-			
-			if(getVolTxt < 100){
-				contHeight = (contHeight*getVolTxt)/100;
-				$("#volume_utilization").css('background-color', '#33cc33'); 
-				$("#utl_vol").text(getVolTxt);
-			}
-			else{
-				$("#volume_utilization").css('background-color', '#FF5757'); 	
-				$("#utl_vol").text(100);
-			}					
-			
-			if(getWeightTxt <100){
-				weightCont = (weightCont*getWeightTxt)/100;
-				$("#weight_utilization").css('background-color', '#33cc33'); 	
-				$("#utl_wt").text(getWeightTxt);
-			}
-			else{
-				$("#weight_utilization").css('background-color', '#FF5757'); 	
-				$("#utl_wt").text(100);
-			}					
-			
-				
-		
-			$("#weight_utilization").css('height', weightCont);		
-			$("#volume_utilization").css('height', contHeight); 
-		
-			$("#checkoutButton_top").attr("disabled", true);
-			$("#checkoutButton_bottom").attr("disabled",true);	
-			$("#continueButton_bottom").attr("disabled",true);	
-			
-			errorMsg = "Dear Customer, You have exceeded the limit. Please adjust the cart. <br>";
-		}	
-		
-		if(isOrderBlocked=='true'){
-			errorMsg =errorMsg + " Dear Customer, You order has been blocked. Please contact Customer Care <br>"
+            }
 
-		}
-
-		
+            
         if(errorMsg==""){
-        	errorsDiv.hide()
-        	errorsDiv.removeClass("alert negative");
+            errorsDiv.hide()
+            errorsDiv.removeClass("alert negative");
         }else{
             errorsDiv.html(errorMsg); 
             errorsDiv.addClass("alert negative");
             $("html, body").animate({ scrollTop: 0 }, 50);
         }
-		
-		
-		if(isContainerFull == 'false')
-		{ 
-			 $("#volume_utilization").css('background-color', '#33cc33'); 
-			 $("#weight_utilization").css('background-color', '#33cc33'); 
-			if(getVolTxt == 100)
-			  {				
-			 	$("#volume_utilization").css('height', contHeight); 		 	
-			  }
-			  if(getWeightTxt == 100)
-			  {
-			  $("#weight_utilization").css('height', contHeight);		
-			  }
+            
+            
+            if(isContainerFull == 'false')
+            { 
+                   $("#volume_utilization").css('background-color', '#33cc33'); 
+                   $("#weight_utilization").css('background-color', '#33cc33'); 
+                  if(getVolTxt == 100)
+                    {                     
+                       $("#volume_utilization").css('height', contHeight);                
+                    }
+                    if(getWeightTxt == 100)
+                    {
+                    $("#weight_utilization").css('height', contHeight);       
+                    }
 
-		}
-				
-		},
-		
-		fillThis: function() {  
-			var contHeight = $("#volume_cont").height(); 
-			var volUtl= $("#volume_utilization").height();
-			var volCont = $("#volume_cont").height(); 
-			var weightUtl= $("#weight_utilization").height();
-			var weightCont = $("#weight_cont").height(); 			
-			var isContainerFull = $('#isContainerFull').val();
-			isContainerfull = isContainerFull;
+            }
+                        
+            },
+            
+            fillThis: function() {  
+                  var contHeight = $("#volume_cont").height(); 
+                  var volUtl= $("#volume_utilization").height();
+                  var volCont = $("#volume_cont").height(); 
+                  var weightUtl= $("#weight_utilization").height();
+                  var weightCont = $("#weight_cont").height();                
+                  var isContainerFull = $('#isContainerFull').val();
+                  isContainerfull = isContainerFull;
 
-			if(null !=contHeight && null != volCont  ){
+                  if(null !=contHeight && null != volCont  ){
 
-				var getVolTxt = $("#volume_txt").val();
-				var getWeightTxt = $("#weight_txt").val();
-				
-				if(isContainerFull == 'true')
-				{ 
+                        var getVolTxt = $("#volume_txt").val();
+                        var getWeightTxt = $("#weight_txt").val();
+                        
+                        if(isContainerFull == 'true')
+                        { 
 
-					if(getVolTxt < 100){
-						contHeight = (contHeight*getVolTxt)/100;
-						$("#volume_utilization").css('background-color', '#33cc33'); 
-						$("#utl_vol").text(getVolTxt);
-					}
-					else{
-						$("#volume_utilization").css('background-color', '#FF5757'); 	
-						$("#utl_vol").text(100);
-					}					
-					if(getWeightTxt <100){
-						weightCont = (weightCont*getWeightTxt)/100;
-						$("#weight_utilization").css('background-color', '#33cc33'); 
-						$("#utl_wt").text(getWeightTxt);
-					}
-					else{
-						$("#weight_utilization").css('background-color', '#FF5757'); 	
-						$("#utl_wt").text(100);
-					}					
-					
-									
-					$("#weight_utilization").css('height', weightCont);		
-					$("#volume_utilization").css('height', contHeight); 				
-				 
-					 //Disable checkout buttons
-					 $("#checkoutButton_top").attr("disabled", true);
-					 $("#checkoutButton_bottom").attr("disabled",true);	
-					 $("#continueButton_bottom").attr("disabled",true);	
-				}
-				
-				if(isContainerFull == 'false')
-				{
-				 if(ACC.cartremoveitem.isOrderBlocked != true)	{
-					 $("#checkoutButton_top").attr("disabled", false);				 
-					 $("#checkoutButton_bottom").attr("disabled",false);
-					 $("#continueButton_bottom").attr("disabled",false);	
-				 }
-				 $("#volume_utilization").css('background-color', '#33cc33'); 
-				 $("#weight_utilization").css('background-color', '#33cc33'); 
-				 
-				 $("#utl_vol").text(getVolTxt);
-				 $("#utl_wt").text(getWeightTxt);
-				 if(getVolTxt == 100)
-				  {				
-				 	$("#volume_utilization").css('height', contHeight);				 	
-				  }
-				  if(getWeightTxt == 100)
-				  {
-				  $("#weight_utilization").css('height', contHeight);		
-				  }
-				  
-				  ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'	);
-				 				
-				}
-				
-				if(getVolTxt <100){
-					
-					$("#volume_utilization").css('height', contHeight * getVolTxt / 100); var volUtlBar = document.getElementById("volume_utilization").style.height;
-					volUtlBar = volUtlBar.replace('px', ''); if(volUtlBar > contHeight) { callBackIfExceeds(volUtl, volCont); } 
-				}
-				
-				if(getWeightTxt <100)
-				{		
-					$("#weight_utilization").css('height', contHeight * getWeightTxt / 100); var weightUtlBar = document.getElementById("weight_utilization").style.height;
-					weightUtlBar = weightUtlBar.replace('px', ''); if(weightUtlBar > contHeight) { callBackIfExceeds(weightUtl, weightCont); } 
-				
-				}
-				
-				if(isContainerFull == 'true')
-				{
-				$("#weight_utilization").css('height', weightCont);				 	
-				$("#volume_utilization").css('height', contHeight); 
-				
-				}
-			}
-		}
+                              if(getVolTxt < 100){
+                                    contHeight = (contHeight*getVolTxt)/100;
+                                    $("#volume_utilization").css('background-color', '#33cc33'); 
+                                    $("#utl_vol").text(getVolTxt);
+                              }
+                              else{
+                                    $("#volume_utilization").css('background-color', '#FF5757');       
+                                    $("#utl_vol").text(100);
+                              }                             
+                              if(getWeightTxt <100){
+                                    weightCont = (weightCont*getWeightTxt)/100;
+                                    $("#weight_utilization").css('background-color', '#33cc33'); 
+                                    $("#utl_wt").text(getWeightTxt);
+                              }
+                              else{
+                                    $("#weight_utilization").css('background-color', '#FF5757');       
+                                    $("#utl_wt").text(100);
+                              }                             
+                              
+                                                      
+                              $("#weight_utilization").css('height', weightCont);         
+                              $("#volume_utilization").css('height', contHeight);                     
+                         
+                               //Disable checkout buttons
+                              $("#checkoutButton_top").attr("disabled", true);
+                              $("#checkoutButton_bottom").attr("disabled",true);   
+                              $("#continueButton_bottom").attr("disabled",true);   
+                        }
+                        
+                        if(isContainerFull == 'false')
+                        {
+                        if(ACC.cartremoveitem.isOrderBlocked != true)  {
+                              $("#checkoutButton_top").attr("disabled", false);                      
+                               $("#checkoutButton_bottom").attr("disabled",false);
+                              $("#continueButton_bottom").attr("disabled",false);  
+                        }
+                        $("#volume_utilization").css('background-color', '#33cc33'); 
+                         $("#weight_utilization").css('background-color', '#33cc33'); 
+                         
+                         $("#utl_vol").text(getVolTxt);
+                        $("#utl_wt").text(getWeightTxt);
+                        if(getVolTxt == 100)
+                          {                     
+                             $("#volume_utilization").css('height', contHeight);                          
+                          }
+                          if(getWeightTxt == 100)
+                          {
+                          $("#weight_utilization").css('height', contHeight);       
+                          }
+                          
+                          ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'      );
+                                               
+                        }
+                        
+                        if(getVolTxt <100){
+                              
+                              $("#volume_utilization").css('height', contHeight * getVolTxt / 100); var volUtlBar = document.getElementById("volume_utilization").style.height;
+                              volUtlBar = volUtlBar.replace('px', ''); if(volUtlBar > contHeight) { callBackIfExceeds(volUtl, volCont); } 
+                        }
+                        
+                        if(getWeightTxt <100)
+                        {           
+                              $("#weight_utilization").css('height', contHeight * getWeightTxt / 100); var weightUtlBar = document.getElementById("weight_utilization").style.height;
+                              weightUtlBar = weightUtlBar.replace('px', ''); if(weightUtlBar > contHeight) { callBackIfExceeds(weightUtl, weightCont); } 
+                        
+                        }
+                        
+                        if(isContainerFull == 'true')
+                        {
+                        $("#weight_utilization").css('height', weightCont);                          
+                        $("#volume_utilization").css('height', contHeight); 
+                        
+                        }
+                  }
+            }
 }
 
 
 $(document).ready(function ()
-		{ 
-		
-	ACC.cartremoveitem.bindCartData();		
-	ACC.cartremoveitem.bindAll();
-	
-		});
+            { 
+            
+      ACC.cartremoveitem.bindCartData();        
+      ACC.cartremoveitem.bindAll();
+      if($("#productsNotAddedToCart").css('display') !== 'none'){
+        ACC.cartremoveitem.highlightQtyInputBox();
+      }
+      
+            });

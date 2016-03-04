@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.services.product.dao;
 
@@ -14,11 +14,11 @@ import com.energizer.core.model.EnergizerShippingPointModel;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  *         anitha.shastry added method getOrphanedProductList()
- * 
+ *
  *         anitha.shastry added method getEnergizerProductListForSapCatgy()
- * 
+ *
  */
 public interface EnergizerProductDAO
 {
@@ -41,12 +41,14 @@ public interface EnergizerProductDAO
 	List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	List<EnergizerShippingPointModel> getShippingPointName(final String shippingPointId);
-	
+
 	List<EnergizerCMIRModel> getAllEnergizerCMIRList();
 
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
-
+	List<EnergizerProductModel> getEnergizerERPMaterialIDList();
+	
+	public EnergizerProductModel getProductWithCode(final String code);
 
 
 }

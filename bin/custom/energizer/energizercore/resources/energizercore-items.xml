@@ -197,6 +197,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute  qualifier="enableContainerOptimization" type="java.lang.Boolean">
+					<modifiers />
+					<persistence type="property" />
+					<defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
+					</attribute>
 					<attribute qualifier="distributionChannel" type="java.lang.String">
 						<description>Distribution Channel</description>
 						<modifiers />
@@ -426,6 +431,22 @@
 					</attribute>
 					<attribute qualifier="packageWeight" type="MetricUnit">
 						<description>weight of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="packageLength" type="MetricUnit">
+						<description>length of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="packageWidth" type="MetricUnit">
+						<description>width of the package for the product</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="packageHeight" type="MetricUnit">
+						<description>height of the package for the product</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>

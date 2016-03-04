@@ -114,6 +114,14 @@
 			</td>
 			<td>${unit.unit.uid}</td>
 		</tr>
+		
+		<tr>
+			<td>
+				<spring:theme code="text.company.unit.packingType" text="Default Packing Type"/>
+			</td>
+			<td>${packingType}</td>
+		</tr>
+		
 		<tr>
 			<td>
 				<spring:theme code="text.company.unit.approvalProcess" text="Approval Process:"/>

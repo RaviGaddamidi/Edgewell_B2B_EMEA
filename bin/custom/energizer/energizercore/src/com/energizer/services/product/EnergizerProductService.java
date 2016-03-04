@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.services.product;
 
@@ -13,7 +13,7 @@ import com.energizer.core.model.EnergizerProductModel;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public interface EnergizerProductService
 {
@@ -37,9 +37,14 @@ public interface EnergizerProductService
 	public List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	public String getShippingPointName(final String shippingPointId);
-	
+
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList();
-	
+
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialID, final String b2bUnitId);
 
+	public List<EnergizerProductConversionFactorModel> getAllEnergizerProductConversion(final String erpMaterialId);
+
+	public List<EnergizerProductModel> getEnergizerERPMaterialID();
+	
+	public EnergizerProductModel getProductWithCode(final String code);
 }
