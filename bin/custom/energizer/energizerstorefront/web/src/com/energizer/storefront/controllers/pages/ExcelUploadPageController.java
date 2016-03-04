@@ -1,6 +1,5 @@
 /**
- *
- *
+ * 
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -24,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -210,19 +211,24 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 						if (materialId != null || customerMaterailId != null)
 						{
-							uploadData = new EnergizerFileUploadData();
-
-							uploadData.setMaterialId(materialId);
-							uploadData.setCustomerMaterialId(customerMaterailId);
+							
+							 uploadData = new EnergizerFileUploadData();
 
 							if (row.getCell(2) != null)
 							{
 								try
 								{
-
+									
 									final String val = row.getCell(2).toString().trim();
 									final Long quantity = new Double(val).longValue();
-									uploadData.setQuantity(quantity);
+									if (quantity > 0)
+									{
+										uploadData.setCustomerMaterialId(customerMaterailId);
+										uploadData.setMaterialId(materialId);
+										uploadData.setQuantity(quantity);
+
+									}
+									
 								}
 								catch (final Exception ise)
 								{
@@ -310,7 +316,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		}
 		if (cartEntryBusinessRulesService.getErrors() != null && !cartEntryBusinessRulesService.getErrors().isEmpty())
 		{
-			//			cartEntryBusinessRulesService.getErrors().clear();R
+			cartEntryBusinessRulesService.getErrors().clear();
 		}
 
 		if (shipmentMap.containsKey(shipmentPoint))
@@ -330,6 +336,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 				if (orderEntry != null)
 				{
+					orderEntry.setQuantity(energizerFileUploadData.getQuantity());
 
 					model.addAttribute("cartShippingPoint",
 							orderEntry.getReferenceShippingPoint() != null ? orderEntry.getReferenceShippingPoint() : "");
@@ -427,27 +434,13 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-			boolean flag = false;
-			String productWithCmirInActive = "";
+
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
 				uqf.setQuantity(entry.getQuantity());
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
-				if (entry.getProduct().isIsActive() == false)
-				{
-					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
-					flag = true;
-
-				}
 			}
-			if (flag == true)
-			{
-				GlobalMessages.addMessage(model, "accErrorMsgs", "cart.cmirinactive", new Object[]
-				{ productWithCmirInActive });
-				//return FORWARD_PREFIX + "/cart";
-			}
-
 		}
 
 		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
@@ -536,8 +529,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody
-	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{
@@ -559,9 +551,17 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		return shipmentMap;
 	}
 
-	private String validateAndGetString(final Cell cell)
+private String validateAndGetString(final Cell cell)
 	{
-		return cell == null ? null : StringUtils.isBlank(cell.toString()) ? null : cell.toString();
+		final DataFormatter formatter = new DataFormatter(Locale.US);
+		final org.apache.poi.ss.util.CellReference ref = new org.apache.poi.ss.util.CellReference(cell);
+		if (cell != null && !(StringUtils.isBlank(formatter.formatCellValue(cell))))
+		{
+			LOG.info("The value of " + ref.formatAsString() + " is " + formatter.formatCellValue(cell));
+		}
+
+		return cell == null ? null : StringUtils.isBlank(formatter.formatCellValue(cell)) ? null : formatter.formatCellValue(cell);
+
 	}
 
 
