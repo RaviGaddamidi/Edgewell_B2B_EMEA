@@ -58,7 +58,7 @@
 		<property name="floorSpaceCount" type="java.lang.Integer" />
 		<property name="isFloorSpaceFull" type="boolean" />
 		<property name="enableFloorSpaceGraphics" type="boolean" />
-		
+		<property name="floorSpaceProductsMap" type="java.util.Map&lt;java.lang.Integer,java.lang.Integer>" />
 		<property name="productsNotAddedToCart" type="java.util.Map&lt;String,java.lang.Integer>" />
 		<property name="productsNotDoubleStacked" type="java.util.Map&lt;String,java.util.List>" />
 	</bean>

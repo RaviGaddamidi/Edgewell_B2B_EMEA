@@ -413,7 +413,7 @@ public class CartPageController extends AbstractPageController
 		}
 
 		cartData.setBusinesRuleErrors(businessRuleErrors);
-
+		cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
 		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 
@@ -480,7 +480,7 @@ public class CartPageController extends AbstractPageController
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 		/*
 		 * final HashMap productList = energizerCartService.getProductNotAddedToCart();
-		 *
+		 * 
 		 * if (productList != null && productList.size() > 0) { final Set productNotAddedMapEntrySet =
 		 * productList.entrySet(); //doubleStackMapEntrySet.isEmpty() String tempList = "ERPMaterialID		:		Quantity";
 		 * GlobalMessages.addErrorMessage(model, tempList); businessRuleErrors.add(tempList); for (final Iterator iterator
@@ -503,13 +503,14 @@ public class CartPageController extends AbstractPageController
 		}
 		else
 		{
-
 			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
 		}
 
-
+		cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		//cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
 		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
+
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);
 		model.addAttribute("errorMessages", errorMessages);

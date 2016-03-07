@@ -145,36 +145,27 @@
 				
 					<cart:cartItems cartData="${cartData}" />
 			
-
-				<div class="clearfix fixthis_row_cls">
+			<div class="clearfix fixthis_row_cls">
 					<div class="span-16">
 					
 						<div class="cntutil_wrapper_cls">
 							 
 							
 				                      
-				                     <c:if test="${cartData.enableFloorSpaceGraphics}"> 	
-				                      <div id="floorSpace_cont">
-				                      		<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>  
-				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
-				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
-				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
-				                      </div>   
-							 	 </c:if>
-									   	<div id="volume_cont">
-									   	 <c:if test="${ not cartData.enableFloorSpaceGraphics}">
+				                  	<div id="volume_cont">
+									
 									   		<div class="divider_20"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div> 
-									   		</c:if> 
+									   		
 				                       	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
-				                        <div style="height: 69px;" id="volume_utilization"></div>                                                                           
+				                        <div style="height: 1px;" id="volume_utilization"></div>                                                                           
 				                    </div>                                                   
 														
 							
 									<div id="weight_cont">
 				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.totalProductWeightInPercent}</span>%</div>
 				                       <div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.weight"/></div>                                                                             
-				       				   <div style="height: 135px;" id="weight_utilization"></div>
+				       				   <div style="height: 1px;" id="weight_utilization"></div>
 				                    </div>
 						
 						</div>
@@ -192,10 +183,46 @@
 						<cart:cartTotals cartData="${cartData}" showTaxEstimate="true"/> 
 					</div>
 				</div>
+			
+
 				<div class="clearfix fixthis_row_cls">
-				<div style="font-weight: bold;font-size: 1.2em;"><span style="padding-left:180px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
-							 <div align="left" style="font-size:11px;color: blue; ">
-									<spring:theme code="basket.your.shopping.container.utilization1"/></div></div></div>
+					<div class="span-16">
+					
+						<div class="cntutil_wrapper_cls">
+							         <c:if test="${cartData.enableFloorSpaceGraphics}"> 	
+				                      <div id="floorSpace_cont">
+										<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>
+				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
+				                	   	<div id="cnt_floorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.floorSpaceProductsMap}</span></div>
+				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
+				                    	<div class="cnt_fs_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
+				                      </div>   
+							 	 </c:if>
+									   							
+						</div>
+						
+
+					</div>
+	
+				</div>
+				<div class="clearfix fixthis_row_cls">
+					<c:if test="${not cartData.enableFloorSpaceGraphics}"> 	
+						<div style="font-weight: bold;font-size: 1.2em;">
+							<span style="padding-left:135px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
+								<div align="left" style="font-size:11px;color: blue; ">
+									<spring:theme code="basket.your.shopping.container.utilization1"/>
+								</div>
+						</div>
+					</c:if>
+					<c:if test="${cartData.enableFloorSpaceGraphics}"> 	
+						<div style="font-weight: bold;font-size: 1.2em;">
+							<span style="padding-left:255px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
+								<div align="left" style="font-size:11px;color: blue; ">
+									<spring:theme code="basket.your.shopping.container.utilization1"/>
+								</div>
+						</div>
+					</c:if>
+				</div>
 				
 				
 		

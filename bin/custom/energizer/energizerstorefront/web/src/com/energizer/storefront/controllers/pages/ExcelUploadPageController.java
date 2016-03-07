@@ -76,7 +76,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- *
+ * 
  */
 
 @Controller
@@ -514,7 +514,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		contUtilForm.setContainerHeight(containerHeight);
 		contUtilForm.setPackingType(packingOption);
-
+		cartDataUpdationforContainer.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
 		cartDataUpdationforContainer.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartDataUpdationforContainer.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 
@@ -545,7 +545,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody
+	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{

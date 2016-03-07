@@ -25,5 +25,5 @@ public interface EnergizerCartService
 
 	public HashMap getProductsNotDoublestacked();
 
-
+	public HashMap getFloorSpaceProductsMap();
 }
