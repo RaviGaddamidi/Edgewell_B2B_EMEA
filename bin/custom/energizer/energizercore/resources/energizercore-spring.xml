@@ -696,8 +696,7 @@
 	<bean id="energizerCustomerUsersListJob" class="com.energizer.core.datafeed.EnergizerCustomerUsersListJob"
 		autowire="byName" />
 		
-	<bean id="energizerProductDimensionCSVProcessor" class="com.energizer.core.datafeed.processor.product.EnergizerProductDimensionCSVProcessor"
-		autowire="byName" />	
+		
 	<!-- ******** End Energizer Product data related Processor ********** -->
 
 	<!-- ******** Start Energizer Order data related Processor ********** -->
