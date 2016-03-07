@@ -47,6 +47,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -199,12 +200,13 @@ public class CartPageController extends AbstractPageController
 	@RequestMapping(method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
-			throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request,
+			final HttpSession session) throws CMSItemNotFoundException
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
+
 
 		if (bindingErrors.hasErrors())
 		{
@@ -232,7 +234,8 @@ public class CartPageController extends AbstractPageController
 		cartEntryBusinessRulesService.clearErrors();
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
-
+		session.setAttribute("containerHeight", containerUtilizationForm.getContainerHeight());
+		session.setAttribute("packingOption", containerUtilizationForm.getPackingType());
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);

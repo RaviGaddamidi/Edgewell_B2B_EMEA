@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,7 +77,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- * 
+ *
  */
 
 @Controller
@@ -305,8 +306,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = "/addtocart", method = RequestMethod.POST)
 	@RequireHardLogIn
-	public String addtocart(@ModelAttribute("excelUploadForm") final ExcelUploadForm excelUploadForm, final Model model)
-			throws CMSItemNotFoundException
+	public String addtocart(@ModelAttribute("excelUploadForm") final ExcelUploadForm excelUploadForm, final Model model,
+			final HttpSession session) throws CMSItemNotFoundException
 	{
 
 		final String shipmentPoint = excelUploadForm.getShippingPoint();
@@ -397,6 +398,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			}
 		}
 
+		if (session.getAttribute("containerHeight") != null && session.getAttribute("packingOption") != null)
+		{
+			contUtilForm.setContainerHeight((String) session.getAttribute("containerHeight"));
+			contUtilForm.setPackingType((String) session.getAttribute("packingOption"));
+		}
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
@@ -545,8 +551,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody
-	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{

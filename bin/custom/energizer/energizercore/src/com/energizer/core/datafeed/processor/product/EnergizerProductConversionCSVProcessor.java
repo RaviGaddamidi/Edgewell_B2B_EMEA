@@ -170,6 +170,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		catch (final Exception e)
 		{
 			LOG.error("Error ---- " + e);
+
 		}
 		getTechnicalFeedErrors().addAll(techFeedErrorRecords);
 		getBusinessFeedErrors().addAll(businessFeedErrorRecords);
@@ -267,12 +268,17 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 			}
 			if (conversionModel.getAlternateUOM().equals("PAL"))
 			{
-			    LOG.info("Uom: " + conversionModel.getAlternateUOM());
+				LOG.info("Uom: " + conversionModel.getAlternateUOM());
 				packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim())
 						- reducedHeightInInches);
-				packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
+
+			}
+			else
+			{
+				packageHeightMetric.setMeasurement(Double.parseDouble(csvValuesMap.get(EnergizerCoreConstants.HEIGHT).trim()));
 			}
 
+			packageHeightMetric.setMeasuringUnits(csvValuesMap.get(EnergizerCoreConstants.UNIT).trim());
 			conversionModel.setPackageHeight(packageHeightMetric);
 
 		}
