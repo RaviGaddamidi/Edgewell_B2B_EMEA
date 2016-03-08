@@ -25,7 +25,7 @@ import com.energizer.services.product.dao.EnergizerProductDAO;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  */
 public class DefaultEnergizerProductService implements EnergizerProductService
 {
@@ -37,7 +37,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerCMIR(java.lang.String)
 	 */
 	@Override
@@ -60,7 +60,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/**
 	 * @param shippingPointId
-	 *
+	 * 
 	 */
 	public String getShippingPointName(final String shippingPointId)
 	{
@@ -81,7 +81,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerCMIR(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -110,7 +110,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.service.EnergizerProductService#getEnergizerProductConversion(java.lang.String)
 	 */
 	@Override
@@ -160,7 +160,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.services.product.EnergizerProductService#getEnergizerCMIRforCustomerMaterialID(java.lang.String,
 	 * java.lang.String)
@@ -194,10 +194,11 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	}
 
-	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(final String erpMaterialId, final String customerMaterialId)
+	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(final String erpMaterialId, final String customerMaterialId,
+			final String b2bUnitId)
 	{
 		final List<EnergizerCMIRModel> result = energizerProductDAO.getEnergizerCMIRListForMatIdAndCustId(erpMaterialId,
-				customerMaterialId);
+				customerMaterialId, b2bUnitId);
 
 		/*
 		 * if (result.isEmpty()) { throw new UnknownIdentifierException("EnergizerCMIR  code '" + erpMaterialId +
@@ -218,7 +219,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerCMIRList(java.lang.String)
 	 */
 	@Override
@@ -232,7 +233,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerOrphanedProductList()
 	 */
 	@Override
@@ -245,7 +246,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -258,7 +259,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.EnergizerProductService#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -292,7 +293,7 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 
 
 	}
-	
+
 	@Override
 	public EnergizerProductModel getProductWithCode(final String code)
 	{

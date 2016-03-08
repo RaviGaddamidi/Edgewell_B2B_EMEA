@@ -22,7 +22,7 @@ import com.energizer.services.product.dao.EnergizerProductDAO;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  *         anitha.shastry added method getOrphanedProductList()
  */
 public class DefaultEnergizerProductDAO implements EnergizerProductDAO
@@ -33,7 +33,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getMoq()
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getEnergizerCMIRList(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -98,7 +98,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.product.dao.EnergizerProductDAO#getEnergizerProductConversionLst(java.lang.String)
 	 */
 	@Override
@@ -120,7 +120,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerCMIRListForCustomerMaterialID(java.lang.String,
 	 * java.lang.String)
@@ -146,17 +146,26 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	@Override
 	public List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(final String erpMaterialId,
-			final String customerMaterialID)
+			final String customerMaterialID, final String b2bUnitId)
 	{
 
-		final String queryString = "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from  "
-				+ " {EnergizerCMIR as C   " + " JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId}  "
-				+ " AND {C:customerMaterialId}= ?customerMaterialId " + "AND {C:ERPMaterialId}= ?erpMaterialId" + " }   ";
+		/*
+		 * final String queryString =
+		 * "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from  " +
+		 * " {EnergizerCMIR as C   " + " JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId}  " +
+		 * " AND {C:customerMaterialId}= ?customerMaterialId " + "AND {C:ERPMaterialId}= ?erpMaterialId" + " WHERE {eu:" +
+		 * EnergizerB2BUnitModel.UID + "}=?energizerB2BUnitModel" + "}";
+		 */
+
+		final String queryString = "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from "
+				+ " {EnergizerCMIR as C JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId} JOIN EnergizerB2BUnit as B ON {C:b2bUnit}={B:pk}}"
+				+ " where {C.CUSTOMERMATERIALID} =?customerMaterialId AND {C.ERPMATERIALID}=?erpMaterialId AND {B.UID}=?b2bUnitId";
 
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
 
 		query.addQueryParameter("erpMaterialId", erpMaterialId);
 		query.addQueryParameter("customerMaterialId", customerMaterialID);
+		query.addQueryParameter("b2bUnitId", b2bUnitId);
 
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
@@ -165,7 +174,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerOrphanedProductList()
 	 */
 	@Override
@@ -183,7 +192,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerPriceRowForB2BUnit(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -265,7 +274,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerERPMaterialIDList()
 	 */
 	@Override
@@ -284,7 +293,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		return flexibleSearchService.<EnergizerProductModel> search(query).getResult();
 
 	}
-	
+
 	@Override
 	public EnergizerProductModel getProductWithCode(final String code)
 	{

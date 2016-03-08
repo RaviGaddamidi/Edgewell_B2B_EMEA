@@ -14,11 +14,11 @@ import com.energizer.core.model.EnergizerShippingPointModel;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  *         anitha.shastry added method getOrphanedProductList()
- *
+ * 
  *         anitha.shastry added method getEnergizerProductListForSapCatgy()
- *
+ * 
  */
 public interface EnergizerProductDAO
 {
@@ -32,7 +32,8 @@ public interface EnergizerProductDAO
 
 	List<EnergizerCMIRModel> getEnergizerCMIRListForCustomerMaterialID(String customerMaterialID, String b2bUnitId);
 
-	List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(String erpMaterialID, String customerMaterialID);
+	List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(String erpMaterialID, String customerMaterialID,
+			String b2bUnitId);
 
 	List<EnergizerProductModel> getEnergizerOrphanedProductList();
 
@@ -47,7 +48,7 @@ public interface EnergizerProductDAO
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
 	List<EnergizerProductModel> getEnergizerERPMaterialIDList();
-	
+
 	public EnergizerProductModel getProductWithCode(final String code);
 
 

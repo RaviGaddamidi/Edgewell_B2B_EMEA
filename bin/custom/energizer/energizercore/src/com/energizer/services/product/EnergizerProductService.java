@@ -13,7 +13,7 @@ import com.energizer.core.model.EnergizerProductModel;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  */
 public interface EnergizerProductService
 {
@@ -28,7 +28,8 @@ public interface EnergizerProductService
 
 	public EnergizerCMIRModel getEnergizerCMIRforCustomerMaterialID(String customerMaterialId, String b2bUnitId);
 
-	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(String erpMaterialId, String customerMaterialId);
+	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(String erpMaterialId, String customerMaterialId,
+			String b2bUnitId);
 
 	public List<EnergizerProductModel> getEnergizerOrphanedProductList();
 
@@ -45,6 +46,6 @@ public interface EnergizerProductService
 	public List<EnergizerProductConversionFactorModel> getAllEnergizerProductConversion(final String erpMaterialId);
 
 	public List<EnergizerProductModel> getEnergizerERPMaterialID();
-	
+
 	public EnergizerProductModel getProductWithCode(final String code);
 }
