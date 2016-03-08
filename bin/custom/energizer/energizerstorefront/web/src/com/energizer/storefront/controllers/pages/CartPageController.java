@@ -234,8 +234,7 @@ public class CartPageController extends AbstractPageController
 		cartEntryBusinessRulesService.clearErrors();
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
-		session.setAttribute("containerHeight", containerUtilizationForm.getContainerHeight());
-		session.setAttribute("packingOption", containerUtilizationForm.getPackingType());
+		session.setAttribute("enableButton", enableButton);
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
@@ -321,12 +320,16 @@ public class CartPageController extends AbstractPageController
 	@RequireHardLogIn
 	public CartData updateCartQuantities(@RequestParam("entryNumber") final Integer entryNumber,
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
-			final BindingResult bindingErrors) throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final HttpSession session) throws CMSItemNotFoundException
 	{
 		//boolean errorMessages = false;
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		//	final boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		if (session.getAttribute("enableButton") != null)
+		{
+			enableButton = (boolean) session.getAttribute("enableButton");
+		}
 
 		if (bindingErrors.hasErrors())
 		{

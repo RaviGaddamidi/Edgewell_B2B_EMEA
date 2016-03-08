@@ -398,11 +398,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 			}
 		}
 
-		if (session.getAttribute("containerHeight") != null && session.getAttribute("packingOption") != null)
-		{
-			contUtilForm.setContainerHeight((String) session.getAttribute("containerHeight"));
-			contUtilForm.setPackingType((String) session.getAttribute("packingOption"));
-		}
+		/*
+		 * if (session.getAttribute("containerHeight") != null && session.getAttribute("packingOption") != null) {
+		 * contUtilForm.setContainerHeight((String) session.getAttribute("containerHeight"));
+		 * contUtilForm.setPackingType((String) session.getAttribute("packingOption")); }
+		 */
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
@@ -411,6 +411,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		if (b2bUnit.getEnableContainerOptimization() == false)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
+		else if (session.getAttribute("enableButton") != null)
+		{
+			enableButton = (boolean) session.getAttribute("enableButton");
 		}
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
@@ -594,8 +598,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 	@RequestMapping(value = CART, method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updateContainerUtil(@Valid final ContainerUtilizationForm containerUtilizationForm, final Model model,
-			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request)
-			throws CMSItemNotFoundException
+			final BindingResult bindingErrors, final RedirectAttributes redirectAttributes, final HttpServletRequest request,
+			final HttpSession session) throws CMSItemNotFoundException
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
@@ -605,7 +609,6 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		{
 			LOG.info("Enable radio button :");
 			enableButton = true;
-
 		}
 
 		if (str != null && str.equals("No"))
@@ -622,6 +625,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
+		session.setAttribute("enableButton", enableButton);
+
 
 		prepareDataForPage(model);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
