@@ -84,19 +84,24 @@ function renderFloorSpaceBlock(){
       
       var separator = "<hr id='block_separator' style='border: 0 none; border-top: 2px dashed #322f32; background: none; height:0; position: absolute;z-index: 1; margin: 0;padding: 0;top: 50%;width: 100%; '/>";
       var parentBlockDiv = "<div id='blockDivParent' style='width: 100%; height: 100%; position; relative;'>"+separator+"</div>";
+      var countDivParent = "<div id='blockCountParent' style='width: 100%; position: relative;'></div>"
       $("#floorSpace_cont").prepend(parentBlockDiv);
+      
+	  $("#blockDivParent").after(countDivParent);
+	  console.log($("#blockDivParent"));
+      
       var isFloorSpaceFull = $("#floorSpaceFull").text();
      // alert("Check"+isFloorSpaceFull);
       for(var bCount=1; bCount<=totalBlock; bCount++){
             var blockBGColor = ""; 
             var blockDiv = "";
-            
+            var countDivChild = "<div class='blockCountChild' style='width:"+individualBlockWidth+"px; text-align: center; top: 2px;float: left;'>"+bCount+"</div>";
             if(isFloorSpaceFull == 'true'){
                   blockBGColor = "rgb(255, 87, 87)";
                   blockDiv = '<div style="height: 100%; border-bottom: 1px solid #000000; background-color: '+blockBGColor+'; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;"></div>';
             }else if(bCount<=usedBlock){            	
                   blockBGColor = "#33cc33";
-                  var tempVar = bCount;
+                  var tempVar = bCount;                  
                   var innerBlockCount = parseInt(((floorSpaceMap[--tempVar]).split("="))[1]);
                   try{
                   blockDiv = '<div style="height: 100%; border-bottom: 1px solid #000000; background-color: transparent; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;">'+createInnerBlock(innerBlockCount,blockBGColor, totalHeight)+'</div>';
@@ -104,9 +109,10 @@ function renderFloorSpaceBlock(){
                 	  console.log("Err: "+e);
                   }
             }else{
-                  blockBGColor = "#ffd799";
+                  blockBGColor = "#ffd799";                  
                   blockDiv = '<div style="height: 100%; border-bottom: 1px solid #000000; background-color: '+blockBGColor+'; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;"></div>';
             }
+            $("#blockCountParent").append(countDivChild);
            /* var blockDiv = '<div style="height: '+individualBlockHeight+'px; border-top: 1px solid #000000; background-color: '+blockBGColor+'; width: 100%; position: absolute; bottom:'+bottomPosition+'px;"></div>';
             $("#floorSpace_cont").prepend(blockDiv);
             bottomPosition = bottomPosition + individualBlockHeight;

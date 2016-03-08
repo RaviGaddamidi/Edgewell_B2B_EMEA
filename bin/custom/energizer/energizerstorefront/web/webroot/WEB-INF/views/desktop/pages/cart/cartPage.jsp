@@ -215,7 +215,7 @@
 						</div>
 					</c:if>
 					<c:if test="${cartData.enableFloorSpaceGraphics}"> 	
-						<div style="font-weight: bold;font-size: 1.2em;">
+						<div style="padding-top:20px;font-weight: bold;font-size: 1.2em;">
 							<span style="padding-left:255px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
 								<div align="left" style="font-size:11px;color: blue; ">
 									<spring:theme code="basket.your.shopping.container.utilization1"/>
@@ -229,14 +229,6 @@
 			<!--   Start Code changes for order flag check  for continueShop button -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked }">
-					<!-- a class="button continueShop-button" disabled="disabled" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a-->
-					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
-				</c:when>
-				<c:when test="${not empty cartData.productsNotAddedToCart }">
-					<!-- a class="button continueShop-button" disabled="disabled" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a-->
-					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
-				</c:when>
-				<c:when test="${cartData.isFloorSpaceFull }">
 					<!-- a class="button continueShop-button" disabled="disabled" style="height: 30px;padding-top: 8px;font-size: 140%;margin-top: 20px;border-color: #169e08;" href="${continueShoppingUrl}"><spring:theme text="Continue Shopping" code="cart.page.continue"/></a-->
 					<button id ="continueButton_bottom" class="checkoutButton positive left" type="button" data-checkout-url="${continueShoppingUrl}" disabled="disabled"><spring:theme text="Continue Shopping" code="cart.page.continue"/></button>
 				</c:when>
