@@ -28,7 +28,7 @@ public interface EnergizerProductService
 
 	public EnergizerCMIRModel getEnergizerCMIRforCustomerMaterialID(String customerMaterialId, String b2bUnitId);
 
-	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(String erpMaterialId, String customerMaterialId);
+	public EnergizerCMIRModel getEnergizerCMIRListForMatIdAndCustId(String erpMaterialId, String customerMaterialId, String b2bUnitId);
 
 	public List<EnergizerProductModel> getEnergizerOrphanedProductList();
 
