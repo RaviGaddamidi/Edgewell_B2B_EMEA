@@ -159,13 +159,13 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 		final String queryString = "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from "
 				+ " {EnergizerCMIR as C JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId} JOIN EnergizerB2BUnit as B ON {C:b2bUnit}={B:pk}}"
-				+ " where {C.CUSTOMERMATERIALID} =?customerMaterialId AND {C.ERPMATERIALID}=?erpMaterialId AND {B.UID}=?b2bUnitId";
+				+ " where {C.CUSTOMERMATERIALID} =?customerMaterialId AND {C.ERPMATERIALID}=?erpMaterialId ";
 
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
 
 		query.addQueryParameter("erpMaterialId", erpMaterialId);
 		query.addQueryParameter("customerMaterialId", customerMaterialID);
-		query.addQueryParameter("b2bUnitId", b2bUnitId);
+		//query.addQueryParameter("b2bUnitId", b2bUnitId);
 
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
