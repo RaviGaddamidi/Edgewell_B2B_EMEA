@@ -980,9 +980,9 @@ function isDate(txtDate)
        return false;
 
    //Checks for mm/dd/yyyy format.
-   dtMonth = dtArray[1];
-   dtDay= dtArray[3];
-   dtYear = dtArray[5];
+	dtMonth = parseInt(dtArray[1],10);
+	dtDay= parseInt(dtArray[3],10);
+	dtYear = parseInt(dtArray[5],10);
   
 
    if (dtMonth < 1 || dtMonth > 12) {
@@ -1002,13 +1002,13 @@ function isDate(txtDate)
                return false;
    }
    var preDtArray = prepopulatedDate.match(rxDatePattern);
-   preDtMonth = preDtArray[1];
-      preDtDay = preDtArray[3];
-      preDtYear = preDtArray[5];
+	preDtMonth = parseInt(preDtArray[1],10);
+    preDtDay = parseInt(preDtArray[3],10);
+    preDtYear = parseInt(preDtArray[5],10);
       
       if( dtMonth < preDtMonth){
     	
-    	  if(dtYear <= preDtYear && dtDay <= preDtDay){
+    	  if(dtYear <= preDtYear){
     		  
     		  return false;
     	  }

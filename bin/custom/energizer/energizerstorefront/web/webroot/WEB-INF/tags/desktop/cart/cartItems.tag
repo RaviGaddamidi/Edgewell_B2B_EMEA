@@ -39,7 +39,7 @@
 				<th id="header8"><spring:theme code="basket.page.unitPrice" /></th>
 				<th id="header9"><spring:theme code="basket.page.quantity" /></th>
 				<th id="header10"><spring:theme code="basket.page.total" /></th>
-				<c:if test="${enableButton}">
+				<c:if test="${enableButton &&  cartData.enableFloorSpaceGraphics}">
 				<th id="header11"><spring:theme
 						code="basket.page.doubleStackProduct" /></th>
 						</c:if>
@@ -199,7 +199,7 @@
 								displayFreeForZero="true" />
 						</ycommerce:testId></td>
 
-                 <c:if test="${enableButton}">
+                 <c:if test="${enableButton && cartData.enableFloorSpaceGraphics}">
 					<td headers="header11" class="doubleStackProduct">
 					<c:set var="erpMaterialId" value="${entry.product.erpMaterialID}"> </c:set>
 					
