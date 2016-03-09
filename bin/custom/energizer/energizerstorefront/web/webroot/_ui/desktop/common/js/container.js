@@ -83,12 +83,13 @@ function renderFloorSpaceBlock(){
       var leftPosition = 0;
       
       var separator = "<hr id='block_separator' style='border: 0 none; border-top: 2px dashed #322f32; background: none; height:0; position: absolute;z-index: 1; margin: 0;padding: 0;top: 50%;width: 100%; '/>";
-      var parentBlockDiv = "<div id='blockDivParent' style='width: 100%; height: 100%; position; relative;'>"+separator+"</div>";
+      var parentBlockDiv = "<div id='blockDivMain'  style='width: 100%; height: 100%; position; relative;'><div id='blockDivParent' style='width: 100%; height: 100%; position; relative;'>"+separator+"</div></div>";
       var countDivParent = "<div id='blockCountParent' style='width: 100%; position: relative;'></div>"
       $("#floorSpace_cont").prepend(parentBlockDiv);
       
-	  $("#blockDivParent").after(countDivParent);
-	  console.log($("#blockDivParent"));
+      var stackDiv = "<div id='stackMain' style='position: absolute; height: 150px; right: -70px; top: 0px;'><div class='stackName' style='height: 50%;'><span style='display: block; padding-top: 35px;'>2nd Stack</span></div><div class='stackName' style='height: 50%;'><span  style='display: block; padding-top: 35px;'>1st Stack</span></div></div>";
+	  $("#blockDivMain").after(countDivParent);
+      $("#blockDivMain").append(stackDiv);
       
       var isFloorSpaceFull = $("#floorSpaceFull").text();
      // alert("Check"+isFloorSpaceFull);
@@ -120,6 +121,7 @@ function renderFloorSpaceBlock(){
             
             $("#blockDivParent").append(blockDiv);
             leftPosition = leftPosition + individualBlockWidth;      
+       
       }
 }
 
