@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.core.datafeed.processor.product;
 
@@ -35,15 +35,15 @@ import com.energizer.core.model.EnergizerProductModel;
 
 
 /**
- * 
+ *
  * This processors imports the CMIR
- * 
+ *
  * Sample file will look like
- * 
+ *
  * EnergizerAccountID,ERPMaterialID,CustomerMaterialID,Language,CustomerMaterial Description,MaterialList
  * price,CustomerListPrice,CustomerListprice currency,ShipmentPointNumber 1000, 10, 10, EN, tanning creme spf2 6 oz
  * 4/3s,21, 12, USD, 712
- * 
+ *
  * Total column count : 9
  */
 public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -101,9 +101,9 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				final Map<String, String> csvValuesMap = record.toMap();
 
 				//if any field empty --- don't process record
-				//if cmir price empty --- trigger email, chk if list price is also empty....if empty --- trigger email, don't process record if both empty				
+				//if cmir price empty --- trigger email, chk if list price is also empty....if empty --- trigger email, don't process record if both empty
 				final EnergizerCSVFeedError error = new EnergizerCSVFeedError();
-				;
+
 				if (validate(record))
 				{
 					addErrors();
@@ -143,7 +143,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				if (energizerProduct == null)
 				{
 					LOG.error(erpMaterialId + " EnergizerProduct does  not exist ");
-					//TO DO log into EnergizerCSVFeedError...so that it can be mailed	
+					//TO DO log into EnergizerCSVFeedError...so that it can be mailed
 					continue;
 				}
 				else
@@ -253,7 +253,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 						priceRowModel.setCurrency(energizerB2BUnitModel.getCurrencyPreference());
 						priceRowModel.setPrice(Double.parseDouble(customerlistprice));
 						modelService.save(priceRowModel);
-						//priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));						
+						//priceRowModel.setUnit(defaultUnitService.getUnitForCode(UNIT));
 						energizerProduct.setEurope1Prices(tmpPriceRowModelList);
 						modelService.save(energizerProduct);
 					}//else
@@ -293,8 +293,26 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			throws Exception
 	{
 		energizerCMIRModel.setCustomerMaterialId(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID));
-		energizerCMIRModel.setCustomerMaterialDescription(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION),
-				new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE).toLowerCase()));
+		if (csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION) != null
+				&& !(csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION).isEmpty()))//if cust mat desc is in the feed then update that with the existing or new model
+
+		{
+
+			energizerCMIRModel.setCustomerMaterialDescription(
+					csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION),
+					new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE).toLowerCase()));
+			LOG.info("THE CUST-MAT-DESCRIPTION IS not empty for" + csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID));
+		}
+
+		else
+		//if cust mat desc not in the feed , Then empty cust-mat description is updated as empty space to avoid null in the existing model or new model.
+		{
+			energizerCMIRModel.setCustomerMaterialDescription(" ", new Locale(csvValuesMap.get(EnergizerCoreConstants.LANGUAGE)
+					.toLowerCase()));
+
+			LOG.info("THE CUST-MAT-DESCRIPTION IS empty for" + csvValuesMap.get(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID));
+		}
+
 		energizerCMIRModel.setShippingPoint(csvValuesMap.get(EnergizerCoreConstants.SHIPMENT_POINT_NO));
 		// Setting Default UOM  and  MOQ
 
@@ -339,12 +357,22 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			final String value = record.toMap().get(columnHeader);
 			//			CMIRPartnerID, , , MaterialList price,
+			/*
+			 * if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SHIPMENT_POINT_NO) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LANGUAGE) ||
+			 * columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION))
+			 */
+			//in the above check, customer material description is made non mandatory field.
+
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_ID)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.SHIPMENT_POINT_NO)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LANGUAGE)
-					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.CUSTOMER_MATERIAL_DESCRIPTION))
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LANGUAGE))
+
 			{
 				if (value.isEmpty())
 				{
@@ -443,7 +471,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	}
 
 	/**
-	 * 
+	 *
 	 * @param b2bUnitId
 	 * @return
 	 */

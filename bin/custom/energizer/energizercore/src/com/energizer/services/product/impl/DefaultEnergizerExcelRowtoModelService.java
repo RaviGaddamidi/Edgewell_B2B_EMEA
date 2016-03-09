@@ -45,8 +45,10 @@ public class DefaultEnergizerExcelRowtoModelService implements EnergizerExcelRow
 
 			if (energizerFileUploadModel.getMaterialId() != null && energizerFileUploadModel.getCustomerMaterialId() != null)
 			{
+				final EnergizerB2BUnitModel energizerB2BUnitModel = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
 				final EnergizerCMIRModel cmirModelforMatIdAndCustId = energizerProductService.getEnergizerCMIRListForMatIdAndCustId(
-						energizerFileUploadModel.getMaterialId(), energizerFileUploadModel.getCustomerMaterialId());
+						energizerFileUploadModel.getMaterialId(), energizerFileUploadModel.getCustomerMaterialId(),
+						energizerB2BUnitModel.getUid());
 				if (cmirModelforMatIdAndCustId != null && cmirModelforMatIdAndCustId.getIsActive() == true)
 				{
 					energizerFileUploadModel.setShippingPoint(cmirModelforMatIdAndCustId.getShippingPoint());

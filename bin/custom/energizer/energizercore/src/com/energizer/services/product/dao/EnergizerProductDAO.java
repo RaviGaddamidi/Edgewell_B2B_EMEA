@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.services.product.dao;
 
@@ -32,7 +32,8 @@ public interface EnergizerProductDAO
 
 	List<EnergizerCMIRModel> getEnergizerCMIRListForCustomerMaterialID(String customerMaterialID, String b2bUnitId);
 
-	List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(String erpMaterialID, String customerMaterialID);
+	List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(String erpMaterialID, String customerMaterialID,
+			String b2bUnitId);
 
 	List<EnergizerProductModel> getEnergizerOrphanedProductList();
 
@@ -41,12 +42,14 @@ public interface EnergizerProductDAO
 	List<EnergizerProductModel> getEnergizerProductListForSapCatgy(String sapCatgyCode);
 
 	List<EnergizerShippingPointModel> getShippingPointName(final String shippingPointId);
-	
+
 	List<EnergizerCMIRModel> getAllEnergizerCMIRList();
 
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId);
 
+	List<EnergizerProductModel> getEnergizerERPMaterialIDList();
 
+	public EnergizerProductModel getProductWithCode(final String code);
 
 
 }

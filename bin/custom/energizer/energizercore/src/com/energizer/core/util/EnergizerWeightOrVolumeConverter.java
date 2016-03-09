@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class EnergizerWeightOrVolumeConverter
 {
 	/**
-	 * Cubic cm - CCM = 0.0000001 M3, Meter cube - M3 = 1 M3. Cubic decimeter - CD3 = 0.001 M3, HectoLitre - HL = 0.1 M3,
+	 * Cubic cm - CCM = 0.000001 M3, Meter cube - M3 = 1 M3. Cubic decimeter - CD3 = 0.001 M3, HectoLitre - HL = 0.1 M3,
 	 * Cubic ft - FT3 = 0.0283168 M3
 	 * 
 	 * KG = 1KG, G = 0.001 KG, LB = 0.453592 KG
@@ -84,7 +84,7 @@ public class EnergizerWeightOrVolumeConverter
 
 	private static BigDecimal convertCubicCMtoMeterCube(final BigDecimal CubicCM)
 	{
-		final BigDecimal valueInMeterCube = CubicCM.multiply(new BigDecimal(0.0000001));
+		final BigDecimal valueInMeterCube = CubicCM.multiply(new BigDecimal(0.000001));
 		return valueInMeterCube;
 
 	}

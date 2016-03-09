@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.services.product.dao.impl;
 
@@ -146,17 +146,26 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 
 	@Override
 	public List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(final String erpMaterialId,
-			final String customerMaterialID)
+			final String customerMaterialID, final String b2bUnitId)
 	{
 
-		final String queryString = "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from  "
-				+ " {EnergizerCMIR as C   " + " JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId}  "
-				+ " AND {C:customerMaterialId}= ?customerMaterialId " + "AND {C:ERPMaterialId}= ?erpMaterialId" + " }   ";
+		/*
+		 * final String queryString =
+		 * "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from  " +
+		 * " {EnergizerCMIR as C   " + " JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId}  " +
+		 * " AND {C:customerMaterialId}= ?customerMaterialId " + "AND {C:ERPMaterialId}= ?erpMaterialId" + " WHERE {eu:" +
+		 * EnergizerB2BUnitModel.UID + "}=?energizerB2BUnitModel" + "}";
+		 */
+
+		final String queryString = "SELECT {C.PK},{C.ERPMATERIALID},{C.CUSTOMERMATERIALID},{C.SHIPPINGPOINT}, {C.UOM} from "
+				+ " {EnergizerCMIR as C JOIN EnergizerProduct as P ON {P:code}={C:ERPMaterialId} JOIN EnergizerB2BUnit as B ON {C:b2bUnit}={B:pk}}"
+				+ " where {C.CUSTOMERMATERIALID} =?customerMaterialId AND {C.ERPMATERIALID}=?erpMaterialId AND {B.UID}=?b2bUnitId";
 
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
 
 		query.addQueryParameter("erpMaterialId", erpMaterialId);
 		query.addQueryParameter("customerMaterialId", customerMaterialID);
+		query.addQueryParameter("b2bUnitId", b2bUnitId);
 
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
@@ -232,7 +241,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		return flexibleSearchService.<EnergizerShippingPointModel> search(retreiveQuery).getResult();
 
 	}
-	
+
 	@Override
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList()
 	{
@@ -243,7 +252,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(querystring);
 		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
 	}
-	
+
 	@Override
 	public List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId)
 	{
@@ -258,6 +267,43 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 		query.addQueryParameter("b2bUnitId", b2bUnitId);
 
 		return flexibleSearchService.<EnergizerPriceRowModel> search(query).getResult();
+
+	}
+
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.services.product.dao.EnergizerProductDAO#getEnergizerERPMaterialIDList()
+	 */
+	@Override
+	public List<EnergizerProductModel> getEnergizerERPMaterialIDList()
+	{
+		//final String queryString = "select * from {EnergizerProduct as enrproduct}";
+
+		final String queryString = //
+		"SELECT {p:" + EnergizerProductModel.PK + "}" //
+				+ "FROM {" + EnergizerProductModel._TYPECODE + " AS p}";
+
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString); //
+
+		System.out.println(" Query results: " + flexibleSearchService.<EnergizerProductModel> search(query).getResult());
+
+		return flexibleSearchService.<EnergizerProductModel> search(query).getResult();
+
+	}
+
+	@Override
+	public EnergizerProductModel getProductWithCode(final String code)
+	{
+		// YTODO Auto-generated method stub
+		final String queryString = "select {product.PK} from " + "{EnergizerProduct as product}" + " WHERE"
+				+ " {product.code}=?code ";
+
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
+		query.addQueryParameter("code", code);
+		return flexibleSearchService.<EnergizerProductModel> search(query).getResult().get(0);
 
 	}
 
