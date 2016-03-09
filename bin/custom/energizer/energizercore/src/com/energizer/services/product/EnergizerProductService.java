@@ -41,5 +41,7 @@ public interface EnergizerProductService
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList();
 	
 	List<EnergizerPriceRowModel> getAllEnergizerPriceRowForB2BUnit(final String erpMaterialID, final String b2bUnitId);
+	
+	public EnergizerProductModel getProductWithCode(final String code);
 
 }
