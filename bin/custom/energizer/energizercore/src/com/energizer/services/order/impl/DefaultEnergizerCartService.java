@@ -195,10 +195,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			//cartData.setTotalProductVolumeInPercent(100.00);
 			if (volume > 100 && palletCount > totalPalletsCount)
 			{
-				message
-						.add("Dear Customer, your order will not fit in one container. You can order maximum "
-								+ totalPalletsCount
-								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+				message.add("" + totalPalletsCount + "");
 
 				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);
@@ -213,10 +210,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			else if (palletCount > totalPalletsCount)
 			{
-				message
-						.add("Dear Customer, your order will not fit in one container. You can order maximum "
-								+ totalPalletsCount
-								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+				message.add("" + totalPalletsCount + "");
 
 				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);

@@ -77,7 +77,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- * 
+ *
  */
 
 @Controller
@@ -499,8 +499,15 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		{
 			for (final String messages : message)
 			{
-
-				GlobalMessages.addErrorMessage(model, messages);
+				if (messages.equals("20") || messages.equals("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ messages });
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, messages);
+				}
 			}
 			errorMessages = true;
 		}
@@ -557,8 +564,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody
-	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{

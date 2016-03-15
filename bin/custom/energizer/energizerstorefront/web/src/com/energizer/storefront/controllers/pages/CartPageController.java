@@ -417,7 +417,15 @@ public class CartPageController extends AbstractPageController
 		{
 			for (final String messages : message)
 			{
-				GlobalMessages.addErrorMessage(model, messages);
+				if (messages.equals("20") || messages.equals("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ messages });
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, messages);
+				}
 				businessRuleErrors.add(messages);
 			}
 		}
@@ -482,7 +490,16 @@ public class CartPageController extends AbstractPageController
 		{
 			for (final String messages : message)
 			{
-				GlobalMessages.addErrorMessage(model, messages);
+
+				if (messages.equals("20") || messages.equals("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ messages });
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, messages);
+				}
 				businessRuleErrors.add(messages);
 			}
 			errorMessages = true;
