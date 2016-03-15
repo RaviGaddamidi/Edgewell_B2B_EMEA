@@ -499,7 +499,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		{
 			for (final String messages : message)
 			{
-				if (messages.equals("20") || messages.equals("40"))
+				if (messages.contains("20") || messages.contains("40"))
 				{
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
 					{ messages });
