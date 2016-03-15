@@ -28,7 +28,36 @@ body, table {font:10pt verdana;}
 .fixthis_row_cls{padding-bottom:45px;}
 .cnt_fs_utllbl_cls{position:relative;top:10px;text-align:center;}
 
+
+
 #floorSpace_cont .cnt_utllbl_cls{ top: 317px;}
 /*.cnt_utl_cls{
 	text-transform: uppercase;
 }*/
+
+
+.spinnerDiv{
+	width: 100%;
+	height: 100%;
+	background-color: #ffffff;
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 200;
+	right: 0;
+	display: none;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	-moz-opacity:0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+}
+
+.spinnerDiv .spinnerImg{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -50px;
+	margin-left:  -100px;
+}

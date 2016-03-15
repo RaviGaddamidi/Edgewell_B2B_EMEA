@@ -77,7 +77,7 @@ import com.energizer.storefront.forms.UpdateQuantityForm;
 
 /**
  * @author M9005674
- *
+ * 
  */
 
 @Controller
@@ -428,10 +428,12 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		final String continueUrl = (String) getSessionService().getAttribute(WebConstants.CONTINUE_URL);
 		model.addAttribute(CONTINUE_URL, (continueUrl != null && !continueUrl.isEmpty()) ? continueUrl : ROOT);
 
-		final CartRestorationData restorationData = (CartRestorationData) sessionService
-				.getAttribute(WebConstants.CART_RESTORATION);
-		model.addAttribute("restorationData", restorationData);
-
+		if (sessionService.getAttribute(WebConstants.CART_RESTORATION) instanceof CartRestorationData)
+		{
+			final CartRestorationData restorationData = (CartRestorationData) sessionService
+					.getAttribute(WebConstants.CART_RESTORATION);
+			model.addAttribute("restorationData", restorationData);
+		}
 		createProductList(model);
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
 		model.addAttribute("pageType", PageType.CART.name());
@@ -555,7 +557,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = EXCEL_ORDER_AJAX_CALL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
+	public @ResponseBody
+	Map<String, List<EnergizerFileUploadData>> excelUploadQuantityUpdate(final Model model,
 			@RequestParam("quantity") final Long quantity, @RequestParam("erpMaterialCode") final String erpMaterialCode)
 			throws CMSItemNotFoundException
 	{

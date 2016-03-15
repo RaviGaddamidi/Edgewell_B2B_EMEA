@@ -40,7 +40,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  */
 public class DefaultEnergizerCartService implements EnergizerCartService
 {
@@ -147,7 +147,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		double availableHeight = 0;
 		double volumeOfNonPalletProducts = 0;
 		double weightOfNonPalletProducts = 0;
-		double filledFloorSpaceCount = 0;
+		final double filledFloorSpaceCount = 0;
 		int floorSpaceCount = 0;
 		double volume = 0;
 		double weight = 0;
@@ -188,16 +188,30 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		if (volume > 100 || palletCount > totalPalletsCount)
 		{
+			floorSpaceCount = totalPalletsCount / 2;
 			//Display an error message "Reduce the products in the cart"
 			LOG.info("Either volume is greater than 100 or pallet count is greater than" + totalPalletsCount);
-			message
-					.add("Dear Customer, your order will not fit in one container. You can order maximum "
-							+ totalPalletsCount
-							+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+
 			//cartData.setTotalProductVolumeInPercent(100.00);
-			availableVolume = 0;
-			floorSpaceCount = totalPalletsCount / 2;
-			cartData.setIsFloorSpaceFull(true);
+
+			if (volume > 100)
+			{
+				cartData.setTotalProductVolumeInPercent(volume);
+				cartData.setTotalProductWeightInPercent(weight);
+				cartData.setIsContainerFull(true);
+			}
+
+			if (palletCount > totalPalletsCount)
+			{
+				message
+						.add("Dear Customer, your order will not fit in one container. You can order maximum "
+								+ totalPalletsCount
+								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+
+				availableVolume = 0;
+				cartData.setIsFloorSpaceFull(true);
+
+			}
 		}
 		else
 		{
@@ -365,6 +379,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			LOG.info("FloorSpace count: " + floorSpaceCount);
 			LOG.info(" Available Height: " + availableHeight);
 			LOG.info(" After filling container Available Volume: " + availableVolume);
+
+			availableWeight = availableWeight
+					- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
+
+			cartData.setFloorSpaceCount(floorSpaceCount);
+			cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
+			cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
+
 		}
 
 		LOG.info("******************************** Possible Double Stacked Products *******************************");
@@ -394,27 +416,16 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		LOG.info("*********************** End *******************************************8");
 
-		availableWeight = availableWeight
-				- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
 
-
-		filledFloorSpaceCount = Math.round(totalPalletsCount / 2);
-		filledFloorSpaceCount = Math.round(floorSpaceCount / filledFloorSpaceCount);
-		filledFloorSpaceCount = Math.round(filledFloorSpaceCount * 10);
-
-		cartData.setFloorSpaceCount(floorSpaceCount);
-		//cartData.setFloorSpaceProductsMap(floorSpaceProductMap);
-		cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
-		cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 		return cartData;
 	}
 
 	/**
 	 * As discussed with Kalyan, we need to show height in cms only 1 inch = 2.54cms Need to store the values in
 	 * local.properties file.
-	 *
+	 * 
 	 * 20ft container - 10 floorSpaceCount 40ft container - 20 floorSpaceCount
-	 *
+	 * 
 	 */
 	public double getAvailableHeight(final String packingOption, final String containerHeight)
 	{
@@ -448,7 +459,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 	/**
-	 *
+	 * 
 	 * @param cartData
 	 * @return
 	 */
@@ -591,7 +602,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			BigDecimal totalCartWt = new BigDecimal(0);
 			/**
 			 * # Container volume in M3 and weight in KG ##########################################
-			 *
+			 * 
 			 * twenty.feet.container.volume=30.44056 twenty.feet.container.weight=15961.90248
 			 * fourty.feet.container.volume=70.62209 fourty.feet.container.weight=18234.3948
 			 */
@@ -699,7 +710,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	}
 
 	/**
-	 *
+	 * 
 	 * @param totalCartWt
 	 * @param totalCartVolume
 	 * @return

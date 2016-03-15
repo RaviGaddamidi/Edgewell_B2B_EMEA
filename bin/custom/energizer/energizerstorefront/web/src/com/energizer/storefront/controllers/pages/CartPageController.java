@@ -182,13 +182,17 @@ public class CartPageController extends AbstractPageController
 	boolean enableButton = false;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String showCart(final Model model) throws CMSItemNotFoundException
+	public String showCart(final Model model, final HttpSession session) throws CMSItemNotFoundException
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		if (b2bUnit.getEnableContainerOptimization() == false)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
+		else if (session.getAttribute("enableButton") != null)
+		{
+			enableButton = (boolean) session.getAttribute("enableButton");
 		}
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
@@ -486,7 +490,7 @@ public class CartPageController extends AbstractPageController
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 		/*
 		 * final HashMap productList = energizerCartService.getProductNotAddedToCart();
-		 * 
+		 *
 		 * if (productList != null && productList.size() > 0) { final Set productNotAddedMapEntrySet =
 		 * productList.entrySet(); //doubleStackMapEntrySet.isEmpty() String tempList = "ERPMaterialID		:		Quantity";
 		 * GlobalMessages.addErrorMessage(model, tempList); businessRuleErrors.add(tempList); for (final Iterator iterator

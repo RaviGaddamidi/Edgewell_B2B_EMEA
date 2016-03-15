@@ -1,6 +1,13 @@
 var isContainerfull;
+var spinnerLoader = '<div class="spinnerDiv"><img class="spinnerImg" src="/_ui/desktop/common/images/spinner.gif"/></div>';
 ACC.cartremoveitem = {
             isOrderBlocked: false,
+            showAndHideLoader: function(flag){    
+                  //use flag value 'block' to show loader
+                  //use flag value 'none' to hide loader
+                  
+                  $(".spinnerDiv").css("display",flag);
+            },
             highlightQtyInputBox: function ()
             {     
                   $(".prdCode").each(function(){
@@ -33,8 +40,8 @@ ACC.cartremoveitem = {
             {
                   
                   $('.submitRemoveProduct').on("click", function ()
-                  {     
-                        
+                  {   
+                        ACC.cartremoveitem.showAndHideLoader("block");
                         var entryNum = $(this).attr('id').split("_")[1];
                         var $form = $('#updateCartForm' + entryNum);
                         var initialCartQuantity = $form.find('input[name=initialQuantity]');
@@ -53,7 +60,7 @@ ACC.cartremoveitem = {
                               type: method,
                               success: function(data) 
                               {
-                                    ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, 0);
+                                  ACC.cartremoveitem.refreshCartData(data, entryNum, productCode, 0);
                               },
                               error: function(xht, textStatus, ex) 
                               {
@@ -165,18 +172,21 @@ ACC.cartremoveitem = {
 
                   $('.qty').on("keypress", function (e)
                               { 
-                        
+                       
                         var $input = $(this);
                         if ((e.keyCode || e.which) == 13) // Enter was hit
                         {     
                               e.preventDefault();
                               $input.blur();
                         }
-                              });
-
-                  $('.qty').on("blur", function ()
-                              {                 
                         
+                              });                  
+                  $('.qty').on("blur", function ()
+                    {       
+                        var parentClass = $(this).parent().parent().attr("class");
+                        if(parentClass == "quantity"){
+                              ACC.cartremoveitem.showAndHideLoader("block"); 
+                        }
                         var entryNum = $(this).parent().find('input[name=entryNumber]').val();                             
                         var $form = $('#updateCartForm' + entryNum);                      
                         var initialCartQuantity = $form.find('input[name=initialQuantity]').val();                        
@@ -524,6 +534,8 @@ ACC.cartremoveitem = {
 
                   ACC.cartremoveitem.fillThis();
                   
+                 ACC.cartremoveitem.showAndHideLoader("none");   
+            
             },
             getCartData : function()
             {
@@ -700,13 +712,12 @@ ACC.cartremoveitem = {
 }
 
 
-$(document).ready(function ()
-            { 
-            
+$(document).ready(function (){ 
+            $("body").append(spinnerLoader);
       ACC.cartremoveitem.bindCartData();        
-      ACC.cartremoveitem.bindAll();
+      ACC.cartremoveitem.bindAll();      
       if($("#productsNotAddedToCart").css('display') !== 'none'){
         ACC.cartremoveitem.highlightQtyInputBox();
       }
       
-            });
+});
