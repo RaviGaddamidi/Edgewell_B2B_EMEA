@@ -11,7 +11,7 @@ $defaultCurrency=USD
 $languages=en,es
 $defaultLanguage=en
 #$deliveryCountries=US,AR,BO,BR,CL,CO,EC,FK,GF,GY,GY,PY,PE,SR,UY,VE,PA,TT,NZ
-$deliveryCountries=US,AR,BO,BR,CL,CO,CR,CU,DO,EC,SV,GF,GP,GT,HT,HN,MQ,MX,NI,PA,PY,PE,PR,BL,MF,UY,VE,NZ,AG,AW,BS,BB,BZ,BM,GD,GY,JM,MS,SR,TC,CUW,DOM,KY,VC,KNA,LC,TTO,TT
+$deliveryCountries=US,AR,BO,BR,CL,CO,CR,CU,DO,EC,SV,GF,GP,GT,HT,HN,MQ,MX,NI,PA,PY,PE,PR,BL,MF,UY,VE,NZ,AG,AW,BS,BB,BZ,BM,GD,GY,JM,MS,SR,TC,CUW,DOM,KY,VC,KNA,LC,TTO,TT,AN
 $submitOrderProcessCode=order-process
 $paymentProvider=Mockup
 

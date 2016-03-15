@@ -208,7 +208,7 @@
 				<div class="clearfix fixthis_row_cls">
 					<c:if test="${not cartData.enableFloorSpaceGraphics}"> 	
 						<div style="font-weight: bold;font-size: 1.2em;">
-							<span style="padding-left:135px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
+							<span style="padding-left:127px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
 								<div align="left" style="font-size:11px;color: blue; ">
 									<spring:theme code="basket.your.shopping.container.utilization1"/>
 								</div>
@@ -216,7 +216,7 @@
 					</c:if>
 					<c:if test="${cartData.enableFloorSpaceGraphics}"> 	
 						<div style="padding-top:20px;font-weight: bold;font-size: 1.2em;">
-							<span style="padding-left:255px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
+							<span style="padding-left:248px"><spring:theme code="basket.your.shopping.container.utilization"/> </span>
 								<div align="left" style="font-size:11px;color: blue; ">
 									<spring:theme code="basket.your.shopping.container.utilization1"/>
 								</div>

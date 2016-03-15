@@ -200,7 +200,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								+ totalPalletsCount
 								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
-				availableVolume = 0;
+				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);
 			}
 
@@ -218,7 +218,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								+ totalPalletsCount
 								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
-				availableVolume = 0;
+				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);
 
 			}

@@ -87,7 +87,7 @@ function renderFloorSpaceBlock(){
       var countDivParent = "<div id='blockCountParent' style='width: 100%; position: relative;'></div>"
       $("#floorSpace_cont").prepend(parentBlockDiv);
       
-      var stackDiv = "<div id='stackMain' style='position: absolute; height: 150px; right: -70px; top: 0px;'><div class='stackName' style='height: 50%;'><span style='display: block; padding-top: 35px;'>2nd Stack</span></div><div class='stackName' style='height: 50%;'><span  style='display: block; padding-top: 35px;'>1st Stack</span></div></div>";
+      var stackDiv = "<div id='stackMain' style='position: absolute; height: 150px; right: -70px; top: 0px;'><div class='stackName' style='height: 50%;'><span style='display: block; padding-top: 35px;'>Stack-2</span></div><div class='stackName' style='height: 50%;'><span  style='display: block; padding-top: 35px;'>Stack-1</span></div></div>";
 	  $("#blockDivMain").after(countDivParent);
       $("#blockDivMain").append(stackDiv);
       
