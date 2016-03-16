@@ -195,10 +195,15 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			//cartData.setTotalProductVolumeInPercent(100.00);
 			if (volume > 100 && palletCount > totalPalletsCount)
 			{
-				message.add("" + totalPalletsCount + "");
+				message
+						.add("Dear Customer, your order will not fit in one container. You can order maximum "
+								+ totalPalletsCount
+								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
 				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);
+				cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
+				cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 			}
 
 			else if (volume > 100)
@@ -210,10 +215,15 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			else if (palletCount > totalPalletsCount)
 			{
-				message.add("" + totalPalletsCount + "");
+				message
+						.add("Dear Customer, your order will not fit in one container. You can order maximum "
+								+ totalPalletsCount
+								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
 				availableVolume = 100;
 				cartData.setIsFloorSpaceFull(true);
+				cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
+				cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 
 			}
 		}

@@ -417,10 +417,15 @@ public class CartPageController extends AbstractPageController
 		{
 			for (final String messages : message)
 			{
-				if (messages.contains("20") || messages.contains("40"))
+				if (messages.contains("20"))
 				{
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-					{ messages });
+					{ "20" });
+				}
+				else if (messages.contains("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ "40" });
 				}
 				else
 				{
@@ -491,10 +496,15 @@ public class CartPageController extends AbstractPageController
 			for (final String messages : message)
 			{
 
-				if (messages.contains("20") || messages.contains("40"))
+				if (messages.contains("20"))
 				{
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-					{ messages });
+					{ "20" });
+				}
+				else if (messages.contains("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ "40" });
 				}
 				else
 				{
@@ -507,7 +517,7 @@ public class CartPageController extends AbstractPageController
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 		/*
 		 * final HashMap productList = energizerCartService.getProductNotAddedToCart();
-		 *
+		 * 
 		 * if (productList != null && productList.size() > 0) { final Set productNotAddedMapEntrySet =
 		 * productList.entrySet(); //doubleStackMapEntrySet.isEmpty() String tempList = "ERPMaterialID		:		Quantity";
 		 * GlobalMessages.addErrorMessage(model, tempList); businessRuleErrors.add(tempList); for (final Iterator iterator
