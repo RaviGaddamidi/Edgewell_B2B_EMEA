@@ -184,9 +184,9 @@ ACC.cartremoveitem = {
                   $('.qty').on("blur", function ()
                     {       
                         var parentClass = $(this).parent().parent().attr("class");
-                        if(parentClass == "quantity"){
+                       /* if(parentClass == "quantity"){
                               ACC.cartremoveitem.showAndHideLoader("block"); 
-                        }
+                        }*/
                         var entryNum = $(this).parent().find('input[name=entryNumber]').val();                             
                         var $form = $('#updateCartForm' + entryNum);                      
                         var initialCartQuantity = $form.find('input[name=initialQuantity]').val();                        
