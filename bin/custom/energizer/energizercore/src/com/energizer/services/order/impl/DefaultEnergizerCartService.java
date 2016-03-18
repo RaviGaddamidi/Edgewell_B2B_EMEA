@@ -186,14 +186,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		LOG.info("Pallet count:" + palletCount);
 
-		if (volume > 100 || palletCount > totalPalletsCount)
+		if (weight > 100 || volume > 100 || palletCount > totalPalletsCount)
 		{
 			floorSpaceCount = totalPalletsCount / 2;
 			//Display an error message "Reduce the products in the cart"
 			LOG.info("Either volume is greater than 100 or pallet count is greater than" + totalPalletsCount);
 
 			//cartData.setTotalProductVolumeInPercent(100.00);
-			if (volume > 100 && palletCount > totalPalletsCount)
+			if ((weight > 100  || volume > 100) && palletCount > totalPalletsCount)
 			{
 				message
 						.add("Dear Customer, your order will not fit in one container. You can order maximum "
@@ -206,7 +206,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
 			}
 
-			else if (volume > 100)
+			else if (weight > 100 || volume > 100)
 			{
 				cartData.setTotalProductVolumeInPercent(volume);
 				cartData.setTotalProductWeightInPercent(weight);
@@ -250,7 +250,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				LOG.info("***************** The floorSpace Count loop " + floorSpaceCount + " starts ****************");
 				availableHeight = getAvailableHeight(packingOption, containerHeight);
 				LOG.info("Available Height:" + availableHeight);
-				if (availableVolume <= 0)
+				if (availableVolume <= 0 )
 				{
 					//Display an error message "Reduce the products in the cart"
 					LOG.info(" Reduce the products in the cart!!! ");
@@ -394,9 +394,13 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			LOG.info(" Available Height: " + availableHeight);
 			LOG.info(" After filling container Available Volume: " + availableVolume);
 
+			if(productWeight>100){
+					
+			}else{
+			
 			availableWeight = availableWeight
 					- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
-
+			}
 			cartData.setFloorSpaceCount(floorSpaceCount);
 			cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 			cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));

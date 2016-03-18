@@ -196,7 +196,9 @@ ACC.cartremoveitem = {
                         
                         if(initialCartQuantity != newCartQuantity)
                         {     
-                              
+                              if(parentClass == "quantity"){
+                                ACC.cartremoveitem.showAndHideLoader("block"); 
+							  }
                               ACC.track.trackUpdateCart(productCode, initialCartQuantity, newCartQuantity);
                               var method = $form.attr("method") ? $form.attr("method").toUpperCase() : "GET";
                              
