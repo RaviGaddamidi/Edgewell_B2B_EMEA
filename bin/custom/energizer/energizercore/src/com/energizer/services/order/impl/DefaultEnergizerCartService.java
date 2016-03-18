@@ -394,13 +394,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			LOG.info(" Available Height: " + availableHeight);
 			LOG.info(" After filling container Available Volume: " + availableVolume);
 
-			if(productWeight>100){
-					
-			}else{
-			
+						
 			availableWeight = availableWeight
 					- getPercentage(new BigDecimal(productWeight), new BigDecimal(0), containerHeight).getPercentWeightUses();
-			}
+			
 			cartData.setFloorSpaceCount(floorSpaceCount);
 			cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 			cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
