@@ -67,6 +67,19 @@ public class EnergizerCartPopulator extends CartPopulator
 		{
 			target.setCostCenter(costCenterData.get(0));
 		}
+
+		/*
+		 * if(source.getContainerHeight()==null && source.getContainerPackingType()==null){
+		 * target.setContainerHeight(source.getContainerHeight());
+		 * target.setContainerPackingType(source.getContainerPackingType()); } else{
+		 */
+
+		target.setContainerHeight(source.getContainerHeight());
+		target.setContainerPackingType(source.getContainerPackingType());
+
+		//}
+		//target.setContainerVolumeUtilization(source.get)
+
 	}
 
 	public Converter<MetricUnitModel, MetricUnitData> getMetricUnitConverter()

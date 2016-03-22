@@ -21,7 +21,6 @@ import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.core.model.user.AddressModel;
 import de.hybris.platform.core.model.user.UserModel;
-import com.energizer.core.model.EnergizerCMIRModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
 import de.hybris.platform.order.OrderService;
@@ -52,6 +51,7 @@ import com.energizer.core.data.EnergizerB2BUnitData;
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitLeadTimeModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerB2BOrderService;
@@ -101,7 +101,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	@Resource
 	private EnergizerProductService energizerProductService;
-	
+
 	@Resource
 	private B2BWorkflowIntegrationService b2bWorkflowIntegrationService;
 
@@ -344,6 +344,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 		modelService.save(cartModel);
 	}
+
 
 
 	/*
@@ -603,7 +604,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 			getCartService().removeSessionCart();
 
 			getModelService().refresh(orderModel);
-			 for (final AbstractOrderEntryModel entry : orderModel.getEntries())
+			for (final AbstractOrderEntryModel entry : orderModel.getEntries())
 			{
 				final EnergizerCMIRModel cmir = energizerProductService.getEnergizerCMIR(entry.getProduct().getCode(), orderModel
 						.getUnit().getUid());
@@ -654,6 +655,25 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	public void setB2bWorkflowIntegrationService(final B2BWorkflowIntegrationService b2bWorkflowIntegrationService)
 	{
 		this.b2bWorkflowIntegrationService = b2bWorkflowIntegrationService;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#setContainerAttributes(de.hybris.platform.commercefacades
+	 * .order.data.CartData)
+	 */
+	@Override
+	public void setContainerAttributes(final CartData cartData)
+	{
+		final CartModel cartModel = cartService.getSessionCart();
+		cartModel.setContainerHeight(cartData.getContainerHeight());
+		cartModel.setContainerPackingType(cartData.getContainerPackingType());
+		cartModel.setContainerVolumeUtilization(cartData.getTotalProductVolumeInPercent());
+		cartModel.setContainerWeightUtilization(cartData.getTotalProductWeightInPercent());
+		modelService.save(cartModel);
+
 	}
 
 }

@@ -126,12 +126,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			}
 			doubleStackMap = new HashMap();
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData, containerHeight);
-
+			cartDataTemp.setContainerPackingType("N/A");
 		}
 		else
 		{
 			cartDataTemp = calCartContainerUtilizationWithSlipSheetsWoodenBase(cartData, containerHeight, packingOption);
 			cartDataTemp.setEnableFloorSpaceGraphics(true);
+			cartDataTemp.setContainerHeight(containerHeight);
+			cartDataTemp.setContainerPackingType(packingOption);
 		}
 
 		return cartDataTemp;

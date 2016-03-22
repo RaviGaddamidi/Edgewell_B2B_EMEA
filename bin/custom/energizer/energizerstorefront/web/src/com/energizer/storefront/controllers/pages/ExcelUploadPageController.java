@@ -60,6 +60,7 @@ import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValida
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.product.data.EnergizerFileUploadData;
+import com.energizer.facades.flow.impl.DefaultEnergizerB2BCheckoutFlowFacade;
 import com.energizer.facades.order.EnergizerExcelUploadFacade;
 import com.energizer.facades.quickorder.EnergizerQuickOrderFacade;
 import com.energizer.services.order.EnergizerCartService;
@@ -130,6 +131,9 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 	@Resource
 	EnergizerProductService energizerProductService;
+
+	@Resource(name = "energizerB2BCheckoutFlowFacade")
+	private DefaultEnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
 
 	ContainerUtilizationForm contUtilForm = new ContainerUtilizationForm();
 
@@ -541,6 +545,8 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		cartDataUpdationforContainer.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
 		cartDataUpdationforContainer.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartDataUpdationforContainer.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
+
+		energizerB2BCheckoutFlowFacade.setContainerAttributes(cartDataUpdationforContainer);
 
 		model.addAttribute("containerHeightList", containerHeightList);
 		model.addAttribute("packingOptionList", packingOptionsList);

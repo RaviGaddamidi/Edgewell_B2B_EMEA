@@ -57,7 +57,8 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		}
 
 		//target.setArchiveID(source.getArchiveID());
-
+		target.setContainerHeight(source.getContainerHeight());
+		target.setContainerPackingType(source.getContainerPackingType());
 
 	}
 

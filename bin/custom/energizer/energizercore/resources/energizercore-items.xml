@@ -758,6 +758,18 @@
 						<persistence type="property" />
 						<modifiers read="true" write="true" optional="true" />
 					</attribute>
+					
+					<attribute qualifier="containerHeight" type="java.lang.String">
+						<description>Container Height of the Packing</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="containerPackingType" type="java.lang.String">
+						<description>Container Packing Option selected</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
 				</attributes>
 			</itemtype>
 

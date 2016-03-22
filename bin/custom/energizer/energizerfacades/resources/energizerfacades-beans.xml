@@ -55,6 +55,7 @@
 		<property name="isContainerFull" type="boolean" />
 		<property name="isOrderBlocked" type="boolean" />
 		<property name="containerHeight" type="java.lang.String" />
+		<property name="containerPackingType" type="java.lang.String" />
 		<property name="floorSpaceCount" type="java.lang.Integer" />
 		<property name="isFloorSpaceFull" type="boolean" />
 		<property name="enableFloorSpaceGraphics" type="boolean" />

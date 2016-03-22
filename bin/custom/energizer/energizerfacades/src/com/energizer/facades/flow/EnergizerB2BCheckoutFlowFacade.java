@@ -41,6 +41,8 @@ public interface EnergizerB2BCheckoutFlowFacade
 			final String rejectionComment);
 
 	public CartData simulateOrder(CartData cartData) throws Exception;
+	
+	public void setContainerAttributes(final CartData cartData);
 
 	/**
 	 * @param workFlowActionCode
