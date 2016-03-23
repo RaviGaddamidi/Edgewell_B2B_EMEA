@@ -147,7 +147,7 @@
 										</table>
 										<br/>
 										
-										<table width="100%">
+										<table>
 																	<tr>
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.containerHeight}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
