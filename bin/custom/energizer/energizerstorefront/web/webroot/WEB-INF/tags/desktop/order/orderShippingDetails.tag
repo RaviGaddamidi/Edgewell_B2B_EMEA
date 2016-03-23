@@ -23,4 +23,7 @@
 				 ${DateTimeUtil.displayDate(order.requestedDeliveryDate)} 
 			</c:if>
 		</p>
+		
+		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerType"/>&nbsp;:&nbsp;${order.containerHeight}</p>
+		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerPackingMaterial"/>&nbsp;:&nbsp;${order.containerPackingType}</p>
 </div>

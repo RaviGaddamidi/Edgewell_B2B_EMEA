@@ -126,7 +126,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			}
 			doubleStackMap = new HashMap();
 			cartDataTemp = calCartContainerUtilizationWithSlipsheets(cartData, containerHeight);
-			cartDataTemp.setContainerPackingType("N/A");
+			if (packingOption.equals(packingOptionWithNoAlgorithm))
+			{
+				cartDataTemp.setContainerPackingType(packingOptionWithNoAlgorithm);
+			}
+			else if (!enableContOptimization)
+			{
+				cartDataTemp.setContainerPackingType("Not Applicable");
+			}
 		}
 		else
 		{
