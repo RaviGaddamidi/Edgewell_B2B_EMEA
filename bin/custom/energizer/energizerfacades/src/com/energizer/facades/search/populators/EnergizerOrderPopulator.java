@@ -12,6 +12,9 @@ import de.hybris.platform.servicelayer.dto.converter.Converter;
 
 import javax.annotation.Resource;
 
+import com.energizer.core.data.EnergizerB2BUnitData;
+import com.energizer.core.model.EnergizerB2BUnitModel;
+
 
 /**
  * @author M1023097
@@ -22,6 +25,9 @@ public class EnergizerOrderPopulator extends OrderPopulator
 
 	@Resource(name = "b2BCustomerConverter")
 	private Converter<B2BCustomerModel, CustomerData> b2BCustomerConverter;
+	
+	@Resource(name = "energizerB2BUnitConverter")
+	private Converter<EnergizerB2BUnitModel, EnergizerB2BUnitData> energizerB2BUnitConverter;
 
 	@Override
 	public void populate(final OrderModel source, final OrderData target)
@@ -46,6 +52,8 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		target.setContrEP(source.getContrEP());
 		if (null != source.getB2bUnit())
 		{
+		   target.setB2bUnit(energizerB2BUnitConverter.convert(source.getB2bUnit()));
+		
 			if (null != source.getB2bUnit().getOrderBlock())
 			{
 				target.setIsOrderBlock(source.getB2bUnit().getOrderBlock());
