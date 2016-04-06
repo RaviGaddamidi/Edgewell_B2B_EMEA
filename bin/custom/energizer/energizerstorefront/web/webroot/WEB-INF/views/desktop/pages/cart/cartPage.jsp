@@ -15,6 +15,7 @@
 
 <spring:theme text="Your Shopping Cart" var="title" code="cart.page.title"/>
 <c:url value="/checkout/single" var="checkoutUrl"/>
+<c:url value="/cart/clearCart" var="clearCartUrl"/>
 
 <template:page pageTitle="${pageTitle}">
 
@@ -119,13 +120,13 @@
 							<spring:theme code="basket.your.shopping.container.optimization" />
 						</button>
 					</ycommerce:testId>
-				</div>
-					
+				      </div>
 					</form:form>
 				</c:if>
 				</div>	
-          
-
+          <form:form action="/cart/clearCart"  method="get">
+         		 <button id="clearCartButton" class="positive" style="margin-top:25px;margin-left:420px" type="submit" ><spring:theme code="basket.your.shopping.clearCart" /></button>
+			</form:form>
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked} ">

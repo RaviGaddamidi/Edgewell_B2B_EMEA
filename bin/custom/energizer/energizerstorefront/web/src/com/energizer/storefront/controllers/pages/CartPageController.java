@@ -248,6 +248,33 @@ public class CartPageController extends AbstractPageController
 		return Views.Pages.Cart.CartPage;
 	}
 
+
+	@RequestMapping(value = "/clearCart", method = RequestMethod.GET)
+	@RequireHardLogIn
+	public String clearCart(final Model model, final RedirectAttributes redirectModel) throws CMSItemNotFoundException
+	{
+
+		final List<OrderEntryData> cartItems = new ArrayList<OrderEntryData>();
+
+		final CartData cartData = cartFacade.getSessionCart();
+
+		final List<OrderEntryData> cartItemsList = cartData.getEntries();
+
+		cartData.setEntries(cartItems);
+		cartFacade.removeSessionCart();
+
+		model.addAttribute("cartData", cartData);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
+		model.addAttribute("pageType", PageType.CART.name());
+
+
+		//return REDIRECT_PREFIX + "/cart";
+		return Views.Pages.Cart.CartPage;
+	}
+
+
 	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
 	@RequireHardLogIn
 	public String cartCheck(final Model model, final RedirectAttributes redirectModel) throws CommerceCartModificationException
@@ -547,7 +574,7 @@ public class CartPageController extends AbstractPageController
 		model.addAttribute("pageType", PageType.CART.name());
 	}
 
-	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public void updateProfile(@Valid final UpdateProfileForm updateProfileForm, final BindingResult bindingResult,
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
