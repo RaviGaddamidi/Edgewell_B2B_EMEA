@@ -574,7 +574,7 @@ public class CartPageController extends AbstractPageController
 		model.addAttribute("pageType", PageType.CART.name());
 	}
 
-	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public void updateProfile(@Valid final UpdateProfileForm updateProfileForm, final BindingResult bindingResult,
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
