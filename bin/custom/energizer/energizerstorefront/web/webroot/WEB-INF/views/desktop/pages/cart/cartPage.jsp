@@ -116,7 +116,7 @@
 					<br>
 					<div class="form-actions">
 					<ycommerce:testId code="update_button" >
-						<button class="positive" type="submit"  >
+						<button class="positive" type="submit" style="margin-top:20px;font-size: 130%;"  >
 							<spring:theme code="basket.your.shopping.container.optimization" />
 						</button>
 					</ycommerce:testId>
@@ -124,9 +124,10 @@
 					</form:form>
 				</c:if>
 				</div>	
-          <form:form action="/cart/clearCart"  method="get">
-         		 <button id="clearCartButton" class="positive" style="margin-top:25px;margin-left:420px" type="submit" ><spring:theme code="basket.your.shopping.clearCart" /></button>
-			</form:form>
+				
+				
+		<div> 		
+          
 			<!--   Start Code changes for order flag check -->
 			<c:choose>
 				<c:when test="${cartData.isOrderBlocked} ">
@@ -142,7 +143,12 @@
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
 			</c:choose>
-			<!--   Start Code changes for order flag check -->	
+			
+			<form:form action="/cart/clearCart"  method="get">
+         		 <button id="clearCartButton" class="checkoutButton positive right" style="font-size: 140%;" type="submit" ><spring:theme code="basket.your.shopping.clearCart" /></button>
+			</form:form>
+		</div>	
+				<!--   Start Code changes for order flag check -->	
 				
 					<cart:cartItems cartData="${cartData}" />
 			
