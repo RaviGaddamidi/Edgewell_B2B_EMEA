@@ -12,7 +12,7 @@
 <c:url value="/cart/miniCart/${totalDisplay}" var="refreshMiniCartUrl"/>
 <c:url value="/cart/rollover/${component.uid}" var="rolloverPopupUrl"/>
 <c:url value="/cart" var="cartUrl"/>
-
+<spring:theme code="breadcrumb.cart" />
 <a href="${cartUrl}" class="minicart">
 	${component.title}
 	<ycommerce:testId code="miniCart_items_label">

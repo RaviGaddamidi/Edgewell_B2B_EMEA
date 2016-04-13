@@ -82,7 +82,7 @@ public class EnergizerFindPricingFactoryStrategy extends FindPricingWithCurrentP
 				if (productConversion != null)
 				{
 					BigDecimal newPrice = new BigDecimal(basePriceValue.getValue() * productConversion.getConversionMultiplier());
-					newPrice = newPrice.setScale(2, RoundingMode.DOWN);
+					newPrice = newPrice.setScale(2, RoundingMode.HALF_EVEN);
 
 					return new PriceValue(basePriceValue.getCurrencyIso(), newPrice.doubleValue(), false);
 				}
