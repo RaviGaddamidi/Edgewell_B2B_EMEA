@@ -443,6 +443,9 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				energizerOrderEntry.setProduct(existEnergizerProduct);
 				energizerOrderEntry.setTotalPrice(lineItemTotalPrice);
 				energizerOrderEntry.setIsNewEntry("Y");
+				energizerOrderEntry.setCustomerMaterialId(energizerCMIRModel.getCustomerMaterialId());//code change to ensure that cust mat id shuln't be null for new order entry model.
+				
+				
 				if (!customerUOM.equalsIgnoreCase(uom))
 				{
 					energizerOrderEntry.setQuantity(orderEntryQty / finalConversionFactor);

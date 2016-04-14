@@ -315,11 +315,19 @@ public class AccountPageController extends AbstractSearchPageController
 			model.addAttribute("breadcrumbs", breadcrumbs);
 
 		}
-		catch (final UnknownIdentifierException e)
+	/**	catch (final UnknownIdentifierException e)
 		{
 			LOG.warn("Attempted to load a order that does not exist or is not visible", e);
 			return REDIRECT_MY_ACCOUNT;
 		}
+		**/
+		//the above catch is been overriden by the below one as that may lead to delegation of exception at platformfilter chain level
+		//Which might give unexpected error with improper console msg
+		catch (final Exception e)
+		{
+			LOG.info("*******caught in accountpagecontroller*******\t cause is\t" + e.getCause() + "\tmessage is\t" + e.getMessage());
+		}
+		
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORDER_DETAIL_CMS_PAGE));
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORDER_DETAIL_CMS_PAGE));
