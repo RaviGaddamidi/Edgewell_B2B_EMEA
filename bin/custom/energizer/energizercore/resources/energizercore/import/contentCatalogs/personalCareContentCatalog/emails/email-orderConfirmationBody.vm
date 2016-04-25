@@ -162,12 +162,16 @@
 										                     		<tr>
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.containerHeight}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
+																		#if ($ctx.order.containerHeight)
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.order.containerHeight}</b></font></p></td>
+																		#end
 																	</tr>
 																	<tr>
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.containerPackingType}:</b></font></p></td>
 																		<td valign="top">&nbsp;</td>
+																		#if ($ctx.order.containerPackingType)
 																		<td valign="top"><p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><b>${ctx.order.containerPackingType}</b></font></p></td>
+																		#end
 																	</tr>
 										</table>
 										
