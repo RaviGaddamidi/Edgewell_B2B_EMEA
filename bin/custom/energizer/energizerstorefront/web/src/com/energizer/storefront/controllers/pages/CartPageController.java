@@ -427,6 +427,11 @@ public class CartPageController extends AbstractPageController
 		LOG.info(" Enable/Disable " + enableButton);
 		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
 				packingOption, enableButton);
+				
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
 
 		if (cartData.isIsContainerFull())
 		{
@@ -516,6 +521,12 @@ public class CartPageController extends AbstractPageController
 		//	final String userId = userService.getCurrentUser().getUid();
 		//	final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
+		
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+		
 		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
 		{

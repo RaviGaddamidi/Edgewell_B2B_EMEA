@@ -497,6 +497,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(),
 				containerHeight, packingOption, enableButton);
 		//final CartData cartDataUpdationforContainer = null;
+		
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
 
 		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
