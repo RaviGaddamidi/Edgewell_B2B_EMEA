@@ -972,7 +972,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			LOG.info("|| totalCartWt => " + totalCartWt + " || totalCartVolume => " + totalCartVolume);
 			ContainerData containerData = null;
 
-			containerData = getPercentageContainerUtil(totalCartWt, totalCartVolume);
+			containerData = getPercentage(totalCartWt, totalCartVolume, containerHeight);
 			cartData.setTotalProductVolumeInPercent(containerData.getPercentVolumeUses());
 			cartData.setTotalProductWeightInPercent(containerData.getPercentWeightUses());
 
