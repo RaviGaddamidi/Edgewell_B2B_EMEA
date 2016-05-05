@@ -260,10 +260,10 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				setRecordSucceeded(succeedRecord);
 			}//end of for loop
 			LOG.info("orderModels list size before sending email " + orderModels.size());
-			if (orderModels.size() > 0)
+			/*if (orderModels.size() > 0)
 			{
 				prepareEmail(orderModels);
-			}
+			}*/
 			LOG.info("EnergizerOrderUpdateCSVProcessor:process:End");
 		}//end of try block
 		catch (final Exception e)

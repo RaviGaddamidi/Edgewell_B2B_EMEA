@@ -861,6 +861,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			BigDecimal casesVolume = new BigDecimal(0);
 			BigDecimal totalCartWt = new BigDecimal(0);
 			BigDecimal calculatedUnitVolume = new BigDecimal(0);
+			BigDecimal casesWeight = new BigDecimal(0);
+			BigDecimal calculatedUnitWeight = new BigDecimal(0);
 
 			message = new ArrayList<String>();
 
@@ -894,6 +896,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						if (productConversioFactor.getAlternateUOM().equalsIgnoreCase("CS"))
 						{
 							casesVolume = new BigDecimal(productConversioFactor.getPackageVolume().getMeasurement());
+							casesWeight = new BigDecimal(productConversioFactor.getPackageWeight().getMeasurement());
 							numberOfEachInCases = productConversioFactor.getConversionMultiplier();
 						}
 						if (productConversioFactor.getAlternateUOM().equalsIgnoreCase("PAL"))
@@ -953,7 +956,15 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				{
 					BigDecimal lineItemTotWt = new BigDecimal(0);
 					final BigDecimal unitWeight = new BigDecimal(coversionFactor.getPackageWeight().getMeasurement());
-					if (unitWeight.compareTo(ZERO) != 0)
+					if (coversionFactor.getAlternateUOM().equals("PAL"))
+					{
+						numberOfcasesPerPallet = numberOfEachInPallet / numberOfEachInCases;
+						LOG.info("Number of cases per pallet: " + numberOfcasesPerPallet);
+						calculatedUnitWeight = casesWeight.multiply(new BigDecimal(numberOfcasesPerPallet));
+						LOG.info("Product Weight on basis of cases Weight: " + calculatedUnitWeight);
+						lineItemTotWt = calculatedUnitWeight.multiply(itemQuantity);
+					}
+					else
 					{
 						lineItemTotWt = unitWeight.multiply(itemQuantity);
 					}
