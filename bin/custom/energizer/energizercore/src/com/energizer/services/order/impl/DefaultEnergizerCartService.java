@@ -40,7 +40,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class DefaultEnergizerCartService implements EnergizerCartService
 {
@@ -505,9 +505,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	/**
 	 * As discussed with Kalyan, we need to show height in cms only 1 inch = 2.54cms Need to store the values in
 	 * local.properties file.
-	 * 
+	 *
 	 * 20ft container - 10 floorSpaceCount 40ft container - 20 floorSpaceCount
-	 * 
+	 *
 	 */
 	public double getAvailableHeight(final String packingOption, final String containerHeight)
 	{
@@ -543,7 +543,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 	/**
-	 * 
+	 *
 	 * @param cartData
 	 * @return
 	 */
@@ -677,7 +677,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					/***** End ********/
 
 
-					LOG.info("pallet Height: " + palletHeight);
+					LOG.info("Pallet Height: " + palletHeight);
 					LOG.info(" ***** UOM Conversion Multiplier details of" + erpMaterialId + " ------ casePerPallet:" + casePerPallet
 							+ " -- casePerLayer: " + casePerLayer + " --layerPerPallet: " + layerPerPallet);
 
@@ -703,79 +703,60 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								productsListA.add(energizerProductPalletHeightTemp);
 							}
 						}
+						balanceNonPal = itemQuantity - (casePerPallet * convertedPAL);
 
-						if (palFractionalPart != 0.0 && palFractionalPart >= 0.85)
+						LOG.info(" Remaining CS after converting CS into Pallets: " + balanceNonPal);
+
+					}
+
+					else if (cmirUom.equalsIgnoreCase("LAY"))
+					{
+						LOG.info("Ordered Quantity of LAY UOM: " + itemQuantity);
+
+						convertedPAL = itemQuantity / layerPerPallet;
+
+						palFractionalPart = convertedPAL % 1;
+						convertedPAL = convertedPAL - palFractionalPart;
+
+						if (convertedPAL != 0 && convertedPAL >= 1)
 						{
-							//convertedPAL = convertedPAL + 1;
+							for (int iPALCount = 1; iPALCount <= convertedPAL; iPALCount++)
+							{
+								final EnergizerProductPalletHeight energizerProductPalletHeightTemp = new EnergizerProductPalletHeight();
+								energizerProductPalletHeightTemp.setErpMaterialId(erpMaterialId);
+								energizerProductPalletHeightTemp.setPalletHeight(palletHeight);
+								energizerProductPalletHeightTemp.setOrderedUOM(cmirUom);
+								energizerProductPalletHeightTemp.setIsVirtualPallet(true);
+								energizerProductPalletHeightTemp.setCalculatedUOM("PAL");
+								productsListA.add(energizerProductPalletHeightTemp);
+							}
+						}
+						balanceNonPal = itemQuantity - (layerPerPallet * convertedPAL);
+
+						LOG.info(" Remaining LAY after converting LAY into Pallets: " + balanceNonPal);
+
+					}
+
+
+					if (balanceNonPal > 0)
+					{
+
+						for (int iCaseCount = 1; iCaseCount <= balanceNonPal; iCaseCount++)
+						{
 							final EnergizerProductPalletHeight energizerProductPalletHeightTemp = new EnergizerProductPalletHeight();
 							energizerProductPalletHeightTemp.setErpMaterialId(erpMaterialId);
-							energizerProductPalletHeightTemp.setPalletHeight(palletHeight);
 							energizerProductPalletHeightTemp.setOrderedUOM(cmirUom);
-							energizerProductPalletHeightTemp.setIsVirtualPallet(true);
-							energizerProductPalletHeightTemp.setCalculatedUOM("PAL");
-							productsListA.add(energizerProductPalletHeightTemp);
+							energizerProductPalletHeightTemp.setPalletHeight(0);
+							energizerProductPalletHeightTemp.setCalculatedUOM(cmirUom);
+							nonPalletProductsList.add(energizerProductPalletHeightTemp);
 						}
-						else
-						{
 
-							balanceNonPal = itemQuantity - (casePerPallet * convertedPAL);
+					}
+					LOG.info(" NonPalletProductsList size : " + nonPalletProductsList.size());
 
-							/*
-							 * LOG.info(" Remaining CS after converting into virtualPallets: " + balanceNonPal);
-							 * 
-							 * convertedLay = balanceNonPal / casePerLayer;
-							 * 
-							 * layerFractionalPart = convertedLay % 1; convertedLay = convertedLay - layerFractionalPart;
-							 * 
-							 * if (convertedLay != 0 && convertedLay >= 1) {
-							 * 
-							 * for (int iLayCount = 1; iLayCount <= convertedLay; iLayCount++) { final
-							 * EnergizerProductPalletHeight energizerProductPalletHeightTemp = new
-							 * EnergizerProductPalletHeight();
-							 * energizerProductPalletHeightTemp.setErpMaterialId(erpMaterialId);
-							 * energizerProductPalletHeightTemp.setPalletHeight(0);
-							 * energizerProductPalletHeightTemp.setOrderedUOM(cmirUom);
-							 * energizerProductPalletHeightTemp.setCalculatedUOM("LAY");
-							 * nonPalletProductsList.add(energizerProductPalletHeightTemp);
-							 * 
-							 * } }
-							 * 
-							 * if (layerFractionalPart != 0 && layerFractionalPart >= 0.85) { convertedLay = convertedLay + 1;
-							 * 
-							 * final EnergizerProductPalletHeight energizerProductPalletHeightTemp = new
-							 * EnergizerProductPalletHeight();
-							 * energizerProductPalletHeightTemp.setErpMaterialId(erpMaterialId);
-							 * energizerProductPalletHeightTemp.setOrderedUOM(cmirUom);
-							 * energizerProductPalletHeightTemp.setPalletHeight(0);
-							 * energizerProductPalletHeightTemp.setCalculatedUOM("LAY");
-							 * nonPalletProductsList.add(energizerProductPalletHeightTemp); }
-							 */
-							/*
-							 * else {
-							 */
-							//LOG.info(" NonPalletProductsList size after converting CS into Layers: " + nonPalletProductsList.size());
-							//balanceNonPal = itemQuantity - ((casePerPallet * convertedPAL) + (casePerLayer * convertedLay));
-							LOG.info(" Remaining CS after converting CS into Pallets: " + balanceNonPal);
 
-							if (balanceNonPal > 0)
-							{
 
-								for (int iCaseCount = 1; iCaseCount <= balanceNonPal; iCaseCount++)
-								{
-									final EnergizerProductPalletHeight energizerProductPalletHeightTemp = new EnergizerProductPalletHeight();
-									energizerProductPalletHeightTemp.setErpMaterialId(erpMaterialId);
-									energizerProductPalletHeightTemp.setOrderedUOM(cmirUom);
-									energizerProductPalletHeightTemp.setPalletHeight(0);
-									energizerProductPalletHeightTemp.setCalculatedUOM(cmirUom);
-									nonPalletProductsList.add(energizerProductPalletHeightTemp);
-								}
-
-							}
-							LOG.info(" NonPalletProductsList size after calculating remaining CS: " + nonPalletProductsList.size());
-
-							//}
-						}
-					} // end of if(orderedUOM==CS)
+					// end of if(orderedUOM==CS)
 
 					if (nonPalletProductsList.size() > 0)
 					{
@@ -804,6 +785,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		return productsListA;
 	}
+
 
 	public HashMap getPossibleDoubleStackedProducts(final String cartERPMaterialID, final double availableHeight,
 			final HashMap doubleStackMap)
@@ -867,7 +849,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			BigDecimal totalCartWt = new BigDecimal(0);
 			/**
 			 * # Container volume in M3 and weight in KG ##########################################
-			 * 
+			 *
 			 * twenty.feet.container.volume=30.44056 twenty.feet.container.weight=15961.90248
 			 * fourty.feet.container.volume=70.62209 fourty.feet.container.weight=18234.3948
 			 */
@@ -975,7 +957,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	}
 
 	/**
-	 * 
+	 *
 	 * @param totalCartWt
 	 * @param totalCartVolume
 	 * @return
