@@ -546,6 +546,32 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 							}
 							else if (volumeOfAllNonPalletProduct > 0
+									&& volumeOfAllNonPalletProduct < 2 * volumePerSlotForNonPallet.doubleValue()
+									&& volumeOfAllNonPalletProduct > volumePerSlotForNonPallet.doubleValue())
+							{
+								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 2.0);
+								volumeOfAllNonPalletProduct = volumeOfAllNonPalletProduct - 2 * volumePerSlotForNonPallet.doubleValue();
+								if (containerHeight.equals(Config.getParameter(TWENTY_FEET_CONTAINER)))
+								{
+									availableVolume = availableVolume - 10;
+								}
+								if (containerHeight.equals(Config.getParameter(FORTY_FEET_CONTAINER)))
+								{
+									availableVolume = availableVolume - 5;
+								}
+
+								halfFilledSlotVolume = Math.round((slotRequiredForNonPallets % 1) * 100);
+
+								percentageVolume = getPercentage(new BigDecimal(0), new BigDecimal(volumeOfAllNonPalletProduct),
+										containerHeight).percentVolumeUses;
+								availableVolume = availableVolume - percentageVolume;
+								volumeOfAllNonPalletProduct = 0;
+
+								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, (halfFilledSlotVolume / 100) + 1.0);
+
+
+							}
+							else if (volumeOfAllNonPalletProduct > 0
 									&& volumeOfAllNonPalletProduct > volumePerSlotForNonPallet.doubleValue())
 							{
 								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 1.0);
@@ -568,7 +594,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 										containerHeight).percentVolumeUses;
 								availableVolume = availableVolume - percentageVolume;
 								volumeOfAllNonPalletProduct = 0;
+
 								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, halfFilledSlotVolume / 100);
+
 							}
 
 
@@ -1406,7 +1434,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 				LOG.info("-----------------------------------------------------------------");
 				/*
 				 * productsListA = getPalletsCountOfProductsInCartForSlipSheet(cartData, productsListA);
-				 * 
+				 *
 				 * palletCount = productsListA.size(); if (palletCount > 44) { break; }
 				 */
 			}
