@@ -201,9 +201,24 @@
 										<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>
 				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
 				                	   	<div id="cnt_floorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.floorSpaceProductsMap}</span></div>
-										<div id="cnt_nonPalletFloorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.nonPalletFloorSpaceProductsMap}</span></div>
+				                	   	<div id="cnt_nonPalletFloorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.nonPalletFloorSpaceProductsMap}</span></div>
 				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
 				                    	<div class="cnt_fs_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
+				                    	
+				                    	
+				                    	<div>
+				                    	<table>
+				                    	<tr>
+				                    	<td>
+				                    	<div id="colorBox1" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #33cc33;"></div>
+				                    	</td>
+				                    	<td><spring:theme code="box.pallets"/></div></td>
+				                    	<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+				                    	<td><div id="colorBox2" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #ffaa00;"></div></td>
+				                    	<td><spring:theme code="box.nonpallets"/></td>
+				                    	</tr>
+				                    	</table>
+				                    	</div>
 				                      </div>   
 							 	 </c:if>
 									   							
