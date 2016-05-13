@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public interface EnergizerCartService
 {
@@ -26,4 +26,6 @@ public interface EnergizerCartService
 	public HashMap getProductsNotDoublestacked();
 
 	public HashMap getFloorSpaceProductsMap();
+
+	public HashMap getNonPalletFloorSpaceProductsMap();
 }

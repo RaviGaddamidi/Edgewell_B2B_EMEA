@@ -201,6 +201,7 @@
 										<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>
 				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
 				                	   	<div id="cnt_floorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.floorSpaceProductsMap}</span></div>
+										<div id="cnt_nonPalletFloorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.nonPalletFloorSpaceProductsMap}</span></div>
 				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
 				                    	<div class="cnt_fs_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
 				                      </div>   

@@ -428,6 +428,11 @@ public class CartPageController extends AbstractPageController
 		final CartData cartData = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(), containerHeight,
 				packingOption, enableButton);
 
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+
 		if (cartData.isIsContainerFull())
 		{
 			businessRuleErrors.add(Localization.getLocalizedString(ORDER_EXCEEDED));
@@ -464,6 +469,7 @@ public class CartPageController extends AbstractPageController
 
 		cartData.setBusinesRuleErrors(businessRuleErrors);
 		cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
 		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 		energizerB2BCheckoutFlowFacade.setContainerAttributes(cartData);
@@ -516,6 +522,12 @@ public class CartPageController extends AbstractPageController
 		//	final String userId = userService.getCurrentUser().getUid();
 		//	final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
+
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+
 		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
 		{
@@ -559,6 +571,7 @@ public class CartPageController extends AbstractPageController
 		}
 
 		cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
 		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 

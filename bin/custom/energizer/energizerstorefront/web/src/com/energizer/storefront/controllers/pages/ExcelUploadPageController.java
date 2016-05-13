@@ -498,6 +498,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				containerHeight, packingOption, enableButton);
 		//final CartData cartDataUpdationforContainer = null;
 
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+
 		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
 		{
@@ -543,6 +548,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		contUtilForm.setContainerHeight(containerHeight);
 		contUtilForm.setPackingType(packingOption);
 		cartDataUpdationforContainer.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
 		cartDataUpdationforContainer.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartDataUpdationforContainer.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 

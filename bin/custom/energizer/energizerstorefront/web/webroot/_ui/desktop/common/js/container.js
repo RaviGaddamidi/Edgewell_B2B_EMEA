@@ -59,7 +59,7 @@ $(document).ready(function(){
 
       fillThis();
       
-      if($("#cnt_floorSpaceProducts #utl_vol").length !=0){
+      if($("#cnt_floorSpaceProducts #utl_vol").length !=0 && $("#cnt_nonPalletFloorSpaceProducts #utl_vol").length !=0){
     	  try{
     	  renderFloorSpaceBlock();
     	  }catch(e){
@@ -73,6 +73,9 @@ function renderFloorSpaceBlock(){
 	var mapData = $("#cnt_floorSpaceProducts #utl_vol").html();
 	var floorSpaceMap = (mapData.substring(1,mapData.length-1)).split(",");
 	//var usedBlock = floorSpaceMap.length;
+	
+	var mapDataPallette = $("#cnt_nonPalletFloorSpaceProducts #utl_vol").html();
+	var palletteSpaceMap = (mapDataPallette.substring(1,mapDataPallette.length-1)).split(",");
 	
       var totalBlock = parseInt($("#containerHeightLine").text())/2;
       var usedBlock = floorSpaceMap.length; //parseInt($($(".cnt_utlvolfill_cls")[0]).text())
@@ -105,13 +108,13 @@ function renderFloorSpaceBlock(){
                   var tempVar = bCount;                  
                   var innerBlockCount = parseInt(((floorSpaceMap[--tempVar]).split("="))[1]);
                   try{
-                  blockDiv = '<div style="height: 100%; border-bottom: 1px solid #000000; background-color: transparent; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;">'+createInnerBlock(innerBlockCount,blockBGColor, totalHeight)+'</div>';
+                  blockDiv = '<div class="outerDiv" style="height: 100%; border-bottom: 1px solid #000000; background-color: transparent; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;">'+createInnerBlock(innerBlockCount,blockBGColor, totalHeight)+'</div>';
                   }catch(e){
                 	  console.log("Err: "+e);
                   }
             }else{
                   blockBGColor = "#ffd799";                  
-                  blockDiv = '<div style="height: 100%; border-bottom: 1px solid #000000; background-color: '+blockBGColor+'; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;"></div>';
+                  blockDiv = '<div class="outerDiv" style="height: 100%; border-bottom: 1px solid #000000; background-color: '+blockBGColor+'; width: '+individualBlockWidth+'px; border-left: 1px solid #000000; position: absolute; left:'+leftPosition+'px;"></div>';
             }
             $("#blockCountParent").append(countDivChild);
            /* var blockDiv = '<div style="height: '+individualBlockHeight+'px; border-top: 1px solid #000000; background-color: '+blockBGColor+'; width: 100%; position: absolute; bottom:'+bottomPosition+'px;"></div>';
@@ -123,6 +126,8 @@ function renderFloorSpaceBlock(){
             leftPosition = leftPosition + individualBlockWidth;      
        
       }
+      
+      createPallette("#blockDivParent .outerDiv",palletteSpaceMap);
 }
 
 function createInnerBlock(noOfInnerBlock,bgColor, totalBlockHeight){
@@ -137,4 +142,38 @@ function createInnerBlock(noOfInnerBlock,bgColor, totalBlockHeight){
 	}
 	
 	return blockItem;
+}
+
+
+function createPallette(obj,palletteMap){
+	
+	for(var pCount=1; pCount<=palletteMap.length; pCount++){
+		var tempVar = pCount;
+		var pallette = [];
+		pallette = ((palletteMap[--tempVar]).split("="));
+		
+		var palleteIndex = parseInt(pallette[0]);
+		var palleteVal = parseFloat(pallette[1]);
+		var divHeight = 0;
+		var pDivHeight = 0;
+		if(palleteVal<1){
+			divHeight = (palleteVal/1)*100;
+		}else{
+			divHeight = 100;
+		}
+		var bottomVal = "";
+		var noc = $($(obj)[palleteIndex]).children().length;
+		if(noc<1){
+			bottomVal = 0;
+		}
+		if(noc<1 && palleteVal>1){
+			pDivHeight = 100;
+		}else{
+			pDivHeight = 50;
+		}
+		var parentPalletterDiv = "<div class='parentPalletterDiv' style='width: 100%; height:"+pDivHeight+"%;bottom:"+bottomVal+"; position: absolute;'><div class='innerPallette' style='width: 100%; height:"+divHeight+"%;background-color:#ffaa00; bottom:0;position: absolute;'></div></div>";
+		$($(obj)[palleteIndex]).append(parentPalletterDiv);
+		
+		//console.log(palleteIndex+": "+palleteVal+" - "+divHeight+" child: "+$($(obj)[palleteIndex]).children().length);
+	}
 }
