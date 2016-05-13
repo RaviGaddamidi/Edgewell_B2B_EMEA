@@ -73,14 +73,14 @@
 				<order:orderTotalsItem order="${orderData}"/>
 			</div>
 			
-			<div class="span-19 last orderFix-cls">
+			<!--<div class="span-19 last orderFix-cls">
 			<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
 		  		 <order:reorderButton order="${orderData}"/>
 		  	</sec:authorize>	
 				 <c:if test="${not empty orderData.status && orderData.status == 'INVOICED' }"> 
 				 	<order:viewInvoiceButton orderData="${orderData}"/>
 				</c:if> 
-			</div>
+			</div>-->
 			
 		</div>
 		
