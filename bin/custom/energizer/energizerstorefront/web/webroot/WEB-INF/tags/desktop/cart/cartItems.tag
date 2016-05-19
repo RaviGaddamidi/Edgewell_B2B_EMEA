@@ -260,8 +260,12 @@
 				<th colspan="3"><input name="volume_txt" type="hidden"
 					id="volume_txt" value="${ cartData.totalProductVolumeInPercent}"><br />
 					<input name="weight_txt" type="hidden" id="weight_txt"
-					value="${ cartData.totalProductWeightInPercent}"><br /> <input
-					name="isContainerFull" type="hidden" id="isContainerFull"
+					value="${ cartData.totalProductWeightInPercent}"><br />
+                    <input name="availableVolume_txt" type="hidden"
+					id="availableVolume_txt" value="${ cartData.availableVolume}"><br />
+					<input name="availableWeight_txt" type="hidden"
+					id="availableWeight_txt" value="${ cartData.availableWeight}"><br />
+					<input name="isContainerFull" type="hidden" id="isContainerFull"
 					value="${ cartData.isContainerFull}"><br /></th>
 
 			</tr>

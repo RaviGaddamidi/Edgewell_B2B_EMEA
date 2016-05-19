@@ -163,14 +163,14 @@
 									
 									   		<div class="divider_20"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div> 
 									   		
-				                       	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
+				                       	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.availableVolume}</span><span id="volumePercentageSign">%</span></div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
 				                        <div style="height: 1px;" id="volume_utilization"></div>                                                                           
 				                    </div>                                                   
 														
 							
 									<div id="weight_cont">
-				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.totalProductWeightInPercent}</span>%</div>
+				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.availableWeight}</span><span id="weightPercentageSign">%</span></div>
 				                       <div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.weight"/></div>                                                                             
 				       				   <div style="height: 1px;" id="weight_utilization"></div>
 				                    </div>
@@ -214,7 +214,7 @@
 				                    	</td>
 				                    	<td><spring:theme code="box.pallets"/></div></td>
 				                    	<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-				                    	<td><div id="colorBox2" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #ffaa00;"></div></td>
+				                    	<td><div id="colorBox2" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #87CEEB;"></div></td>
 				                    	<td><spring:theme code="box.nonpallets"/></td>
 				                    	</tr>
 				                    	</table>

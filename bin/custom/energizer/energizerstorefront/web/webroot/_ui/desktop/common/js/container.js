@@ -167,11 +167,11 @@ function createPallette(obj,palletteMap){
 			bottomVal = 0;
 		}
 		if(noc<1 && palleteVal>1){
-			pDivHeight = 100;
+			pDivHeight = (palleteVal/2)*100;
 		}else{
 			pDivHeight = 50;
 		}
-		var parentPalletterDiv = "<div class='parentPalletterDiv' style='width: 100%; height:"+pDivHeight+"%;bottom:"+bottomVal+"; position: absolute;'><div class='innerPallette' style='width: 100%; height:"+divHeight+"%;background-color:#ffaa00; bottom:0;position: absolute;'></div></div>";
+		var parentPalletterDiv = "<div class='parentPalletterDiv' style='width: 100%; height:"+pDivHeight+"%;bottom:"+bottomVal+"; position: absolute;'><div class='innerPallette' style='width: 100%; height:"+divHeight+"%;background-color:#87CEEB; bottom:0;position: absolute;'></div></div>";
 		$($(obj)[palleteIndex]).append(parentPalletterDiv);
 		
 		//console.log(palleteIndex+": "+palleteVal+" - "+divHeight+" child: "+$($(obj)[palleteIndex]).children().length);

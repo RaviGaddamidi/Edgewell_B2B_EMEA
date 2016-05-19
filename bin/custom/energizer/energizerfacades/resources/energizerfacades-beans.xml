@@ -63,6 +63,8 @@
 		<property name="productsNotAddedToCart" type="java.util.Map&lt;String,java.lang.Integer>" />
 		<property name="productsNotDoubleStacked" type="java.util.Map&lt;String,java.util.List>" />
 		<property name="nonPalletFloorSpaceProductsMap" type="java.util.Map&lt;java.lang.Integer,java.lang.Double>" />
+		<property name="availableVolume" type="java.lang.Double" />
+		<property name="availableWeight" type="java.lang.Double" />
 	</bean>
 	<!-- ************ End CartData Bean definition ******************* -->	
 

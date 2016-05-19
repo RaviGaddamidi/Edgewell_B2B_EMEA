@@ -6,6 +6,7 @@ package com.energizer.services.order;
 import de.hybris.platform.commercefacades.order.data.CartData;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -25,7 +26,7 @@ public interface EnergizerCartService
 
 	public HashMap getProductsNotDoublestacked();
 
-	public HashMap getFloorSpaceProductsMap();
+	public LinkedHashMap getFloorSpaceProductsMap();
 
-	public HashMap getNonPalletFloorSpaceProductsMap();
+	public LinkedHashMap getNonPalletFloorSpaceProductsMap();
 }
