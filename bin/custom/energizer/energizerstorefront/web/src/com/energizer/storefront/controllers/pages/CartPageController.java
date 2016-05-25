@@ -459,6 +459,10 @@ public class CartPageController extends AbstractPageController
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
 					{ "40" });
 				}
+				else if (message.contains("2 wooden base packing material"))
+				{
+					GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
+				}
 				else
 				{
 					GlobalMessages.addErrorMessage(model, messages);
@@ -543,6 +547,10 @@ public class CartPageController extends AbstractPageController
 				{
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
 					{ "40" });
+				}
+				else if (message.contains("2 wooden base packing material"))
+				{
+					GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
 				}
 				else
 				{

@@ -139,6 +139,9 @@
 				<c:when test="${cartData.isFloorSpaceFull}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
+				<c:when test="${cartData.errorMessage}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
@@ -272,6 +275,9 @@
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				<c:when test="${cartData.isFloorSpaceFull}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
+				<c:when test="${cartData.errorMessage}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				<c:otherwise>

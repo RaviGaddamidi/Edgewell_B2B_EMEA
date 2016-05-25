@@ -161,7 +161,7 @@
 										</form:label>
 										<c:if test="${entry.updateable}">
 											<form:input disabled="${not entry.updateable}" type="text"
-												size="1" id="quantity_${entry.entryNumber}" class="qty"
+												maxlength="5" size="3" id="quantity_${entry.entryNumber}" class="qty"
 												path="quantity" />
 										</c:if>
 									</ycommerce:testId>
