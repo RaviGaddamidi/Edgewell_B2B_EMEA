@@ -1012,4 +1012,25 @@
 	<bean name="approveDecisionAutomatedAction" class="com.energizer.core.actions.ApproveDecisionAutomatedAction" parent="b2BAbstractWorkflowAutomatedAction">
 		<property name="eventService" ref="eventService"/>
 	</bean>
+	
+	<!-- Increasing limit of maximum product quantity that can be added to the cart  -->
+	<alias name="defaultCommerceUpdateCartEntryStrategy" alias="commerceUpdateCartEntryStrategy"/>
+	<bean id="defaultCommerceUpdateCartEntryStrategy"
+			class="de.hybris.platform.commerceservices.order.impl.DefaultCommerceUpdateCartEntryStrategy"
+			parent="abstractCommerceCartStrategy">
+		<property name="commerceUpdateCartEntryHooks" ref="commerceUpdateCartEntryMethodHooks"/>
+		<property name="configurationService" ref="configurationService"/>
+		 <property name="forceInStockMaxQuantity" value="99999" /> 
+		
+	</bean>
+	
+	<alias name="defaultCommerceAddToCartStrategy" alias="commerceAddToCartStrategy"/>
+	<bean id="defaultCommerceAddToCartStrategy"
+			class="de.hybris.platform.commerceservices.order.impl.DefaultCommerceAddToCartStrategy"
+			parent="abstractCommerceAddToCartStrategy">
+		<property name="commerceAddToCartMethodHooks" ref="commerceAddToCartMethodHooks"/>
+		<property name="configurationService" ref="configurationService"/>
+		 <property name="forceInStockMaxQuantity" value="99999" /> 
+	</bean>
+	
 </beans>

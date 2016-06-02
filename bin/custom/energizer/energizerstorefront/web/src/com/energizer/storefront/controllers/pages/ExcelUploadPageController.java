@@ -497,7 +497,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		final CartData cartDataUpdationforContainer = energizerCartService.calCartContainerUtilization(cartFacade.getSessionCart(),
 				containerHeight, packingOption, enableButton);
 		//final CartData cartDataUpdationforContainer = null;
-		
+
 		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
 		{
 			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
@@ -517,6 +517,10 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 				{
 					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
 					{ "40" });
+				}
+				else if (message.contains("2 wooden base packing material"))
+				{
+					GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
 				}
 				else
 				{
@@ -548,6 +552,7 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 		contUtilForm.setContainerHeight(containerHeight);
 		contUtilForm.setPackingType(packingOption);
 		cartDataUpdationforContainer.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		cartDataUpdationforContainer.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
 		cartDataUpdationforContainer.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
 		cartDataUpdationforContainer.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
 

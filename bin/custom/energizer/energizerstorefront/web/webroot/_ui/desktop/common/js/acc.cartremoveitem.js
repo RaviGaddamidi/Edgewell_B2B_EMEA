@@ -421,6 +421,8 @@ ACC.cartremoveitem = {
                         var removeItem = false;
                         var totalProductWeightInPercent = cartData.totalProductWeightInPercent;
                         var totalProductVolumeInPercent = cartData.totalProductVolumeInPercent;
+						var availableVolume = cartData.availableVolume;
+                        var availableWeight = cartData.availableWeight;
                         ACC.cartremoveitem.isOrderBlocked =cartData.isOrderBlocked;
                                                 
                         if (entryNum == -1) // grouped item
@@ -453,7 +455,9 @@ ACC.cartremoveitem = {
                                     form.parent().parent().find(".total").html(entryPrice.formattedValue);
 
                                     $('#weight_txt').val(totalProductWeightInPercent);
-                                    $('#volume_txt').val(totalProductVolumeInPercent);      
+                                    $('#volume_txt').val(totalProductVolumeInPercent);   
+                                    $('#availableVolume_txt').val(availableVolume);
+                                    $('#availableWeight_txt').val(availableWeight);							  
                                     
                                     var isContainerFullFlag = cartData.isContainerFull;                                    
                                     $('#isContainerFull').val(isContainerFullFlag);                                           
@@ -483,7 +487,9 @@ ACC.cartremoveitem = {
                                                 form.parent().parent().find(".total").html(entry.totalPrice.formattedValue);
 
                                                 $('#weight_txt').val(totalProductWeightInPercent);
-                                                $('#volume_txt').val(totalProductVolumeInPercent);    
+                                                $('#volume_txt').val(totalProductVolumeInPercent);
+                                                $('#availableVolume_txt').val(availableVolume);
+                                                $('#availableWeight_txt').val(availableWeight);  												
 
                                                 var isContainerFullFlag = cartData.isContainerFull;                                                     
                                                 $('#isContainerFull').val(isContainerFullFlag);
@@ -529,7 +535,9 @@ ACC.cartremoveitem = {
                   }
                   
                   $('#weight_txt').val(totalProductWeightInPercent);
-                  $('#volume_txt').val(totalProductVolumeInPercent);    
+                  $('#volume_txt').val(totalProductVolumeInPercent); 
+                  $('#availableVolume_txt').val(availableVolume);
+                  $('#availableWeight_txt').val(availableWeight);				  
                   
                   var isContainerFullFlag = cartData.isContainerFull;                                 
                   $('#isContainerFull').val(isContainerFullFlag);                                           
@@ -546,8 +554,10 @@ ACC.cartremoveitem = {
             var isOrderBlocked = $('#isOrderBlocked').val();
             var getVolTxt = $("#volume_txt").val();
             var getWeightTxt = $("#weight_txt").val();
-            var weightCont = $("#weight_cont").height();    
-           
+            var weightCont = $("#weight_cont").height(); 
+            var getavailableVolTxt = $("#availableVolume_txt").val();
+            var getavailableWeightTxt = $("#availableWeight_txt").val();			
+           // var percentageSign = $("#percentageSign").val();	
             var errorsDiv = $('#businesRuleErrors').show(); 
             var errorMsg = "";
             
@@ -557,21 +567,25 @@ ACC.cartremoveitem = {
                   if(getVolTxt < 100){
                         contHeight = (contHeight*getVolTxt)/100;
                         $("#volume_utilization").css('background-color', '#33cc33'); 
-                        $("#utl_vol").text(getVolTxt);
+                        $("#utl_vol").text(getavailableVolTxt);
+                        $("#volumePercentageSign").text("%");
                   }
                   else{
                         $("#volume_utilization").css('background-color', '#FF5757');       
-                        $("#utl_vol").text(100);
+                        $("#utl_vol").text("Volume Exceeded");
+                        $("#volumePercentageSign").text("");
                   }                             
                   
                   if(getWeightTxt <100){
                         weightCont = (weightCont*getWeightTxt)/100;
                         $("#weight_utilization").css('background-color', '#33cc33');       
-                        $("#utl_wt").text(getWeightTxt);
+                        $("#utl_wt").text(getavailableWeightTxt);
+                        $("#weightPercentageSign").text("%");
                   }
                   else{
                         $("#weight_utilization").css('background-color', '#FF5757');       
-                        $("#utl_wt").text(100);
+                        $("#utl_wt").text("Weight Exceeded");
+                        $("#weightPercentageSign").text("");
                   }                             
                   
                         
@@ -608,12 +622,30 @@ ACC.cartremoveitem = {
                    $("#weight_utilization").css('background-color', '#33cc33'); 
                   if(getVolTxt == 100)
                     {                     
-                       $("#volume_utilization").css('height', contHeight);                
+                       $("#volume_utilization").css('height', contHeight);       
+                       $("#volumePercentageSign").text("%");
                     }
                     if(getWeightTxt == 100)
                     {
-                    $("#weight_utilization").css('height', contHeight);       
+                    $("#weight_utilization").css('height', contHeight);    
+                    $("#weightPercentageSign").text("%");
                     }
+					
+					if(getVolTxt > 100){
+                  	    contHeight = (contHeight*getVolTxt)/100;
+                  	    $("#volume_utilization").css('height', contHeight);
+                  	    $("#volume_utilization").css('background-color', '#FF5757');       
+                        $("#utl_vol").text("Volume Exceeded");
+                        $("#volumePercentageSign").text("");
+                     }
+                                               
+                    if(getWeightTxt > 100){
+                	    weightCont = (weightCont*getWeightTxt)/100;
+                	    $("#weight_utilization").css('height', weightCont);
+                  	    $("#weight_utilization").css('background-color', '#FF5757');       
+                        $("#utl_wt").text("Weight Exceeded");
+                        $("#weightPercentageSign").text("");
+                  }
 
             }
                         
@@ -632,6 +664,8 @@ ACC.cartremoveitem = {
 
                         var getVolTxt = $("#volume_txt").val();
                         var getWeightTxt = $("#weight_txt").val();
+						var getavailableVolTxt = $("#availableVolume_txt").val();
+                        var getavailableWeightTxt = $("#availableWeight_txt").val();
                         
                         if(isContainerFull == 'true')
                         { 
@@ -639,20 +673,24 @@ ACC.cartremoveitem = {
                               if(getVolTxt < 100){
                                     contHeight = (contHeight*getVolTxt)/100;
                                     $("#volume_utilization").css('background-color', '#33cc33'); 
-                                    $("#utl_vol").text(getVolTxt);
+                                    $("#utl_vol").text(getavailableVolTxt);
+                                    $("#volumePercentageSign").text("%");
                               }
                               else{
                                     $("#volume_utilization").css('background-color', '#FF5757');       
-                                    $("#utl_vol").text(100);
+                                    $("#utl_vol").text("Volume Exceeded");
+                                    $("#volumePercentageSign").text("");
                               }                             
                               if(getWeightTxt <100){
                                     weightCont = (weightCont*getWeightTxt)/100;
                                     $("#weight_utilization").css('background-color', '#33cc33'); 
-                                    $("#utl_wt").text(getWeightTxt);
+                                    $("#utl_wt").text(getavailableWeightTxt);
+                                    $("#weightPercentageSign").text("%");
                               }
                               else{
                                     $("#weight_utilization").css('background-color', '#FF5757');       
-                                    $("#utl_wt").text(100);
+                                    $("#utl_wt").text("Weight Exceeded");
+                                    $("#weightPercentageSign").text("");
                               }                             
                               
                                                       
@@ -672,19 +710,39 @@ ACC.cartremoveitem = {
                                $("#checkoutButton_bottom").attr("disabled",false);
                               $("#continueButton_bottom").attr("disabled",false);  
                         }
-                        $("#volume_utilization").css('background-color', '#33cc33'); 
-                         $("#weight_utilization").css('background-color', '#33cc33'); 
+                       // $("#volume_utilization").css('background-color', '#33cc33'); 
+                        // $("#weight_utilization").css('background-color', '#33cc33'); 
                          
-                         $("#utl_vol").text(getVolTxt);
-                        $("#utl_wt").text(getWeightTxt);
+                         //$("#utl_vol").text(getVolTxt);
+                       // $("#utl_wt").text(getWeightTxt);
                         if(getVolTxt == 100)
-                          {                     
-                             $("#volume_utilization").css('height', contHeight);                          
+                          {     
+                             $("#volume_utilization").css('background-color', '#33cc33');						  
+                             $("#volume_utilization").css('height', contHeight); 
+                             $("#utl_vol").text(getavailableVolTxt);
+                             $("#volumePercentageSign").text("%");
                           }
                           if(getWeightTxt == 100)
                           {
-                          $("#weight_utilization").css('height', contHeight);       
+						       $("#weight_utilization").css('background-color', '#33cc33');
+                               $("#weight_utilization").css('height', contHeight);    
+                               $("#utl_wt").text(getavailableWeightTxt);
+                               $("#weightPercentageSign").text("%");
                           }
+						  
+						   if(getVolTxt > 100)
+						  {
+                        	  $("#volume_utilization").css('background-color', '#FF5757');       
+                              $("#utl_vol").text("Volume Exceeded");
+                              $("#volumePercentageSign").text("");
+                          }
+                                                     
+                        if(getWeightTxt > 100)
+						{
+                        	$("#weight_utilization").css('background-color', '#FF5757');       
+                            $("#utl_wt").text("Weight Exceeded");
+                            $("#weightPercentageSign").text("");
+                        }
                           
                           ACC.common.$globalMessages.html('<div id="businesRuleErrors"></div>'      );
                                                
@@ -693,13 +751,21 @@ ACC.cartremoveitem = {
                         if(getVolTxt <100){
                               
                               $("#volume_utilization").css('height', contHeight * getVolTxt / 100); var volUtlBar = document.getElementById("volume_utilization").style.height;
-                              volUtlBar = volUtlBar.replace('px', ''); if(volUtlBar > contHeight) { callBackIfExceeds(volUtl, volCont); } 
+                              volUtlBar = volUtlBar.replace('px', '');
+                              $("#volume_utilization").css('background-color', '#33cc33');
+                              $("#utl_vol").text(getavailableVolTxt);
+                              $("#volumePercentageSign").text("%");
+							  if(volUtlBar > contHeight) { callBackIfExceeds(volUtl, volCont); } 
                         }
                         
                         if(getWeightTxt <100)
                         {           
                               $("#weight_utilization").css('height', contHeight * getWeightTxt / 100); var weightUtlBar = document.getElementById("weight_utilization").style.height;
-                              weightUtlBar = weightUtlBar.replace('px', ''); if(weightUtlBar > contHeight) { callBackIfExceeds(weightUtl, weightCont); } 
+                              weightUtlBar = weightUtlBar.replace('px', ''); 
+                              $("#weight_utilization").css('background-color', '#33cc33');
+							  $("#utl_wt").text(getavailableWeightTxt);
+							  $("#weightPercentageSign").text("%");
+							  if(weightUtlBar > contHeight) { callBackIfExceeds(weightUtl, weightCont); } 
                         
                         }
                         

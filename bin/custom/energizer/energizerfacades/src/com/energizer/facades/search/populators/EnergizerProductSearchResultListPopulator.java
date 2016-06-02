@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -63,6 +64,13 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 	{
 		super.populate(source, productData);
 		int baseUOM = 1;
+		
+		int numberOfEachInCase = 0;
+		int numberOfEachInLayer = 0;
+		int numberOfEachInPallet = 0;
+		int numberOfCasesPerPallet = 0;
+		int numberOfCasesPerLayer = 0;
+		
 		setLoggedInUserB2bUnit();
 		final String productCode = source.getValues().get("code").toString();
 		final EnergizerProductModel energizerProductModel = (EnergizerProductModel) productService.getProductForCode(productCode);
@@ -168,6 +176,31 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 						.getCurrency().getSymbol());
 			}
 		}
+		
+		final List<EnergizerProductConversionFactorModel> conversionFactor = energizerProductModel.getProductConversionFactors();
+		for (final EnergizerProductConversionFactorModel factor : conversionFactor)
+		{
+			if (factor.getAlternateUOM().equalsIgnoreCase("CS") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInCase = factor.getConversionMultiplier();
+			}
+			else if (factor.getAlternateUOM().equalsIgnoreCase("LAY") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInLayer = factor.getConversionMultiplier();
+			}
+			else if (factor.getAlternateUOM().equalsIgnoreCase("PAL") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInPallet = factor.getConversionMultiplier();
+			}
+		}
+
+		if (numberOfEachInCase > 0)
+		{
+			numberOfCasesPerPallet = numberOfEachInPallet / numberOfEachInCase;
+			numberOfCasesPerLayer = numberOfEachInLayer / numberOfEachInCase;
+		}
+		productData.setNumberOfCasesPerPallet(numberOfCasesPerPallet);
+		productData.setNumberOfCasesPerLayer(numberOfCasesPerLayer);
 	}
 
 	/**

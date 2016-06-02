@@ -42,6 +42,8 @@
 		<property name="familyName" type="java.lang.String" />
 		<property name="groupName" type="java.lang.String" />
 		<property name="isActive" type="boolean" />
+		<property name="numberOfCasesPerPallet" type="java.lang.Integer" />
+		<property name="numberOfCasesPerLayer" type="java.lang.Integer" />
 	</bean>
 	<!-- ************ End Product Details Page Bean defination ******************* -->	
 	
@@ -62,6 +64,10 @@
 		<property name="floorSpaceProductsMap" type="java.util.Map&lt;java.lang.Integer,java.lang.Integer>" />
 		<property name="productsNotAddedToCart" type="java.util.Map&lt;String,java.lang.Integer>" />
 		<property name="productsNotDoubleStacked" type="java.util.Map&lt;String,java.util.List>" />
+		<property name="nonPalletFloorSpaceProductsMap" type="java.util.Map&lt;java.lang.Integer,java.lang.Double>" />
+		<property name="availableVolume" type="java.lang.Double" />
+		<property name="availableWeight" type="java.lang.Double" />
+		<property name="errorMessage" type="boolean" />
 	</bean>
 	<!-- ************ End CartData Bean definition ******************* -->	
 

@@ -63,7 +63,9 @@
 			<spring:theme code="basket.page.customerProductName"/>  : ${fn:escapeXml(product.customerProductName)}<br>			
 			<spring:theme code="basket.page.shipFrom"/> : ${fn:escapeXml( product.shippingPointName)}  <br>
 			<spring:theme code="basket.page.moq"/> : ${fn:escapeXml(product.moq)}<br>
-			<spring:theme code="basket.page.uom"/> : ${fn:escapeXml(product.uom)}<br> 
+			<spring:theme code="basket.page.uom"/> : ${fn:escapeXml(product.uom)}<br>
+            <spring:theme code="basket.page.casesPerPallet"/> : ${fn:escapeXml(product.numberOfCasesPerPallet)}<br> 
+			<spring:theme code="basket.page.casesPerLayer"/> : ${fn:escapeXml(product.numberOfCasesPerLayer)}<br>			
 			<%-- obsolete : ${product.obsolete}<br> --%>
 		</div>			
         
@@ -124,7 +126,7 @@
                         <c:if test="${empty isOrderForm || not isOrderForm}">
                             <form id="addToCartForm${product.code}" action_data="<c:url value="/cart/add"/>" method="post" class="add_to_cart_form">
 								<label for="qtyInput"><spring:theme code="basket.page.quantity"/></label>
-								<input type="text" maxlength="3" size="1" id="qty" name="qty" class="qty" value="${fn:escapeXml(product.moq)}">                            
+								<input type="text" maxlength="5" size="3" id="qty" name="qty" class="qty" value="${fn:escapeXml(product.moq)}">                            
                                 <input type="hidden" name="productCodePost" value="${product.code}"/>
                                 
                                 <c:choose>
