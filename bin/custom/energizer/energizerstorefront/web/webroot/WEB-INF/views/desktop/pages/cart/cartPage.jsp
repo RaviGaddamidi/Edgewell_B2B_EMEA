@@ -139,6 +139,9 @@
 				<c:when test="${cartData.isFloorSpaceFull}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
+				<c:when test="${cartData.errorMessage}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
 				<c:otherwise>
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button" data-checkout-url="${checkoutUrl}"><spring:theme code="checkout.checkout" /></button>
 				</c:otherwise>
@@ -163,14 +166,14 @@
 									
 									   		<div class="divider_20"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div> 
 									   		
-				                       	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.totalProductVolumeInPercent}</span>%</div>
+				                       	<div class="cnt_utlvolfill_cls"><span id="utl_vol">${cartData.availableVolume}</span><span id="volumePercentageSign">%</span></div>
 				                    	<div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.volume"/></div>
 				                        <div style="height: 1px;" id="volume_utilization"></div>                                                                           
 				                    </div>                                                   
 														
 							
 									<div id="weight_cont">
-				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.totalProductWeightInPercent}</span>%</div>
+				                       <div class="cnt_utlwilfill_cls"><span id="utl_wt">${cartData.availableWeight}</span><span id="weightPercentageSign">%</span></div>
 				                       <div class="cnt_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.weight"/></div>                                                                             
 				       				   <div style="height: 1px;" id="weight_utilization"></div>
 				                    </div>
@@ -201,8 +204,24 @@
 										<div class="divider_40"><span id="containerHeightLine" class="span_cls">${cartData.containerHeight}</span></div>
 				                	   	<div class="cnt_utlvolfill_cls" style="display:none"><span id="utl_vol">${cartData.floorSpaceCount}</span></div>
 				                	   	<div id="cnt_floorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.floorSpaceProductsMap}</span></div>
+				                	   	<div id="cnt_nonPalletFloorSpaceProducts" style="display:none"><span id="utl_vol">${cartData.nonPalletFloorSpaceProductsMap}</span></div>
 				                    	<div id="floorSpaceFull" style="display:none"><span id="floor_Space_Full">${cartData.isFloorSpaceFull}</span></div>
 				                    	<div class="cnt_fs_utllbl_cls"><spring:theme code="basket.your.shopping.container.utilization.floorSpace"/></div>
+				                    	
+				                    	
+				                    	<div>
+				                    	<table>
+				                    	<tr>
+				                    	<td>
+				                    	<div id="colorBox1" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #33cc33;"></div>
+				                    	</td>
+				                    	<td><spring:theme code="box.pallets"/></div></td>
+				                    	<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+				                    	<td><div id="colorBox2" style="float: left;width: 20px;height: 20px;margin: 5px;border: 1px solid rgba(0, 0, 0, .2);background: #87CEEB;"></div></td>
+				                    	<td><spring:theme code="box.nonpallets"/></td>
+				                    	</tr>
+				                    	</table>
+				                    	</div>
 				                      </div>   
 							 	 </c:if>
 									   							
@@ -259,6 +278,9 @@
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				<c:when test="${cartData.isFloorSpaceFull}">
+					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
+				</c:when>
+				<c:when test="${cartData.errorMessage}">
 					<button id ="checkoutButton_top" class="checkoutButton positive right" type="button"  data-checkout-url="${checkoutUrl}" disabled="disabled"><spring:theme code="checkout.checkout" /></button>
 				</c:when>
 				<c:otherwise>
