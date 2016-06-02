@@ -34,7 +34,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.NumberUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +44,7 @@ import com.energizer.core.model.EnergizerCronJobModel;
 
 /**
  * @author M9005674
- *
+ * 
  */
 public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 {
@@ -59,6 +58,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	public final StringBuilder message = new StringBuilder(512);
 	public static final String COMMA = ",";
 
+	
 	private String enviorment;
 	private static String CATALOG_NAME = "";
 	private static String VERSION = "";
@@ -136,7 +136,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		try
 		{
 			enviorment = configurationService.getConfiguration().getString("mail.enviorment");
-			setMailSubject(enviorment + "ERROR: Occurred in " + cronjob.getDisplayName().toUpperCase());
+			setMailSubject(enviorment+"ERROR: Occurred in " + cronjob.getDisplayName().toUpperCase());
 			logErrors(cronjob, errors);
 			EmailMessageModel emailMessageModel = null;
 			EmailAddressModel emailAddress = null;
@@ -152,7 +152,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 			synchronized (message)
 			{
 				emailMessageModel = emailService.createEmailMessage(toAddressModels, null, null, emailAddress,
-						Config.getParameter(EMAIL_REPLY_TO), getMailSubject(), message.toString(), emailAttachmentList);
+						Config.getParameter(EMAIL_REPLY_TO),getMailSubject(), message.toString(), emailAttachmentList);
 				emailService.send(emailMessageModel);
 			}
 			message.setLength(0);
@@ -280,37 +280,6 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		return flag;
 	}
 
-	/**
-	 * @param input
-	 *           input value
-	 * @param isValid
-	 *           isValid
-	 * @param errBuffer
-	 *           errBuffer
-	 * @param field
-	 *           field
-	 * @return Numeric Double Value
-	 */
-	public Double calculateNumeric(final String input, boolean isValid, final StringBuffer errBuffer, final String field)
-	{
-
-		Double returnVal = null;
-		if (StringUtils.isNotBlank(input))
-		{
-			if (NumberUtils.isNumber(input))
-			{
-				returnVal = NumberUtils.createDouble(input);
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + field + " is not an number ");
-			}
-		}
-		return returnVal;
-
-	}
-
 	public void sendEmail(final List<String> toAddresses, final List<String> ccAddresses, final List<String> bccAddresses,
 			final String fromAddress, final String fromAddressDisplayName, final String replyToAddress, final String subject,
 			final String body)
@@ -351,7 +320,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 		}
 
 		final EmailMessageModel message = emailService.createEmailMessage(toAddressList, ccAddressesList, bccAddressesList,
-				fromAddressEmail, replyToAddress, enviorment + subject, body, null);
+				fromAddressEmail, replyToAddress, enviorment+subject, body, null);
 		emailService.send(message);
 
 
@@ -379,7 +348,7 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 
 	public void logRecord(final Iterable<CSVRecord> recordsForLog)
 	{
-		//		final boolean isCronJobLoggerEnabled =  (configurationService.getConfiguration().getBoolean("isCronJobLoggerEnabled", false));
+		//		final boolean isCronJobLoggerEnabled =  (configurationService.getConfiguration().getBoolean("isCronJobLoggerEnabled", false));		
 
 		//		if(isCronJobLoggerEnabled){
 		boolean printedHeader = false;
@@ -680,5 +649,4 @@ public class AbstractEnergizerCSVProcessor implements EnergizerCSVProcessor
 	{
 		return reader;
 	}
-
 }
