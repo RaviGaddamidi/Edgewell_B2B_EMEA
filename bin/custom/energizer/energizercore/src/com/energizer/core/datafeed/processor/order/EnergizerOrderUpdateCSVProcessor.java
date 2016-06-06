@@ -215,6 +215,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				{
 					LOG.info("In Record Number " + record.getRecordNumber() + " " + SAP_ORDER_NO + " " + sapOrderNo + " and "
 							+ HYBRIS_ORDER_NO + " " + hybrisOrderNo + " does not exist");
+					LOG.info("the updated field are " + bdsDocId + "\t" + sapOrderNo + "\t" + bdsContrEp);
 					error = new EnergizerCSVFeedError();
 					final List<String> columnNames = new ArrayList<String>();
 					final List<Integer> columnNumbers = new ArrayList<Integer>();
@@ -345,6 +346,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 	 */
 	private OrderModel updateOrder(final OrderModel energizerOrderModel)
 	{
+		LOG.info("UPDATING order variables ---for erp-ord-no" + energizerOrderModel.getErpOrderNumber() + "bdsdocid" + bdsDocId);
 		energizerOrderModel.setPurchaseOrderNumber(poNo);
 		energizerOrderModel.setRequestedDeliveryDate(reqDeliveryDate);
 		energizerOrderModel.setTotalPrice(totalValue);
@@ -360,7 +362,7 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		energizerOrderModel.setDocumentID(bdsDocId);
 		energizerOrderModel.setDocumentClass(bdsCocuClass);
 		energizerOrderModel.setContrEP(bdsContrEp);
-
+         LOG.info("UPDATED order variables ---for erp-ord-no" + energizerOrderModel.getErpOrderNumber());
 
 		return energizerOrderModel;
 	}
@@ -557,10 +559,45 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 		//StringUtils.isEmpty function will check null and empty
 		//Read all CSV feeds
 
-		if (!StringUtils.isEmpty(csvValuesMap.get(SAP_ORDER_NO)))
-		{
-			sapOrderNo = csvValuesMap.get(SAP_ORDER_NO);
-		}
+
+		sapOrderNo = StringUtils.isNotBlank(csvValuesMap.get(SAP_ORDER_NO)) ? csvValuesMap.get(SAP_ORDER_NO) : null;
+
+		poNo = StringUtils.isNotBlank(csvValuesMap.get(PO_NO)) ? csvValuesMap.get(PO_NO) : null;
+
+		status = StringUtils.isNotBlank(csvValuesMap.get(STATUS)) ? ENERGIZER_POSSIBLE_ORDER_STATUS_MAP.get(csvValuesMap
+				.get(STATUS)) : null;
+
+		containerID = StringUtils.isNotBlank(csvValuesMap.get(CONTAINER_ID)) ? csvValuesMap.get(CONTAINER_ID) : null;
+
+		sealNumber = StringUtils.isNotBlank(csvValuesMap.get(SEAL_NUMBER)) ? csvValuesMap.get(SEAL_NUMBER) : null;
+
+		vesselNumber = StringUtils.isNotBlank(csvValuesMap.get(VESSAL_NUMBER)) ? csvValuesMap.get(VESSAL_NUMBER) : null;
+
+		invoicePDF = StringUtils.isNotBlank(csvValuesMap.get(INVOICE_PDF)) ? csvValuesMap.get(INVOICE_PDF) : null;
+
+		erpMaterialID = StringUtils.isNotBlank(csvValuesMap.get(ERP_MATERIAL_ID)) ? csvValuesMap.get(ERP_MATERIAL_ID) : null;
+
+		bdsDocId = StringUtils.isNotBlank(csvValuesMap.get(BDS_DOCID)) ? csvValuesMap.get(BDS_DOCID) : null;
+
+		bdsContrEp = StringUtils.isNotBlank(csvValuesMap.get(BDS_CONTREP)) ? csvValuesMap.get(BDS_CONTREP) : null;
+
+		bdsCocuClass = StringUtils.isNotBlank(csvValuesMap.get(BDS_DOCUCLASS)) ? csvValuesMap.get(BDS_DOCUCLASS) : null;
+
+		uom = StringUtils.isNotBlank(csvValuesMap.get(UOM)) ? csvValuesMap.get(UOM) : null;
+		
+		totalValue = NumberUtils.createDouble(csvValuesMap.get(TOTAL_VALUE));
+
+		totalTax = NumberUtils.createDouble(csvValuesMap.get(TOTAL_TAX));
+
+		totalShipment = NumberUtils.createDouble(csvValuesMap.get(TOTAL_SHIPMENT));
+
+		totalDiscount = NumberUtils.createDouble(csvValuesMap.get(TOTAL_DISCOUNT));
+
+		itemTax = calculateNumeric(csvValuesMap.get(ITEM_TAX), isValid, errBuffer, ITEM_TAX);
+		itemTotalDiscount = calculateNumeric(csvValuesMap.get(ITEM_TOTAL_DISCOUNT), isValid, errBuffer, ITEM_TOTAL_DISCOUNT);
+		itemTotalShipment = calculateNumeric(csvValuesMap.get(ITEM_TOTAL_SHIPMENT), isValid, errBuffer, ITEM_TOTAL_SHIPMENT);
+		lineItemTotalPrice = calculateNumeric(csvValuesMap.get(LINE_ITEM_TOTAL_PRICE), isValid, errBuffer, LINE_ITEM_TOTAL_PRICE);
+		itemTotalPrice = calculateNumeric(csvValuesMap.get(ITEM_TOTAL_PRICE), isValid, errBuffer, ITEM_TOTAL_PRICE);
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(HYBRIS_ORDER_NO)))
 		{
@@ -579,12 +616,6 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				hybrisOrderNo = "";
 			}
 		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(PO_NO)))
-		{
-			poNo = csvValuesMap.get(PO_NO);
-		}
-
 		if (!StringUtils.isEmpty(csvValuesMap.get(REQ_DELIVERY_DATE)))
 		{
 			try
@@ -597,105 +628,6 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				errBuffer.append(" || " + REQ_DELIVERY_DATE + " = " + csvValuesMap.get(REQ_DELIVERY_DATE) + " has invalid format: "
 						+ e.getMessage());
 			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(TOTAL_VALUE)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(TOTAL_VALUE)))
-			{
-				totalValue = NumberUtils.createDouble(csvValuesMap.get(TOTAL_VALUE));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + TOTAL_VALUE + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(TOTAL_TAX)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(TOTAL_TAX)))
-			{
-				totalTax = NumberUtils.createDouble(csvValuesMap.get(TOTAL_TAX));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + TOTAL_TAX + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(TOTAL_SHIPMENT)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(TOTAL_SHIPMENT)))
-			{
-				totalShipment = NumberUtils.createDouble(csvValuesMap.get(TOTAL_SHIPMENT));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + TOTAL_SHIPMENT + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(TOTAL_DISCOUNT)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(TOTAL_DISCOUNT)))
-			{
-				totalDiscount = NumberUtils.createDouble(csvValuesMap.get(TOTAL_DISCOUNT));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + TOTAL_DISCOUNT + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(STATUS)))
-		{
-			status = ENERGIZER_POSSIBLE_ORDER_STATUS_MAP.get(csvValuesMap.get(STATUS));
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(CONTAINER_ID)))
-		{
-			containerID = csvValuesMap.get(CONTAINER_ID);
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(SEAL_NUMBER)))
-		{
-			sealNumber = csvValuesMap.get(SEAL_NUMBER);
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(VESSAL_NUMBER)))
-		{
-			vesselNumber = csvValuesMap.get(VESSAL_NUMBER);
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(INVOICE_PDF)))
-		{
-			invoicePDF = csvValuesMap.get(INVOICE_PDF);
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ARCHIVE_ID)))
-		{
-			//archiveID = csvValuesMap.get(ARCHIVE_ID);
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ERP_MATERIAL_ID)))
-		{
-			erpMaterialID = csvValuesMap.get(ERP_MATERIAL_ID);
-		}
-		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_DOCID)))
-		{
-			bdsDocId = csvValuesMap.get(BDS_DOCID);
-		}
-		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_CONTREP)))
-		{
-			bdsContrEp = csvValuesMap.get(BDS_CONTREP);
-		}
-		if (!StringUtils.isEmpty(csvValuesMap.get(BDS_DOCUCLASS)))
-		{
-			bdsCocuClass = csvValuesMap.get(BDS_DOCUCLASS);
 		}
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(ORDER_ENTRY_QTY)))
@@ -714,11 +646,11 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 			}
 
 		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(UOM)))
+		else
 		{
-			uom = csvValuesMap.get(UOM);
+			orderEntryQty = null;
 		}
+
 
 		if (!StringUtils.isEmpty(csvValuesMap.get(REJECTION_REASON)))
 		{
@@ -732,71 +664,9 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 				rejectedStatus = "Yes";
 			}
 		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TOTAL_PRICE)))
+		else
 		{
-			if (NumberUtils.isNumber(csvValuesMap.get(ITEM_TOTAL_PRICE)))
-			{
-				itemTotalPrice = NumberUtils.createDouble(csvValuesMap.get(ITEM_TOTAL_PRICE));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + ITEM_TOTAL_PRICE + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(LINE_ITEM_TOTAL_PRICE)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(LINE_ITEM_TOTAL_PRICE)))
-			{
-				lineItemTotalPrice = NumberUtils.createDouble(csvValuesMap.get(LINE_ITEM_TOTAL_PRICE));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + LINE_ITEM_TOTAL_PRICE + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TOTAL_SHIPMENT)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(ITEM_TOTAL_SHIPMENT)))
-			{
-				itemTotalShipment = NumberUtils.createDouble(csvValuesMap.get(ITEM_TOTAL_SHIPMENT));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + ITEM_TOTAL_SHIPMENT + " is not an number ");
-			}
-		}
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TOTAL_DISCOUNT)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(ITEM_TOTAL_DISCOUNT)))
-			{
-				itemTotalDiscount = NumberUtils.createDouble(csvValuesMap.get(ITEM_TOTAL_DISCOUNT));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + ITEM_TOTAL_DISCOUNT + " is not an number ");
-			}
-		}
-
-
-		if (!StringUtils.isEmpty(csvValuesMap.get(ITEM_TAX)))
-		{
-			if (NumberUtils.isNumber(csvValuesMap.get(ITEM_TAX)))
-			{
-				itemTax = NumberUtils.createDouble(csvValuesMap.get(ITEM_TAX));
-			}
-			else
-			{
-				isValid = false;
-				errBuffer.append(" || " + ITEM_TAX + " is not an number ");
-			}
+			rejectionReason = null;
 		}
 
 		//Generate Log if record is not readable
