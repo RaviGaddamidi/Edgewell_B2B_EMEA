@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.product.populators;
 
@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -31,7 +32,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class EnergizerProductPopulator implements Populator<EnergizerProductModel, ProductData>
 {
@@ -61,6 +62,12 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 			throws ConversionException
 	{
 		int baseUOM = 1;
+
+		int numberOfEachInCase = 0;
+		int numberOfEachInLayer = 0;
+		int numberOfEachInPallet = 0;
+		int numberOfCasesPerPallet = 0;
+		int numberOfCasesPerLayer = 0;
 
 		final String currentUserId = customerFacade.getCurrentCustomer().getUid();
 		if (currentUserId.equals("anonymous"))
@@ -185,6 +192,31 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 						.getCurrency().getSymbol());
 			}
 		}
+
+		final List<EnergizerProductConversionFactorModel> conversionFactor = energizerProductModel.getProductConversionFactors();
+		for (final EnergizerProductConversionFactorModel factor : conversionFactor)
+		{
+			if (factor.getAlternateUOM().equalsIgnoreCase("CS") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInCase = factor.getConversionMultiplier();
+			}
+			else if (factor.getAlternateUOM().equalsIgnoreCase("LAY") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInLayer = factor.getConversionMultiplier();
+			}
+			else if (factor.getAlternateUOM().equalsIgnoreCase("PAL") && factor.getConversionMultiplier() != null)
+			{
+				numberOfEachInPallet = factor.getConversionMultiplier();
+			}
+		}
+
+		if (numberOfEachInCase > 0)
+		{
+			numberOfCasesPerPallet = numberOfEachInPallet / numberOfEachInCase;
+			numberOfCasesPerLayer = numberOfEachInLayer / numberOfEachInCase;
+		}
+		productData.setNumberOfCasesPerPallet(numberOfCasesPerPallet);
+		productData.setNumberOfCasesPerLayer(numberOfCasesPerLayer);
 	}
 
 	/**
