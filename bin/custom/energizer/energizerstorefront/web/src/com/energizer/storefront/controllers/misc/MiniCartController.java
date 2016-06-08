@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.misc;
 
@@ -20,8 +20,6 @@ import de.hybris.platform.cms2.servicelayer.services.CMSComponentService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.product.data.PriceData;
-import com.energizer.storefront.controllers.AbstractController;
-import com.energizer.storefront.controllers.ControllerConstants;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +33,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.energizer.storefront.controllers.AbstractController;
+import com.energizer.storefront.controllers.ControllerConstants;
 
 
 /**
@@ -64,6 +65,7 @@ public class MiniCartController extends AbstractController
 	public String getMiniCart(@PathVariable final String totalDisplay, final Model model)
 	{
 		final CartData cartData = cartFacade.getMiniCart();
+		int numberOfEntries = 0;
 		model.addAttribute("totalPrice", cartData.getTotalPrice());
 		model.addAttribute("subTotal", cartData.getSubTotal());
 		if (cartData.getDeliveryCost() != null)
@@ -76,7 +78,15 @@ public class MiniCartController extends AbstractController
 		{
 			model.addAttribute("totalNoDelivery", cartData.getTotalPrice());
 		}
-		model.addAttribute("totalItems", cartData.getTotalUnitCount());
+		if (cartFacade.getSessionCart().getEntries() == null)
+		{
+			numberOfEntries = 0;
+		}
+		else
+		{
+			numberOfEntries = cartFacade.getSessionCart().getEntries().size();
+		}
+		model.addAttribute("totalItems", numberOfEntries);
 		model.addAttribute("totalDisplay", totalDisplay);
 		return ControllerConstants.Views.Fragments.Cart.MiniCartPanel;
 	}

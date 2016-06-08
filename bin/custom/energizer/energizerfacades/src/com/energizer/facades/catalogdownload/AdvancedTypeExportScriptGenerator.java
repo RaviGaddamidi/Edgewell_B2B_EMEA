@@ -158,6 +158,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 		final List<String> columns = new ArrayList<String>();// new HashSet<String>();
 
 		AttributeDescriptor ad1 = null;
+		AttributeDescriptor ad2 = null;
 
 		try
 		{
@@ -168,27 +169,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 				for (final AttributeDescriptor ad : attribs)
 				{
 					LOG.info(" In Script Header loop, Attribute: " + ad);
-					/*
-					 * if (!isIgnoreColumn(type, ad) && !(ad instanceof RelationDescriptor && !(ad.isProperty())) &&
-					 * !ad.getQualifier().equals(Item.PK) && (ad.isInitial() || ad.isWritable()) &&
-					 * (!ad.getQualifier().equals("itemtype") || TypeManager.getInstance().getType("EnumerationValue")
-					 * .isAssignableFrom(type)) // export relations as attributes || ((!isIgnoreColumn(type, ad) && ad
-					 * instanceof RelationDescriptor && overrideRelationAsAttribute(ad)))) { if (!ad.isOptional()) {
-					 * addAdditionalModifier(type.getCode(), ad.getQualifier(), ImpExConstants.Syntax.Modifier.ALLOWNULL,
-					 * "true"); } if (ad.isUnique() || getAdditionalModifiers(type,
-					 * ad.getQualifier()).get(ImpExConstants.Syntax.Modifier.UNIQUE) != null) { hasUnique = true; } if
-					 * (!ad.isWritable()) { addAdditionalModifier(type.getCode(), ad.getQualifier(),
-					 * ImpExConstants.Syntax.Modifier.FORCE_WRITE, "true"); }
-					 */
-					/*
-					 * if (ad.isLocalized()) { for (final de.hybris.platform.jalo.c2l.Language lang : this.getLanguages()) {
-					 * generateColumn(ad, lang.getIsoCode()); columns.add(generateColumn(ad, lang.getIsoCode())); } } else {
-					 */
-
-					/*
-					 * if (ad.isUnique() || getAdditionalModifiers(type,
-					 * ad.getQualifier()).get(ImpExConstants.Syntax.Modifier.UNIQUE) != null) { hasUnique = true; }
-					 */
+					
 
 					if (ad.getQualifier().equals("erpMaterialId"))
 					{
@@ -208,44 +189,30 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 					{
 						LOG.info("orderingUnit attribute: --- " + ad.getQualifier());
 
-						columns.add(generateColumn(ad, null));
+						ad2 = ad;
+
 					}
 
-					//columns.addAll(getAdditionalColumns(type));
+					else if (ad.getQualifier().equals("uom"))
+					{
+						LOG.info("UOM attribute: --- " + ad.getQualifier());
+
+						columns.add(generateColumn(ad, null));
+						columns.add(generateColumn(ad2, null));
+
+					}
+
 
 				}
 			}
-			//columns.addAll(getAdditionalColumns(final type));
-			/*
-			 * final Map line = new HashMap(); int index = 0; final String firstColumn = generateFirstHeaderColumn(type,
-			 * hasUniqueColumns); line.put(Integer.valueOf(index), firstColumn); index++;
-			 */
-
-			/*
-			 * if (isUseDocumentID()) { line.put(Integer.valueOf(index), ImpExConstants.Syntax.DOCUMENT_ID_PREFIX +
-			 * "Item"); } else { line.put(Integer.valueOf(index), Item.PK + (hasUnique ? "" :
-			 * ImpExConstants.Syntax.MODIFIER_START + ImpExConstants.Syntax.Modifier.UNIQUE +
-			 * ImpExConstants.Syntax.MODIFIER_EQUAL + Boolean.TRUE + ImpExConstants.Syntax.MODIFIER_END)); }
-			 */
-			//index++;
-
+			
 			final Map line = new HashMap();
 			int index = 0;
-			/*
-			 * line.put(Integer.valueOf(index), "insert_update " + type.getCode()); index++;
-			 */
+			
 
 			final String firstColumn = generateFirstHeaderColumn(type, hasUnique);
 			line.put(Integer.valueOf(index), firstColumn);
 			index++;
-
-
-			/*
-			 * if (isUseDocumentID()) { line.put(Integer.valueOf(index), ImpExConstants.Syntax.DOCUMENT_ID_PREFIX +
-			 * "Item"); } else { line.put(Integer.valueOf(index), Item.PK + (hasUnique ? "" :
-			 * ImpExConstants.Syntax.MODIFIER_START + ImpExConstants.Syntax.Modifier.UNIQUE +
-			 * ImpExConstants.Syntax.MODIFIER_EQUAL + Boolean.TRUE + ImpExConstants.Syntax.MODIFIER_END)); } index++;
-			 */
 
 			for (final Iterator<String> iter = columns.iterator(); iter.hasNext(); index++)
 			{

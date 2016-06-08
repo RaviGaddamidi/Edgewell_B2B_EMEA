@@ -221,12 +221,12 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 
 
-							if (row.getCell(2) != null)
+							if (row.getCell(3) != null)
 							{
 								try
 								{
 
-									final String val = row.getCell(2).toString().trim();
+									final String val = row.getCell(3).toString().trim();
 									final Long quantity = new Double(val).longValue();
 									if (quantity > 0)
 									{

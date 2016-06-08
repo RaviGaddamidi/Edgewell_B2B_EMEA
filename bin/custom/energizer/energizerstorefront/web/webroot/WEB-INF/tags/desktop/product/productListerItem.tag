@@ -126,7 +126,7 @@
                         <c:if test="${empty isOrderForm || not isOrderForm}">
                             <form id="addToCartForm${product.code}" action_data="<c:url value="/cart/add"/>" method="post" class="add_to_cart_form">
 								<label for="qtyInput"><spring:theme code="basket.page.quantity"/></label>
-								<input type="text" maxlength="5" size="3" id="qty" name="qty" class="qty" value="${fn:escapeXml(product.moq)}">                            
+								<input type="text" maxlength="5" size="3" id="qty" name="qty" class="qty" value="${fn:escapeXml(product.moq)}"> &nbsp; ${fn:escapeXml(product.uom)}                           
                                 <input type="hidden" name="productCodePost" value="${product.code}"/>
                                 
                                 <c:choose>

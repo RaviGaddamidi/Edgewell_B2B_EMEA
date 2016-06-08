@@ -14,7 +14,7 @@
 <div class="qty">
 	<c:if test="${product.purchasable}">
 		<label for="qtyInput"><spring:theme code="basket.page.quantity"/></label>
-		<input type="text" maxlength="5" size="3" id="qtyInput" name="qtyInput" class="qty" value="${fn:escapeXml(product.moq)}">
+		<input type="text" maxlength="5" size="3" id="qtyInput" name="qtyInput" class="qty" value="${fn:escapeXml(product.moq)}">&nbsp; ${fn:escapeXml(product.uom)}
 	</c:if>
 
 	<c:if test="${product.stock.stockLevel gt 0}">

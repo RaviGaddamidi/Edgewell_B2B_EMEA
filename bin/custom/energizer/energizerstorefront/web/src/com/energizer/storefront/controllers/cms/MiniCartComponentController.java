@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.cms;
 
@@ -17,7 +17,6 @@ import de.hybris.platform.acceleratorcms.model.components.MiniCartComponentModel
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.product.data.PriceData;
-import com.energizer.storefront.controllers.ControllerConstants;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.energizer.storefront.controllers.ControllerConstants;
 
 
 /**
@@ -41,6 +42,7 @@ public class MiniCartComponentController extends AbstractCMSComponentController<
 	public static final String TOTAL_DISPLAY = "totalDisplay";
 	public static final String TOTAL_NO_DELIVERY = "totalNoDelivery";
 	public static final String SUB_TOTAL = "subTotal";
+	public static final String LINE_ITEMS = "lineItems";
 
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
@@ -49,6 +51,7 @@ public class MiniCartComponentController extends AbstractCMSComponentController<
 	protected void fillModel(final HttpServletRequest request, final Model model, final MiniCartComponentModel component)
 	{
 		final CartData cartData = cartFacade.getMiniCart();
+		int numberOfEntries = 0;
 		model.addAttribute(SUB_TOTAL, cartData.getSubTotal());
 		if (cartData.getDeliveryCost() != null)
 		{
@@ -60,8 +63,19 @@ public class MiniCartComponentController extends AbstractCMSComponentController<
 		{
 			model.addAttribute(TOTAL_NO_DELIVERY, cartData.getTotalPrice());
 		}
+
+		if (cartFacade.getSessionCart().getEntries() == null)
+		{
+			numberOfEntries = 0;
+		}
+		else
+		{
+			numberOfEntries = cartFacade.getSessionCart().getEntries().size();
+		}
+
 		model.addAttribute(TOTAL_PRICE, cartData.getTotalPrice());
 		model.addAttribute(TOTAL_DISPLAY, component.getTotalDisplay());
-		model.addAttribute(TOTAL_ITEMS, cartData.getTotalUnitCount());
+		model.addAttribute(TOTAL_ITEMS, numberOfEntries);
+		model.addAttribute(LINE_ITEMS, numberOfEntries);
 	}
 }
