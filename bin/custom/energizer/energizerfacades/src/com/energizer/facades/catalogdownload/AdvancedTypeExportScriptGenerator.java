@@ -105,7 +105,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 			 * if (LOG.isDebugEnabled()) { LOG.info("generating script statements for type " + type.getCode()); }
 			 */
 
-			System.out.println("Type name: " + type.getCode());
+			//System.out.println("Type name: " + type.getCode());
 
 			if (type.getCode().equals("EnergizerCMIR"))
 			{
