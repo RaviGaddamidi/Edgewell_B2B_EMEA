@@ -42,8 +42,7 @@ public class MiniCartComponentController extends AbstractCMSComponentController<
 	public static final String TOTAL_DISPLAY = "totalDisplay";
 	public static final String TOTAL_NO_DELIVERY = "totalNoDelivery";
 	public static final String SUB_TOTAL = "subTotal";
-	public static final String LINE_ITEMS = "lineItems";
-
+	
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
 
@@ -76,6 +75,5 @@ public class MiniCartComponentController extends AbstractCMSComponentController<
 		model.addAttribute(TOTAL_PRICE, cartData.getTotalPrice());
 		model.addAttribute(TOTAL_DISPLAY, component.getTotalDisplay());
 		model.addAttribute(TOTAL_ITEMS, numberOfEntries);
-		model.addAttribute(LINE_ITEMS, numberOfEntries);
 	}
 }
