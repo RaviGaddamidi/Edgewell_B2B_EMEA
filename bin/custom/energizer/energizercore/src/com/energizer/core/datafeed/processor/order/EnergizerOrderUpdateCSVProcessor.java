@@ -585,13 +585,13 @@ public class EnergizerOrderUpdateCSVProcessor extends AbstractEnergizerCSVProces
 
 		uom = StringUtils.isNotBlank(csvValuesMap.get(UOM)) ? csvValuesMap.get(UOM) : null;
 		
-		totalValue = NumberUtils.createDouble(csvValuesMap.get(TOTAL_VALUE));
+		totalValue = calculateNumeric(csvValuesMap.get(TOTAL_VALUE), isValid, errBuffer, TOTAL_VALUE);
 
-		totalTax = NumberUtils.createDouble(csvValuesMap.get(TOTAL_TAX));
+		totalTax = calculateNumeric(csvValuesMap.get(TOTAL_TAX), isValid, errBuffer, TOTAL_TAX);
 
-		totalShipment = NumberUtils.createDouble(csvValuesMap.get(TOTAL_SHIPMENT));
+		totalShipment = calculateNumeric(csvValuesMap.get(TOTAL_SHIPMENT), isValid, errBuffer, TOTAL_SHIPMENT);
 
-		totalDiscount = NumberUtils.createDouble(csvValuesMap.get(TOTAL_DISCOUNT));
+		totalDiscount = calculateNumeric(csvValuesMap.get(TOTAL_DISCOUNT), isValid, errBuffer, TOTAL_DISCOUNT);
 
 		itemTax = calculateNumeric(csvValuesMap.get(ITEM_TAX), isValid, errBuffer, ITEM_TAX);
 		itemTotalDiscount = calculateNumeric(csvValuesMap.get(ITEM_TOTAL_DISCOUNT), isValid, errBuffer, ITEM_TOTAL_DISCOUNT);
