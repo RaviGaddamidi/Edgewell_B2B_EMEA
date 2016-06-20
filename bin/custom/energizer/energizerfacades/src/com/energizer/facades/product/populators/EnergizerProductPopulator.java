@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.product.populators;
 
@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import javax.annotation.Resource;
 
+import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.core.model.EnergizerPriceRowModel;
 import com.energizer.core.model.EnergizerProductConversionFactorModel;
@@ -31,7 +32,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class EnergizerProductPopulator implements Populator<EnergizerProductModel, ProductData>
 {
@@ -62,6 +63,9 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 	{
 		int baseUOM = 1;
 
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
 		final String currentUserId = customerFacade.getCurrentCustomer().getUid();
 		if (currentUserId.equals("anonymous"))
 		{
@@ -80,7 +84,7 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 		productData.setFamilyName(energizerProductModel.getFamilyCode() == null ? EMPTY : energizerProductModel.getFamilyCode());
 		productData.setGroupName(energizerProductModel.getGroupCode() == null ? EMPTY : energizerProductModel.getGroupCode());
 
-		final String userId = userService.getCurrentUser().getUid();
+
 		final EnergizerCMIRModel energizerCMIRModel;
 		final EnergizerProductConversionFactorModel energizerProductConversionFactorModel;
 		if (loggedInUserB2bUnit != null)
@@ -111,6 +115,10 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 				shippingPointId = energizerCMIRModel.getShippingPoint();
 				shippingPointName = energizerProductService.getShippingPointName(shippingPointId);
 				productData.setShippingPoint(shippingPointId);
+			}
+			if (!b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
+			{
+				productData.setUom(energizerProductModel.getUnitOfMeasurement());
 			}
 
 			productData.setShippingPointName(shippingPointName == null ? EMPTY : shippingPointName);

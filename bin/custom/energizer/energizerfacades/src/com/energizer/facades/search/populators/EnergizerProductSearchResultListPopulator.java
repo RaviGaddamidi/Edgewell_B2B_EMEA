@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.search.populators;
 
@@ -33,7 +33,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class EnergizerProductSearchResultListPopulator extends EnergizerSearchResultProductPopulator
 {
@@ -119,7 +119,7 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 
 		if (productData.getUom() == null || productData.getUom().isEmpty())
 		{
-			productData.setUom(energizerProductModel.getUnit().getCode());
+			productData.setUom(energizerProductModel.getUnitOfMeasurement());
 		}
 
 

@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.misc;
 
@@ -21,7 +21,9 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.CartModel;
+import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.order.CartService;
+import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.Config;
 
@@ -51,6 +53,7 @@ import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.services.product.EnergizerProductService;
 import com.energizer.storefront.controllers.AbstractController;
 import com.energizer.storefront.controllers.ControllerConstants;
@@ -86,6 +89,9 @@ public class AddToCartController extends AbstractController
 	private EnergizerProductService energizerProductService;
 
 	@Resource
+	ProductService productService;
+
+	@Resource
 	private UserService userService;
 
 	@Resource
@@ -106,10 +112,24 @@ public class AddToCartController extends AbstractController
 			@Valid final AddToCartForm form, final BindingResult bindingErrors)
 	{
 		final OrderEntryData orderEntryData = getOrderEntryData(form.getQty(), code, null);
-		getOrderEntryShippingPoints(orderEntryData);
+
+		final EnergizerB2BUnitModel enrB2BUnitModel = getCurrentUserB2BUnit();
+
+		//getOrderEntryShippingPoints(orderEntryData);
+
+
+		if (enrB2BUnitModel.getCatalogType().equalsIgnoreCase("cmir"))
+		{
+			getOrderEntryShippingPoints(orderEntryData);
+		}
+		else
+		{
+			orderEntryData.setShippingPoint("");
+			orderEntryData.setReferenceShippingPoint("");
+		}
 		orderEntryBusinessRulesService.clearErrors();
 
-		orderEntryBusinessRulesService.validateBusinessRules(orderEntryData);
+		//	orderEntryBusinessRulesService.validateBusinessRules(orderEntryData);
 		if (orderEntryBusinessRulesService.hasErrors())
 		{
 			final List<BusinessRuleError> errors = orderEntryBusinessRulesService.getErrors();
@@ -197,10 +217,18 @@ public class AddToCartController extends AbstractController
 		orderEntry.getProduct().setCode(productCode);
 		orderEntry.setEntryNumber(entryNumber);
 
-		final String userId = userService.getCurrentUser().getUid();
-		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
-		orderEntry.getProduct().setUom(energizerCMIR.getUom());
+		final EnergizerB2BUnitModel b2bUnit = getCurrentUserB2BUnit();
+
+		if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
+		{
+			final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
+			orderEntry.getProduct().setUom(energizerCMIR.getUom());
+		}
+		else
+		{
+			final EnergizerProductModel energizerProduct = (EnergizerProductModel) productService.getProductForCode(productCode);
+			orderEntry.getProduct().setUom(energizerProduct.getUnitOfMeasurement());
+		}
 
 		return orderEntry;
 	}
@@ -219,7 +247,7 @@ public class AddToCartController extends AbstractController
 
 
 	/**
-	 * 
+	 *
 	 * @param orderEntryData
 	 */
 	protected void getOrderEntryShippingPoints(final OrderEntryData orderEntryData)
@@ -256,5 +284,19 @@ public class AddToCartController extends AbstractController
 			orderEntryData.setReferenceShippingPoint(shippingPoint);
 		}
 		//}
+	}
+
+	public EnergizerB2BUnitModel getCurrentUserB2BUnit()
+	{
+		final UserModel user = userService.getCurrentUser();
+		if (user != null)
+		{
+			final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(user.getUid());
+			if (b2bUnit != null)
+			{
+				return b2bUnit;
+			}
+		}
+		return null;
 	}
 }

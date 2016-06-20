@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -26,6 +26,7 @@ import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commerceservices.order.CommerceCartModificationException;
 import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.session.SessionService;
@@ -58,6 +59,7 @@ import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationS
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerProductModel;
 import com.energizer.facades.flow.impl.SessionOverrideB2BCheckoutFlowFacade;
 import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
@@ -300,18 +302,25 @@ public class CartPageController extends AbstractPageController
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-            boolean flag = false;
-			String productWithCmirInActive="";
+			boolean flag = false;
+			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				final UpdateQuantityForm uqf = new UpdateQuantityForm();
 				uqf.setQuantity(entry.getQuantity());
 				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
-				if (entry.getProduct().isIsActive() == false)
-				{
-                    productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
-					flag = true;
 
+				final EnergizerB2BUnitModel b2bUnit = getCurrentUserB2BUnit();
+
+
+				if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
+				{
+					if (entry.getProduct().isIsActive() == false)
+					{
+						productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+						flag = true;
+
+					}
 				}
 			}
 			if (flag == true)
@@ -384,13 +393,35 @@ public class CartPageController extends AbstractPageController
 		orderEntry.getProduct().setCode(productCode);
 		orderEntry.setEntryNumber(entryNumber);
 
-		final String userId = userService.getCurrentUser().getUid();
-		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
-		orderEntry.getProduct().setUom(energizerCMIR.getUom());
+		final EnergizerB2BUnitModel b2bUnit = getCurrentUserB2BUnit();
+
+		if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
+		{
+			final EnergizerCMIRModel energizerCMIR = energizerProductService.getEnergizerCMIR(productCode, b2bUnit.getUid());
+			orderEntry.getProduct().setUom(energizerCMIR.getUom());
+		}
+		else
+		{
+			final EnergizerProductModel energizerProduct = (EnergizerProductModel) productService.getProductForCode(productCode);
+			orderEntry.getProduct().setUom(energizerProduct.getUnitOfMeasurement());
+		}
 
 		return orderEntry;
 
+	}
+
+	public EnergizerB2BUnitModel getCurrentUserB2BUnit()
+	{
+		final UserModel user = userService.getCurrentUser();
+		if (user != null)
+		{
+			final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(user.getUid());
+			if (b2bUnit != null)
+			{
+				return b2bUnit;
+			}
+		}
+		return null;
 	}
 
 }

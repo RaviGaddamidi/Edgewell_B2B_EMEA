@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
@@ -20,6 +20,7 @@ import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPaymentTypeData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BReplenishmentRecurrenceEnum;
 import de.hybris.platform.b2bacceleratorfacades.order.data.ScheduledCartData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.TriggerData;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2bacceleratorservices.enums.CheckoutPaymentType;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.ContentPageModel;
@@ -42,6 +43,7 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
+import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
@@ -83,6 +85,7 @@ import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.facades.flow.impl.DefaultEnergizerB2BCheckoutFlowFacade;
 import com.energizer.facades.order.impl.DefaultEnergizerB2BOrderHistoryFacade;
 import com.energizer.storefront.annotations.RequireHardLogIn;
@@ -130,11 +133,20 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@Resource(name = "energizerB2BCheckoutFlowFacade")
 	private DefaultEnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
 
+	@Resource(name = "energizerSolrQueryManipulationService")
+	private EnergizerSolrQueryManipulationService energizerSolrQueryManipulationService;
+
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
 
 	@Resource
 	private CartService cartService;
+
+	@Resource
+	private UserService userService;
+
+	@Resource
+	private B2BCommerceUserService b2bCommerceUserService;
 
 	@Resource
 	private EnergizerOrderBusinessRuleValidationService orderBusinessRulesService;
@@ -254,15 +266,26 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				final String productCode = entry.getProduct().getCode();
 				final ProductData product = productFacade.getProductForCodeAndOptions(productCode,
 						Arrays.asList(ProductOption.BASIC, ProductOption.PRICE));
-				if (entry.getProduct().isIsActive() == true)
+
+				final EnergizerB2BUnitModel b2bUnit = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
+
+				if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
 				{
-					entry.setProduct(product);
+
+					if (entry.getProduct().isIsActive() == true)
+					{
+						entry.setProduct(product);
+					}
+					else
+					{
+						productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+						flag = true;
+
+					}
 				}
 				else
 				{
-					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
-					flag = true;
-
+					entry.setProduct(product);
 				}
 
 			}
@@ -337,22 +360,35 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@RequireHardLogIn
 	public List<? extends AddressData> getDeliveryAddresses()
 	{
+
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
 		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
 		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses();
-		//final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
-		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
-
 		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
-		for (final String soldToAddressId : soldToAddressIds)
+
+		if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
 		{
-			for (final AddressData address : energizerDeliveryAddresses)
+
+			//final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
+			final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
+
+			for (final String soldToAddressId : soldToAddressIds)
 			{
-				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
+				for (final AddressData address : energizerDeliveryAddresses)
 				{
-					energizerAddresses.add(address);
-					break;
+					if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
+					{
+						energizerAddresses.add(address);
+						break;
+					}
 				}
 			}
+		}
+		else
+		{
+			energizerAddresses.addAll(energizerDeliveryAddresses);
 		}
 
 		return energizerAddresses;
@@ -374,7 +410,13 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@RequireHardLogIn
 	public CartData setDeliveryAddress(@RequestParam(value = "addressId") final String addressId)
 	{
+
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
 		AddressData addressData = null;
+		int leadTime = 0;
+		final int defaultLeadTime = Integer.parseInt(Config.getParameter("defaultLeadTime"));
 
 		final List<AddressData> deliveryAddresses = energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses();
 		for (final AddressData deliveryAddress : deliveryAddresses)
@@ -385,25 +427,36 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				break;
 			}
 		}
-		int leadTime = 0;
-		if (addressData != null && getCheckoutFlowFacade().setDeliveryAddress(addressData))
+
+		if (b2bUnit.getCatalogType().equalsIgnoreCase("cmir"))
 		{
-			// ShippingPoint should fetch from cartdata but its not availble so fetching it by code.
-			//final String shippingPointId = cartFacade.getSessionCart().getShippingPoint();
-			final String shippingPoint = getShippingPoint();
-			final String soldToAddressId = addressData.getErpAddressId();
-			final int defaultLeadTime = Integer.parseInt(Config.getParameter("defaultLeadTime"));
-			if (shippingPoint != null && soldToAddressId != null)
+			if (addressData != null && getCheckoutFlowFacade().setDeliveryAddress(addressData))
 			{
-				leadTime = energizerB2BCheckoutFlowFacade.getLeadTimeData(shippingPoint, soldToAddressId);
-				if (leadTime > 0)
+				// ShippingPoint should fetch from cartdata but its not availble so fetching it by code.
+				//final String shippingPointId = cartFacade.getSessionCart().getShippingPoint();
+				final String shippingPoint = getShippingPoint();
+				final String soldToAddressId = addressData.getErpAddressId();
+
+				if (shippingPoint != null && soldToAddressId != null)
 				{
-					energizerB2BCheckoutFlowFacade.setLeadTime(leadTime);
+					leadTime = energizerB2BCheckoutFlowFacade.getLeadTimeData(shippingPoint, soldToAddressId);
+					if (leadTime > 0)
+					{
+						energizerB2BCheckoutFlowFacade.setLeadTime(leadTime);
+					}
+					else
+					{
+						energizerB2BCheckoutFlowFacade.setLeadTime(defaultLeadTime);
+					}
 				}
-				else
-				{
-					energizerB2BCheckoutFlowFacade.setLeadTime(defaultLeadTime);
-				}
+			}
+		}
+
+		else
+		{
+			if (addressData != null && getCheckoutFlowFacade().setDeliveryAddress(addressData))
+			{
+				energizerB2BCheckoutFlowFacade.setLeadTime(defaultLeadTime);
 			}
 		}
 		return energizerB2BCheckoutFlowFacade.getCheckoutCart();
@@ -1059,7 +1112,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	/**
 	 * Need to move out of controller utility method for Replenishment
-	 * 
+	 *
 	 */
 	protected List<String> getNumberRange(final int startNumber, final int endNumber)
 	{

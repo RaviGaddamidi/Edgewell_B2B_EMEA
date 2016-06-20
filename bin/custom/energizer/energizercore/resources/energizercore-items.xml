@@ -276,6 +276,12 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="unitOfMeasurement" type="java.lang.String">
+                        <description>Unit Of Measurement</description>
+                        <modifiers />
+                        <persistence type="property" />
+                    </attribute>
+
 
 				</attributes>
 			</itemtype>
