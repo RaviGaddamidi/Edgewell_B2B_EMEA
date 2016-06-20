@@ -1065,7 +1065,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 			entryModel.setRejectedStatus("No");
 			entryModel.setIsNewEntry("N");
 			energizerB2BCheckoutFlowFacade.saveEntry(entryModel);
-			ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
+			//ShippingValidationErros = energizerB2BCheckoutFlowFacade.getOrderShippingValidation(entryModel);
 
 			if (ShippingValidationErros.size() > 0)
 			{

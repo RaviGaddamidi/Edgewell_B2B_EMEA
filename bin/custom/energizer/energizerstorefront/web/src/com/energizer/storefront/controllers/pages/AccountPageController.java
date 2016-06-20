@@ -287,7 +287,7 @@ public class AccountPageController extends AbstractSearchPageController
             final List<OrderEntryData> entries = orderDetails.getEntries();
 			boolean flag = true;
 			String cmir = " ";
-			for (final OrderEntryData entry : entries)
+			/*for (final OrderEntryData entry : entries)
 			{
 				if (entry.getProduct().isIsActive() == false || !entry.getProduct().getCustomerMaterialId().contains(entry.getCustomerMaterialId()))
 				{
@@ -301,7 +301,7 @@ public class AccountPageController extends AbstractSearchPageController
 			{
 				GlobalMessages.addMessage(model, "accErrorMsgs", "reorder.cmirinactive", new Object[]
 				{ cmir });
-			}
+			}*/
 
 			model.addAttribute("displayed", flag);
 			model.addAttribute("orderData", orderDetails);

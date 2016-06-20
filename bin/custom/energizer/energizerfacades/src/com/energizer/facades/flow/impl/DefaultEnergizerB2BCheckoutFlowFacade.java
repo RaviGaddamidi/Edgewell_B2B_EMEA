@@ -607,8 +607,11 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 			{
 				final EnergizerCMIRModel cmir = energizerProductService.getEnergizerCMIR(entry.getProduct().getCode(), orderModel
 						.getUnit().getUid());
-				entry.setCustomerMaterialId(cmir.getCustomerMaterialId());
-				modelService.save(entry);
+				if(cmir!=null)
+				 {
+				 entry.setCustomerMaterialId(cmir.getCustomerMaterialId());
+				  modelService.save(entry);
+				}
 			}
 
 			orderModel.setTotalPrice(cartModel.getTotalPrice());
