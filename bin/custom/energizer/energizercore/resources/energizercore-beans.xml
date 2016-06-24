@@ -100,7 +100,7 @@
 		<property name="containerPackingType" type="String"/>	
 		<property name="totalPalletCount" type="Integer"/>
 		<property name="virtualPalletCount" type="Integer"/>
-		<property name="partialPalletCount" type="Double"/>
+		<property name="partialPalletCount" type="Integer"/>
     </bean>    
     
      <bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData"  >

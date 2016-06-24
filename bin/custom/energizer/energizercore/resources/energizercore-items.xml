@@ -779,7 +779,7 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					<attribute qualifier="partialPalletCount" type="java.lang.Double">
+					<attribute qualifier="partialPalletCount" type="java.lang.Integer">
 						<description>Partial pallet</description>
 						<modifiers />
 						<persistence type="property" />
