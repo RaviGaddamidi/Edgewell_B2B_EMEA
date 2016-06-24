@@ -24,14 +24,4 @@
 			</c:if>
 		</p>
 		
-		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerType"/>&nbsp;:&nbsp;
-		  <c:if test="${not empty order.containerHeight }">
-		    ${order.containerHeight}
-		  </c:if>
-		</p>
-		<p class="reduce_space_cls"><spring:theme code="text.account.orderHistory.containerPackingMaterial"/>&nbsp;:&nbsp;
-		  <c:if test="${not empty order.containerPackingType }">
-		    ${order.containerPackingType}
-		  </c:if>
-		</p>
 </div>

@@ -98,6 +98,9 @@
 		<property name="rejectionComments" type="String"></property>
 		<property name="containerHeight" type="String"/>
 		<property name="containerPackingType" type="String"/>	
+		<property name="totalPalletCount" type="Integer"/>
+		<property name="virtualPalletCount" type="Integer"/>
+		<property name="partialPalletCount" type="Double"/>
     </bean>    
     
      <bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData"  >

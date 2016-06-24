@@ -196,7 +196,7 @@
 .orderList .orderListTable tbody td p{text-align:left;}
 
 table.orderListApprovTbl-cls{width:100%;}
-table.orderListApprovTbl-cls td:last-child p{width:105px;word-wrap:break-word;}
+table.orderListApprovTbl-cls td:last-child p{width:130px;word-wrap:break-word;}
 .obShippinFixCls{
 	position:relative;
 	left:41px;

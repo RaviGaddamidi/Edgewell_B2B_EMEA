@@ -105,6 +105,8 @@
 			<order:orderApprovalDetailsItem order="${orderData}" />
 		</c:if> 
 
+		<order:orderHistoryLoadingDetails order="${orderData}" />
+		
 	    <order:energizerOrderDetailsItem order="${orderData}"/> 
 
 	</div>

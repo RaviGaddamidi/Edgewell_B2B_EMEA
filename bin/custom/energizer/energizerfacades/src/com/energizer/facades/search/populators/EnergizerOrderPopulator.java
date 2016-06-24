@@ -67,6 +67,9 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		//target.setArchiveID(source.getArchiveID());
 		target.setContainerHeight(source.getContainerHeight());
 		target.setContainerPackingType(source.getContainerPackingType());
+		target.setTotalPalletCount(source.getTotalPalletCount());
+		target.setVirtualPalletCount(source.getVirtualPalletCount());
+		target.setPartialPalletCount(source.getPartialPalletCount());
 
 	}
 

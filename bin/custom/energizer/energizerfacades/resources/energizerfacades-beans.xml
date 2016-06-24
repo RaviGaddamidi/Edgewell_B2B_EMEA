@@ -68,6 +68,9 @@
 		<property name="availableVolume" type="java.lang.Double" />
 		<property name="availableWeight" type="java.lang.Double" />
 		<property name="errorMessage" type="boolean" />
+		<property name="totalPalletCount" type="java.lang.Integer" />
+		<property name="virtualPalletCount" type="java.lang.Integer" />
+		<property name="partialPalletCount" type="java.lang.Double" />
 	</bean>
 	<!-- ************ End CartData Bean definition ******************* -->	
 

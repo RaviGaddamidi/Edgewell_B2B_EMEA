@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.search.populators;
 
@@ -59,6 +59,9 @@ public class EnergizerCartPopulator extends CartPopulator
 		}
 		target.setContainerVolumeUtilization(source.getContainerVolumeUtilization());
 		target.setContainerWeightUtilization(source.getContainerWeightUtilization());
+		target.setTotalPalletCount(source.getTotalPalletCount());
+		target.setVirtualPalletCount(source.getVirtualPalletCount());
+		target.setPartialPalletCount(source.getPartialPalletCount());
 		target.setLeadTime(source.getLeadTime());
 
 		//cost center setting as - one b2b unit can have only one cost center.

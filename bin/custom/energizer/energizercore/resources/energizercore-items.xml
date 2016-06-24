@@ -769,6 +769,21 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="totalPalletCount" type="java.lang.Integer">
+						<description>Total Pallet</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="virtualPalletCount" type="java.lang.Integer">
+						<description>Virtual Pallet</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="partialPalletCount" type="java.lang.Double">
+						<description>Partial pallet</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 					
 				</attributes>
 			</itemtype>
