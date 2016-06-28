@@ -1294,9 +1294,6 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			cartData.setAvailableVolume((Math.round((100 - cartData.getTotalProductVolumeInPercent()) * 100.0) / 100.0));
 			cartData.setAvailableWeight((Math.round((100 - cartData.getTotalProductWeightInPercent()) * 100.0) / 100.0));
 
-			cartData.setTotalPalletCount(0);
-			cartData.setVirtualPalletCount(virtualPallet);
-			cartData.setPartialPalletCount(partialPallet);
 			LOG.info("Available volume: " + cartData.getAvailableVolume() + " Available Weight: " + cartData.getAvailableWeight());
 		}
 		catch (final Exception exception)
