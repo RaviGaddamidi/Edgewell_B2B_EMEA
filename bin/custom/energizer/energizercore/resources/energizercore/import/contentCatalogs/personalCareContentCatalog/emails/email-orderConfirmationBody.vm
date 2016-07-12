@@ -371,9 +371,11 @@
 										
 										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.getMessage('paragraphDeliveryInfo', "#genHtmlLinkStartTag($deliveryInfoUrl)", "#genHtmlLinkEndTag()")}</font></p>-->
 										<!--<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">$paragraphContactUs</font></p>-->
+										<div style="float:left;margin:2%;margin-top:1%;">
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.complimentaryClosing}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.signature}</font></p>
 										<p><font color="#666666" size="2" face="Arial, Helvetica, sans-serif">${ctx.messages.note}</font></p>
+										</div>
 									</td>
 								</tr>
 								<tr>
