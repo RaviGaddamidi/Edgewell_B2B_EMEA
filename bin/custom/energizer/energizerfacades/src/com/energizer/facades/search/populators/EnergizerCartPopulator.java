@@ -13,6 +13,10 @@ import de.hybris.platform.core.model.user.AddressModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
@@ -37,6 +41,8 @@ public class EnergizerCartPopulator extends CartPopulator
 	@Override
 	public void populate(final CartModel source, final CartData target)
 	{
+	    Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
+		Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
 		super.populate(source, target);
 		if (source.getB2bUnit() != null)
 		{
@@ -63,6 +69,15 @@ public class EnergizerCartPopulator extends CartPopulator
 		target.setVirtualPalletCount(source.getVirtualPalletCount());
 		target.setPartialPalletCount(source.getPartialPalletCount());
 		target.setLeadTime(source.getLeadTime());
+		
+		palStackData = source.getPalStackData();
+        final SortedSet<Integer> keys = new TreeSet<Integer>(palStackData.keySet());
+		for (final Integer key : keys)
+		{
+			final List<String> value = palStackData.get(key);
+			sortedPalStackData.put(key, value);
+		}
+		target.setPalStackData(sortedPalStackData);
 
 		//cost center setting as - one b2b unit can have only one cost center.
 		final List<? extends B2BCostCenterData> costCenterData = b2bCheckoutFacade.getActiveVisibleCostCenters();

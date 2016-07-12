@@ -71,6 +71,7 @@
 		<property name="totalPalletCount" type="java.lang.Integer" />
 		<property name="virtualPalletCount" type="java.lang.Integer" />
 		<property name="partialPalletCount" type="java.lang.Integer" />
+		<property name="palStackData" type="java.util.Map&lt;Integer,java.util.List&lt;String&gt;>"/>
 	</bean>
 	<!-- ************ End CartData Bean definition ******************* -->	
 

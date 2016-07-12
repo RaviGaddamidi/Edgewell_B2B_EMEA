@@ -193,6 +193,53 @@
 										           
 										</table>
 										
+										#if ($ctx.order.palStackData)                   
+                                            <table style="height:200px;width:700px; position:relative;background-color: #ffd799;margin-left:25px;float:left;margin-right:100px;border-color:Black;border-collapse:collapse; table-layout:fixed; border :1px solid ;">
+                                                 <tr style="height:100px;">
+                                                    #foreach( $item in ${ctx.order.palStackData.entrySet()} )
+                                                    <td  style="border-right: 1px solid #000000;border-bottom: 1px solid #000000;">
+                                                       #foreach( $productList in $item.value )  
+                                                          #if ($velocityCount == 2)
+                                                             #if ($productList == "NA")
+                                                             #else
+                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:30px;">
+                                                                   <p>$productList</p>
+                                                                </div>
+                                                             #end
+                                                          #end
+                                                       #end
+                                                    </td>
+                                                   #end
+                                                   <td style="border-bottom: 1px solid #000000;background-color: white; width:60px;border:0;">
+                                                     &nbsp;<p>${ctx.messages.secondStack}</p>
+                                                   </td>
+                                                 </tr>  
+            
+                                                 <tr style="height:100px;">
+                                                     #foreach( $item in ${ctx.order.palStackData.entrySet()} )
+                                                     <td  style="border-right: 1px solid #000000;border-bottom: 1px solid #000000;">
+                                                        #foreach( $productList in $item.value )   
+                                                           #if ($velocityCount == 2) 
+                                                           #else 
+                                                              #if ($productList == "NA")
+                                                              #else
+                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:30px;">
+                                                                   <p>$productList</p>
+                                                                </div>
+                                                               #end
+                                                           #end
+                                                        #end
+                                                      </td>
+                                                      #end
+                                                   <td style="border-bottom: 1px solid #000000;background-color: white; width:60px;border:0;">
+                                                      &nbsp;<p>${ctx.messages.firstStack}</p>
+                                                   </td>
+                                                  </tr>  
+                                        </table>
+										<p  align="Center">${ctx.messages.palStack}<br/><br/>
+                                      #end
+
+										
 										<p><font color="blue" size="1" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.disclaimer}</b></font></p>
 										
 										#if ($!ctx.order.purchaseOrderNumber)

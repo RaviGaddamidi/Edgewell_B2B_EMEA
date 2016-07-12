@@ -675,6 +675,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		cartModel.setTotalPalletCount(cartData.getTotalPalletCount());
 		cartModel.setVirtualPalletCount(cartData.getVirtualPalletCount());
 		cartModel.setPartialPalletCount(cartData.getPartialPalletCount());
+		cartModel.setPalStackData(cartData.getPalStackData());
 		modelService.save(cartModel);
 
 	}

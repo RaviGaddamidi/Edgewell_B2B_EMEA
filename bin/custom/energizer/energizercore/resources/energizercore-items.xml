@@ -19,7 +19,8 @@
 			autocreate="true" type="list" />
 		<collectiontype elementtype="EnergizerProductConversionFactor"
 			code="EnergizerProductConversionFactorList" autocreate="true" type="list" />
-
+        <collectiontype elementtype="java.lang.String" code="palStackList"
+			autocreate="true" type="list" />
 	</collectiontypes>
 
 	<enumtypes>
@@ -44,6 +45,12 @@
 			<value code="HOP" />
 		</enumtype>
 	</enumtypes>
+	
+	 <maptypes>	
+	   <maptype code="palStackMap" argumenttype="java.lang.Integer"
+         returntype="palStackList" generate="true" autocreate="true" />
+      </maptypes>
+	
 	<relations>
 		<relation code="AbstractOrder2B2BPermissionResults"
 		          localized="false" generate="false" autocreate="false">
@@ -784,7 +791,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-					
+					<attribute qualifier="palStackData" type="palStackMap">
+						<description>Container Optimization PAL Stack data</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 

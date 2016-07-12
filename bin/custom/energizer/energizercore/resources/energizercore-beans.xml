@@ -101,6 +101,7 @@
 		<property name="totalPalletCount" type="Integer"/>
 		<property name="virtualPalletCount" type="Integer"/>
 		<property name="partialPalletCount" type="Integer"/>
+		<property name="palStackData" type="java.util.Map&lt;Integer,java.util.List&lt;String&gt;>"/>
     </bean>    
     
      <bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData"  >

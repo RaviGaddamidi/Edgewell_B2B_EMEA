@@ -106,6 +106,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	List<EnergizerProductPalletHeight> nonPalletProductsList = new ArrayList<EnergizerProductPalletHeight>();
 	final ArrayList<EnergizerProductPalletHeight> sortedProductsListA = new ArrayList<EnergizerProductPalletHeight>();
 	ArrayList<EnergizerProductPalletHeight> productsListB = null;
+	LinkedHashMap<Integer, List<String>> palStackData = null;
 
 
 	@Override
@@ -186,6 +187,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		doubleStackMap = new HashMap();
 		floorSpaceProductMap = new LinkedHashMap<Integer, Integer>();
 		nonPalletFloorSpaceProductMap = new LinkedHashMap<Integer, Double>();
+		palStackData = new LinkedHashMap<Integer, List<String>>();
 		double availableVolume = 100;
 		double availableWeight = 100;
 		double availableHeight = 0;
@@ -210,6 +212,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		int actualPallet = 0;
 		int virtualPallet = 0;
 		int partialPallet = 0;
+
+		String matrix[][] = null;
 
 		message = new ArrayList<String>();
 		products = new ArrayList<EnergizerProductPalletHeight>();
@@ -314,9 +318,12 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			Collections.sort(productsListA);
 
+			matrix = new String[2][totalPalletsCount / 2];
+
 			for (floorSpaceCount = 0; floorSpaceCount < totalPalletsCount / 2; floorSpaceCount++)
 			{
 				LOG.info("***************** The floorSpace Count loop " + floorSpaceCount + " starts ****************");
+
 				availableHeight = getAvailableHeight(packingOption, containerHeight);
 				LOG.info("Available Height:" + availableHeight);
 				if (availableVolume <= 0)
@@ -367,7 +374,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 										+ getWeightOfGivenMaterial(productsListA.get(minIndex - 1).getErpMaterialId(),
 												productsListA.get(minIndex - 1).getCalculatedUOM());
 
-
+								matrix[0][floorSpaceCount] = productsListA.get(maxIndex - 1).getErpMaterialId();
+								matrix[1][floorSpaceCount] = productsListA.get(minIndex - 1).getErpMaterialId();
 								productsListA.remove(maxIndex - 1); // removeHighestLowestPalletList(productsListA, maxIndex);;
 								productsListA.remove(minIndex - 1);
 								floorSpaceProductMap.put(floorSpaceCount, 2);
@@ -393,6 +401,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								final double percentageVolumeOfSinglePallet = getPercentage(new BigDecimal(0),
 										new BigDecimal(volumeOfSinglePallet), containerHeight).getPercentVolumeUses();
 								availableVolume = availableVolume - percentageVolumeOfSinglePallet;
+
+								matrix[0][floorSpaceCount] = productsListA.get(0).getErpMaterialId();
 
 								productsListA.remove(maxIndex - 1);
 								floorSpaceProductMap.put(floorSpaceCount, 1);
@@ -424,6 +434,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							}
 							productWeight = productWeight
 									+ getWeightOfGivenMaterial(tempProduct.getErpMaterialId(), tempProduct.getCalculatedUOM());
+
+							matrix[0][floorSpaceCount] = tempProduct.getErpMaterialId();
+
 							productsListA.remove(tempProduct);
 							floorSpaceProductMap.put(floorSpaceCount, 1);
 
@@ -452,11 +465,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			/*
 			 * if (nonPalletProductsList.size() > 0 && !packingOption.equalsIgnoreCase("2 WOODEN BASE")) {
-			 *
+			 * 
 			 * LOG.info("Select packing Option : 2 Wooden Base "); message .add(
 			 * "Dear Customer, Your order contains some products whose quantity is less than a full pallet (partial pallet). Partial pallets can be shipped only with 2 wooden base packing material. Please change your packing material or remove the partial pallet products."
 			 * ); cartData.setErrorMessage(true); }
-			 *
+			 * 
 			 * else
 			 */if (nonPalletProductsList.size() > 0 && palletCount < totalPalletsCount)
 			{
@@ -531,6 +544,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								availableVolume = availableVolume - percentVolumePerSlot;
 								nonPalletVolumePercent = nonPalletVolumePercent - percentVolumePerSlotForNonPallet;
 								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 1.0);
+								matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
 								partialPallet = partialPallet + 1;
 							}
 
@@ -541,6 +555,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 										/ percentVolumePerSlotForNonPallet);
 								partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent
 										/ percentVolumePerSlotForNonPallet));
+								matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
 								nonPalletVolumePercent = 0;
 
 							}
@@ -553,6 +568,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							availableVolume = availableVolume - (2 * percentVolumePerSlot);
 							nonPalletVolumePercent = nonPalletVolumePercent - (2 * percentVolumePerSlotForNonPallet);
 							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 2.0);
+							matrix[0][nonPalletFloorSpaceCount] = "Custom Pallet";
+							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
 							partialPallet = partialPallet + 2;
 						}
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < 2 * percentVolumePerSlotForNonPallet
@@ -563,6 +580,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - percentVolumePerSlot;
 							availableVolume = availableVolume - (nonPalletVolumePercent - percentVolumePerSlotForNonPallet);
+							matrix[0][nonPalletFloorSpaceCount] = "Custom Pallet";
+							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
 							nonPalletVolumePercent = 0;
 						}
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < percentVolumePerSlotForNonPallet)
@@ -572,6 +591,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - nonPalletVolumePercent;
 							nonPalletVolumePercent = 0;
+							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
 						}
 					}
 				}
@@ -614,6 +634,31 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			cartData.setFloorSpaceCount(floorSpaceCount);
 			cartData.setTotalProductVolumeInPercent((Math.round((100 - availableVolume) * 100.0) / 100.0));
 			cartData.setTotalProductWeightInPercent((Math.round((100 - availableWeight) * 100.0) / 100.0));
+
+
+			for (int innerCount = 0; innerCount < (totalPalletsCount / 2); innerCount++)
+			{
+				final List<String> palStackProduct = new ArrayList<String>();
+
+				for (int outerCount = 0; outerCount < 2; outerCount++)
+				{
+					if (matrix[outerCount][innerCount] != null)
+					{
+						LOG.info("Element at i=" + outerCount + "and j=" + innerCount + "value " + matrix[outerCount][innerCount]);
+						palStackProduct.add(matrix[outerCount][innerCount]);
+					}
+					else
+					{
+						palStackProduct.add("NA");
+					}
+
+
+				}
+				palStackData.put(innerCount, palStackProduct);
+			}
+
+
+			cartData.setPalStackData(palStackData);
 
 		}
 
@@ -660,8 +705,6 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		LOG.info("Available volume: " + cartData.getAvailableVolume() + " Available Weight: " + cartData.getAvailableWeight());
 
 		LOG.info("*********************** End *******************************************8");
-
-
 		return cartData;
 	}
 

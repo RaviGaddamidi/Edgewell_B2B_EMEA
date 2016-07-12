@@ -10,6 +10,12 @@ import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import javax.annotation.Resource;
 
 import com.energizer.core.data.EnergizerB2BUnitData;
@@ -32,6 +38,8 @@ public class EnergizerOrderPopulator extends OrderPopulator
 	@Override
 	public void populate(final OrderModel source, final OrderData target)
 	{
+	    Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
+		Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
 		super.populate(source, target);
 		target.setErpOrderNumber(source.getErpOrderNumber());
 		target.setInvoiceNumber(source.getInvoiceNumber());
@@ -70,6 +78,15 @@ public class EnergizerOrderPopulator extends OrderPopulator
 		target.setTotalPalletCount(source.getTotalPalletCount());
 		target.setVirtualPalletCount(source.getVirtualPalletCount());
 		target.setPartialPalletCount(source.getPartialPalletCount());
+		
+		palStackData = source.getPalStackData();
+        final SortedSet<Integer> keys = new TreeSet<Integer>(palStackData.keySet());
+		for (final Integer key : keys)
+		{
+			final List<String> value = palStackData.get(key);
+			sortedPalStackData.put(key, value);
+		}
+		target.setPalStackData(sortedPalStackData);
 
 	}
 
