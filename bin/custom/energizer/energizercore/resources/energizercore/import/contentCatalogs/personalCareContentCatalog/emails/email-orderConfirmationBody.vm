@@ -191,18 +191,20 @@
 										                </tr>
 										                
 										           
-										</table>
+										</table><br/>
 										
-										#if ($ctx.order.palStackData)                   
-                                            <table style="height:200px;width:700px; position:relative;background-color: #ffd799;margin-left:25px;float:left;margin-right:100px;border-color:Black;border-collapse:collapse; table-layout:fixed; border :1px solid ;">
-                                                 <tr style="height:100px;">
+										#if ($!ctx.order.palStackDatasource.getPalStackData().isEmpty())         
+
+									
+                                            <table style="height:180px;width:700px; position:relative;background-color: #ffd799;margin-left:25px;float:left;margin-right:100px;border-color:Black;border-collapse:collapse; table-layout:fixed; border :1px solid ;">
+                                                 <tr style="height:90px;">
                                                     #foreach( $item in ${ctx.order.palStackData.entrySet()} )
                                                     <td  style="border-right: 1px solid #000000;border-bottom: 1px solid #000000;">
                                                        #foreach( $productList in $item.value )  
                                                           #if ($velocityCount == 2)
                                                              #if ($productList == "NA")
                                                              #else
-                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:30px;">
+                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:15px;">
                                                                    <p>$productList</p>
                                                                 </div>
                                                              #end
@@ -211,11 +213,11 @@
                                                     </td>
                                                    #end
                                                    <td style="border-bottom: 1px solid #000000;background-color: white; width:60px;border:0;">
-                                                     &nbsp;<p>${ctx.messages.secondStack}</p>
+                                                     &nbsp;<p style="margin-bottom: 35px;">${ctx.messages.secondStack}</p>
                                                    </td>
                                                  </tr>  
             
-                                                 <tr style="height:100px;">
+                                                 <tr style="height:90px;">
                                                      #foreach( $item in ${ctx.order.palStackData.entrySet()} )
                                                      <td  style="border-right: 1px solid #000000;border-bottom: 1px solid #000000;">
                                                         #foreach( $productList in $item.value )   
@@ -223,7 +225,7 @@
                                                            #else 
                                                               #if ($productList == "NA")
                                                               #else
-                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:30px;">
+                                                                <div style="font-size:12px;color: black;transform: rotate(-90deg);white-space: nowrap;margin-top:15px;">
                                                                    <p>$productList</p>
                                                                 </div>
                                                                #end
@@ -232,15 +234,21 @@
                                                       </td>
                                                       #end
                                                    <td style="border-bottom: 1px solid #000000;background-color: white; width:60px;border:0;">
-                                                      &nbsp;<p>${ctx.messages.firstStack}</p>
+                                                      &nbsp;<p style="margin-bottom: 35px;">${ctx.messages.firstStack}</p>
                                                    </td>
                                                   </tr>  
+												  
                                         </table>
-										<p  align="Center">${ctx.messages.palStack}<br/><br/>
-                                      #end
-
 										
-										<p><font color="blue" size="1" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.disclaimer}</b></font></p>
+                                      #end
+									  
+										
+										<p style="float:left;margin:2%;">
+										#if ($!ctx.order.palStackData.isEmpty()) 
+										          <font color="#666666" size="2" face="Arial, Helvetica, sans-serif" style="margin-left: 300px;"><b>${ctx.messages.palStack}</b></font><br/><br/>
+												  #end
+										          <font color="blue" size="1" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.disclaimer}</b></font>
+							               </p>
 										
 										#if ($!ctx.order.purchaseOrderNumber)
 										<!--<table width="100%" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#bfc1c0">
