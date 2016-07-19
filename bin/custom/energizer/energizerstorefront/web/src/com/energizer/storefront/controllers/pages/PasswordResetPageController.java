@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordGenerateFacade;
+import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.facades.accounts.impl.DefaultEnergizerB2BPasswordQuestionsFacade;
 import com.energizer.facades.accounts.impl.DefaultEnergizerCompanyB2BCommerceFacade;
 import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator;
@@ -89,6 +91,9 @@ public class PasswordResetPageController extends AbstractPageController
 
 	@Resource(name = "defaultEnergizerB2BPasswordQuestionsFacade")
 	private DefaultEnergizerB2BPasswordQuestionsFacade passwordQuestionsFacade;
+
+	@Resource(name = "defaultEnergizerPasswordGenerateFacade")
+	private DefaultEnergizerPasswordGenerateFacade defaultEnergizerPasswordGenerateFacade;
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String getPasswordRequest(final Model model) throws CMSItemNotFoundException
@@ -160,13 +165,19 @@ public class PasswordResetPageController extends AbstractPageController
 		}
 		else
 		{
+			/*
+			 * try { getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
+			 * GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+			 * "account.confirmation.forgotten.password.link.sent", new Object[] { forgottenPassExpValue });
+			 * model.addAttribute(new ForgottenPwdForm());
+			 *
+			 * }
+			 */
+
 			try
 			{
-				getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
-				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ forgottenPassExpValue });
-				model.addAttribute(new ForgottenPwdForm());
+				final EnergizerB2BCustomerModel customer = defaultEnergizerPasswordGenerateFacade.getCustomerByUID(resetPwdForm
+						.getEmail());
 
 			}
 			catch (final Exception e)
@@ -218,25 +229,65 @@ public class PasswordResetPageController extends AbstractPageController
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
+			LOG.info("Error on same page");
 			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 		}
 		else
 		{
+			/*
+			 * try { getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
+			 *
+			 *
+			 * GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+			 * "account.confirmation.forgotten.password.link.sent", new Object[] { forgottenPassExpValue });
+			 * model.addAttribute(new ForgottenPwdForm()); }
+			 */
 			try
 			{
-				getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
-				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ forgottenPassExpValue });
-				model.addAttribute(new ForgottenPwdForm());
+				final EnergizerB2BCustomerModel existCustomerModel = defaultEnergizerPasswordGenerateFacade
+						.getCustomerByUID(forgottenPwdForm.getEmail());
+				if (existCustomerModel == null)
+				{
+					GlobalMessages.addErrorMessage(model, "password.reset.invalidEmailId");
+
+				}
+				else
+				{
+					final String customerPasswordQuestion = existCustomerModel.getPasswordQuestion();
+					final String customerPasswordAnswer = existCustomerModel.getPasswordAnswer();
+					final String formPasswordQuestion = forgottenPwdForm.getPasswordQuestion();
+					final String formPasswordAnswer = forgottenPwdForm.getPasswordAnswer();
+
+					if (customerPasswordQuestion == null && customerPasswordAnswer == null)
+					{
+						GlobalMessages.addErrorMessage(model,
+								"password.question.noSet");
+
+
+					}
+					else if (customerPasswordQuestion.equalsIgnoreCase(formPasswordQuestion)
+							&& customerPasswordAnswer.equalsIgnoreCase(formPasswordAnswer))
+					{
+						GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+								"account.confirmation.forgotten.password.link.sent", new Object[]
+								{ forgottenPassExpValue });
+
+					}
+					else
+					{
+						GlobalMessages.addErrorMessage(model,
+								"password.questionOranswer.donotMatch");
+
+
+					}
+				}
 			}
 			catch (final UnknownIdentifierException unknownIdentifierException)
 			{
-				GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-						"account.confirmation.forgotten.password.link.sent", new Object[]
-						{ forgottenPassExpValue });
+				GlobalMessages.addErrorMessage(model, "user doesnot exist");
 				model.addAttribute(new ForgottenPwdForm());
-				LOG.warn("Email: " + forgottenPwdForm.getEmail() + " does not exist in the database.");
+				return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
+
 			}
 			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 		}
@@ -318,7 +369,7 @@ public class PasswordResetPageController extends AbstractPageController
 
 	/**
 	 * Prepares the view to display an error message
-	 * 
+	 *
 	 * @param model
 	 * @param page
 	 * @throws CMSItemNotFoundException

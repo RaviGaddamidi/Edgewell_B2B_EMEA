@@ -999,7 +999,8 @@
 	<bean id="defaultEnergizerPasswordExpiryFacade" class="com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordExpiryFacade"
 	autowire="byName"></bean>
 		
-		
+	<bean id="defaultEnergizerPasswordGenerateFacade" class="com.energizer.core.datafeed.facade.impl.DefaultEnergizerPasswordGenerateFacade"
+	autowire="byName"></bean>	
 	
 
 	

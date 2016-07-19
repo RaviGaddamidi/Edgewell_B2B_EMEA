@@ -193,7 +193,7 @@
 										           
 										</table><br/>
 										
-										#if ($!ctx.order.palStackDatasource.getPalStackData().isEmpty())         
+										#if ($ctx.order.containerPackingType=='1 SLIP SHEET AND 1 WOODEN BASE' || $ctx.order.containerPackingType=='2 WOODEN BASE')         
 
 									
                                             <table style="height:180px;width:700px; position:relative;background-color: #ffd799;margin-left:25px;float:left;margin-right:100px;border-color:Black;border-collapse:collapse; table-layout:fixed; border :1px solid ;">
@@ -244,7 +244,7 @@
 									  
 										
 										<p style="float:left;margin:2%;">
-										#if ($!ctx.order.palStackData.isEmpty()) 
+										#if ($ctx.order.containerPackingType=='1 SLIP SHEET AND 1 WOODEN BASE' || $ctx.order.containerPackingType=='2 WOODEN BASE')  
 										          <font color="#666666" size="2" face="Arial, Helvetica, sans-serif" style="margin-left: 300px;"><b>${ctx.messages.palStack}</b></font><br/><br/>
 												  #end
 										          <font color="blue" size="1" face="Arial, Helvetica, sans-serif"><b>${ctx.messages.disclaimer}</b></font>
