@@ -555,18 +555,23 @@ ACC.checkoutB2B = {
             
             ACC.checkoutB2B.cartData=data;
             ACC.checkoutB2B.refreshCart(data);
+            if(data.deliveryAddress!=null)
+            	{
+            	
+            ACC.checkoutB2B.getLeadTime(data);
+            	}
             // ACC.checkoutB2B.refreshSection(".summaryPaymentType");
             // ACC.checkoutB2B.refreshSection(".summaryCostCenter");
             ACC.checkoutB2B.refreshSection(".summaryPayment");
             ACC.checkoutB2B.refreshSection(".summaryDeliveryAddress");
-            if(!ACC.checkoutB2B.pageInitDone)
+            if(data.deliveryAddress==null)
             {
                   li=document.createElement("li");
                   $(li).html(noDeliveryAddressMesage);
                   $(".summaryDeliveryAddress ul li").remove();
                   $(".summaryDeliveryAddress ul").append(li);
                   
-                  ACC.checkoutB2B.pageInitDone=!ACC.checkoutB2B.pageInitDone;
+                 
             }
             
             ACC.checkoutB2B.refreshSection(".summaryDeliveryMode");
@@ -746,6 +751,49 @@ ACC.checkoutB2B = {
           }
             
                                     
+    },
+    
+getLeadTime:function(data){
+    	
+    	document.leadTime=data.leadTime;
+        document.leadTime = document.leadTime +" Days";
+        document.getElementById("leadTimeId").innerHTML = document.leadTime;
+      datePickerTextBox=$("#datepicker-2");
+      if(data.requestedDeliveryDate!=null && data.requestedDeliveryDate>0)
+        {
+    	  //alert("if .. lead time "+data.leadTime);
+    	  // alert("data.requestedDeliveryDate "+data.requestedDeliveryDate);
+          leadTimeDate=new Date(data.requestedDeliveryDate);
+          // alert("leadTimeDate "+leadTimeDate);
+          datePart=(leadTimeDate.getDate().length < 2)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+          monthPart=(leadTimeDate.getMonth().length < 2)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+          yearPart=leadTimeDate.getFullYear().toString();
+          datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+        }
+      else
+        {
+    	  //alert("else .. lead time "+data.leadTime);
+          if(document.leadTime!=null && document.leadTime>0)
+            {
+              leadTimeDate=new Date(new Date().getTime()+(86400000*document.leadTime));
+              datePart=(leadTimeDate.getDate().length < 2)?'0'+leadTimeDate.getDate():leadTimeDate.getDate();
+              monthPart=(leadTimeDate.getMonth().length < 2)?'0'+(leadTimeDate.getMonth()+1):(leadTimeDate.getMonth()+1);
+              yearPart=leadTimeDate.getFullYear().toString();
+              datePickerTextBox.val(monthPart+"-"+datePart+"-"+yearPart);
+            }
+        }
+      
+        var reqDevdate=new Date(data.requestedDeliveryDate);
+        var curr_date = reqDevdate.getDate();
+        var curr_month = reqDevdate.getMonth();
+        var curr_year = reqDevdate.getFullYear();
+        var reqDeliverDate = curr_month+"/"+curr_date+"/"+curr_year;
+        document.assignLeadTimeToDatePicker();
+        prepopulatedDate = datePickerTextBox.val();
+        //alert()
+      //  ACC.checkoutB2B.refresh(data);
+        $.colorbox.close();
+    	
     },
 
     bindTermsAndConditionsLink: function() {

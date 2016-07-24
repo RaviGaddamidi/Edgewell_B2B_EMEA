@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
@@ -81,6 +81,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationService;
+import com.energizer.core.datafeed.facade.impl.DefaultEnergizerAddressFacade;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
 import com.energizer.facades.flow.impl.DefaultEnergizerB2BCheckoutFlowFacade;
@@ -129,6 +130,9 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	@Resource(name = "energizerB2BCheckoutFlowFacade")
 	private DefaultEnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
+
+	@Resource(name = "defaultEnergizerAddressFacade")
+	private DefaultEnergizerAddressFacade defaultEnergizerAddressFacade;
 
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
@@ -218,7 +222,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@RequireHardLogIn
 	public String checkoutSummary(final Model model) throws CMSItemNotFoundException
 	{
-
+		int leadTime = 0;
 		if (!b2bUserGroupProvider.isCurrentUserAuthorizedToCheckOut())
 		{
 			GlobalMessages.addErrorMessage(model, "checkout.error.invalid.accountType");
@@ -235,6 +239,36 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		getCheckoutFlowFacade().setDeliveryModeIfAvailable();
 		getCheckoutFlowFacade().setPaymentInfoIfAvailable();
 		getCheckoutFlowFacade().setDefaultPaymentTypeForCheckout();
+
+		LOG.info("before address");
+		if (getDeliveryAddressesForB2Bunit().size() == 1)
+		{
+			final AddressData addressData = getDeliveryAddressesForB2Bunit().get(0);
+			energizerB2BCheckoutFlowFacade.setSingleDeliveryAddress(addressData);
+
+			final String shippingPoint = getShippingPoint();
+			final String soldToAddressId = addressData.getErpAddressId();
+			final int defaultLeadTime = Integer.parseInt(Config.getParameter("defaultLeadTime"));
+			if (shippingPoint != null && soldToAddressId != null)
+			{
+				leadTime = energizerB2BCheckoutFlowFacade.getLeadTimeData(shippingPoint, soldToAddressId);
+				if (leadTime > 0)
+				{
+					energizerB2BCheckoutFlowFacade.setLeadTime(leadTime);
+				}
+				else
+				{
+					energizerB2BCheckoutFlowFacade.setLeadTime(defaultLeadTime);
+				}
+			}
+
+		}
+		else
+		{
+			LOG.info("address : null");
+			getCheckoutFlowFacade().setDeliveryAddress(null);
+		}
+		LOG.info("after address");
 
 		//final CartData cartData = getCheckoutFlowFacade().getCheckoutCart();
 		final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
@@ -353,6 +387,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 					break;
 				}
 			}
+
+
 		}
 
 		return energizerAddresses;
@@ -544,7 +580,13 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	{
 		// remove the delivery address;
 
-		getCheckoutFlowFacade().removeDeliveryAddress();
+		//getCheckoutFlowFacade().removeDeliveryAddress();
+
+		if (getDeliveryAddresses().size() != 1)
+		{
+			getCheckoutFlowFacade().removeDeliveryAddress();
+		}
+
 		getCheckoutFlowFacade().removeDeliveryMode();
 		final CartData cartData = getCheckoutFlowFacade().setCostCenterForCart(costCenterId,
 				this.getCheckoutFlowFacade().getCheckoutCart().getCode());
@@ -1059,7 +1101,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	/**
 	 * Need to move out of controller utility method for Replenishment
-	 * 
+	 *
 	 */
 	protected List<String> getNumberRange(final int startNumber, final int endNumber)
 	{
@@ -1079,5 +1121,32 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		final EnergizerCMIRModel energizerCMIR = defaultEnergizerB2BOrderHistoryFacade.getEnergizerCMIR(productCode,
 				b2bUnit.getUid());
 		return energizerCMIR.getShippingPoint();
+	}
+
+	public List<? extends AddressData> getDeliveryAddressesForB2Bunit()
+	{
+		final String userId = defaultEnergizerB2BOrderHistoryFacade.getCurrentUser();
+		final EnergizerB2BUnitModel b2bUnit = defaultEnergizerB2BOrderHistoryFacade.getParentUnitForCustomer(userId);
+		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
+		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.fetchAddressForB2BUnit(b2bUnit.getUid());
+		//final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
+		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
+
+		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
+		for (final String soldToAddressId : soldToAddressIds)
+		{
+			for (final AddressData address : energizerDeliveryAddresses)
+			{
+				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
+				{
+					energizerAddresses.add(address);
+					break;
+				}
+			}
+
+
+		}
+
+		return energizerAddresses;
 	}
 }

@@ -14,6 +14,7 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.data.PriceData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
+import de.hybris.platform.commerceservices.service.data.CommerceCheckoutParameter;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.AbstractOrderModel;
 import de.hybris.platform.core.model.order.CartModel;
@@ -48,6 +49,7 @@ import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderBusinessRuleValidationService;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.data.EnergizerB2BUnitData;
+import com.energizer.core.datafeed.service.impl.DefaultEnergizerAddressService;
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitLeadTimeModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
@@ -100,6 +102,9 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 	UserService userService;
 
 	@Resource
+	DefaultEnergizerAddressService defaultEnergizerAddressService;
+
+	@Resource
 	private EnergizerProductService energizerProductService;
 
 	@Resource
@@ -118,7 +123,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getEnergizerDeliveryAddresses()
 	 */
 	@Override
@@ -130,6 +135,14 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		if (cartModel != null)
 		{
 			addressModels = getDeliveryService().getSupportedDeliveryAddressesForOrder(cartModel, true);
+			if (addressModels != null)
+			{
+				LOG.info("supported address size: " + addressModels.size());
+			}
+			else
+			{
+				LOG.info("supported address size:null");
+			}
 		}
 		for (final AddressModel model : addressModels)
 		{
@@ -141,7 +154,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.hybris.platform.commercefacades.order.impl.DefaultCheckoutFacade#getCheckoutCart()
 	 */
 	@Override
@@ -154,7 +167,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getsoldToAddressIds()
 	 */
 	@Override
@@ -167,7 +180,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getOrderValidation(de.hybris.platform.core.model.order
 	 * .AbstractOrderEntryModel)
@@ -181,7 +194,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		 * priceService.getPriceInformationsForProduct(product); final ProductData productData = new ProductData();
 		 * productData.setCode(product.getCode()); productData.setDescription(product.getDescription());
 		 * productData.setName(product.getName());
-		 *
+		 * 
 		 * if (!prices.isEmpty()) { final PriceInformation price = prices.iterator().next(); final PriceData priceData =
 		 * new PriceData(); priceData.setCurrencyIso(price.getPriceValue().getCurrencyIso());
 		 * priceData.setValue(BigDecimal.valueOf(price.getPriceValue().getValue())); productData.setPrice(priceData); }
@@ -205,7 +218,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getOrderShippingValidation(de.hybris.platform.core.model
 	 * .order.AbstractOrderEntryModel)
@@ -230,7 +243,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getLeadTimeData(java.lang.String, java.lang.String)
 	 */
 	public int getLeadTimeData(final String shippingPointId, final String soldToAddressId)
@@ -280,7 +293,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getOrderData()
 	 */
 	@Override
@@ -294,7 +307,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#simulateOrderMarshel(de.hybris.platform.commercefacades
 	 * .order.data.CartData)
@@ -327,7 +340,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#setLeadTime(int)
 	 */
 	@Override
@@ -349,7 +362,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#simulateOrder(de.hybris.platform.commercefacades.order
 	 * .data.CartData)
@@ -631,7 +644,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getActionForCode(java.lang.String)
 	 */
 	@Override
@@ -659,7 +672,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#setContainerAttributes(de.hybris.platform.commercefacades
 	 * .order.data.CartData)
@@ -679,5 +692,71 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		modelService.save(cartModel);
 
 	}
+
+	public List<AddressData> fetchAddressForB2BUnit(final String b2bUnitUId)
+	{
+		final List<AddressData> deliveryAddresses = new ArrayList<AddressData>();
+		final List<AddressModel> energizerB2BUnitModelList = defaultEnergizerAddressService.fetchAddressForB2BUnit(b2bUnitUId);
+
+		for (final AddressModel model : energizerB2BUnitModelList)
+		{
+			final AddressData addressData = getEnergizerAddressConverter().convert(model);
+			//LOG.info("no exception");
+			deliveryAddresses.add(addressData);
+		}
+		return deliveryAddresses;
+	}
+
+
+
+	public boolean setSingleDeliveryAddress(final AddressData addressData)
+	{
+		final CartModel cartModel = getCart();
+		if (cartModel != null)
+		{
+			AddressModel addressModel = null;
+			if (addressData != null)
+			{
+				if (addressData.getId() != null)
+				{
+					addressModel = getSingleDeliveryAddressModelForCode(addressData.getErpAddressId());
+				}
+				else
+				{
+					addressModel = createDeliveryAddressModel(addressData, cartModel);
+				}
+			}
+
+			final CommerceCheckoutParameter parameter = new CommerceCheckoutParameter();
+			parameter.setEnableHooks(true);
+			parameter.setCart(cartModel);
+			parameter.setAddress(addressModel);
+			parameter.setIsDeliveryAddress(false);
+
+			return getCommerceCheckoutService().setDeliveryAddress(parameter);
+		}
+		return false;
+	}
+
+
+	protected AddressModel getSingleDeliveryAddressModelForCode(final String erpAddressId)
+	{
+
+
+		final CartModel cartModel = getCart();
+		if (cartModel != null)
+		{
+			final List<AddressModel> addresses = defaultEnergizerAddressService.fetchAddress(erpAddressId);
+			if (addresses != null)
+			{
+
+				return addresses.get(0);
+
+
+			}
+		}
+		return null;
+	}
+
 
 }
