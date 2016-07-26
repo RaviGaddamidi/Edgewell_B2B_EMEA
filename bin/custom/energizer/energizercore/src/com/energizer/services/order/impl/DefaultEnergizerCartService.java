@@ -544,7 +544,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								availableVolume = availableVolume - percentVolumePerSlot;
 								nonPalletVolumePercent = nonPalletVolumePercent - percentVolumePerSlotForNonPallet;
 								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 1.0);
-								matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
+								matrix[1][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 								partialPallet = partialPallet + 1;
 							}
 
@@ -555,7 +555,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 										/ percentVolumePerSlotForNonPallet);
 								partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent
 										/ percentVolumePerSlotForNonPallet));
-								matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
+								matrix[1][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 								nonPalletVolumePercent = 0;
 
 							}
@@ -568,8 +568,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							availableVolume = availableVolume - (2 * percentVolumePerSlot);
 							nonPalletVolumePercent = nonPalletVolumePercent - (2 * percentVolumePerSlotForNonPallet);
 							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, 2.0);
-							matrix[0][nonPalletFloorSpaceCount] = "Custom Pallet";
-							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
+							matrix[0][nonPalletFloorSpaceCount] = "Mixed-Pallet";
+							matrix[1][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 							partialPallet = partialPallet + 2;
 						}
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < 2 * percentVolumePerSlotForNonPallet
@@ -580,8 +580,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - percentVolumePerSlot;
 							availableVolume = availableVolume - (nonPalletVolumePercent - percentVolumePerSlotForNonPallet);
-							matrix[0][nonPalletFloorSpaceCount] = "Custom Pallet";
-							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
+							matrix[0][nonPalletFloorSpaceCount] = "Mixed-Pallet";
+							matrix[1][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 							nonPalletVolumePercent = 0;
 						}
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < percentVolumePerSlotForNonPallet)
@@ -591,7 +591,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - nonPalletVolumePercent;
 							nonPalletVolumePercent = 0;
-							matrix[1][nonPalletFloorSpaceCount] = "Custom Pallet";
+							matrix[0][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 						}
 					}
 				}
