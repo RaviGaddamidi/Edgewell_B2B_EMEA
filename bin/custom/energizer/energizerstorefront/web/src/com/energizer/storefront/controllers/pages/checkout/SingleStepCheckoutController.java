@@ -582,7 +582,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		//getCheckoutFlowFacade().removeDeliveryAddress();
 
-		if (getDeliveryAddresses().size() != 1)
+		if (getDeliveryAddressesForB2Bunit().size() != 1)
 		{
 			getCheckoutFlowFacade().removeDeliveryAddress();
 		}

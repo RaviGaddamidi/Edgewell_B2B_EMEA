@@ -245,7 +245,7 @@ public class PasswordResetPageController extends AbstractPageController
 			try
 			{
 				final EnergizerB2BCustomerModel existCustomerModel = defaultEnergizerPasswordGenerateFacade
-						.getCustomerByUID(forgottenPwdForm.getEmail());
+						.getCustomerByUID(forgottenPwdForm.getEmail().toLowerCase());
 				if (existCustomerModel == null)
 				{
 					GlobalMessages.addErrorMessage(model, "password.reset.invalidEmailId");
