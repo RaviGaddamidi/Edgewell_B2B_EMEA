@@ -268,6 +268,7 @@ public class PasswordResetPageController extends AbstractPageController
 					else if (customerPasswordQuestion.equalsIgnoreCase(formPasswordQuestion)
 							&& customerPasswordAnswer.equalsIgnoreCase(formPasswordAnswer))
 					{
+					    getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
 						GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
 								"account.confirmation.forgotten.password.link.sent", new Object[]
 								{ forgottenPassExpValue });
