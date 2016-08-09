@@ -2024,4 +2024,6 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		return nonPalletFloorSpaceProductMap;
 	}
 
+
+
 }

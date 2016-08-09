@@ -74,32 +74,9 @@
 			
 				<br>
 				
-				<c:if test="${enableForB2BUnit}">
-				<form id="form" name="form" action="cart" method="post"  >
-				  <c:choose>
-				<c:when test="${enableButton}">  
-				
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  checked="checked"><spring:theme code="enable.containerOptimization"/><br>
-				
-				<input type="radio" name="choice" value="No"   onclick="submitForm()" ><spring:theme code="disable.containerOptimization"/> 
-			
-                 
-                 </c:when>
-                 <c:otherwise>
-                 
-                 
-				<input type="radio" name="choice"  value="Yes" onclick="submitForm()"  ><spring:theme code="enable.containerOptimization"/><br>
-				
-				<input type="radio" name="choice" value="No"  checked="checked" onclick="submitForm()" ><spring:theme code="disable.containerOptimization"/> 
-                 
-                 </c:otherwise>
-                 
-                 </c:choose>
-                 </form>
-                 </c:if>
                  <br><br>
                  <div >
-                 <c:if test="${enableButton}">
+               <c:if test="${enableButton}">
 			<form:form  name="containerform" action="cart" id="containeroptimization" method="post" commandName ="containerUtilizationForm" >
 		 
 			  <label ><spring:theme code="container.height"/></label> 
@@ -229,6 +206,20 @@
 						
 
 					</div>
+					
+					<c:if test="${cartData.enableFloorSpaceGraphics }">
+					                   <div style="text-align: center;color: blue; "><br/><br/>
+					                      <b><spring:theme code="text.account.orderHistory.fullPallets"/>&nbsp;:&nbsp;
+		                                     <c:if test="${not empty cartData.totalPalletCount }">
+		                                          ${cartData.totalPalletCount}
+		                                     </c:if></b><br/><br/>
+		                                     
+		                                   <b><spring:theme code="text.account.orderHistory.partialPallets"/>&nbsp;&nbsp;
+		                                       <c:if test="${not empty cartData.partialPalletCount }">
+		                                           ${cartData.partialPalletCount}
+		                                      </c:if></b>
+		                                </div> 
+		                                </c:if>
 	
 				</div>
 				<div class="clearfix fixthis_row_cls">

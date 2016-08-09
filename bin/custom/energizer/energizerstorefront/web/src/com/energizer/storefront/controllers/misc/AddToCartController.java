@@ -9,13 +9,14 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.misc;
 
 import de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade;
 import de.hybris.platform.b2bacceleratorfacades.product.data.CartEntryData;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.CartModificationData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
@@ -51,6 +53,7 @@ import com.energizer.business.BusinessRuleError;
 import com.energizer.core.business.service.EnergizerOrderEntryBusinessRuleValidationService;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.services.order.EnergizerCartService;
 import com.energizer.services.product.EnergizerProductService;
 import com.energizer.storefront.controllers.AbstractController;
 import com.energizer.storefront.controllers.ControllerConstants;
@@ -76,8 +79,13 @@ public class AddToCartController extends AbstractController
 	private static final String SHOWN_PRODUCT_COUNT = "storefront.minicart.shownProductCount";
 	public static final String SUCCESSFUL_MODIFICATION_CODE = "success";
 
+
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
+
+	@Deprecated
+	@Resource(name = "cartFacade")
+	private de.hybris.platform.commercefacades.order.CartFacade cartCommerceFacade;
 
 	@Resource
 	private CartService cartService;
@@ -91,6 +99,8 @@ public class AddToCartController extends AbstractController
 	@Resource
 	private B2BCommerceUserService b2bCommerceUserService;
 
+	@Resource
+	EnergizerCartService energizerCartService;
 
 	@Resource
 	private EnergizerOrderEntryBusinessRuleValidationService orderEntryBusinessRulesService;
@@ -103,8 +113,10 @@ public class AddToCartController extends AbstractController
 
 	@RequestMapping(value = "/cart/add", method = RequestMethod.POST, produces = "application/json")
 	public String addToCart(@RequestParam("productCodePost") final String code, final Model model,
-			@Valid final AddToCartForm form, final BindingResult bindingErrors)
+			@Valid final AddToCartForm form, final BindingResult bindingErrors, final HttpSession session)
 	{
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final OrderEntryData orderEntryData = getOrderEntryData(form.getQty(), code, null);
 		getOrderEntryShippingPoints(orderEntryData);
 		orderEntryBusinessRulesService.clearErrors();
@@ -127,8 +139,41 @@ public class AddToCartController extends AbstractController
 		}
 
 
-
 		final CartModificationData modification = cartFacade.addOrderEntry(orderEntryData);
+		CartData cartModificationData = null;
+		String height = (String) session.getAttribute("containerHeight");
+		final Boolean enableButton = b2bUnit.getEnableContainerOptimization();
+		if (height == null)
+		{
+			height = "40FT";
+		}
+		if (height != null && height.contains("40"))
+		{
+			LOG.info("for 40 ft");
+			cartModificationData = energizerCartService.calCartContainerUtilization(cartCommerceFacade.getSessionCart(), "40FT",
+					"1 SLIP SHEET AND 1 WOODEN BASE", enableButton);
+
+		}
+		else if (height != null && height.contains("20"))
+		{
+			LOG.info("for 20 ft");
+			cartModificationData = energizerCartService.calCartContainerUtilization(cartCommerceFacade.getSessionCart(), "20FT",
+					"1 SLIP SHEET AND 1 WOODEN BASE", enableButton);
+
+		}
+		if (cartModificationData == null && cartModificationData.getTotalPalletCount() == null
+				&& cartModificationData.getPartialPalletCount() == null)
+		{
+			model.addAttribute("FullPallet", null);
+			model.addAttribute("MixedPallet", null);
+		}
+		else
+		{
+			model.addAttribute("FullPallet", cartModificationData.getTotalPalletCount());
+			model.addAttribute("MixedPallet", cartModificationData.getPartialPalletCount());
+		}
+
+
 
 		model.addAttribute("numberShowing", Config.getInt(SHOWN_PRODUCT_COUNT, 3));
 		model.addAttribute("modifications", (modification != null ? Lists.newArrayList(modification) : Collections.emptyList()));
@@ -219,7 +264,7 @@ public class AddToCartController extends AbstractController
 
 
 	/**
-	 * 
+	 *
 	 * @param orderEntryData
 	 */
 	protected void getOrderEntryShippingPoints(final OrderEntryData orderEntryData)

@@ -193,10 +193,14 @@ public class CartPageController extends AbstractPageController
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
-		else if (session.getAttribute("enableButton") != null)
+		else
 		{
-			enableButton = (boolean) session.getAttribute("enableButton");
+			enableButton = true;
 		}
+		/*
+		 * else if (session.getAttribute("enableButton") != null) { enableButton = (boolean)
+		 * session.getAttribute("enableButton"); }
+		 */
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
@@ -213,25 +217,18 @@ public class CartPageController extends AbstractPageController
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
-
+		enableButton = true;
 
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
 		}
-
-		final String str = request.getParameter("choice");
-		if (str != null && str.equals("Yes"))
-		{
-			LOG.info("Enable radio button :");
-			enableButton = true;
-		}
-
-		if (str != null && str.equals("No"))
-		{
-			LOG.info("radio button value:");
-			enableButton = false;
-		}
+		/*
+		 * final String str = request.getParameter("choice"); if (str != null && str.equals("Yes")) {
+		 * LOG.info("Enable radio button :"); enableButton = true; }
+		 * 
+		 * if (str != null && str.equals("No")) { LOG.info("radio button value:"); enableButton = false; }
+		 */
 		if (b2bUnit.getEnableContainerOptimization() == false)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
@@ -241,6 +238,8 @@ public class CartPageController extends AbstractPageController
 		cartEntryBusinessRulesService.clearErrors();
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
+		session.setAttribute("containerHeight", containerUtilizationForm.getContainerHeight());
+		LOG.info("session: " + session.getAttribute("containerHeight"));
 		session.setAttribute("enableButton", enableButton);
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
@@ -357,10 +356,10 @@ public class CartPageController extends AbstractPageController
 			final BindingResult bindingErrors, final HttpSession session) throws CMSItemNotFoundException
 	{
 
-		if (session.getAttribute("enableButton") != null)
-		{
-			enableButton = (boolean) session.getAttribute("enableButton");
-		}
+		/*
+		 * if (session.getAttribute("enableButton") != null) { enableButton = (boolean)
+		 * session.getAttribute("enableButton"); }
+		 */
 
 		if (bindingErrors.hasErrors())
 		{

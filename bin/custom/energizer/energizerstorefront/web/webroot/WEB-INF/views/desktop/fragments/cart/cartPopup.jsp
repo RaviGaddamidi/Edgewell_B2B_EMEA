@@ -94,5 +94,13 @@
 </div>
 
 <div class="links">
+    <c:if test="${not empty FullPallet}">
+       <spring:theme code="Full Pallet : "/>${FullPallet}<br/>
+    </c:if>
+	 
+	 <c:if test="${not empty MixedPallet}">
+       <spring:theme code="Mixed Pallet : "/>${MixedPallet}<br/>
+    </c:if>
+	 
 	<a href="${cartUrl}" class="button positive"><spring:theme code="checkout.checkout" /></a>
 </div>
