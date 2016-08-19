@@ -37,6 +37,7 @@ import de.hybris.platform.workflow.model.WorkflowModel;
 import de.hybris.platform.workflow.model.WorkflowTemplateModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -45,6 +46,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.PredicateUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -131,8 +133,7 @@ public class StartWorkFlowForAdmin extends AbstractSimpleB2BApproveOrderDecision
 
 	protected WorkflowModel createAndStartWorkflow(final B2BApprovalProcessModel process, final B2BCustomerModel admin)
 	{
-		final String workflowTemplateCode = getB2bWorkflowIntegrationService().generateWorkflowTemplateCode(
-				"B2B_APPROVAL_WORKFLOW", Collections.singletonList(admin));
+		final String workflowTemplateCode = generateWorkflowTemplateCode("B2B_APPROVAL_WORKFLOW", Collections.singletonList(admin));
 		final WorkflowTemplateModel workflowTemplate = getB2bWorkflowIntegrationService().createWorkflowTemplate(
 				Collections.singletonList(admin), workflowTemplateCode, "Generated B2B Order Approval Workflow",
 				WorkflowTemplateType.ORDER_APPROVAL);
@@ -146,6 +147,28 @@ public class StartWorkFlowForAdmin extends AbstractSimpleB2BApproveOrderDecision
 		}
 
 		return workflow;
+	}
+	
+		public String generateWorkflowTemplateCode(final String prefix, final List<B2BCustomerModel> users)
+	{
+		final StringBuffer id = new StringBuffer(prefix);
+		String userUID = null;
+		String userPK = null;
+		final Collection<String> uidCollection = new ArrayList<String>();
+
+		for (final B2BCustomerModel user : users)
+		{
+			userUID = user.getUid();
+			LOG.info("Approver Id: " + userUID);
+			userPK = user.getPk().toString();
+			LOG.info("Approver Id: " + userPK);
+			uidCollection.add(userUID + "_" + userPK);
+		}
+		Collections.sort((List<String>) uidCollection);
+		id.append(StringUtils.join(Arrays.asList(new Collection[]
+		{ uidCollection }), "_"));
+		LOG.info("Template code: " + id.toString());
+		return id.toString();
 	}
 
 	protected void handleError(final OrderModel order, final Exception exception)

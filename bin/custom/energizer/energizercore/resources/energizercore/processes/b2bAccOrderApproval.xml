@@ -48,7 +48,8 @@
 	</action>
 
 	<action id="auditStartOfApproval" bean="auditStartOfApproval">
-		<transition name="OK" to="startWorkflow" />
+		<!-- <transition name="OK" to="startWorkflow" /> -->
+		<transition name="OK" to="startWorkFlowForApprovers"/>
 	</action>
 
 	<action id="auditStartOfAdminApproval" bean="auditStartOfApproval">
@@ -60,7 +61,11 @@
 		<transition name="NOK" to="error" />
 	</action>
 
-	<action id="startWorkflow" bean="startWorkflow">
+	<!-- <action id="startWorkflow" bean="startWorkflow">
+		<transition name="OK" to="sendOrderPendingApprovalNotification" />
+	</action> -->
+	
+	<action id="startWorkFlowForApprovers" bean="startWorkFlowForApprovers">
 		<transition name="OK" to="sendOrderPendingApprovalNotification" />
 	</action>
 

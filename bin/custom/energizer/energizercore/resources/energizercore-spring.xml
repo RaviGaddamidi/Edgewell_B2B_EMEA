@@ -286,6 +286,13 @@
 		<property name="b2bUnitService" ref="b2bUnitService" />
 		<property name="userService" ref="userService" />
 	</bean>
+	
+	<bean id="startWorkFlowForApprovers" class="com.energizer.core.actions.StartWorkFlowForApprovers" parent="abstractProceduralB2BOrderApproveAction">
+		<property name="b2bWorkflowIntegrationService" ref="b2bWorkflowIntegrationService" />
+		<property name="permissionResultHelper" ref="permissionResultHelper" />
+		<property name="workflowProcessingService" ref="workflowProcessingService" />
+		<property name="workflowService" ref="newestWorkflowService" />
+	</bean>
 
 	<bean id="checkCreditCardOrderAction" class="com.energizer.core.actions.CheckCreditCardOrderAction" parent="abstractSimpleB2BApproveOrderDecisionAction">
 	</bean>
