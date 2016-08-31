@@ -113,3 +113,13 @@ INSERT_UPDATE Unit; unitType[unique=true]; code[unique=true]; name[lang=en]; con
 #Irrelevant for energizer
 #INSERT_UPDATE Unit; unitType[unique=true]; code[unique=true]; name[lang=en]; conversion;;; 
 #; consumerunit; CONSUMERUNIT; consumerunit; 1
+
+INSERT_UPDATE EnergizerCatalog;catalogCode[unique=true];catalogName[lang=en];constantleadtime
+;USP;US Professional;10
+;USR;US Retail;10
+;USD;US Display;21
+;USC;US CloseOut;10
+;CAR;Canada Retail;10
+;CAP;Canada Professional;10
+;CAD;Canada Display;21
+;CAC;Canada CloseOut;10

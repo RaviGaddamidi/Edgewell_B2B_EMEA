@@ -21,8 +21,11 @@ import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceServi
 import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
+import de.hybris.platform.core.model.c2l.CountryModel;
 import de.hybris.platform.core.model.c2l.CurrencyModel;
 import de.hybris.platform.core.model.c2l.LanguageModel;
+import de.hybris.platform.core.model.security.PrincipalGroupModel;
+import de.hybris.platform.core.model.user.UserGroupModel;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
@@ -50,9 +53,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
 import com.energizer.core.datafeed.EnergizerCSVFeedError;
+import com.energizer.core.datafeed.facade.impl.DefaultEnergizerCustomerFacade;
 import com.energizer.core.datafeed.form.B2BBudgetForm;
 import com.energizer.core.datafeed.form.B2BCostCenterForm;
 import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.core.model.EnergizerCatalogModel;
 
 
 /**
@@ -62,9 +67,10 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
  * Sample file will look like
  *
  * CustomerID,SalesOrg,DistributionChannel,Division,Customername,OrderType,DeletionFlag,Status,Currency,
- * MinimumOrderValue,DefaultLanguage 1006, 1000, 10, 10, tyfg, ZOR, 1, 1, USD, 10, EN
- *
- * Total column count : 11
+ * MinimumOrderValue,DefaultLanguage,MainCatalog,CloseOutCatalog,DisplayCatalog,Country,Site 1006, 1000, 10, 10, tyfg,
+ * ZOR, 1, 1, USD, 10, EN,USR,1,1,US,1
+ * 
+ * Total column count : 16
  */
 public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 {
@@ -100,6 +106,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "b2bCommerceBudgetService")
 	private B2BCommerceBudgetService b2bCommerceBudgetService;
 
+
 	@Autowired
 	protected ConfigurationService configurationService;
 
@@ -124,6 +131,16 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	private final String DEFAULT_LANGUAGE = "DefaultLanguage";
 	private final String MINIMUM_ORDER_VALUE = "MinimumOrderValue";
 	private final String DATE_FORMAT = "MM/dd/yyyy";
+
+	private final String LATAM_CATALOG = "LatamCatalog";
+	private final String MAIN_CATALOG = "MainCatalog";
+	private final String CLOSE_OUT_CATALOG = "CloseOutCatalog";
+	private final String DISPLAY_CATALOG = "DisplayCatalog";
+	private final String COUNTRY_KEY = "CountryKey";
+	private final String SITE = "Site";
+
+
+	
 
 	/**
 	 * @return the b2bCostCenterDatas
@@ -211,6 +228,56 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						energizeB2BUnit.setOrderBlock(blockStatus);
 						final boolean active = csvValuesMap.get(DELETION_FLAG).trim().equalsIgnoreCase("1") ? false : true;
 						energizeB2BUnit.setActive(active);
+
+						if (csvValuesMap.get(SITE).trim() != null)
+						{
+							energizeB2BUnit.setSite(Integer.parseInt(csvValuesMap.get(SITE).trim()));
+						}
+
+						final List<EnergizerCatalogModel> availableCatalogList = getAvailableEnergizerCatalogList();
+
+						final List<EnergizerCatalogModel> catalogList = new ArrayList<EnergizerCatalogModel>();
+
+
+
+						if (availableCatalogList.size() != 0)
+						{
+							for (int iCatalogCount = 0; iCatalogCount < availableCatalogList.size(); iCatalogCount++)
+							{
+								final EnergizerCatalogModel energizerCatalog = availableCatalogList.get(iCatalogCount);
+								LOG.info("Catalog Code: " + energizerCatalog.getCatalogCode());
+								LOG.info("Catalog Name: " + energizerCatalog.getCatalogName());
+
+
+								if ((csvValuesMap.get(MAIN_CATALOG).trim()).equalsIgnoreCase(energizerCatalog.getCatalogCode()))
+								{
+									energizeB2BUnit.setMainCatalog(energizerCatalog.getCatalogCode());
+									catalogList.add(energizerCatalog);
+								}
+
+								final boolean displayCatalog = csvValuesMap.get(DISPLAY_CATALOG).trim().equalsIgnoreCase("1") ? true
+										: false;
+								if (displayCatalog && energizerCatalog.getCatalogCode().equals("USD"))
+								{
+									catalogList.add(energizerCatalog);
+								}
+								final boolean closeOutCatalog = csvValuesMap.get(CLOSE_OUT_CATALOG).trim().equalsIgnoreCase("1") ? true
+										: false;
+								if (closeOutCatalog && energizerCatalog.getCatalogCode().equals("USC"))
+								{
+									catalogList.add(energizerCatalog);
+								}
+							}
+						}
+
+						energizeB2BUnit.setEnergizerNACustomerCatalogs(catalogList);
+
+
+						final CountryModel countryModel = new CountryModel();
+						countryModel.setIsocode(csvValuesMap.get(COUNTRY_KEY).trim());
+						final CountryModel countryModelfound = flexibleSearchService.getModelByExample(countryModel);
+						energizeB2BUnit.setCountry(countryModelfound);
+
 						try
 						{
 							final CurrencyModel currencyModel = commonI18NService.getCurrency(csvValuesMap.get(CURRENCY).trim());
@@ -267,6 +334,54 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 						final boolean blockStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
 						b2bUnit.setOrderBlock(blockStatus);
 						b2bUnit.setMinimumOrderValue(new BigDecimal(csvValuesMap.get(MINIMUM_ORDER_VALUE).trim()));
+
+						if (csvValuesMap.get(SITE).trim() != null)
+						{
+							b2bUnit.setSite(Integer.parseInt(csvValuesMap.get(SITE).trim()));
+						}
+
+						final List<EnergizerCatalogModel> availableCatalogList = getAvailableEnergizerCatalogList();
+
+
+						final List<EnergizerCatalogModel> tempCatalogList = new ArrayList<EnergizerCatalogModel>();
+
+						if (availableCatalogList.size() != 0)
+						{
+							for (int iCatalogCount = 0; iCatalogCount < availableCatalogList.size(); iCatalogCount++)
+							{
+								final EnergizerCatalogModel energizerCatalog = availableCatalogList.get(iCatalogCount);
+								LOG.info("Catalog Code: " + energizerCatalog.getCatalogCode());
+								LOG.info("Catalog Name: " + energizerCatalog.getCatalogName()); //energizerCatalog.getPk();
+
+
+								if ((csvValuesMap.get(MAIN_CATALOG).trim()).equalsIgnoreCase(energizerCatalog.getCatalogCode()))
+								{
+									b2bUnit.setMainCatalog(energizerCatalog.getCatalogCode());
+									tempCatalogList.add(energizerCatalog);
+								}
+
+								final boolean displayCatalog = csvValuesMap.get(DISPLAY_CATALOG).trim().equalsIgnoreCase("1") ? true
+										: false;
+								if (displayCatalog && energizerCatalog.getCatalogCode().equals("USD"))
+								{
+									tempCatalogList.add(energizerCatalog);
+								}
+								final boolean closeOutCatalog = csvValuesMap.get(CLOSE_OUT_CATALOG).trim().equalsIgnoreCase("1") ? true
+										: false;
+								if (closeOutCatalog && energizerCatalog.getCatalogCode().equals("USC"))
+								{
+									tempCatalogList.add(energizerCatalog);
+								}
+							}
+						}
+
+						b2bUnit.setEnergizerNACustomerCatalogs(tempCatalogList);
+
+						final CountryModel countryModel = new CountryModel();
+						countryModel.setIsocode(csvValuesMap.get(COUNTRY_KEY).trim());
+						final CountryModel countryModelfound = flexibleSearchService.getModelByExample(countryModel);
+						b2bUnit.setCountry(countryModelfound);
+
 						try
 						{
 							final CurrencyModel currencyModel = commonI18NService.getCurrency(csvValuesMap.get(CURRENCY).trim());
@@ -460,22 +575,56 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 			columnNumber++;
 			setTotalRecords(record.getRecordNumber());
 			final String value = record.toMap().get(columnHeader);
-			if (value.isEmpty())
+
+			//checking if the customer is LATAM_CATALOG, then skip the validations for mainCatalog,DisplayCatalog and CloseoutCatalog
+			if (record.toMap().get(SITE).equals("1"))
 			{
-				long recordFailed = getRecordFailed();
-				error = new EnergizerCSVFeedError();
-				final List<String> columnNames = new ArrayList<String>();
-				final List<Integer> columnNumbers = new ArrayList<Integer>();
-				error.setLineNumber(record.getRecordNumber());
-				columnNames.add(columnHeader);
-				error.setColumnName(columnNames);
-				error.setMessage(columnHeader + " column should not be empty");
-				columnNumbers.add(columnNumber);
-				error.setColumnNumber(columnNumbers);
-				getTechnicalFeedErrors().add(error);
-				setTechRecordError(getTechnicalFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
+
+				if (columnHeader.equalsIgnoreCase(MAIN_CATALOG) || columnHeader.equalsIgnoreCase(CLOSE_OUT_CATALOG)
+						|| columnHeader.equalsIgnoreCase(DISPLAY_CATALOG))
+				{
+					continue;
+				}
+				else
+				{
+					if (value.isEmpty())
+					{
+						long recordFailed = getRecordFailed();
+						error = new EnergizerCSVFeedError();
+						final List<String> columnNames = new ArrayList<String>();
+						final List<Integer> columnNumbers = new ArrayList<Integer>();
+						error.setLineNumber(record.getRecordNumber());
+						columnNames.add(columnHeader);
+						error.setColumnName(columnNames);
+						error.setMessage(columnHeader + " column should not be empty");
+						columnNumbers.add(columnNumber);
+						error.setColumnNumber(columnNumbers);
+						getTechnicalFeedErrors().add(error);
+						setTechRecordError(getTechnicalFeedErrors().size());
+						recordFailed++;
+						setRecordFailed(recordFailed);
+					}
+				}
+			}
+			else
+			{
+				if (value.isEmpty())
+				{
+					long recordFailed = getRecordFailed();
+					error = new EnergizerCSVFeedError();
+					final List<String> columnNames = new ArrayList<String>();
+					final List<Integer> columnNumbers = new ArrayList<Integer>();
+					error.setLineNumber(record.getRecordNumber());
+					columnNames.add(columnHeader);
+					error.setColumnName(columnNames);
+					error.setMessage(columnHeader + " column should not be empty");
+					columnNumbers.add(columnNumber);
+					error.setColumnNumber(columnNumbers);
+					getTechnicalFeedErrors().add(error);
+					setTechRecordError(getTechnicalFeedErrors().size());
+					recordFailed++;
+					setRecordFailed(recordFailed);
+				}
 			}
 		}
 	}
@@ -516,6 +665,19 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		return b2BPermissionData;
 
 	}
+
+
+
+
+	public List<EnergizerCatalogModel> getAvailableEnergizerCatalogList()
+	{
+		final String query = "SELECT {" + EnergizerCatalogModel.PK + "} from {" + EnergizerCatalogModel._TYPECODE + "}";
+
+		final SearchResult<EnergizerCatalogModel> resultList = flexibleSearchService.search(query);
+		final List<EnergizerCatalogModel> catalogList = resultList.getResult();
+		return catalogList;
+	}
+
 
 	/**
 	 * @return the companyB2BCommerceService
