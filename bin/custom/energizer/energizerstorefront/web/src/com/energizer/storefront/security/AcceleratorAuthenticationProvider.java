@@ -13,12 +13,20 @@
  */
 package com.energizer.storefront.security;
 
+import de.hybris.platform.b2b.model.B2BCustomerModel;
+import de.hybris.platform.b2b.model.B2BUnitModel;
+import de.hybris.platform.b2b.services.B2BUnitService;
+import de.hybris.platform.cms2.model.site.CMSSiteModel;
+import de.hybris.platform.cms2.servicelayer.services.CMSSiteService;
 import de.hybris.platform.core.Constants;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 import de.hybris.platform.spring.security.CoreAuthenticationProvider;
+import de.hybris.platform.util.Config;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -37,6 +45,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.energizer.core.model.EnergizerB2BCustomerModel;
+import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.util.EnergizerPasswordNotificationUtil;
 
 
@@ -65,6 +76,12 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 	private CartService cartService;
 
 	private B2BUserGroupProvider b2bUserGroupProvider;
+
+	@Resource(name = "cmsSiteService")
+	private CMSSiteService cmsSiteService;
+
+	@Resource(name = "b2bUnitService")
+	private B2BUnitService<B2BUnitModel, B2BCustomerModel> b2bUnitService;
 
 	@Resource
 	protected EnergizerPasswordNotificationUtil energizerPasswordNotificationUtil;
@@ -133,7 +150,61 @@ public class AcceleratorAuthenticationProvider extends CoreAuthenticationProvide
 			}
 		}
 
+		if (null != authentication.getName())
+		{
 
+			final EnergizerB2BCustomerModel b2bcustomer = (EnergizerB2BCustomerModel) userService.getUserForUID(authentication
+					.getName());
+
+			final EnergizerB2BUnitModel unit = (EnergizerB2BUnitModel) b2bUnitService.getParent(b2bcustomer);
+
+			final CMSSiteModel site = cmsSiteService.getCurrentSite();
+
+			if (null != unit && site != null)
+			{
+				final String siteid = site.getUid();
+
+				if (siteid.equals(WebConstants.PERSONAL_CARE_NA)
+						&& !(WebConstants.PERSONAL_CARE_NA).equals(getSiteURL(unit.getSite()))) //(siteid.equals(WebConstants.PERSONAL_CARE_NA) && !(siteid.equals(getSiteURL(unit.getSite()))))//!USER_COUNTRY.contains(userCountry.getIsocode())
+				{
+					throw new InsufficientAuthenticationException(messages.getMessage("login.error.incorrect.site",
+							"You are not allowed to login"));
+				}
+				else if (siteid.equals(WebConstants.PERSONAL_CARE)
+						&& (!(WebConstants.PERSONAL_CARE).equals(getSiteURL(unit.getSite())))) //(siteid.equals(WebConstants.PERSONAL_CARE) && !(siteid.equals(getSiteURL(unit.getSite()))))//USER_COUNTRY.contains(userCountry.getIsocode())
+				{
+					throw new InsufficientAuthenticationException(messages.getMessage("login.error.incorrect.site",
+							"You are not allowed to login"));
+				}
+				else if (!b2bcustomer.getActive())
+				{
+					throw new InsufficientAuthenticationException(messages.getMessage("login.error.incorrect.site",
+							"You are not allowed to login"));
+				}
+			}
+		}
+	}
+
+
+	protected String getSiteURL(final int siteId)
+	{
+		String siteMatchURL = null;
+		List<String> siteList = null;
+		final List<String> siteURLsList = Arrays.asList(Config.getParameter("website.personalCare.site").split(
+				new Character(',').toString()));
+
+		for (final Iterator iterator = siteURLsList.iterator(); iterator.hasNext();)
+		{
+			final String tempSiteURL = (String) iterator.next();
+
+			siteList = Arrays.asList(tempSiteURL.split(new Character(':').toString()));
+
+			if (Integer.parseInt(siteList.get(0)) == siteId)
+			{
+				siteMatchURL = siteList.get(1);
+			}
+		}
+		return siteMatchURL;
 	}
 
 	/**

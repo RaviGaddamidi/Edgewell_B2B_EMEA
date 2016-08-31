@@ -81,8 +81,8 @@
 
 										
 		<!-- ext-template -->
-		<extension name="ycommercewebservices" />
-		<extension name="ycommercewebserviceshmc" />
+	<!--	<extension name="ycommercewebservices" />
+		<extension name="ycommercewebserviceshmc" /> -->
 		<!-- extension name="yacceleratorfulfilmentprocess"  -->
 		<extension name="yaddon" />
 		<!-- extension name="yacceleratortest" -->

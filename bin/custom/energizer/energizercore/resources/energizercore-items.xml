@@ -21,7 +21,8 @@
 			code="EnergizerProductConversionFactorList" autocreate="true" type="list" />
         <collectiontype elementtype="java.lang.String" code="palStackList"
 			autocreate="true" type="list" />
-	</collectiontypes>
+<collectiontype elementtype="EnergizerCatalog" code="EnergizerCatalogList"
+			autocreate="true" type="list" />	</collectiontypes>
 
 	<enumtypes>
 		<enumtype code="OrderStatus" autocreate="false" generate="true"
@@ -264,10 +265,57 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+	
+					<attribute qualifier="energizerNACustomerCatalogs" type="EnergizerCatalogList">
+					<description>list containing the catalogs for NA Customers</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 
+					<attribute qualifier="mainCatalog" type="java.lang.String">
+						<description>Main Catalog</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+										<attribute qualifier="site" type="java.lang.Integer">
+						<description>Site</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 
+		<itemtype code="EnergizerCatalog" autocreate="true" generate="true" jaloclass="com.energizer.core.jalo.EnergizerCatalog">
+				<description> Energizer Catalogs for NA customers </description>
+				<deployment table="en_catalog" typecode="10205" />
+				<attributes>
+				
+				<attribute qualifier="catalogCode" type="java.lang.String">
+						<description>Catalog Code</description>
+						
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="catalogName" type="localized:java.lang.String">
+						<description>Catalog Name</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="catalogIcon" type="Media">
+						<description>Catalog Icon</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="constantleadtime" type="java.lang.Integer">
+					<description>lead time on basis of catalog type</description>
+					<modifiers/>
+					<persistence type="property"></persistence>
+					</attribute>
+					
+				</attributes>
+				
+			</itemtype>
 
 			<itemtype code="EnergizerProduct" extends="Product"
 				autocreate="true" generate="true"

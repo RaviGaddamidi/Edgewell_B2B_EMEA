@@ -60,6 +60,7 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	private static final String SAMPLE_DATA_IMPORT_FOLDER = "energizerinitialdata";
 	//	public static final String ENERGIZER = "energizer";
 	public static final String PERSONAL_CARE = "personalCare";
+	public static final String PERSONAL_CARE_NA = "personalCare-na";
 	public static final String HOUSEHOLD = "houseHold";
 
 	@Resource
@@ -127,6 +128,20 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
 		}
 
+		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
+				&& configurationService.getConfiguration().getBoolean("isEPCNAEnabled"))
+		{
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE, PERSONAL_CARE,
+					Collections.singletonList(PERSONAL_CARE_NA));
+
+			final ImportData powertoolsImportData = new ImportData();
+			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE_NA));
+			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
+			// Send an event to notify any AddOns that the initial data import is complete
+			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+
+		}
 		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
 				&& configurationService.getConfiguration().getBoolean("isEHPEnabled"))
 		{

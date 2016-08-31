@@ -39,4 +39,8 @@ public final class WebConstants
 
 	public static final String MULTI_DIMENSIONAL_PRODUCT = "multiDimensionalProduct";
 
+	public static final String PERSONAL_CARE = "personalCare";
+
+	public static final String PERSONAL_CARE_NA = "personalCare-na";
+
 }

@@ -52,6 +52,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 	//	public static final String ENERGIZER = "energizer";
 	public static final String PERSONAL_CARE = "personalCare";
+	public static final String PERSONAL_CARE_NA = "personalCare-na";
 	public static final String HOUSEHOLD = "houseHold";
 
 	@Resource
@@ -108,14 +109,13 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		final boolean personalcare = configurationService.getConfiguration().getBoolean("isEPCEnabled");//getBooleanSystemSetupParameter(context, PERSONAL_CARE);
 		final boolean household = configurationService.getConfiguration().getBoolean("isEHPEnabled");//getBooleanSystemSetupParameter(context, HOUSEHOLD);
 		//final boolean syncProducts = getBooleanSystemSetupParameter(context, IMPORT_SYNC_PRODUCTS);
+		final boolean personalcare_na = configurationService.getConfiguration().getBoolean("isEPCNAEnabled");
 
 		final boolean importAccessRights = getBooleanSystemSetupParameter(context, IMPORT_ACCESS_RIGHTS);
 
-		if (importSites && personalcare)
+		if (importSites && (personalcare || personalcare_na))
 		{
 			importProductCatalog(context, PERSONAL_CARE);
-
-			importContentCatalog(context, PERSONAL_CARE);
 
 			executeCatalogSyncJob(context, PERSONAL_CARE);
 
@@ -123,15 +123,41 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 			createAndActivateSolrIndex(context, PERSONAL_CARE);
 
+		}
+		if (importSites && personalcare)
+		{
+			importContentCatalog(context, PERSONAL_CARE);
+			executeCatalogSyncJob(context, PERSONAL_CARE);
+
+			importSite(context, PERSONAL_CARE);
+
 			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
 
-			final ImportData powertoolsImportData = new ImportData();
-			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
-			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE));
-			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
-			getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+			final ImportData personalcareImportData = new ImportData();
+			personalcareImportData.setProductCatalogName(PERSONAL_CARE);
+			personalcareImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE));
+			personalcareImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
+			getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(personalcareImportData)));
 
 		}
+
+		if (importSites && personalcare_na)
+		{
+			importContentCatalog(context, PERSONAL_CARE_NA);
+			executeCatalogSyncJob(context, PERSONAL_CARE_NA);
+
+			importSite(context, PERSONAL_CARE_NA);
+
+			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
+
+			final ImportData personalcareImportData = new ImportData();
+			personalcareImportData.setProductCatalogName(PERSONAL_CARE_NA);
+			personalcareImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE_NA));
+			personalcareImportData.setStoreNames(Arrays.asList(PERSONAL_CARE_NA));
+			getEventService().publishEvent(new CoreDataImportedEvent(context, Arrays.asList(personalcareImportData)));
+
+		}
+
 
 		if (importSites && household)
 		{
@@ -198,6 +224,7 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		final boolean syncCatalogs = getBooleanSystemSetupParameter(context, IMPORT_SYNC_CATALOGS);
 		final boolean personalcare = getBooleanSystemSetupParameter(context, PERSONAL_CARE);
 		final boolean household = getBooleanSystemSetupParameter(context, HOUSEHOLD);
+		final boolean personalcare_na = getBooleanSystemSetupParameter(context, PERSONAL_CARE_NA);
 
 		logInfo(context, "Begin preparing catalogs sync job  [" + catalogName + "]");
 		importImpexFile(context, "/energizercore/import/catalogs-sync.impex", true);
@@ -208,6 +235,12 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		logInfo(context, "Done preparing catalogs sync job  [" + catalogName + "]");
 		PerformResult syncCronJobResult = null;
 		if (syncCatalogs && personalcare)
+		{
+			logInfo(context, "Executing catalogs sync job  [" + catalogName + "]");
+			syncCronJobResult = super.executeCatalogSyncJob(context, personalcare_na + "Catalog");
+			logInfo(context, "Executed catalogs sync job  [" + catalogName + "]");
+		}
+		if (syncCatalogs && personalcare_na)
 		{
 			logInfo(context, "Executing catalogs sync job  [" + catalogName + "]");
 			syncCronJobResult = super.executeCatalogSyncJob(context, personalcare + "Catalog");
@@ -275,8 +308,19 @@ public class CoreSystemSetup extends AbstractSystemSetup
 		logInfo(context, "Begin importing store [" + storeName + "]");
 
 		importImpexFile(context, "/energizercore/import/stores/" + storeName + "/store.impex");
-		importImpexFile(context, "/energizercore/import/stores/" + storeName + "/site.impex");
+		//importImpexFile(context, "/energizercore/import/stores/" + storeName + "/site.impex");
 
 		logInfo(context, "Done importing store [" + storeName + "]");
 	}
+
+	protected void importSite(final SystemSetupContext context, final String siteName)
+	{
+		logInfo(context, "Begin importing site [" + siteName + "]");
+
+		importImpexFile(context, "/energizercore/import/stores/" + siteName + "/site.impex");
+
+		logInfo(context, "Done importing site [" + siteName + "]");
+
+	}
+
 }
