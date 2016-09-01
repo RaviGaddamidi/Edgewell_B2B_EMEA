@@ -24,14 +24,13 @@ import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.core.model.c2l.CountryModel;
 import de.hybris.platform.core.model.c2l.CurrencyModel;
 import de.hybris.platform.core.model.c2l.LanguageModel;
-import de.hybris.platform.core.model.security.PrincipalGroupModel;
-import de.hybris.platform.core.model.user.UserGroupModel;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
+import de.hybris.platform.servicelayer.search.SearchResult;
 import de.hybris.platform.servicelayer.type.TypeService;
 import de.hybris.platform.util.Config;
 
@@ -53,7 +52,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
 import com.energizer.core.datafeed.EnergizerCSVFeedError;
-import com.energizer.core.datafeed.facade.impl.DefaultEnergizerCustomerFacade;
 import com.energizer.core.datafeed.form.B2BBudgetForm;
 import com.energizer.core.datafeed.form.B2BCostCenterForm;
 import com.energizer.core.model.EnergizerB2BUnitModel;
