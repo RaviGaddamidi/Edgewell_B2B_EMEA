@@ -271,4 +271,26 @@ div.delivery_stages .headline{
 /* new css */
 .accountContentPane .headline{color:#0b4f04;}
 
+.yCmsComponent.siteLogo{
+	float: left;
+	width: 25%;
+}
 
+#catalogManagementList{
+	float: right;
+	width: 75%;
+	margin-top: 5%;
+	
+}
+
+#catalogManagementList ul{
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+#catalogManagementList ul li{
+	float: left;
+	margin-right: 10px;
+    font-weight: bold;
+    color: #0643f9;
+}

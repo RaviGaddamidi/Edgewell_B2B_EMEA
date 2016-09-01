@@ -33,3 +33,24 @@ $(document).ready(function()
 {
 	ACC.cms.bindAll();
 });
+
+$(document).ready(function() {
+
+	$(".selectedCatalogManagement").on('click', function() {
+		var selectedCatalog = this.id;
+		 $('.loader').show();
+		$.ajax({
+			type : 'POST',
+			url : '/catalogRedirect',
+			async: false,
+			data : {
+				selectedCatalog : selectedCatalog
+			},
+			//contentType : "application/json;charset=utf-8",
+			success : function(result) {
+				window.location.href=result;
+			},
+
+		});
+	});
+});

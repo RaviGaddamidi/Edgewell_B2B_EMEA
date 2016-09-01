@@ -16,8 +16,14 @@ package com.energizer.storefront.controllers.pages;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.servicelayer.session.SessionService;
+import de.hybris.platform.util.Config;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -27,6 +33,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.core.model.EnergizerB2BUnitModel;
+import com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade;
+import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.util.GlobalMessages;
 
 
@@ -59,9 +68,13 @@ public class HomePageController extends AbstractPageController
 		this.sessionService = sessionService;
 	}
 
+
+	@Resource(name = "energizerCompanyB2BCommerceFacade")
+	protected EnergizerCompanyB2BCommerceFacade energizerCompanyB2BCommerceFacade;
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String home(@RequestParam(value = "logout", defaultValue = "false") final boolean logout, final Model model,
-			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
+			final RedirectAttributes redirectModel, final HttpSession hs) throws CMSItemNotFoundException
 	{
 		if (logout)
 		{
@@ -81,10 +94,54 @@ public class HomePageController extends AbstractPageController
 			GlobalMessages.addBusinessRuleMessage(model, (String) sessionService.getAttribute("quesAnsAlert"));
 			sessionService.removeAttribute("quesAnsAlert");
 		}
+
+
+
+		final EnergizerB2BUnitModel b2bUnit = energizerCompanyB2BCommerceFacade.getEnergizerB2BUnitModelForLoggedInUser();
+
+		final List catalogManagementList = b2bUnit.getEnergizerNACustomerCatalogs();
+
+		if (null == sessionService.getAttribute("selectedCatalog"))
+		{
+			sessionService.setAttribute("selectedCatalog", b2bUnit.getMainCatalog());
+			hs.setAttribute("currentCatalog", b2bUnit.getMainCatalog());
+		}
+
+
+		final String siteURL = getSiteURL(b2bUnit.getSite());
+
+		if (siteURL.equals(WebConstants.PERSONAL_CARE_NA))
+		{
+			hs.setAttribute(WebConstants.PERSONAL_CARE_NA, Boolean.TRUE);
+		}
+
+		model.addAttribute("catalogManagementList", catalogManagementList);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(null));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(null));
 		updatePageTitle(model, getContentPageForLabelOrId(null));
 		return getViewForPage(model);
+	}
+
+
+	protected String getSiteURL(final int siteId)
+	{
+		String siteMatchURL = null;
+		List<String> siteList = null;
+		final List<String> siteURLsList = Arrays.asList(Config.getParameter("website.personalCare.site").split(
+				new Character(',').toString()));
+
+		for (final Iterator iterator = siteURLsList.iterator(); iterator.hasNext();)
+		{
+			final String tempSiteURL = (String) iterator.next();
+
+			siteList = Arrays.asList(tempSiteURL.split(new Character(':').toString()));
+
+			if (Integer.parseInt(siteList.get(0)) == siteId)
+			{
+				siteMatchURL = siteList.get(1);
+			}
+		}
+		return siteMatchURL;
 	}
 
 	protected void updatePageTitle(final Model model, final AbstractPageModel cmsPage)

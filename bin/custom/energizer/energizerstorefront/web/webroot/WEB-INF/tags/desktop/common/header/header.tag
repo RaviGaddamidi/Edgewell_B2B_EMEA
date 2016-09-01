@@ -45,4 +45,45 @@
 	<cms:pageSlot position="SiteLogo" var="logo" limit="1">
 		<cms:component component="${logo}" class="siteLogo"  element="div"/>
 	</cms:pageSlot>
+	
+	
+	
+<c:if test="${sessionScope['personalCare-na']}">	
+	<div id="catalogManagementList">
+
+		<form id="CatalogListForm" action="/catalogRedirect">
+		<c:set var="currentCatalog" value="${sessionScope['currentCatalog']}"/>
+		<ul>
+		<c:if test="${not empty catalogManagementList}">
+			<c:forEach items="${catalogManagementList}" var="catalogManagementList">
+				
+				<li>
+				<c:if test="${catalogManagementList.catalogCode == currentCatalog}">
+				<c:set var="checkedVal" value="true" />
+				</c:if>
+				<c:if test="${catalogManagementList.catalogCode != currentCatalog}">
+				<c:set var="checkedVal" value="false" />
+				</c:if>
+				
+				<c:choose>
+				<c:when test="${checkedVal == 'true'}">
+				<input type="radio"  class="selectedCatalogManagement" id="${catalogManagementList.catalogCode}" checked="checked"/>
+				</c:when>
+				<c:otherwise>
+				<input type="radio"  class="selectedCatalogManagement" id="${catalogManagementList.catalogCode}" />
+				</c:otherwise>
+				</c:choose>
+				<c:out value="${catalogManagementList.catalogName}"/>
+				</li>
+			</c:forEach>
+			</c:if>
+			</ul>
+		</form>
+			
+	  </div>
+	</c:if>
+	
+	
+	
+	
 </div>
