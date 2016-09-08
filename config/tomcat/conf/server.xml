@@ -63,8 +63,7 @@
 
     <Connector port="${tomcat.ssl.port}"
     				maxHttpHeaderSize="8192"
-    				proxyName="energizer.local.com"
-    				proxyPort="443"
+			   proxyPort="${proxy.ssl.port}"
                maxThreads="150"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
@@ -89,7 +88,7 @@
      --> 
 	${tomcat.connectors.ajp.plain}	
 
-    <Engine name="Catalina" defaultHost="localhost">
+    <Engine name="Catalina" defaultHost="${tomcat.site.hostName}">
 
 			<Valve 	className="org.apache.catalina.valves.AccessLogValve"
              		directory="${HYBRIS_LOG_DIR}/tomcat"
@@ -98,7 +97,7 @@
 	      		 	pattern="combined"
           />
 
-      <Host 	name="localhost"
+      <Host 	name="${tomcat.site.hostName}"
       			appBase="webapps"
 		       	unpackWARs="false"
 		       	autoDeploy="false">
@@ -107,6 +106,13 @@
 			${tomcat.webapps}
 
 
+      </Host>
+      
+      <Host 	name="${tomcat.site.hostName.us}"
+      			appBase="webapps"
+		       	unpackWARs="false"
+		       	autoDeploy="false">
+			${tomcat.webapps}
       </Host>
 
     </Engine>
