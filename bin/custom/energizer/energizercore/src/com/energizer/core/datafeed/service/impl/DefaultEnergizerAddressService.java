@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.energizer.core.datafeed.service.EnergizerAddressService;
+import com.energizer.core.model.EnergizerUnitContactsModel;
 
 
 
@@ -50,4 +51,29 @@ public class DefaultEnergizerAddressService implements EnergizerAddressService
 		final List<AddressModel> energizerB2BUnitModelList = result.getResult();
 		return energizerB2BUnitModelList;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.core.datafeed.service.EnergizerAddressService#getEnergizerUnitContact(java.lang.String)
+	 */
+	@Override
+	public EnergizerUnitContactsModel getEnergizerUnitContact(final String customerId)
+	{
+		final FlexibleSearchQuery retquery = new FlexibleSearchQuery(
+				"select {pk} from {EnergizerUnitContacts} where {customerId}=?customerId");
+
+		retquery.addQueryParameter("customerId", customerId);
+		final SearchResult<EnergizerUnitContactsModel> result = flexibleSearchService.search(retquery);
+		if (result.getResult() != null && result.getResult().size() > 0)
+		{
+			return result.getResult().get(0);
+		}
+		else
+		{
+			return null;
+		}
+
+	}
+
 }

@@ -39,6 +39,14 @@
 		<property name="productUrlConverter" ref="productUrlConverter"/>
 	</bean>
 
+
+<alias name="defaultCMSParagraphComponentRenderers" alias="cmsParagraphComponentRenderers"/>
+	<bean id="defaultCMSParagraphComponentRenderers" class="com.energizer.storefront.renderer.CMSParagraphComponentRenderer" >
+		<property name="b2bUnitService" ref="b2bUnitService"/>
+		<property name="userService" ref="userService"/>
+	</bean>
+
+
 	<alias alias="cmsComponentRendererRegistry" name="acceleratorCMSComponentRendererRegistry" />
 	<bean id="acceleratorCMSComponentRendererRegistry" parent="defaultCMSComponentRendererRegistry">
 		<property name="renderers">

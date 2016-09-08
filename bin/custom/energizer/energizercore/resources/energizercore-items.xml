@@ -277,7 +277,34 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
-										<attribute qualifier="site" type="java.lang.Integer">
+					
+					<attribute qualifier="contactUs" type="EnergizerUnitContacts">
+						<description>Contact Us</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
+					<!-- <attribute qualifier="cmirCatalog" type="java.lang.Boolean">
+						<description>CMIR Catalog</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="closeOutCatalog" type="java.lang.Boolean">
+						<description>Close Out Catalog</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="displayCatalog" type="java.lang.Boolean">
+						<description>Display Catalog</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="countryKey" type="java.lang.String">
+						<description>Country Key</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute> -->
+					<attribute qualifier="site" type="java.lang.Integer">
 						<description>Site</description>
 						<modifiers />
 						<persistence type="property" />
@@ -400,6 +427,27 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					
+					<!-- na expansion req begins down -->
+					<attribute qualifier="deliveryUOM" type="java.lang.String">
+						<description>Product Delivery UOM</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="catalogType" type="java.lang.String">
+						<description>Product's Catalog Type </description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+										
+					<attribute type="java.lang.String" qualifier="upccode">
+					<description>upc code as extra identifier</description>
+					<modifiers/>
+					<persistence type="property"></persistence>
+					</attribute>
+					
+					
 				</attributes>
 			</itemtype>
 
@@ -718,6 +766,10 @@
 					</attribute>
 					<attribute qualifier="active" type="java.lang.Boolean">
 						<description>SAP specific Id</description>
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="contactUsEmailId" type="java.lang.String">
+						<description>Contact Us Email Id</description>
 						<persistence type="property" />
 					</attribute>
 				</attributes>
@@ -1051,6 +1103,41 @@
 					</attribute>
 				</attributes>
 			</itemtype>
+			
+			<itemtype code="EnergizerUnitContacts"
+				autocreate="true" generate="true"
+				jaloclass="com.energizer.core.jalo.EnergizerUnitContacts">
+				<description>B2BUnit Level Contacts Email, Phone And Address </description>
+				<deployment table="en_unit_contacts" typecode="10212" />
+				<attributes>
+					<!-- customer account ID maintain in ID OOTB field -->
+					<!-- customer primary admin - maintain in contact person OOTB field -->
+					<!-- sold to address (EnergizerAddress) - maintain in addresses OOTB 
+						field -->
+					<attribute qualifier="customerId" type="java.lang.String">
+						<description>Customer Organisation Id</description>
+						<persistence type="property" />
+						<modifiers optional="false" initial="false" unique="true" />
+					</attribute>
+					<attribute qualifier="EmailId" type="java.lang.String">
+						<description>Contact Us Mail Id</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="PhoneNumber" type="java.lang.String">
+						<description>Contact Us Phone Number</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="Address" type="java.lang.String">
+						<description>Contact Us Address</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					
+				</attributes>
+</itemtype>
+			
 			<itemtype code="EnergizerCMSLinkComponent" extends="CMSLinkComponent"
 				autocreate="true" generate="true"
 				jaloclass="com.energizer.core.jalo.EnergizerCMSLinkComponent">

@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 
 import com.energizer.core.datafeed.facade.EnergizerAddressFacade;
 import com.energizer.core.datafeed.service.impl.DefaultEnergizerAddressService;
+import com.energizer.core.model.EnergizerUnitContactsModel;
 
 
 /**
@@ -53,5 +54,17 @@ public class DefaultEnergizerAddressFacade implements EnergizerAddressFacade
 			deliveryAddresses.add(addressData);
 		}
 		return deliveryAddresses;
+	}
+
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.core.datafeed.facade.EnergizerAddressFacade#getEnergizerUnitContact(java.lang.String)
+	 */
+	@Override
+	public EnergizerUnitContactsModel getEnergizerUnitContact(final String customerId)
+	{
+		return defaultEnergizerAddressService.getEnergizerUnitContact(customerId);
 	}
 }
