@@ -17,4 +17,6 @@ public interface EnergizerAddressService
 	public List<AddressModel> fetchAddress(final String erpAddressId);
 
 	public List<AddressModel> fetchAddressForB2BUnit(final String b2bUnitUId);
+	
+	public List<AddressModel> fetchAddressOnSHCustID(final String shcustid);
 }

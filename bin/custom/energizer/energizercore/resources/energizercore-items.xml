@@ -21,6 +21,7 @@
 			code="EnergizerProductConversionFactorList" autocreate="true" type="list" />
         <collectiontype elementtype="java.lang.String" code="palStackList"
 			autocreate="true" type="list" />
+		<collectiontype elementtype="Address" code="AddressList" autocreate="true" type="list"/>
 	</collectiontypes>
 
 	<enumtypes>
@@ -671,6 +672,23 @@
 					<attribute qualifier="active" type="java.lang.Boolean">
 						<description>SAP specific Id</description>
 						<persistence type="property" />
+					</attribute>
+					
+					<!-- New Attributes to add ship to -->
+					
+					<attribute qualifier="shipToPartyList" type="AddressList">
+					<description>list of associated shiptos </description>
+					<persistence type="property"></persistence>
+					</attribute>
+					
+					<attribute type="java.lang.boolean" qualifier="SoldTo">
+					<description>flag to identify whether the address is soldto or not</description>
+					<persistence type="property"></persistence>
+					</attribute>
+					
+					<attribute type="java.lang.String" qualifier="ShCustomerid">
+					<description>new field as primary key for shipto addresses</description>
+					<persistence type="property"></persistence>
 					</attribute>
 				</attributes>
 			</itemtype>

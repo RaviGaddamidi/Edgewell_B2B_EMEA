@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
+
 import com.energizer.core.datafeed.facade.EnergizerAddressFacade;
 import com.energizer.core.datafeed.service.impl.DefaultEnergizerAddressService;
 
@@ -28,9 +30,11 @@ public class DefaultEnergizerAddressFacade implements EnergizerAddressFacade
 
 	private Converter<AddressModel, AddressData> energizerAddressConverter;
 
+	protected static final Logger LOG = Logger.getLogger(DefaultEnergizerAddressFacade.class);
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.core.datafeed.facade.EnergizerAddressFacade#fetchAddress(java.lang.String)
 	 */
 	@Override
@@ -53,5 +57,30 @@ public class DefaultEnergizerAddressFacade implements EnergizerAddressFacade
 			deliveryAddresses.add(addressData);
 		}
 		return deliveryAddresses;
+	}
+
+	@Override
+	public List<AddressModel> fetchAddressOnSHCustID(final String shcustid)
+	{
+		// YTODO Auto-generated method stub
+
+		List<AddressModel> energizercustSHAddList = null;
+		energizercustSHAddList = defaultEnergizerAddressService.fetchAddressOnSHCustID(shcustid);
+		List<AddressModel> energizersoldtoidlist = null;
+		energizersoldtoidlist = fetchAddress(shcustid);//fetching add in case sh and sp are same then fetch on basis of sp.
+
+
+
+		if (energizersoldtoidlist != null && energizersoldtoidlist.size() == 1)
+		{
+			LOG.info("its sold to as well shipto found, just send for update");
+			return energizersoldtoidlist;
+		}
+
+
+
+		LOG.info("its shipto  found, just send for update");
+		return energizercustSHAddList;
+
 	}
 }

@@ -299,7 +299,9 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		// EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService.getUnitForUid(b2bAccount);
 		EnergizerB2BUnitModel energizerB2BUnitModel = null;
-		final List<AddressModel> addresses = defaultEnergizerAddressFacade.fetchAddress(b2bAccount);
+		/* final List<AddressModel> addresses = defaultEnergizerAddressFacade.fetchAddress(b2bAccount); */
+
+		final List<AddressModel> addresses = defaultEnergizerAddressFacade.fetchAddressOnSHCustID(b2bAccount);
 		AddressModel addrs = null;
 		//only one sold to party will be assigned to one address
 		for (final AddressModel address : addresses)
