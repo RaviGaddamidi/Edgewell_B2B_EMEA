@@ -445,7 +445,6 @@
 			</map>
 		</property>
 		<property name="defaultAddressFormatConverter" ref="usSingleLineAddressFormatConverter"/>
-		<property name="energizerAddressConverter" ref="energizerAddressConverter"/>
 	</bean>
 	<alias name="energizerAddressConverter" alias="energizerAddressConverter"/>
 	<bean id="energizerAddressConverter" parent="abstractPopulatingConverter">
