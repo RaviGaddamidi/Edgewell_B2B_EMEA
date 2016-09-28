@@ -64,13 +64,13 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 	{
 		super.populate(source, productData);
 		int baseUOM = 1;
-		
+
 		int numberOfEachInCase = 0;
 		int numberOfEachInLayer = 0;
 		int numberOfEachInPallet = 0;
 		int numberOfCasesPerPallet = 0;
 		int numberOfCasesPerLayer = 0;
-		
+
 		setLoggedInUserB2bUnit();
 		final String productCode = source.getValues().get("code").toString();
 		final EnergizerProductModel energizerProductModel = (EnergizerProductModel) productService.getProductForCode(productCode);
@@ -135,6 +135,7 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 
 		final Collection<PriceRowModel> rowPrices = energizerProductModel.getEurope1Prices();
 		boolean foundCmirPrice = false;
+
 		for (final Iterator iterator = rowPrices.iterator(); iterator.hasNext();)
 		{
 			final PriceRowModel priceRowModel = (PriceRowModel) iterator.next();
@@ -142,7 +143,8 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 			{
 				final EnergizerPriceRowModel energizerPriceRowModel = (EnergizerPriceRowModel) priceRowModel;
 				if (null != energizerPriceRowModel.getB2bUnit() && null != loggedInUserB2bUnit
-						&& energizerPriceRowModel.getB2bUnit().getUid().equalsIgnoreCase(loggedInUserB2bUnit.getUid()))
+						&& energizerPriceRowModel.getB2bUnit().getUid().equalsIgnoreCase(loggedInUserB2bUnit.getUid())
+						&& energizerPriceRowModel.getIsActive().equals(true))
 				{
 					if (energizerPriceRowModel.getPrice() == null || energizerPriceRowModel.getPrice().doubleValue() == 0.0)
 					{
@@ -176,7 +178,7 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 						.getCurrency().getSymbol());
 			}
 		}
-		
+
 		final List<EnergizerProductConversionFactorModel> conversionFactor = energizerProductModel.getProductConversionFactors();
 		for (final EnergizerProductConversionFactorModel factor : conversionFactor)
 		{

@@ -32,7 +32,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  */
 public class EnergizerProductPopulator implements Populator<EnergizerProductModel, ProductData>
 {
@@ -159,7 +159,8 @@ public class EnergizerProductPopulator implements Populator<EnergizerProductMode
 			{
 				final EnergizerPriceRowModel energizerPriceRowModel = (EnergizerPriceRowModel) priceRowModel;
 				if (null != energizerPriceRowModel.getB2bUnit() && null != loggedInUserB2bUnit
-						&& energizerPriceRowModel.getB2bUnit().getUid().equalsIgnoreCase(loggedInUserB2bUnit.getUid()))
+						&& energizerPriceRowModel.getB2bUnit().getUid().equalsIgnoreCase(loggedInUserB2bUnit.getUid())
+						&& energizerPriceRowModel.getIsActive().equals(true))
 				{
 					if (energizerPriceRowModel.getPrice() == null || energizerPriceRowModel.getPrice().doubleValue() == 0.0)
 					{

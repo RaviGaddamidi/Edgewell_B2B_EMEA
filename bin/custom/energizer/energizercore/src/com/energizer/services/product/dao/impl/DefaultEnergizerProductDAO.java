@@ -199,11 +199,12 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 	@Override
 	public EnergizerPriceRowModel getEnergizerPriceRowForB2BUnit(final String erpMaterialId, final String b2bUnitId)
 	{
-		final String queryString = "select {enrprice.pk} from " + "{EnergizerCMIR as cmir JOIN EnergizerB2BUnit AS myb2bunit ON "
+		final String queryString = "select distinct {enrprice.pk} from "
+				+ "{EnergizerCMIR as cmir JOIN EnergizerB2BUnit AS myb2bunit ON "
 				+ "{cmir.b2bUnit}={myb2bunit.pk} JOIN EnergizerProduct AS prod ON "
 				+ "{cmir.erpMaterialId}={prod.code} JOIN EnergizerPriceRow AS enrprice ON "
 				+ " {enrprice.b2bUnit}={myb2bunit.pk} and {enrprice.product}={prod.pk} " + "} " + " WHERE "
-				+ "{myb2bunit.uid}=?b2bUnitId and " + "{cmir.erpMaterialId}=?erpMaterialId";
+				+ "{myb2bunit.uid}=?b2bUnitId and " + "{cmir.erpMaterialId}=?erpMaterialId and " + "{enrprice.isActive}='1'";
 
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
 		query.addQueryParameter("erpMaterialId", erpMaterialId);
