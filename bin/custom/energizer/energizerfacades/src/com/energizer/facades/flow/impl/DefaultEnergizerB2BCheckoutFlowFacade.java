@@ -767,5 +767,65 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.energizer.facades.flow.EnergizerB2BCheckoutFlowFacade#getMultipleShiptos(com.energizer.core.model.
+	 * EnergizerB2BUnitModel, java.lang.String)
+	 */
+	@Override
+	public List<AddressData> getMultipleShiptos(final EnergizerB2BUnitModel b2bunit, final String soldto)
+	{
+
+		final List<AddressData> deliveryAddresses = new ArrayList<AddressData>();
+		Collection<AddressModel> addressModels = new ArrayList<AddressModel>();
+		final CartModel cartModel = getCart();
+
+		if (cartModel != null)
+		{
+			addressModels = b2bunit.getAddresses();
+
+			for (final AddressModel address : addressModels)
+			{
+
+				if (address != null && address.getErpAddressId() != null && soldto != null
+						&& soldto.trim().equalsIgnoreCase(address.getErpAddressId().trim()))
+				{
+
+					if (address.getShCustomerid() != null && address.getSoldTo() != null
+							&& address.getErpAddressId().equals(address.getShCustomerid()) && address.getSoldTo())//if soldto is shipto as well.
+					{
+						final AddressData bufadddata;
+						bufadddata = getEnergizerAddressConverter().convert(address);
+
+						deliveryAddresses.add(bufadddata);
+						LOG.debug("both sold and shipto are found ,adding to addresslist" + "the sh id in address data is"
+								+ bufadddata.getShCustomerid());
+					}
+
+
+					for (final AddressModel shiptos : address.getShipToPartyList())
+					{
+						if (shiptos != null)
+						{
+							final AddressData addressData;
+							addressData = getEnergizerAddressConverter().convert(shiptos);
+
+							deliveryAddresses.add(addressData);
+							LOG.debug("shipping address found ,adding to addresslist" + "the sh id in address data is"
+									+ addressData.getShCustomerid());
+						}
+						else
+						{
+							LOG.debug("not a shipping address");
+						}
+					}
+				}
+			}
+		}
+		return deliveryAddresses;
+	}
+
+
 
 }
