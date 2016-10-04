@@ -365,31 +365,49 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return getVisibleActiveCostCenters();
 	}
 
-	@ResponseBody
+		@ResponseBody
 	@RequestMapping(value = "/summary/getDeliveryAddresses.json", method =
 	{ RequestMethod.GET, RequestMethod.POST })
 	@RequireHardLogIn
 	public List<? extends AddressData> getDeliveryAddresses()
 	{
+		/*
+		 * List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>(); energizerDeliveryAddresses =
+		 * energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses(); //final CartData cartData =
+		 * energizerB2BCheckoutFlowFacade.getCheckoutCart(); final List<String> soldToAddressIds =
+		 * energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
+		 * 
+		 * final List<AddressData> energizerAddresses = new ArrayList<AddressData>(); for (final String soldToAddressId :
+		 * soldToAddressIds) { for (final AddressData address : energizerDeliveryAddresses) { if
+		 * (soldToAddressId.equalsIgnoreCase(address.getErpAddressId())) { energizerAddresses.add(address); break; } }
+		 * 
+		 * 
+		 * }
+		 * 
+		 * return energizerAddresses;
+		 */
+
+		final String userId = defaultEnergizerB2BOrderHistoryFacade.getCurrentUser();
+		final EnergizerB2BUnitModel b2bUnit = defaultEnergizerB2BOrderHistoryFacade.getParentUnitForCustomer(userId);
 		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
-		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses();
-		//final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
-		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
+		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.fetchAddressForB2BUnit(b2bUnit.getUid());
 
-		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
-		for (final String soldToAddressId : soldToAddressIds)
+		List<AddressData> energizerAddresses = new ArrayList<AddressData>();
+		String soldTo = null;
+
+		for (final AddressData address : energizerDeliveryAddresses)
 		{
-			for (final AddressData address : energizerDeliveryAddresses)
+			if (address.getShCustomerid() != null && address.getErpAddressId().equals(address.getShCustomerid())
+					&& address.isSoldTo())
 			{
-				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
-				{
-					energizerAddresses.add(address);
-					break;
-				}
+				soldTo = address.getErpAddressId();
+
+				LOG.debug(" SoldTo is found for the b2bunit!! ");
+				break;
 			}
-
-
 		}
+
+		energizerAddresses = energizerB2BCheckoutFlowFacade.getMultipleShiptos(b2bUnit, soldTo);
 
 		return energizerAddresses;
 	}
