@@ -129,7 +129,10 @@
      	<property name="salesPersonEmailId" type="String"/>
      	<property name="displayName" type="String"/>
      	<property name="active" type="boolean"/>
-	</bean>
+		<property name="shipToPartyList" type="java.util.List&lt;AddressData&gt;"/>
+     	<property name="soldTo" type="boolean"/>
+     	<property name="shCustomerid" type="String"/>
+    </bean>
     
     <bean class="com.energizer.core.datafeed.EnergizerCSVFeedError" >
      	<property name="lineNumber" type="Long"/>
