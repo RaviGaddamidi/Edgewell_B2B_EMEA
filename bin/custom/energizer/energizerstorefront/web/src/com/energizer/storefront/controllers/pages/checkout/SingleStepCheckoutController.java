@@ -359,7 +359,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return getVisibleActiveCostCenters();
 	}
 
-		@ResponseBody
+	@ResponseBody
 	@RequestMapping(value = "/summary/getDeliveryAddresses.json", method =
 	{ RequestMethod.GET, RequestMethod.POST })
 	@RequireHardLogIn
@@ -1114,7 +1114,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	/**
 	 * Need to move out of controller utility method for Replenishment
-	 *
+	 * 
 	 */
 	protected List<String> getNumberRange(final int startNumber, final int endNumber)
 	{

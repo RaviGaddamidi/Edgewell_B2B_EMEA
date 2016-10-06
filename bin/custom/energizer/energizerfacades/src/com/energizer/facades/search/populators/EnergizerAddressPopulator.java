@@ -8,12 +8,12 @@ import de.hybris.platform.core.model.user.AddressModel;
 
 /**
  * @author M1023097
- *
+ * 
  */
 public class EnergizerAddressPopulator extends AddressPopulator
 {
-	
-    @Override
+
+	@Override
 	public void populate(final AddressModel source, final AddressData target)
 	{
 		super.populate(source, target);
@@ -39,7 +39,6 @@ public class EnergizerAddressPopulator extends AddressPopulator
 		}
 		target.setSoldTo(source.getSoldTo());
 
-		
 	}
 
 }
