@@ -148,7 +148,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 				}
 				else
 				{
-					//chec if b2bunit exists
+					//check if b2bunit exists
 					final EnergizerB2BUnitModel energizerB2BUnitModel = getEnergizerB2BUnit(b2bUnitId);
 
 					final List<EnergizerCMIRModel> energizerCmirModels = energizerProduct.getProductCMIR();
@@ -274,6 +274,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private boolean isCMIRModelSame(final EnergizerCMIRModel cmirModel, final Map<String, String> csvValuesMap)
 	{
 		if (cmirModel != null && cmirModel.getErpMaterialId().equals(csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID))
+				&& cmirModel.getB2bUnit() != null
 				&& cmirModel.getB2bUnit().getUid().equals(csvValuesMap.get(EnergizerCoreConstants.ENERGIZER_ACCOUNT_ID)))
 		{
 			// record exists, just update other attributes
