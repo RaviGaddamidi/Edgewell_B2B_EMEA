@@ -700,6 +700,7 @@ public class DefaultEnergizerB2BCheckoutFlowFacade extends DefaultB2BCheckoutFlo
 
 	public List<AddressData> fetchAddressForB2BUnit(final String b2bUnitUId)
 	{
+		b2bUnitModel = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser();
 		final List<AddressData> deliveryAddresses = new ArrayList<AddressData>();
 		final List<AddressModel> energizerB2BUnitModelList = defaultEnergizerAddressService.fetchAddressForB2BUnit(b2bUnitUId);
 

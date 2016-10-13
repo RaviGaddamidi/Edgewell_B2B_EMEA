@@ -37,7 +37,10 @@ public class EnergizerAddressPopulator extends AddressPopulator
 		{
 			target.setShCustomerid(source.getShCustomerid());
 		}
-		target.setSoldTo(source.getSoldTo());
+		if (source.getSoldTo() != null)
+		{
+			target.setSoldTo(source.getSoldTo());
+		}
 
 	}
 
