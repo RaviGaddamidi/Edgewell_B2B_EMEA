@@ -11,11 +11,18 @@ window.open('/my-account/invoice/invoicePdfDisplay?orderCode= ${orderData.code} 
 }
 </script>
 
-<!--<spring:url value="/my-account/invoice/${orderData.code}?inline=true" var="viewinvoiceUrl" />
+<c:if test="${not empty orderData.created}">
+<c:if test="${ DateTimeUtil.displayDate(orderData.created) gt '08/30/2016'}">
+					${DateTimeUtil.displayDate(orderData.created)}
+				
+
+<spring:url value="/my-account/invoice/${orderData.code}?inline=true" var="viewinvoiceUrl" />
 <a class="positive right pad_right re-order invoicePdf"  
 style=" text-align:center ; background-color: #169e08;  padding-top:14px; width:95px; 
 border-color: #169e08; color: #fff; font-weight: bold; text-transform: uppercase; border-color: #000;  
 height: 26px;padding-left: 10px;padding-right: 10px;" href="javascript:openInvoicePDF('${orderData.code}')" >
-<spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a> -->
+<spring:theme code="text.order.viewInvoice" text="viewInvoice"/></a>
+</c:if>
+</c:if>
 
 
