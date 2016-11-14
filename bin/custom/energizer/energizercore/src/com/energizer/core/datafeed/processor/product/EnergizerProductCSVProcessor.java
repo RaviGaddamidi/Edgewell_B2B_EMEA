@@ -1,6 +1,7 @@
 package com.energizer.core.datafeed.processor.product;
 
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.catalog.CatalogVersionService;
 import de.hybris.platform.catalog.enums.ArticleApprovalStatus;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;
@@ -45,6 +46,8 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	private ModelService modelService;
 	@Resource
+	CatalogVersionService catalogVersionService;
+	@Resource
 	private SessionService sessionService;
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
@@ -67,10 +70,12 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 	{
 		try
 		{
-			final CatalogVersionModel catalogVersion = getCatalogVersion();
+
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
+				CatalogVersionModel catalogVersion = getCatalogVersion();
+
 				final Map<String, String> csvValuesMap = record.toMap();
 				validate(record);
 				if (!getTechnicalFeedErrors().isEmpty())
@@ -80,6 +85,14 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 					getTechnicalFeedErrors().clear();
 					continue;
 				}
+
+				if (csvValuesMap.get(EnergizerCoreConstants.CATALOG_TYPE) != null)
+				{
+					catalogVersion = catalogVersionService.getCatalogVersion("personalCare-naProductCatalog", "Staged");
+				}
+
+
+
 
 				LOG.info("|| Start add or updating  EnergizerProductModel for product :  "
 						+ (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
@@ -142,6 +155,9 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerProd.setCatalogVersion(catalogVersion);
 		energizerProd.setApprovalStatus(ArticleApprovalStatus.APPROVED);
 		energizerProd.setCode(productMaterialId);
+		energizerProd.setCatalogType(csvValuesMap.get(EnergizerCoreConstants.CATALOG_TYPE).toString());
+		energizerProd.setUpccode(csvValuesMap.get(EnergizerCoreConstants.UPC_CODE).toString());
+		energizerProd.setDeliveryUOM(csvValuesMap.get(EnergizerCoreConstants.DELIVERY_UOM).toString());
 
 		// Assigning The Category
 		try

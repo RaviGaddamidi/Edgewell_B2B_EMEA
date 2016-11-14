@@ -15,6 +15,10 @@
 
 	<!-- Solr field value providers -->
 
+	<bean id="energizerProductCatalogTypeValueProvider" class="com.energizer.core.solr.provider.EnergizerProductCatalogTypeValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider" />
+	</bean>
+
 	<bean id="volumeAwareProductPriceValueProvider" class="com.energizer.core.solr.provider.VolumeAwareProductPriceValueProvider"
 		parent="abstractPropertyFieldValueProvider">
 		<property name="fieldNameProvider" ref="solrFieldNameProvider" />

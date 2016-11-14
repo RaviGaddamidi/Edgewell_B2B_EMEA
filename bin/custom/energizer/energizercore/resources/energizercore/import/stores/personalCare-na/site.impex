@@ -1,7 +1,7 @@
 #
 # Import the CMS Site configuration for the Powertools store
 #
-$productCatalog=personalCareProductCatalog
+$productCatalog=personalCare-naProductCatalog
 $contentCatalog=personalCare-naContentCatalog
 $contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
 $defaultLanguage=en

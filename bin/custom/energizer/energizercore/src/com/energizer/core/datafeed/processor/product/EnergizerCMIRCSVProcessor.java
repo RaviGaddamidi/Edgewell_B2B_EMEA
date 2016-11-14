@@ -4,6 +4,7 @@
 package com.energizer.core.datafeed.processor.product;
 
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.catalog.CatalogVersionService;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.europe1.model.PriceRowModel;
 import de.hybris.platform.product.ProductService;
@@ -35,15 +36,15 @@ import com.energizer.core.model.EnergizerProductModel;
 
 
 /**
- *
+ * 
  * This processors imports the CMIR
- *
+ * 
  * Sample file will look like
- *
+ * 
  * EnergizerAccountID,ERPMaterialID,CustomerMaterialID,Language,CustomerMaterial Description,MaterialList
  * price,CustomerListPrice,CustomerListprice currency,ShipmentPointNumber 1000, 10, 10, EN, tanning creme spf2 6 oz
  * 4/3s,21, 12, USD, 712
- *
+ * 
  * Total column count : 9
  */
 public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -64,7 +65,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	private UnitService defaultUnitService;
 	@Resource
 	ConfigurationService configurationService;
-
+	@Resource
+	CatalogVersionService catalogVersionService;
 
 	boolean hasCustomerListPriceBusinessError = false;
 	boolean hasCustomerListPriceTechnicalError = false;
@@ -81,6 +83,8 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 	private final String ZERO = "0";
 
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
@@ -91,7 +95,10 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 		defaultUOM = configurationService.getConfiguration().getString("feedprocessor.defalult.uom.value", null);
 		try
 		{
-			final CatalogVersionModel catalogVersion = getCatalogVersion();
+			CatalogVersionModel catalogVersion = getCatalogVersion();
+
+			catalogVersion = catalogVersionService.getCatalogVersion("personalCare-naProductCatalog", "Staged");
+
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
@@ -471,7 +478,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	}
 
 	/**
-	 *
+	 * 
 	 * @param b2bUnitId
 	 * @return
 	 */

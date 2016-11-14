@@ -2,7 +2,7 @@
 # Create the Powertools BaseStore
 #
 
-$productCatalog=personalCareProductCatalog
+$productCatalog=personalCare-naProductCatalog
 $classificationCatalog=PersonalCareClassification
 $currencies=USD
 $net=true
@@ -19,8 +19,8 @@ INSERT_UPDATE PromotionGroup;Identifier[unique=true];
 ;personalCarePromoGrp;
 
 # Base Store
-INSERT_UPDATE BaseStore;uid[unique=true];catalogs(id);currencies(isocode);net;taxGroup(code);storelocatorDistanceUnit(code);defaultCurrency(isocode);languages(isocode);defaultLanguage(isocode);deliveryCountries(isocode);submitOrderProcessCode;paymentProvider;
-;$storeUid;$productCatalog,$classificationCatalog;$currencies;$net;;miles;$defaultCurrency;$languages;$defaultLanguage;$deliveryCountries;$submitOrderProcessCode;$paymentProvider;
+UPDATE BaseStore;uid[unique=true];catalogs(id);currencies(isocode);net;taxGroup(code);storelocatorDistanceUnit(code);defaultCurrency(isocode);languages(isocode);defaultLanguage(isocode);deliveryCountries(isocode);submitOrderProcessCode;paymentProvider;
+;$storeUid;$productCatalog;$currencies;$net;;miles;$defaultCurrency;$languages;$defaultLanguage;$deliveryCountries;$submitOrderProcessCode;$paymentProvider;
 
 #INSERT_UPDATE BaseStore2DeliveryModeRel;source(uid)[unique=true];target(code)[unique=true]
 #;personalCare;premium-net

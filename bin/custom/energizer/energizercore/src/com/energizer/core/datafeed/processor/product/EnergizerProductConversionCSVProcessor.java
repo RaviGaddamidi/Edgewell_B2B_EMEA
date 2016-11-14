@@ -3,6 +3,7 @@
  */
 package com.energizer.core.datafeed.processor.product;
 
+import de.hybris.platform.catalog.CatalogVersionService;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
@@ -32,14 +33,14 @@ import com.energizer.core.model.MetricUnitModel;
 
 
 /**
- *
+ * 
  * This processors imports the product conversion.
- *
+ * 
  * Sample file will look like
- *
+ * 
  * ERPMaterialID,AlternateUOM,BaseUOMMultiplier,VolumeInUOM,VolumeUOM,WeightInUOM,WeightUOM 3, EA, 1, 0.311, CDM,
  * 126.552 ,G
- *
+ * 
  * Total column count : 7
  */
 public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -60,6 +61,9 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 	@Resource
 	ConfigurationService configurationService;
 
+	@Resource
+	CatalogVersionService catalogVersionService;
+
 	private static final Logger LOG = Logger.getLogger(EnergizerProductConversionCSVProcessor.class);
 
 	private static final String ENERGIZER_PRODUCT_CONVERSION = "feedprocessor.energizerOrderUpdateFeed.mandatory";
@@ -74,7 +78,11 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 		EnergizerProductModel energizerProduct = null;
 		try
 		{
-			final CatalogVersionModel catalogVersion = getCatalogVersion();
+			CatalogVersionModel catalogVersion = getCatalogVersion();
+
+			catalogVersion = catalogVersionService.getCatalogVersion("personalCare-naProductCatalog", "Staged");
+
+
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
@@ -304,7 +312,7 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 
 
 	/**
-	 *
+	 * 
 	 * @param record
 	 * @return
 	 */

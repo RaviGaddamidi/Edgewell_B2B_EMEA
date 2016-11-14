@@ -80,8 +80,13 @@ public class EnergizerProductCategoryCSVProcessor extends AbstractEnergizerCSVPr
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
 
 	{
-		final String catalogName = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_NAME);
-		final String catalogVersion = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_VERSION);
+		String catalogName = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_NAME);
+		String catalogVersion = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_VERSION);
+
+		//Changes added for Multi Product Catalog
+		catalogName = "personalCare-naProductCatalog";
+		catalogVersion = "Staged";
+
 		final CatalogVersionModel catalogModelVersionModel = catalogVersionService.getCatalogVersion(catalogName, catalogVersion);
 		long succeedRecord = getRecordSucceeded();
 		CSV_HEADERS = Config.getParameter(MATERIAL_CATEGORY_FEED_HEADERS_KEY).split(new Character(DELIMETER).toString());

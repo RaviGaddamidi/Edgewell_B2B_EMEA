@@ -94,7 +94,26 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	@SystemSetup(type = Type.ESSENTIAL, process = Process.ALL)
 	public void createEssentialData(final SystemSetupContext context)
 	{
-		// Add Essential Data here as you require
+		/*
+		 * // Add Essential Data here as you require final CatalogManager cm = CatalogManager.getInstance();
+		 * 
+		 * if (configurationService.getConfiguration().getBoolean("isEPCNAEnabled")) {
+		 * 
+		 * // find source and target version final CatalogVersion src =
+		 * cm.getCatalog(PERSONAL_CARE_NA).getCatalogVersion("staged"); final CatalogVersion tgt =
+		 * cm.getCatalog(PERSONAL_CARE).getCatalogVersion("online");
+		 * 
+		 * // find synchronization by source and target version final SyncItemJob syncJob = cm.getSyncJob(src, tgt);
+		 * 
+		 * // get modifieable list of root types final List<ComposedType> rootTypes = new
+		 * ArrayList<ComposedType>(syncJob.getRootTypes());
+		 * 
+		 * // insert our type at first position rootTypes.add(0,
+		 * TypeManager.getInstance().getComposedType("EnergizerProduct"));
+		 * 
+		 * // dont forget to save them again syncJob.setRootTypes(rootTypes);
+		 */
+		//}
 	}
 
 	/**
@@ -131,11 +150,11 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
 				&& configurationService.getConfiguration().getBoolean("isEPCNAEnabled"))
 		{
-			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE, PERSONAL_CARE,
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, PERSONAL_CARE, PERSONAL_CARE_NA,
 					Collections.singletonList(PERSONAL_CARE_NA));
 
 			final ImportData powertoolsImportData = new ImportData();
-			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
+			powertoolsImportData.setProductCatalogName(PERSONAL_CARE_NA);
 			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE_NA));
 			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
 			// Send an event to notify any AddOns that the initial data import is complete

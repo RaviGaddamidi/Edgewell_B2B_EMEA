@@ -113,22 +113,27 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 		final boolean importAccessRights = getBooleanSystemSetupParameter(context, IMPORT_ACCESS_RIGHTS);
 
+
 		if (importSites && (personalcare || personalcare_na))
 		{
-			importProductCatalog(context, PERSONAL_CARE);
+			//importProductCatalog(context, PERSONAL_CARE);
 
 			executeCatalogSyncJob(context, PERSONAL_CARE);
 
 			importStore(context, PERSONAL_CARE);
 
-			createAndActivateSolrIndex(context, PERSONAL_CARE);
+			//	createAndActivateSolrIndex(context, PERSONAL_CARE);
 
 		}
+
 		if (importSites && personalcare)
 		{
 			importContentCatalog(context, PERSONAL_CARE);
 			executeCatalogSyncJob(context, PERSONAL_CARE);
 
+			createAndActivateSolrIndex(context, PERSONAL_CARE);
+
+			importProductCatalog(context, PERSONAL_CARE);
 			importSite(context, PERSONAL_CARE);
 
 			((ValidationService) Registry.getApplicationContext().getBean("validationService")).reloadValidationEngine();
@@ -143,7 +148,13 @@ public class CoreSystemSetup extends AbstractSystemSetup
 
 		if (importSites && personalcare_na)
 		{
+
+			importProductCatalog(context, PERSONAL_CARE_NA);
+
 			importContentCatalog(context, PERSONAL_CARE_NA);
+
+			createAndActivateSolrIndex(context, PERSONAL_CARE_NA);
+
 			executeCatalogSyncJob(context, PERSONAL_CARE_NA);
 
 			importSite(context, PERSONAL_CARE_NA);

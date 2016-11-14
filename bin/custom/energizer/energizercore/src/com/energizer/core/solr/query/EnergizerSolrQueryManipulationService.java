@@ -20,6 +20,8 @@ public interface EnergizerSolrQueryManipulationService
 
 	public static final String B2B_UNIT_SEARCHQUERY_PREFIX = "b2bunit";
 
+	public static final String CATALOG_TYPE_SEARCHQUERY_PREFIX = "catalogType";
+
 	public static final String ADD_SORT = "topRated";
 
 	public static final String B2B_UNIT_EXTRAFILTER_PREFIX = "relevance";
@@ -40,5 +42,8 @@ public interface EnergizerSolrQueryManipulationService
 	public String getSolrQueryForCategorySearch(final String sortCode, final String existingQuery);
 
 	public String getSolrQueryForTextSearchPage(final String sortCode, final String existingQuery);
+
+	public String getNASolrQueryForTextSearchPage(final String sortCode, final String existingQuery,
+			final String sessionSelectedCatalog);
 
 }

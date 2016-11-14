@@ -8,6 +8,9 @@ import de.hybris.platform.servicelayer.user.UserService;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
+
 import com.energizer.core.model.EnergizerB2BUnitModel;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationService;
 import com.energizer.core.solr.query.EnergizerSolrQueryManipulationServiceTest;
@@ -23,6 +26,8 @@ import com.energizer.core.solr.query.EnergizerSolrQueryManipulationServiceTest;
  */
 public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSolrQueryManipulationService
 {
+
+	private static final Logger LOG = Logger.getLogger(DefaultEnergizerSolrQueryManipulationService.class);
 
 	@Resource(name = "b2bCommerceUserService")
 	private B2BCommerceUserService b2bUserService;
@@ -215,5 +220,73 @@ public class DefaultEnergizerSolrQueryManipulationService implements EnergizerSo
 		return retVal;
 	}
 
+	/**
+	 * This method manipulates the SOLR query for the NA professional search listing page based on catalog selection for
+	 * NA Customers. The result set is a union of USR and USP products
+	 * 
+	 * @param sortCode
+	 *           This is the sort code selected by the user in the category listing page.
+	 * @param existingQuery
+	 *           This is the already constructed SOLR query that needs manipulation
+	 * 
+	 * @return String
+	 */
+	@Override
+	public String getNASolrQueryForTextSearchPage(final String sortCode, final String existingQuery,
+			final String sessionSelectedCatalog)
+	{
+		if (StringUtils.isEmpty(sessionSelectedCatalog))
+		{
+			return "";
+		}
 
+		String selectedCatalog = "";
+		selectedCatalog = CATALOG_TYPE_SEARCHQUERY_PREFIX + QUERY_CONNECTOR + sessionSelectedCatalog;
+		/*
+		 * String selectedCatalog = ""; if
+		 * (sessionSelectedCatalog.equals(EnergizerCoreConstants.CATALOG_CODE_US_PROFESSIONAL)) { selectedCatalog =
+		 * IS_PROFESSIONAL_SEARCHQUERY_PREFIX + QUERY_CONNECTOR + "true"; } else { selectedCatalog =
+		 * CATALOG_TYPE_SEARCHQUERY_PREFIX + QUERY_CONNECTOR + sessionSelectedCatalog; }
+		 */
+
+		LOG.info("Selected Catalog: " + selectedCatalog);
+		String retVal = EMPTY_STRING;
+		if (existingQuery == null || existingQuery.isEmpty())
+		{
+			if (sortCode != null)
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR
+						+ selectedCatalog;
+			}
+			else
+			{
+				retVal = ((existingQuery == null) ? EMPTY_STRING : existingQuery) + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX
+						+ QUERY_CONNECTOR + selectedCatalog + "::catalogId:personalCare-naProductCatalog";
+			}
+		}
+		else
+		{
+			if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+				retVal = existingQuery + QUERY_CONNECTOR + B2B_UNIT_EXTRAFILTER_PREFIX + QUERY_CONNECTOR + selectedCatalog;
+			}
+			if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) == -1)
+			{
+				retVal = existingQuery + QUERY_CONNECTOR + sortCode + QUERY_CONNECTOR + selectedCatalog;
+			}
+			else if (sortCode != null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+				retVal = existingQuery;
+				if (existingQuery.indexOf(selectedCatalog) == -1)
+				{
+					retVal = retVal + QUERY_CONNECTOR + selectedCatalog;
+				}
+			}
+			else if (sortCode == null && existingQuery.indexOf(QUERY_CONNECTOR) != -1)
+			{
+				retVal = existingQuery;
+			}
+		}
+		return retVal;
+	}
 }

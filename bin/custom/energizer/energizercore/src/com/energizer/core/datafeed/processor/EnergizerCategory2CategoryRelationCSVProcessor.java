@@ -37,9 +37,8 @@ import com.energizer.core.model.EnergizerCategoryModel;
  * 
  * Sample file will look like
  * 
- * CategoryCode,          Category, SuperCategoryCode,SuperCategory, CategoryType,Language
- * Feminine Care-Playtex, Playtex,  Feminine Care,    Feminine Care, Brand,       en
- * Total column count : 6
+ * CategoryCode, Category, SuperCategoryCode,SuperCategory, CategoryType,Language Feminine Care-Playtex, Playtex,
+ * Feminine Care, Feminine Care, Brand, en Total column count : 6
  */
 public class EnergizerCategory2CategoryRelationCSVProcessor extends AbstractEnergizerCSVProcessor
 {
@@ -84,8 +83,10 @@ public class EnergizerCategory2CategoryRelationCSVProcessor extends AbstractEner
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
 
 	{
-		final String catalogName = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_NAME);
-		final String catalogVersion = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_VERSION);
+		//final String catalogName = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_NAME);
+		//final String catalogVersion = Config.getParameter(FEED_PROCESSOR_PRODUCT_CATALOG_VERSION);
+		final String catalogName = "personalCare-naProductCatalog";
+		final String catalogVersion = "Staged";
 		final CatalogVersionModel catalogModelVersionModel = catalogVersionService.getCatalogVersion(catalogName, catalogVersion);
 		long succeedRecord = getRecordSucceeded();
 		CSV_HEADERS = Config.getParameter(CATEGORY_CATEGORY_FEED_HEADERS_KEY).split(new Character(DELIMETER).toString());

@@ -109,11 +109,19 @@ public class HomePageController extends AbstractPageController
 
 
 		final String siteURL = getSiteURL(b2bUnit.getSite());
+		sessionService.setAttribute("siteURL", siteURL);
+
 
 		if (siteURL.equals(WebConstants.PERSONAL_CARE_NA))
 		{
-			hs.setAttribute(WebConstants.PERSONAL_CARE_NA, Boolean.TRUE);
+			hs.setAttribute(WebConstants.PERSONAL_CARE_NA, "TRUE");
+
 		}
+		else
+		{
+			hs.setAttribute(WebConstants.PERSONAL_CARE_NA, "FALSE");
+		}
+
 
 		model.addAttribute("catalogManagementList", catalogManagementList);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(null));

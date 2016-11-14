@@ -29,6 +29,9 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 	public static final String OBSOLETE_STATUS = "ObsoleteStatus";
 	public static final String LANGUAGE = "Language";
 	public static final String PRODUCT_DESCRIPTION = "ProductDesription";
+	public static final String CATALOG_TYPE = "CatalogType";
+	public static final String UPC_CODE = "UPCCode";
+	public static final String DELIVERY_UOM = "DeliveryUOM";
 
 	// Constants for EnergizerMediaCSVProcessor
 	public static final String THUMBNAIIL_PATH = "ThumnailPath";

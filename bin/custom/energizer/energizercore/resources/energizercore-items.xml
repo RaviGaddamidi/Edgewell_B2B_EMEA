@@ -349,6 +349,8 @@
 				jaloclass="com.energizer.core.jalo.EnergizerProduct">
 				<description>Energizer Product model with SAP specific data
 				</description>
+    
+				
 				<attributes>
 					<!-- EnergizerMaterialNumber field - OOTB uid -->
 					<!-- EnergizerMaterialDescription field - OOTB name -->
@@ -437,17 +439,19 @@
 					
 					<attribute qualifier="catalogType" type="java.lang.String">
 						<description>Product's Catalog Type </description>
-						<modifiers />
+					<!-- 	<modifiers read="true" write="true" search="true" optional="false"/>  -->
+						<modifiers/>
 						<persistence type="property" />
 					</attribute>
-										
+								
+													
 					<attribute type="java.lang.String" qualifier="upccode">
 					<description>upc code as extra identifier</description>
 					<modifiers/>
 					<persistence type="property"></persistence>
 					</attribute>
-					
-					
+									
+					<!-- na expansion req ends -->
 				</attributes>
 			</itemtype>
 

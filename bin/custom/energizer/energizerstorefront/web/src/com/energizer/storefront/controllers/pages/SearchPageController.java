@@ -32,6 +32,7 @@ import de.hybris.platform.converters.Converters;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.model.ModelService;
+import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.util.Config;
 
 import java.util.ArrayList;
@@ -119,6 +120,9 @@ public class SearchPageController extends AbstractSearchPageController
 	@Resource(name = "energizerSolrQueryManipulationService")
 	private EnergizerSolrQueryManipulationService energizerSolrQueryManipulationService;
 
+	@Resource(name = "sessionService")
+	private SessionService sessionService;
+
 	@Resource
 	EnergizerCartService energizerCartService;
 
@@ -200,7 +204,27 @@ public class SearchPageController extends AbstractSearchPageController
 			final Model model) throws CMSItemNotFoundException
 	{
 		//need to handle the solr query to enforce the b2bunit restriction on the catalog before it proceeds to the OOTB solr search
-		searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery);
+
+		//	final int siteId = energizerSolrQueryManipulationService.getB2BUnitForLoggedInUser().getSite();
+
+		//	final String siteURL = energizerSolrQueryManipulationService.getSiteURL(siteId);
+
+
+		final String selectedCatalog = (String) sessionService.getAttribute("selectedCatalog");
+
+		LOG.info("Selected Catalog: " + selectedCatalog + " : " + sessionService.getAttribute("siteURL"));
+		if ((sessionService.getAttribute("siteURL").equals(WebConstants.PERSONAL_CARE_NA)))
+		{
+			searchQuery = energizerSolrQueryManipulationService.getNASolrQueryForTextSearchPage(sortCode, searchQuery,
+					selectedCatalog);
+
+		}
+		else if ((sessionService.getAttribute("siteURL").equals(WebConstants.PERSONAL_CARE)))
+		{
+			searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery);
+		}
+
+		//searchQuery = energizerSolrQueryManipulationService.getSolrQueryForTextSearchPage(sortCode, searchQuery);
 
 		final ProductSearchPageData<SearchStateData, ProductData> searchPageData = performSearch(searchQuery, page, showMode,
 				sortCode, getSearchPageSize(), false);
