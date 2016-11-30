@@ -53,34 +53,9 @@ public class DefaultEnergizerAddressFacade implements EnergizerAddressFacade
 		for (final AddressModel model : energizerB2BUnitModelList)
 		{
 			final AddressData addressData = energizerAddressConverter.convert(model);
-			//LOG.info("no exception");
 			deliveryAddresses.add(addressData);
 		}
 		return deliveryAddresses;
 	}
 
-	@Override
-	public List<AddressModel> fetchAddressOnSHCustID(final String shcustid)
-	{
-		// YTODO Auto-generated method stub
-
-		List<AddressModel> energizercustSHAddList = null;
-		energizercustSHAddList = defaultEnergizerAddressService.fetchAddressOnSHCustID(shcustid);
-		List<AddressModel> energizersoldtoidlist = null;
-		energizersoldtoidlist = fetchAddress(shcustid);//fetching add in case sh and sp are same then fetch on basis of sp.
-
-
-
-		if (energizersoldtoidlist != null && energizersoldtoidlist.size() == 1)
-		{
-			LOG.info("its sold to as well shipto found, just send for update");
-			return energizersoldtoidlist;
-		}
-
-
-
-		LOG.info("its shipto  found, just send for update");
-		return energizercustSHAddList;
-
-	}
 }

@@ -140,7 +140,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 						final boolean activeStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
 						energizerAddress.setShippingAddress(activeStatus);
 						energizerAddress.setActive(Boolean.TRUE);
-						energizerAddress.setSoldTo(Boolean.TRUE);
+						
 						try
 						{
 							final CountryModel countryModel = new CountryModel();
@@ -204,7 +204,6 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 						final boolean activeStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
 						energizerAddress.setShippingAddress(activeStatus);
 						energizerAddress.setActive(Boolean.TRUE);
-						energizerAddress.setSoldTo(Boolean.TRUE);
 						modelService.save(energizerAddress);
 						succeedRecord++;
 						setRecordSucceeded(succeedRecord);

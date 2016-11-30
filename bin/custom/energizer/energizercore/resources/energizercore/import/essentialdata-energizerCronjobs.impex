@@ -17,7 +17,6 @@ $interfaceTypeEnergizerOfflineOrder = $config-interfaceType_EnergizerOfflineOrde
 $interfaceTypeEnergizerOrderUpdate = $config-interfaceType_EnergizerOrderUpdate
 $interfaceTypeProductCategory = $config-interfaceType_EnergizerProductCategory
 $interfaceTypePasswordExpiry = $config-interfaceType_EnergizerPasswordExpiry
-$interfaceTypeCustomerShiptoAddress = $config-interfaceType_EnergizerCustomerShiptoAddress
 
 
 $technicalEmailAddress=$config-technical_EmailAddress
@@ -46,7 +45,6 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 
 ;energizerCMIRMonitorCronJob;energizerCMIRMonitorJob;en;;CMIR Monitor Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
-;energizerCustomerShiptoAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerShiptoAddress; shipto job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 
 
 INSERT_UPDATE CronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);emailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]

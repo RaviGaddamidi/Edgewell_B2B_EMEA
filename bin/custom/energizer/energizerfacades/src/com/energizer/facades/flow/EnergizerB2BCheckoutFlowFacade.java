@@ -15,7 +15,6 @@ import java.util.List;
 
 import com.energizer.business.BusinessRuleError;
 import com.energizer.core.model.EnergizerB2BCustomerModel;
-import com.energizer.core.model.EnergizerB2BUnitModel;
 
 
 /**
@@ -50,7 +49,5 @@ public interface EnergizerB2BCheckoutFlowFacade
 	 * @return
 	 */
 	public WorkflowActionModel getActionForCode(String workFlowActionCode);
-
-	public List<AddressData> getMultipleShiptos(final EnergizerB2BUnitModel b2bunit, final String soldto);
 
 }

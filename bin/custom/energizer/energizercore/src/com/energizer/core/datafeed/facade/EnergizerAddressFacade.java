@@ -19,5 +19,4 @@ public interface EnergizerAddressFacade
 
 	public List<AddressData> fetchAddressForB2BUnit(final String b2bUnitUId);
 	
-	public List<AddressModel> fetchAddressOnSHCustID(final String shcustid);
 }
