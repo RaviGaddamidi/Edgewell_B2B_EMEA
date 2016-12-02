@@ -1,7 +1,7 @@
 /*
  * [y] hybris Platform
  *
- * Copyright (c) 2000-2014 hybris AG
+ * Copyright (c) 2000-2015 hybris AG
  * All rights reserved.
  *
  * This software is the confidential and proprietary information of hybris
@@ -9,12 +9,16 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.cockpits.cmscockpit.session.impl;
 
+import de.hybris.platform.cms2.servicelayer.services.admin.CMSAdminComponentService;
+import de.hybris.platform.cms2.servicelayer.services.admin.CMSAdminContentSlotService;
+import de.hybris.platform.cms2.servicelayer.services.admin.CMSAdminSiteService;
 import de.hybris.platform.cmscockpit.components.contentbrowser.CmsPageMainAreaEditComponentFactory;
 import de.hybris.platform.cmscockpit.components.contentbrowser.CmsPageMainAreaPersonalizeComponentFactory;
+import de.hybris.platform.cmscockpit.services.CmsCockpitService;
 import de.hybris.platform.cmscockpit.session.impl.CmsPageBrowserModel;
 import de.hybris.platform.cockpit.components.contentbrowser.AbstractContentBrowser;
 import de.hybris.platform.cockpit.components.contentbrowser.MainAreaComponentFactory;
@@ -26,6 +30,7 @@ import de.hybris.platform.cockpit.session.BrowserSectionModel;
 import de.hybris.platform.cockpit.session.Lockable;
 import de.hybris.platform.cockpit.session.UISessionUtils;
 import de.hybris.platform.core.model.ItemModel;
+import de.hybris.platform.servicelayer.model.ModelService;
 import com.energizer.cockpits.cmscockpit.components.contentbrowser.DefaultCmsPageContentBrowser;
 import com.energizer.cockpits.cmscockpit.components.contentbrowser.DefaultCmsPageMainAreaPreviewComponentFactory;
 
@@ -41,6 +46,13 @@ public class DefaultCmsPageBrowserModel extends CmsPageBrowserModel
 {
 	private List<MainAreaComponentFactory> viewModes = null;
 	private TypedObject page;
+
+    public DefaultCmsPageBrowserModel(CMSAdminSiteService cmsAdminSiteService, CmsCockpitService cmsCockpitService, ModelService modelService, CMSAdminComponentService cmsAdminComponentService, CMSAdminContentSlotService cmsAdminContentSlotService)
+    {
+        super(cmsAdminSiteService, cmsCockpitService, modelService, cmsAdminComponentService, cmsAdminContentSlotService);
+
+    }
+
 
 	@Override
 	public List<MainAreaComponentFactory> getAvailableViewModes()
@@ -67,7 +79,7 @@ public class DefaultCmsPageBrowserModel extends CmsPageBrowserModel
 
 	protected DefaultCmsPageBrowserModel newDefaultCmsPageBrowserModel()
 	{
-		return new DefaultCmsPageBrowserModel();
+		return new DefaultCmsPageBrowserModel(cmsAdminSiteService, cmsCockpitService, modelService, cmsAdminComponentService, cmsAdminContentSlotService);
 	}
 
 	protected CmsPageMainAreaEditComponentFactory newCmsPageMainAreaEditComponentFactory()
@@ -160,25 +172,22 @@ public class DefaultCmsPageBrowserModel extends CmsPageBrowserModel
 						final BrowserSectionModel sectionModel = ((SectionTableModel) changedEvent.getSource()).getModel();
 
 						final List<TypedObject> sectionItems = sectionModel.getItems();
-						if (sectionItems != null && !sectionItems.isEmpty())
+						if (sectionItems != null && !sectionItems.isEmpty() && sectionItems.contains(changedEvent.getItem()))
 						{
-							if (sectionItems.contains(changedEvent.getItem()))
+							final int removedIndex = sectionItems.indexOf(changedEvent.getItem());
+							if (sectionModel.getSelectedIndex() != null)
 							{
-								final int removedIndex = sectionItems.indexOf(changedEvent.getItem());
-								if (sectionModel.getSelectedIndex() != null)
+								if (removedIndex < sectionModel.getSelectedIndex().intValue())
 								{
-									if (removedIndex < sectionModel.getSelectedIndex().intValue())
-									{
-										sectionModel.setSelectedIndex(sectionModel.getSelectedIndex().intValue() - 1);
-									}
-									else if (removedIndex == sectionModel.getSelectedIndex().intValue())
-									{
-										sectionModel.setSelectedIndexes(Collections.EMPTY_LIST);
-									}
+									sectionModel.setSelectedIndex(sectionModel.getSelectedIndex().intValue() - 1);
 								}
-								removeComponentFromSlot((TypedObject) sectionModel.getRootItem(), changedEvent.getItem());
-								sectionModel.update();
+								else if (removedIndex == sectionModel.getSelectedIndex().intValue())
+								{
+									sectionModel.setSelectedIndexes(Collections.EMPTY_LIST);
+								}
 							}
+							removeComponentFromSlot((TypedObject) sectionModel.getRootItem(), changedEvent.getItem());
+							sectionModel.update();
 						}
 
 						if (getContentEditorSection().getRootItem() != null
@@ -212,14 +221,14 @@ public class DefaultCmsPageBrowserModel extends CmsPageBrowserModel
 						if (sectionItems.contains(changedItem))
 						{
 							final TypedObject typedObject = sectionItems.get(sectionItems.indexOf(changedItem));
-							getModelService().refresh(typedObject.getObject());
+							modelService.refresh(typedObject.getObject());
 							sectionModel.update();
 						}
 						if ((sectionModel.getRootItem() != null && sectionModel.getRootItem().equals(changedItem)))
 						{
 							final TypedObject rootItem = (TypedObject) sectionModel.getRootItem();
 							final ItemModel itemModel = (ItemModel) rootItem.getObject();
-							getModelService().refresh(itemModel);
+                            modelService.refresh(itemModel);
 							if (sectionModel instanceof Lockable)
 							{
 								getContentEditorSection().setReadOnly(((Lockable) sectionModel).isLocked());

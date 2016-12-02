@@ -2,7 +2,7 @@
 <!--
  [y] hybris Platform
 
- Copyright (c) 2000-2014 hybris AG
+ Copyright (c) 2000-2015 hybris AG
  All rights reserved.
 
  This software is the confidential and proprietary information of hybris
@@ -201,7 +201,6 @@
 							<entry key="celumReferenceSelector" value="de.hybris.platform.cockpit.model.referenceeditor.celum.impl.CelumMediaReferenceUIEditor"/>
 							<entry key="simple" value="de.hybris.platform.cockpit.model.referenceeditor.impl.SimpleReferenceUIEditor"/>
 							<entry key="shortListEditor" value="de.hybris.platform.cockpit.model.editor.impl.DefaultSelectUIEditor"/>
-							<entry key="catalogVersionEditor" value="de.hybris.platform.cmscockpit.components.editor.impl.CategoryVersionRadioEditor"/>
 							<entry key="baseStoresEditor" value="de.hybris.platform.cmscockpit.components.editor.impl.BaseStoreCheckboxUIEditor"/>
 							<!--
 								Note:
@@ -209,8 +208,6 @@
 							-->
 							<entry key="simpleMediaReferenceSelector" value="de.hybris.platform.cockpit.model.referenceeditor.simple.impl.DefaultSimpleMediaReferenceUIEditor"/>
 							<entry key="simpleCelumReferenceSelector" value="de.hybris.platform.cockpit.model.referenceeditor.celum.impl.CelumSimpleMediaReferenceUIEditor"/>
-							<!-- Note: special editor for collections of BTGCondition -->
-							<entry key="btgConditionCollection" value="de.hybris.platform.btgcockpit.components.editor.BTGConditionCollectionUIEditor"/>
 						</map>
 					</property>
 					<property name="label" value="referenceEditor"/>

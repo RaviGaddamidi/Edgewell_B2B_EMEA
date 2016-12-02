@@ -13,6 +13,5 @@
 		<property qualifier="PreviewData.language" editor="simple" />
 		<property qualifier="PreviewData.page" />
 		<property qualifier="PreviewData.uiExperience" editor="uiExperience" />
-		<property qualifier="PreviewData.catalogVersions" editor="catalogVersionEditor" />
 	</group>
 </editor>

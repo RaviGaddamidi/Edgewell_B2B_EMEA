@@ -1,7 +1,7 @@
 /*
  * [y] hybris Platform
  *
- * Copyright (c) 2000-2014 hybris AG
+ * Copyright (c) 2000-2015 hybris AG
  * All rights reserved.
  *
  * This software is the confidential and proprietary information of hybris
@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.cockpits.cmscockpit.session.impl;
 
@@ -30,7 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hybris.platform.core.Registry;
 import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -86,7 +88,7 @@ public class DefaultCmsCockpitPerspective extends CmsCockpitPerspective
 	 */
 	protected DefaultCmsPageBrowserModel newDefaultCmsPageBrowserModel()
 	{
-		return new DefaultCmsPageBrowserModel();
+		return (DefaultCmsPageBrowserModel) getApplicationContext().getBean("cmsPageBrowserModel", DefaultCmsPageBrowserModel.class);
 	}
 
 	@Override
@@ -175,4 +177,7 @@ public class DefaultCmsCockpitPerspective extends CmsCockpitPerspective
 		return null;
 	}
 
+    protected ApplicationContext getApplicationContext(){
+        return Registry.getApplicationContext();
+    }
 }

@@ -1,9 +1,9 @@
 #Ant properties
-#Thu Oct 16 05:29:49 CEST 2014
-builddate=20141016 0529
+#Thu Mar 12 03:41:03 CET 2015
+builddate=20150312 0340
 description=energizercockpits
 name=energizercockpits
-releasedate=20141009 1419
+releasedate=20150311 1421
 vendor=hybris
-version=5.4.0.0
-version.api=5.4.0
+version=5.5.1.0
+version.api=5.5.1

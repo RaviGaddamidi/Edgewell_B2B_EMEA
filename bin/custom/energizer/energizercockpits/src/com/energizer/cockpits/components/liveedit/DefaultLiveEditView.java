@@ -1,7 +1,7 @@
 /*
  * [y] hybris Platform
  *
- * Copyright (c) 2000-2014 hybris AG
+ * Copyright (c) 2000-2015 hybris AG
  * All rights reserved.
  *
  * This software is the confidential and proprietary information of hybris
@@ -9,20 +9,10 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.cockpits.components.liveedit;
 
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.zkoss.util.resource.Labels;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Messagebox;
-
-import de.hybris.platform.commerceservices.enums.UiExperienceLevel;
 import de.hybris.platform.cms2.model.preview.PreviewDataModel;
 import de.hybris.platform.cmscockpit.components.liveedit.LiveEditView;
 import de.hybris.platform.cmscockpit.components.liveedit.impl.DefaultLiveEditViewModel;
@@ -34,7 +24,17 @@ import de.hybris.platform.cockpit.model.meta.TypedObject;
 import de.hybris.platform.cockpit.session.UIBrowserArea;
 import de.hybris.platform.cockpit.session.UICockpitPerspective;
 import de.hybris.platform.cockpit.session.UISessionUtils;
+import de.hybris.platform.commerceservices.enums.UiExperienceLevel;
 import com.energizer.cockpits.cmscockpit.session.impl.DefaultLiveEditBrowserArea;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Messagebox;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Controller of (live edit) preview of a site.
@@ -63,9 +63,8 @@ public class DefaultLiveEditView extends LiveEditView<DefaultLiveEditPopupEditDi
 		initialize();
 	}
 	
-	@Override
 	protected DefaultLiveEditPopupEditDialog createLiveEditPopupDialog(
-			final String[] passedAttributes) throws InterruptedException {
+			final Map<String, Object> passedAttributes) throws InterruptedException {
 		return new DefaultLiveEditPopupEditDialog(passedAttributes, getModel().getCurrentPreviewData().getCatalogVersions(), DefaultLiveEditView.this);
 	}
 	
@@ -148,13 +147,9 @@ public class DefaultLiveEditView extends LiveEditView<DefaultLiveEditPopupEditDi
 
 	public void updateItem(final TypedObject item, final Set<PropertyDescriptor> modifiedProperties, final Object reason)
 	{
-	
-		if (!(reason instanceof DefaultLiveEditPopupEditDialog))
+		if (!(reason instanceof DefaultLiveEditPopupEditDialog) && this.getPopupEditorDialog() != null && this.getPopupEditorDialog().isVisible() && !this.getPopupEditorDialog().equals(reason))
 		{
-			if (this.getPopupEditorDialog() != null && this.getPopupEditorDialog().isVisible() && !this.getPopupEditorDialog().equals(reason))
-			{
-				getPopupEditorDialog().update();
-			}
+			getPopupEditorDialog().update();
 		}
 	}
 
