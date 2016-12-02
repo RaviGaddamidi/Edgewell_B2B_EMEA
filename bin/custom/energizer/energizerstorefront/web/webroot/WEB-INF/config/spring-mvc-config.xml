@@ -36,11 +36,11 @@
 	<bean id="jaxb2RootElementHttpMessageConverter" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
 
 	<!-- activates annotation driven binding -->
-	<mvc:annotation-driven ignoreDefaultModelOnRedirect="true" validator="validator">
+	<mvc:annotation-driven ignore-default-model-on-redirect="true" validator="validator">
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
 			<bean id="jaxbMessageConverterMVC" parent="jaxbMessageConverter"/>
-			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	

@@ -13,6 +13,7 @@
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
+import de.hybris.platform.b2bacceleratorfacades.company.refactoring.impl.DefaultB2BCostCenterFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCommentData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BDaysOfWeekData;
@@ -42,6 +43,7 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
@@ -137,8 +139,13 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@Resource(name = "cartFacade")
 	private CartFacade cartFacade;
 
+	@Resource(name = "DefaultB2BCostCenterFacade")
+	private DefaultB2BCostCenterFacade defaultB2BCostCenterFacade;
+
 	@Resource
 	private CartService cartService;
+
+	private ModelService modelService;
 
 	@Resource
 	private EnergizerOrderBusinessRuleValidationService orderBusinessRulesService;
@@ -164,18 +171,21 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return getCheckoutFlowFacade().getBillingCountries();
 	}
 
+
 	@ModelAttribute("costCenters")
 	public List<? extends B2BCostCenterData> getVisibleActiveCostCenters()
 	{
-		final List<? extends B2BCostCenterData> costCenterData = getCheckoutFlowFacade().getActiveVisibleCostCenters();
+		final List<? extends B2BCostCenterData> costCenterData = defaultB2BCostCenterFacade.getActiveCostCenters();
 		return costCenterData == null ? Collections.<B2BCostCenterData> emptyList() : costCenterData;
 	}
+
 
 	@ModelAttribute("paymentTypes")
 	public Collection<B2BPaymentTypeData> getAllB2BPaymentTypes()
 	{
 		return getCheckoutFlowFacade().getPaymentTypesForCheckoutSummary();
 	}
+
 
 	@ModelAttribute("daysOfWeek")
 	public Collection<B2BDaysOfWeekData> getAllDaysOfWeek()
@@ -216,6 +226,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 		return REDIRECT_PREFIX + "/cart";
 	}
+
 
 	@RequestMapping(value = "/summary", method =
 	{ RequestMethod.GET, RequestMethod.POST })
@@ -365,27 +376,27 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@RequireHardLogIn
 	public List<? extends AddressData> getDeliveryAddresses()
 	{
-		
-		  List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
-		  energizerDeliveryAddresses =energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses(); 
-		  //final CartData cartData =energizerB2BCheckoutFlowFacade.getCheckoutCart(); 
-		  final List<String> soldToAddressIds =energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
-		  
-		  final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
-		  for (final String soldToAddressId : soldToAddressIds)
-		  { 
-		     for (final AddressData address : energizerDeliveryAddresses)
-     			 { 
-				   if(soldToAddressId.equalsIgnoreCase(address.getErpAddressId())) 
-				     { 
-					    energizerAddresses.add(address); 
-						break;
-					  } 
-			     }
-		  
-		  }
-		  
-		  return energizerAddresses;
+
+		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
+		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.getEnergizerDeliveryAddresses();
+		//final CartData cartData =energizerB2BCheckoutFlowFacade.getCheckoutCart();
+		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
+
+		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
+		for (final String soldToAddressId : soldToAddressIds)
+		{
+			for (final AddressData address : energizerDeliveryAddresses)
+			{
+				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
+				{
+					energizerAddresses.add(address);
+					break;
+				}
+			}
+
+		}
+
+		return energizerAddresses;
 	}
 
 	@ResponseBody
@@ -567,6 +578,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				+ "&createUpdateStatus=Success";
 	}
 
+
 	@ResponseBody
 	@RequestMapping(value = "/summary/setCostCenter.json", method = RequestMethod.POST)
 	@RequireHardLogIn
@@ -598,6 +610,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 				.getCheckoutCart().getCode());
 		return cartData;
 	}
+
+
 
 	@ResponseBody
 	@RequestMapping(value = "/summary/updateCostCenter.json", method = RequestMethod.POST)
@@ -635,6 +649,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return null;
 	}
 
+
+
 	@ResponseBody
 	@RequestMapping(value = "/summary/setPaymentType.json", method = RequestMethod.POST)
 	@RequireHardLogIn
@@ -650,12 +666,13 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return cartData;
 	}
 
+
 	@ResponseBody
 	@RequestMapping(value = "/summary/setPurchaseOrderNumber.json", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public CartData setPurchaseOrderNumber(@RequestParam(value = "purchaseOrderNumber") final String purchaseOrderNumber)
 	{
-		getCheckoutFlowFacade().setPurchaseOrderNumber(purchaseOrderNumber);
+		setPurchaseOrderNumberInCart(purchaseOrderNumber);
 		LOG.info("Purchase order no set in cart " + purchaseOrderNumber);
 		final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
 
@@ -815,6 +832,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		model.addAttribute(WebConstants.BREADCRUMBS_KEY, contentPageBreadcrumbBuilder.getBreadcrumbs(pageForRequest));
 		return ControllerConstants.Views.Fragments.Checkout.TermsAndConditionsPopup;
 	}
+
+
 
 	@RequestMapping(value = "/placeOrder")
 	@RequireHardLogIn
@@ -1023,6 +1042,8 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return invalid;
 	}
 
+
+
 	@RequestMapping(value = "/summary/reorder", method =
 	{ RequestMethod.PUT, RequestMethod.POST })
 	@RequireHardLogIn
@@ -1095,7 +1116,7 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	/**
 	 * Need to move out of controller utility method for Replenishment
-	 * 
+	 *
 	 */
 	protected List<String> getNumberRange(final int startNumber, final int endNumber)
 	{
@@ -1117,27 +1138,40 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		return energizerCMIR.getShippingPoint();
 	}
 
+	public boolean setPurchaseOrderNumberInCart(final String purchaseOrderNumber)
+	{
+		final CartModel cartModel = cartService.getSessionCart();
+		if (cartModel != null)
+		{
+			cartModel.setPurchaseOrderNumber(purchaseOrderNumber);
+			modelService.save(cartModel);
+			modelService.refresh(cartModel);
+			return true;
+		}
+		return false;
+	}
+
 	public List<? extends AddressData> getDeliveryAddressesForB2Bunit()
 	{
 		final String userId = defaultEnergizerB2BOrderHistoryFacade.getCurrentUser();
 		final EnergizerB2BUnitModel b2bUnit = defaultEnergizerB2BOrderHistoryFacade.getParentUnitForCustomer(userId);
 		List<AddressData> energizerDeliveryAddresses = new ArrayList<AddressData>();
 		energizerDeliveryAddresses = energizerB2BCheckoutFlowFacade.fetchAddressForB2BUnit(b2bUnit.getUid());
-		
+
 		final List<String> soldToAddressIds = energizerB2BCheckoutFlowFacade.getsoldToAddressIds(getShippingPoint());
 		final List<AddressData> energizerAddresses = new ArrayList<AddressData>();
 		for (final String soldToAddressId : soldToAddressIds)
 		{
-		  for (final AddressData address : energizerDeliveryAddresses)
-		    {
- 				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
- 				{
- 					energizerAddresses.add(address);
- 					break;
- 				}
-            }
-		}	
-	
+			for (final AddressData address : energizerDeliveryAddresses)
+			{
+				if (soldToAddressId.equalsIgnoreCase(address.getErpAddressId()))
+				{
+					energizerAddresses.add(address);
+					break;
+				}
+			}
+		}
+
 		return energizerAddresses;
 	}
 }

@@ -9,14 +9,14 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.flow.impl;
 
+import de.hybris.platform.b2bacceleratorservices.enums.B2BCheckoutFlowEnum;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BCheckoutPciOptionEnum;
 import de.hybris.platform.core.Registry;
 import de.hybris.platform.servicelayer.session.SessionService;
-import com.energizer.core.enums.B2BCheckoutFlowEnum;
-import com.energizer.core.enums.B2BCheckoutPciOptionEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;

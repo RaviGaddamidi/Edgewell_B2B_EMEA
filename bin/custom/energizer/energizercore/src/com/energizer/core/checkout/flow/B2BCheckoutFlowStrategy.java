@@ -9,16 +9,17 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.checkout.flow;
 
-import com.energizer.core.enums.B2BCheckoutFlowEnum;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BCheckoutFlowEnum;
+
 
 
 /**
  * Abstraction for strategy determining flow for checkout logic.
- * 
+ *
  * @since 4.6
  */
 public interface B2BCheckoutFlowStrategy

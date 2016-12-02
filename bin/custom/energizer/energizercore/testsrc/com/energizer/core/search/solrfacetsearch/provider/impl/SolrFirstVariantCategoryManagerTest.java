@@ -9,16 +9,15 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
 import de.hybris.bootstrap.annotations.UnitTest;
 import de.hybris.platform.b2b.model.GenericVariantProductModel;
 import de.hybris.platform.b2b.model.VariantValueCategoryModel;
-import com.energizer.core.product.data.SolrFirstVariantCategoryEntryData;
+import de.hybris.platform.b2bacceleratorfacades.product.data.SolrFirstVariantCategoryEntryData;
 import de.hybris.platform.servicelayer.i18n.L10NService;
-import com.energizer.core.search.solrfacetsearch.provider.entity.VariantValueCategoryModelSequenceComparator;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +32,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.energizer.core.search.solrfacetsearch.provider.entity.VariantValueCategoryModelSequenceComparator;
 
 
 /**

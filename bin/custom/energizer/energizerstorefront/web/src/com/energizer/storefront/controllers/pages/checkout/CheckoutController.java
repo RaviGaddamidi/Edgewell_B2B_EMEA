@@ -9,10 +9,22 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
+
+import de.hybris.platform.acceleratorservices.controllers.page.PageType;
+import de.hybris.platform.b2bacceleratorfacades.order.B2BOrderFacade;
+import de.hybris.platform.b2bacceleratorfacades.order.data.ScheduledCartData;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BCheckoutFlowEnum;
+import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.cms2.model.pages.AbstractPageModel;
+import de.hybris.platform.commercefacades.order.data.OrderData;
+import de.hybris.platform.commercefacades.order.data.OrderEntryData;
+import de.hybris.platform.commercefacades.product.ProductFacade;
+import de.hybris.platform.commercefacades.product.ProductOption;
+import de.hybris.platform.commercefacades.product.data.ProductData;
 
 import java.util.Arrays;
 
@@ -26,22 +38,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import de.hybris.platform.acceleratorservices.controllers.page.PageType;
-import de.hybris.platform.b2bacceleratorfacades.order.B2BCartFacade;
-import de.hybris.platform.b2bacceleratorfacades.order.B2BOrderFacade;
-import de.hybris.platform.b2bacceleratorfacades.order.data.ScheduledCartData;
-import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
-import de.hybris.platform.cms2.model.pages.AbstractPageModel;
-import de.hybris.platform.commercefacades.order.data.OrderData;
-import de.hybris.platform.commercefacades.order.data.OrderEntryData;
-import de.hybris.platform.commercefacades.product.ProductFacade;
-import de.hybris.platform.commercefacades.product.ProductOption;
-import de.hybris.platform.commercefacades.product.data.ProductData;
-import com.energizer.core.enums.B2BCheckoutFlowEnum;
 import com.energizer.storefront.annotations.RequireHardLogIn;
 import com.energizer.storefront.constants.WebConstants;
 import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.variants.VariantSortStrategy;
 
 
 /**
@@ -189,7 +188,7 @@ public class CheckoutController extends AbstractCheckoutController
 
 	/**
 	 * Method used to determine the checkout redirect URL that will handle the checkout process.
-	 * 
+	 *
 	 * @return A <code>String</code> object of the URL to redirect to.
 	 */
 	protected String getCheckoutRedirectUrl()

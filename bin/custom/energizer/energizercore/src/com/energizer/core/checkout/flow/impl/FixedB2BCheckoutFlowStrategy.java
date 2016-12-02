@@ -9,20 +9,21 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.checkout.flow.impl;
 
-import com.energizer.core.checkout.flow.B2BCheckoutFlowStrategy;
-import com.energizer.core.enums.B2BCheckoutFlowEnum;
+import de.hybris.platform.b2bacceleratorservices.enums.B2BCheckoutFlowEnum;
 
 import org.springframework.beans.factory.annotation.Required;
 
+import com.energizer.core.checkout.flow.B2BCheckoutFlowStrategy;
+
 
 /**
- * 
+ *
  * Uses fixed {@link B2BCheckoutFlowEnum} as result. Used most likely on the end of checkout flow strategy chain.
- * 
+ *
  * @since 4.6
  */
 public class FixedB2BCheckoutFlowStrategy implements B2BCheckoutFlowStrategy

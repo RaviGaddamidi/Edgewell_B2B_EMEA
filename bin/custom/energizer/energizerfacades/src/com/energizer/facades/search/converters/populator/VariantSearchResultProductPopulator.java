@@ -9,12 +9,13 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.search.converters.populator;
 
 
 import de.hybris.platform.acceleratorfacades.order.data.PriceRangeData;
+import de.hybris.platform.b2bacceleratorfacades.product.data.SolrFirstVariantCategoryEntryData;
 import de.hybris.platform.commercefacades.product.data.PriceData;
 import de.hybris.platform.commercefacades.product.data.PriceDataType;
 import de.hybris.platform.commercefacades.product.data.ProductData;
@@ -26,7 +27,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.energizer.core.product.data.SolrFirstVariantCategoryEntryData;
 import com.energizer.core.search.solrfacetsearch.provider.entity.SolrPriceRange;
 import com.energizer.core.search.solrfacetsearch.provider.entity.SolrPriceRangeEntry;
 import com.energizer.core.search.solrfacetsearch.provider.impl.SolrFirstVariantCategoryManager;
@@ -59,7 +59,7 @@ public class VariantSearchResultProductPopulator extends SearchResultProductPopu
 	/**
 	 * Set price range for the {@link ProductData}. If there is no priceRange in the source, no {@link PriceRangeData}
 	 * will be set in the target.
-	 * 
+	 *
 	 * @param source
 	 *           The {@link SearchResultValueData} containing the priceRange.
 	 * @param target
@@ -89,7 +89,7 @@ public class VariantSearchResultProductPopulator extends SearchResultProductPopu
 
 	/**
 	 * Set list of first categories for the {@link ProductData}.
-	 * 
+	 *
 	 * @param source
 	 *           The {@link SearchResultValueData} containing the priceRange.
 	 * @param target

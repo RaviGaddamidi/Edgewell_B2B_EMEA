@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.util;
 
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
 public class DefaultRequestDataProcessor implements RequestDataValueProcessor
 {
 	@Override
-	public String processAction(final HttpServletRequest request, final String action)
+	public String processAction(final HttpServletRequest request, final String action, final String httpMethod)
 	{
 		return action;
 	}

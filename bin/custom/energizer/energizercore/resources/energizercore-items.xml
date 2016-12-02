@@ -32,18 +32,18 @@
 			<value code="INVOICED" />
 			<!-- <value code="CANCELLED" /> -->
 		</enumtype>
-		<enumtype generate="true" code="B2BCheckoutFlowEnum"
+		<!-- <enumtype generate="true" code="B2BCheckoutFlowEnum"
 			autocreate="true" dynamic="true">
-			<!-- <model package="com.energizer.core.enums"/> -->
+			<model package="com.energizer.core.enums"/>
 			<value code="SINGLE" />
 			<value code="MULTISTEP" />
 		</enumtype>
 		<enumtype generate="true" code="B2BCheckoutPciOptionEnum"
 			autocreate="true" dynamic="true">
-			<!-- <model package="com.energizer.core.enums"/> -->
+			<model package="com.energizer.core.enums"/>
 			<value code="Default" />
 			<value code="HOP" />
-		</enumtype>
+		</enumtype> -->
 	</enumtypes>
 	
 	 <maptypes>	
