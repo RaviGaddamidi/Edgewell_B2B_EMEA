@@ -43,7 +43,6 @@ import de.hybris.platform.core.model.order.CartModel;
 import de.hybris.platform.cronjob.enums.DayOfWeek;
 import de.hybris.platform.order.CartService;
 import de.hybris.platform.order.InvalidCartException;
-import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.util.localization.Localization;
 
@@ -144,8 +143,6 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 
 	@Resource
 	private CartService cartService;
-
-	private ModelService modelService;
 
 	@Resource
 	private EnergizerOrderBusinessRuleValidationService orderBusinessRulesService;
@@ -672,9 +669,19 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	@RequireHardLogIn
 	public CartData setPurchaseOrderNumber(@RequestParam(value = "purchaseOrderNumber") final String purchaseOrderNumber)
 	{
-		setPurchaseOrderNumberInCart(purchaseOrderNumber);
+		getCheckoutFlowFacade().setPurchaseOrderNumber(purchaseOrderNumber);
 		LOG.info("Purchase order no set in cart " + purchaseOrderNumber);
+
+
+		if (getDeliveryAddressesForB2Bunit().size() == 1)
+		{
+			final AddressData addressData = getDeliveryAddressesForB2Bunit().get(0);
+			energizerB2BCheckoutFlowFacade.setSingleDeliveryAddress(addressData);
+
+		}
+
 		final CartData cartData = energizerB2BCheckoutFlowFacade.getCheckoutCart();
+
 
 		return cartData;
 	}
@@ -1136,19 +1143,6 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 		final EnergizerCMIRModel energizerCMIR = defaultEnergizerB2BOrderHistoryFacade.getEnergizerCMIR(productCode,
 				b2bUnit.getUid());
 		return energizerCMIR.getShippingPoint();
-	}
-
-	public boolean setPurchaseOrderNumberInCart(final String purchaseOrderNumber)
-	{
-		final CartModel cartModel = cartService.getSessionCart();
-		if (cartModel != null)
-		{
-			cartModel.setPurchaseOrderNumber(purchaseOrderNumber);
-			modelService.save(cartModel);
-			modelService.refresh(cartModel);
-			return true;
-		}
-		return false;
 	}
 
 	public List<? extends AddressData> getDeliveryAddressesForB2Bunit()
