@@ -123,7 +123,7 @@ public class ProductVariantOptionDataPopulator<SOURCE extends ProductModel, TARG
 		if (CollectionUtils.isNotEmpty(parent.getElements()) && parent.getVariantOption() != null)
 		{
 
-			final VariantMatrixElementData elementToCopy = getRightElementToCopy(parent);
+			VariantMatrixElementData elementToCopy = getRightElementToCopy(parent);
 
 			parent.getVariantOption().setCode(elementToCopy.getVariantOption().getCode());
 			parent.getVariantOption().setUrl(elementToCopy.getVariantOption().getUrl());

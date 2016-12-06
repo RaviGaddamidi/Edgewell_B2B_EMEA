@@ -100,7 +100,7 @@ public class ProductVariantMatrixPopulator<SOURCE extends ProductModel, TARGET e
 		for (final VariantValueCategoryModel valueCategory : valuesCategories)
 		{
 
-			final VariantMatrixElementData existingNode = getExistingNode(currentParentNode, valueCategory);
+			VariantMatrixElementData existingNode = getExistingNode(currentParentNode, valueCategory);
 
 			if (existingNode == null)
 			{
@@ -154,7 +154,7 @@ public class ProductVariantMatrixPopulator<SOURCE extends ProductModel, TARGET e
 	protected VariantMatrixElementData createNode(final VariantMatrixElementData parent,
 			final VariantValueCategoryModel valueCategory)
 	{
-		final VariantMatrixElementData elementData = new VariantMatrixElementData();
+		VariantMatrixElementData elementData = new VariantMatrixElementData();
 		elementData.setElements(new ArrayList<VariantMatrixElementData>());
 
 		if (parent != null)
