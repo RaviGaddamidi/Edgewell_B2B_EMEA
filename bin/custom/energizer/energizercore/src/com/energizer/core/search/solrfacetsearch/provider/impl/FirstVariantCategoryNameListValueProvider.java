@@ -9,16 +9,15 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
-import com.energizer.core.search.solrfacetsearch.provider.AbstractMultidimensionalProductFieldValueProvider;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +29,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.energizer.core.search.solrfacetsearch.provider.AbstractMultidimensionalProductFieldValueProvider;
 
 
 /**
@@ -72,7 +73,7 @@ public class FirstVariantCategoryNameListValueProvider extends AbstractMultidime
 	/**
 	 * Add first level category from {@code variant} to {@code categoryValues}. If there is already a first level
 	 * category with higher precedence, nothing is added.
-	 * 
+	 *
 	 * @param categoryValues
 	 *           The map to be populated.
 	 * @param variant
@@ -108,7 +109,7 @@ public class FirstVariantCategoryNameListValueProvider extends AbstractMultidime
 
 	/**
 	 * Get the list of {@link VariantValueCategoryModel} for a given {@link GenericVariantProductModel}.
-	 * 
+	 *
 	 * @param variant
 	 *           The variant that contains the categories.
 	 * @return A list of categories sorted by priority.
@@ -136,7 +137,7 @@ public class FirstVariantCategoryNameListValueProvider extends AbstractMultidime
 	 * previous to the old one.<br>
 	 * e.g.: If {@code currentCategoryValues} has sequences [3,4,5] and {@code oldCategoryValues} has sequences [3,5,4],
 	 * then {@code currentCategoryValues} is previous (on first level, 3 == 3, but on second level 4 < 5).
-	 * 
+	 *
 	 * @param currentCategoryValues
 	 *           Current category list.
 	 * @param oldCategoryValues

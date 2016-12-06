@@ -9,24 +9,25 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.flow.impl;
 
 import de.hybris.platform.b2bacceleratorfacades.order.impl.DefaultB2BCheckoutFacade;
+
+import org.springframework.beans.factory.annotation.Required;
+
 import com.energizer.core.checkout.flow.B2BCheckoutFlowStrategy;
 import com.energizer.core.checkout.pci.B2BCheckoutPciStrategy;
 import com.energizer.core.enums.B2BCheckoutFlowEnum;
 import com.energizer.core.enums.B2BCheckoutPciOptionEnum;
 import com.energizer.facades.flow.B2BCheckoutFlowFacade;
 
-import org.springframework.beans.factory.annotation.Required;
-
 
 /**
  * Default implementation of the {@link B2BCheckoutFlowFacade}. Delegates resolving the checkout flow to an injected
  * {@link B2BCheckoutFlowStrategy}.
- * 
+ *
  * @since 4.6
  * @spring.bean checkoutFlowFacade
  */

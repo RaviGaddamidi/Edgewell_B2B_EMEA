@@ -9,14 +9,14 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.checkout.pci.impl;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import com.energizer.core.checkout.pci.B2BCheckoutPciStrategy;
 import com.energizer.core.enums.B2BCheckoutPciOptionEnum;
-
-import org.springframework.beans.factory.annotation.Required;
 
 
 /**

@@ -9,18 +9,17 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.DefaultCategorySource;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.solrfacetsearch.config.IndexConfig;
 import de.hybris.platform.solrfacetsearch.config.IndexedProperty;
-import com.energizer.core.search.solrfacetsearch.provider.ProductSource;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -29,6 +28,8 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.energizer.core.search.solrfacetsearch.provider.ProductSource;
 
 
 /**

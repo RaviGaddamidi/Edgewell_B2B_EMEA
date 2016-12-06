@@ -9,17 +9,13 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.commercefacades.order.data.CartData;
-import com.energizer.core.enums.B2BCheckoutFlowEnum;
-import com.energizer.facades.flow.B2BCheckoutFlowFacade;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.pages.AbstractLoginPageController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +28,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.energizer.core.enums.B2BCheckoutFlowEnum;
+import com.energizer.facades.flow.B2BCheckoutFlowFacade;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.pages.AbstractLoginPageController;
 
 
 /**
@@ -83,7 +84,7 @@ public class CheckoutLoginController extends AbstractLoginPageController
 
 	/**
 	 * Checks if there are any items in the cart.
-	 * 
+	 *
 	 * @return returns true if items found in cart.
 	 */
 	protected boolean hasItemsInCart()

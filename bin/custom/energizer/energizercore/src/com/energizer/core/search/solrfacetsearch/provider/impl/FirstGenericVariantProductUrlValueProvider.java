@@ -9,15 +9,14 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
 import de.hybris.platform.commerceservices.url.UrlResolver;
 import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
-import com.energizer.core.search.solrfacetsearch.provider.AbstractMultidimensionalProductFieldValueProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +26,8 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.energizer.core.search.solrfacetsearch.provider.AbstractMultidimensionalProductFieldValueProvider;
 
 
 /**

@@ -9,11 +9,10 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.solrfacetsearch.config.IndexConfig;
 import de.hybris.platform.solrfacetsearch.config.IndexedProperty;
@@ -22,6 +21,7 @@ import de.hybris.platform.solrfacetsearch.provider.FieldNameProvider;
 import de.hybris.platform.solrfacetsearch.provider.FieldValue;
 import de.hybris.platform.solrfacetsearch.provider.FieldValueProvider;
 import de.hybris.platform.solrfacetsearch.provider.impl.AbstractPropertyFieldValueProvider;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public abstract class AbstractMultidimensionalProductFieldValueProvider extends 
 	/**
 	 * Add a value in the list of field values. It will add one entry for each {@link FieldValue} related to the given
 	 * Solr property.
-	 * 
+	 *
 	 * @param fieldValues
 	 *           The list of field values.
 	 * @param indexedProperty
@@ -85,7 +85,7 @@ public abstract class AbstractMultidimensionalProductFieldValueProvider extends 
 
 	/**
 	 * For a given product, retrieve its base product.
-	 * 
+	 *
 	 * @param model
 	 *           The product.
 	 * @return The base product, if it is a variant product, or the model, if it is already the base product or is not a
@@ -108,7 +108,7 @@ public abstract class AbstractMultidimensionalProductFieldValueProvider extends 
 
 	/**
 	 * For a given product, finds out if it is a base product of {@link GenericVariantProductModel} products.
-	 * 
+	 *
 	 * @param model
 	 *           The product.
 	 * @return True if it is a base product that has generic variants.

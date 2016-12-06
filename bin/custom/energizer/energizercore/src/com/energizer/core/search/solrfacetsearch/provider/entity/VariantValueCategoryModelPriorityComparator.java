@@ -9,13 +9,13 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.entity;
 
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.category.CategoryService;
 import de.hybris.platform.category.model.CategoryModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.Comparator;
 import java.util.LinkedList;

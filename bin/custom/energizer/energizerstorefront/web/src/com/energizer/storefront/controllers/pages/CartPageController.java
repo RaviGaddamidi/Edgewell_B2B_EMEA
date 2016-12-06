@@ -189,18 +189,10 @@ public class CartPageController extends AbstractPageController
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		if (b2bUnit.getEnableContainerOptimization() == false)
+		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
-		else
-		{
-			enableButton = true;
-		}
-		/*
-		 * else if (session.getAttribute("enableButton") != null) { enableButton = (boolean)
-		 * session.getAttribute("enableButton"); }
-		 */
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
@@ -217,19 +209,14 @@ public class CartPageController extends AbstractPageController
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
-		enableButton = true;
+
 
 		if (bindingErrors.hasErrors())
 		{
 			getViewWithBindingErrorMessages(model, bindingErrors);
 		}
-		/*
-		 * final String str = request.getParameter("choice"); if (str != null && str.equals("Yes")) {
-		 * LOG.info("Enable radio button :"); enableButton = true; }
-		 * 
-		 * if (str != null && str.equals("No")) { LOG.info("radio button value:"); enableButton = false; }
-		 */
-		if (b2bUnit.getEnableContainerOptimization() == false)
+
+		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
@@ -355,11 +342,6 @@ public class CartPageController extends AbstractPageController
 			@RequestParam("productCode") final String productCode, final Model model, @Valid final UpdateQuantityForm form,
 			final BindingResult bindingErrors, final HttpSession session) throws CMSItemNotFoundException
 	{
-
-		/*
-		 * if (session.getAttribute("enableButton") != null) { enableButton = (boolean)
-		 * session.getAttribute("enableButton"); }
-		 */
 
 		if (bindingErrors.hasErrors())
 		{
@@ -522,8 +504,6 @@ public class CartPageController extends AbstractPageController
 			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
 
-		//	final String userId = userService.getCurrentUser().getUid();
-		//	final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
 
 		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)

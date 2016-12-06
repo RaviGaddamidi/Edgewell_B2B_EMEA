@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.variant.populators;
 
@@ -17,9 +17,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import de.hybris.bootstrap.annotations.UnitTest;
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
 import de.hybris.platform.commercefacades.product.data.VariantOptionData;
 import de.hybris.platform.ordersplitting.model.StockLevelModel;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
 
 import java.util.ArrayList;

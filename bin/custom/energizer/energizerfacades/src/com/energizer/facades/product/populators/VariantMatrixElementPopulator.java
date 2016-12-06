@@ -9,12 +9,10 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.product.populators;
 
-import de.hybris.platform.b2b.model.VariantCategoryModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.commercefacades.product.data.ImageData;
 import de.hybris.platform.commercefacades.product.data.VariantCategoryData;
 import de.hybris.platform.commercefacades.product.data.VariantMatrixElementData;
@@ -23,6 +21,8 @@ import de.hybris.platform.commercefacades.product.data.VariantOptionQualifierDat
 import de.hybris.platform.commercefacades.product.data.VariantValueCategoryData;
 import de.hybris.platform.converters.Populator;
 import de.hybris.platform.servicelayer.dto.converter.ConversionException;
+import de.hybris.platform.variants.model.VariantCategoryModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.Arrays;
 
