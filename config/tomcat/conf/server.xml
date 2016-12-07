@@ -63,8 +63,6 @@
 
     <Connector port="${tomcat.ssl.port}"
     				maxHttpHeaderSize="8192"
-    				proxyName="energizer.local.com"
-    				proxyPort="443"
                maxThreads="150"
                protocol="org.apache.coyote.http11.Http11Protocol"
                executor="hybrisExecutor"
