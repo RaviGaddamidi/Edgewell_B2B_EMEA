@@ -18,8 +18,8 @@ $indexCurrencies=USD
 # Setup the Solr server, indexer, and search configs
 #
 
-REMOVE SolrServerConfig;name[unique=true]
-;$serverConfigName  
+#REMOVE SolrServerConfig;name[unique=true]
+#;$serverConfigName  
 
 
 # Create the solr server configuration
