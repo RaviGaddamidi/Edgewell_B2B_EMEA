@@ -32,14 +32,18 @@
 		<extension name="voucher" />
 		<extension name="customerreview" />
 		<extension name="ticketsystem" />
-		<extension name="solrfacetsearch" />
-		<extension name="solrfacetsearchhmc" />
 		<extension name="b2bcommerce" />
 		<extension name="b2bapprovalprocess" />
 		<extension name="b2badmincockpit" />
 		<extension name="oci" />
 		<extension name="wishlist" />
 		<extension name="commercefacades" />
+		
+		<!-- Solr Extensions -->
+		<extension name="solrserver" />
+		<extension name="solrfacetsearch" />
+		<extension name="solrfacetsearchhmc" />
+		
 
 										
 		<!-- ext-data -->
@@ -71,7 +75,7 @@
 										
 		<!-- ext-addon -->
 		<extension name="addonsupport" />
-		<extension name="b2ccheckoutaddon" />
+		<!-- <extension name="b2ccheckoutaddon" /> -->
 
 										
 		<!-- ext-print -->
@@ -112,8 +116,8 @@
 		<extension name="energizerinitialdata" />
 		<extension name="energizertest" />
 		<extension name="energizercockpits" />
-		 
-
+		
+		
 				
 	</extensions>
 </hybrisconfig>
