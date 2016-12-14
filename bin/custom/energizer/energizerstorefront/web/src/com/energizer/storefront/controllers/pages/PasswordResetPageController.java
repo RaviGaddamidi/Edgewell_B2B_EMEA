@@ -165,21 +165,26 @@ public class PasswordResetPageController extends AbstractPageController
 		}
 		else
 		{
-			/*
-			 * try { getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
-			 * GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-			 * "account.confirmation.forgotten.password.link.sent", new Object[] { forgottenPassExpValue });
-			 * model.addAttribute(new ForgottenPwdForm());
-			 *
-			 * }
-			 */
-
 			try
 			{
-				final EnergizerB2BCustomerModel customer = defaultEnergizerPasswordGenerateFacade.getCustomerByUID(resetPwdForm
-						.getEmail());
+				final EnergizerB2BCustomerModel existCustomerModel = defaultEnergizerPasswordGenerateFacade
+						.getCustomerByUID(resetPwdForm.getEmail().toLowerCase());
+				if (existCustomerModel != null)
+				{
+					getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
+					GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+							"account.confirmation.forgotten.password.link.sent", new Object[]
+							{ forgottenPassExpValue });
+					model.addAttribute(new ForgottenPwdForm());
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, "password.reset.invalidEmailId");
+
+				}
 
 			}
+
 			catch (final Exception e)
 			{
 
@@ -260,15 +265,14 @@ public class PasswordResetPageController extends AbstractPageController
 
 					if (customerPasswordQuestion == null && customerPasswordAnswer == null)
 					{
-						GlobalMessages.addErrorMessage(model,
-								"password.question.noSet");
+						GlobalMessages.addErrorMessage(model, "password.question.noSet");
 
 
 					}
 					else if (customerPasswordQuestion.equalsIgnoreCase(formPasswordQuestion)
 							&& customerPasswordAnswer.equalsIgnoreCase(formPasswordAnswer))
 					{
-					    getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
+						getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
 						GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
 								"account.confirmation.forgotten.password.link.sent", new Object[]
 								{ forgottenPassExpValue });
@@ -276,8 +280,7 @@ public class PasswordResetPageController extends AbstractPageController
 					}
 					else
 					{
-						GlobalMessages.addErrorMessage(model,
-								"password.questionOranswer.donotMatch");
+						GlobalMessages.addErrorMessage(model, "password.questionOranswer.donotMatch");
 
 
 					}
