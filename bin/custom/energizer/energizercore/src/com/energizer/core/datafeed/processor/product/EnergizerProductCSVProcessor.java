@@ -1,6 +1,6 @@
 package com.energizer.core.datafeed.processor.product;
 
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.catalog.enums.ArticleApprovalStatus;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.category.CategoryService;

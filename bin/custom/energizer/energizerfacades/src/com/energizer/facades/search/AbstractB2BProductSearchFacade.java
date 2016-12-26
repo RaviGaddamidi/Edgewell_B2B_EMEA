@@ -9,11 +9,10 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.search;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
 import de.hybris.platform.commercefacades.converter.ConfigurablePopulator;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
@@ -22,6 +21,7 @@ import de.hybris.platform.commercefacades.search.data.SearchStateData;
 import de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.product.ProductService;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
 
 import java.util.Arrays;

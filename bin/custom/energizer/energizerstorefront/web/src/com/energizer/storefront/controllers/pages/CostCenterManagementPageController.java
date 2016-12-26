@@ -15,17 +15,14 @@ package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.model.B2BBudgetModel;
 import de.hybris.platform.b2b.model.B2BCostCenterModel;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BBudgetData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
+import de.hybris.platform.b2bacceleratorfacades.search.data.BudgetSearchStateData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.commercefacades.search.data.SearchStateData;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.B2BCostCenterForm;
 
 import java.util.List;
 
@@ -42,6 +39,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.breadcrumb.Breadcrumb;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.B2BCostCenterForm;
 
 
 /**
@@ -82,7 +85,9 @@ public class CostCenterManagementPageController extends MyCompanyPageController
 			throws CMSItemNotFoundException
 	{
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BCostCenterData> searchPageData = b2bCommerceCostCenterFacade.getPagedCostCenters(pageableData);
+
+		final SearchStateData searchStateData = new SearchStateData();
+		final SearchPageData<B2BCostCenterData> searchPageData = b2bCommerceCostCenterFacade.search(searchStateData, pageableData);//getPagedCostCenters(pageableData);
 		populateModel(model, searchPageData, showMode);
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
@@ -109,8 +114,9 @@ public class CostCenterManagementPageController extends MyCompanyPageController
 			@RequestParam("costCenterCode") final String costCenterCode, final Model model) throws CMSItemNotFoundException
 	{
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BBudgetData> searchPageData = b2bCommerceCostCenterFacade.getPagedBudgetsForCostCenters(
-				pageableData, costCenterCode);
+		final BudgetSearchStateData budgetSearchStateData = new BudgetSearchStateData();
+		budgetSearchStateData.setCostCenterCode(costCenterCode);
+		final SearchPageData<B2BBudgetData> searchPageData = b2bCommerceBudgetFacade.search(budgetSearchStateData, pageableData);//getPagedBudgetsForCostCenters(pageableData,costCenterCode);
 
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "budgets");

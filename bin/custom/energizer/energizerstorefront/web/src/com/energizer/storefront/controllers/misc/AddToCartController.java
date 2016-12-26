@@ -15,7 +15,9 @@ package com.energizer.storefront.controllers.misc;
 
 import de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade;
 import de.hybris.platform.b2bacceleratorfacades.product.data.CartEntryData;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.CartModificationData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
@@ -80,7 +82,7 @@ public class AddToCartController extends AbstractController
 	public static final String SUCCESSFUL_MODIFICATION_CODE = "success";
 
 
-	@Resource(name = "cartFacade")
+	@Resource(name = "b2bCartFacade")
 	private CartFacade cartFacade;
 
 	@Deprecated

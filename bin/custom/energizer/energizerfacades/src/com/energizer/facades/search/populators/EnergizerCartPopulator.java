@@ -3,8 +3,11 @@
  */
 package com.energizer.facades.search.populators;
 
+
+
 import de.hybris.platform.b2bacceleratorfacades.order.B2BCheckoutFacade;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
+import de.hybris.platform.b2bcommercefacades.company.impl.DefaultB2BCostCenterFacade;
 import de.hybris.platform.commercefacades.order.converters.populator.CartPopulator;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.user.data.AddressData;
@@ -34,6 +37,9 @@ public class EnergizerCartPopulator extends CartPopulator
 
 	private Converter<AddressModel, AddressData> energizerAddressConverter;
 
+	@Resource(name = "defaultB2BCostCenterFacade")
+	private DefaultB2BCostCenterFacade defaultB2BCostCenterFacade;
+
 	@Resource
 	private B2BCheckoutFacade b2bCheckoutFacade;
 
@@ -41,8 +47,8 @@ public class EnergizerCartPopulator extends CartPopulator
 	@Override
 	public void populate(final CartModel source, final CartData target)
 	{
-	    Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
-		Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
+		Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
+		final Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
 		super.populate(source, target);
 		if (source.getB2bUnit() != null)
 		{
@@ -69,9 +75,9 @@ public class EnergizerCartPopulator extends CartPopulator
 		target.setVirtualPalletCount(source.getVirtualPalletCount());
 		target.setPartialPalletCount(source.getPartialPalletCount());
 		target.setLeadTime(source.getLeadTime());
-		
+
 		palStackData = source.getPalStackData();
-        final SortedSet<Integer> keys = new TreeSet<Integer>(palStackData.keySet());
+		final SortedSet<Integer> keys = new TreeSet<Integer>(palStackData.keySet());
 		for (final Integer key : keys)
 		{
 			final List<String> value = palStackData.get(key);
@@ -80,7 +86,7 @@ public class EnergizerCartPopulator extends CartPopulator
 		target.setPalStackData(sortedPalStackData);
 
 		//cost center setting as - one b2b unit can have only one cost center.
-		final List<? extends B2BCostCenterData> costCenterData = b2bCheckoutFacade.getActiveVisibleCostCenters();
+		final List<? extends B2BCostCenterData> costCenterData = defaultB2BCostCenterFacade.getActiveCostCenters();
 		if (costCenterData != null && costCenterData.size() > 0)
 		{
 			target.setCostCenter(costCenterData.get(0));

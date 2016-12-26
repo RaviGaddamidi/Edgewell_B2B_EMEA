@@ -9,13 +9,11 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
 import de.hybris.bootstrap.annotations.UnitTest;
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.category.model.CategoryModel;
 import de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.PropertyFieldValueProviderTestBase;
 import de.hybris.platform.core.model.product.ProductModel;
@@ -23,7 +21,9 @@ import de.hybris.platform.solrfacetsearch.config.IndexedProperty;
 import de.hybris.platform.solrfacetsearch.config.exceptions.FieldValueProviderException;
 import de.hybris.platform.solrfacetsearch.provider.FieldValue;
 import de.hybris.platform.solrfacetsearch.provider.FieldValueProvider;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
 import de.hybris.platform.variants.model.VariantProductModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

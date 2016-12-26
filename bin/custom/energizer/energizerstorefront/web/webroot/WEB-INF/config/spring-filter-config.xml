@@ -41,7 +41,7 @@
         <ref bean="urlEncoderFilter"/>
         
         <ref bean="energizerSecurityFilter"/>
-         <ref bean="energizerURLFilter"/>
+         <ref bean="energizerURLFilter"/> 
 
 		<!-- Security -->
 		<ref bean="springSecurityFilterChain"/>

@@ -1,11 +1,12 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.accounts.populators;
 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceB2BUserGroupService;
+import de.hybris.platform.b2b.company.B2BCommerceB2BUserGroupService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceB2BUserGroupService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.strategies.CustomerNameStrategy;
@@ -30,7 +31,7 @@ import com.energizer.facades.accounts.impl.DefaultEnergizerGroupsLookUpStrategy;
 
 /**
  * @author M1028720
- * 
+ *
  */
 public class EnergizerB2BCustomerReversePopulator implements Populator<CustomerData, EnergizerB2BCustomerModel>
 {

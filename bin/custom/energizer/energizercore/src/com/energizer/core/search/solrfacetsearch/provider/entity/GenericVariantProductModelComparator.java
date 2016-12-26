@@ -9,13 +9,13 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.entity;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.category.model.CategoryModel;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +73,7 @@ public class GenericVariantProductModelComparator implements Comparator<GenericV
 
 	/**
 	 * Get the list of {@link VariantValueCategoryModel} related to a specific {@link GenericVariantProductModel}.
-	 * 
+	 *
 	 * @param productModel
 	 *           the variant product.
 	 * @return The variant value categories, ordered by variant category priority.

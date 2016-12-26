@@ -9,19 +9,19 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.constants.B2BConstants;
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
-import de.hybris.platform.b2bacceleratorfacades.company.data.UserData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUserGroupData;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUserGroupData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
@@ -186,7 +186,8 @@ public class UserManagementPageController extends MyCompanyPageController
 			@RequestParam("approver") final String approver, final Model model, final RedirectAttributes redirectModel)
 			throws CMSItemNotFoundException
 	{
-		b2bCommerceUserFacade.removeApproverFromCustomer(user, approver);
+
+		b2bApproverFacade.removeApproverFromCustomer(user, approver);
 		GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.approver.removed");
 		return String.format(REDIRECT_TO_USER_DETAILS, urlEncode(user));
 	}
@@ -251,7 +252,7 @@ public class UserManagementPageController extends MyCompanyPageController
 		{ user }, "Disable {0} Customer", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
 
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
+		final CustomerData customerData = b2bCommerceUserFacade.getCustomerForUid(user);
 		model.addAttribute("customerData", customerData);
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		return ControllerConstants.Views.Pages.MyCompany.MyCompanyManageUserDisbaleConfirmPage;
@@ -361,12 +362,12 @@ public class UserManagementPageController extends MyCompanyPageController
 				urlEncode(user)), getMessageSource().getMessage("text.company.manageUsers.approvers.breadcrumb", new Object[]
 		{ user }, "Customer {0} Approvers", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
-		final B2BUnitData unit = companyB2BCommerceFacade.getUnitForUid(user);
+		final B2BUnitData unit = b2bCommerceUnitFacade.getUnitForUid(user);
 		model.addAttribute("unit", unit);
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceUserFacade.getPagedApproversForCustomer(pageableData, user);
+		final SearchPageData<CustomerData> searchPageData = b2bApproverFacade.getPagedApproversForCustomer(pageableData, user);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "approvers");
 		model.addAttribute("baseUrl", "/my-company/organization-management/manage-users");
@@ -381,7 +382,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	public B2BSelectionData selectApproverForCustomer(@RequestParam("user") final String user,
 			@RequestParam("approver") final String approver, final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceUserFacade.addApproverForCustomer(user, approver));
+		return populateDisplayNamesForRoles(b2bApproverFacade.addApproverForCustomer(user, approver));
 	}
 
 	@ResponseBody
@@ -391,7 +392,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	public B2BSelectionData deselectApproverForCustomer(@RequestParam("user") final String user,
 			@RequestParam("approver") final String approver, final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceUserFacade.removeApproverFromCustomer(user, approver));
+		return populateDisplayNamesForRoles(b2bApproverFacade.removeApproverFromCustomer(user, approver));
 	}
 
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
@@ -412,7 +413,7 @@ public class UserManagementPageController extends MyCompanyPageController
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BPermissionData> searchPageData = b2bCommerceUserFacade.getPagedPermissionsForCustomer(pageableData,
+		final SearchPageData<B2BPermissionData> searchPageData = b2bPermissionFacade.getPagedPermissionsForCustomer(pageableData,
 				user);
 		final List<B2BPermissionData> filteredPermissions = new ArrayList<B2BPermissionData>();
 		for (final B2BPermissionData permissionData : searchPageData.getResults())
@@ -439,7 +440,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	public B2BSelectionData selectPermissionForCustomer(@RequestParam("user") final String user,
 			@RequestParam("permission") final String permission, final Model model) throws CMSItemNotFoundException
 	{
-		return b2bCommerceUserFacade.addPermissionToCustomer(user, permission);
+		return b2bPermissionFacade.addPermissionToCustomer(user, permission);
 	}
 
 	@ResponseBody
@@ -449,7 +450,7 @@ public class UserManagementPageController extends MyCompanyPageController
 	public B2BSelectionData deselectPermissionForCustomer(@RequestParam("user") final String user,
 			@RequestParam("permission") final String permission, final Model model) throws CMSItemNotFoundException
 	{
-		return b2bCommerceUserFacade.removePermissionFromCustomer(user, permission);
+		return b2bPermissionFacade.removePermissionFromCustomer(user, permission);
 	}
 
 	@RequestMapping(value = "/permissions/remove", method =
@@ -459,7 +460,7 @@ public class UserManagementPageController extends MyCompanyPageController
 			@RequestParam("permission") final String permission, final Model model, final RedirectAttributes redirectModel)
 			throws CMSItemNotFoundException
 	{
-		b2bCommerceUserFacade.removePermissionFromCustomer(user, permission);
+		b2bPermissionFacade.removePermissionFromCustomer(user, permission);
 		GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.permission.removed");
 		return String.format(REDIRECT_TO_USER_DETAILS, urlEncode(user));
 	}

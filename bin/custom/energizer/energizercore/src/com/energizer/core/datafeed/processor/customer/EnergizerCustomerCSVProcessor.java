@@ -4,21 +4,22 @@
 package com.energizer.core.datafeed.processor.customer;
 
 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceCostCenterService;
+import de.hybris.platform.b2b.company.B2BCommerceCostCenterService;
 import de.hybris.platform.b2b.enums.B2BPeriodRange;
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.model.B2BBudgetModel;
 import de.hybris.platform.b2b.model.B2BCostCenterModel;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceBudgetFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceCostCenterFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BBudgetData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
 import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceBudgetService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceCostCenterService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
+import de.hybris.platform.b2bapprovalprocessfacades.company.B2BPermissionFacade;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.core.model.c2l.CurrencyModel;
@@ -53,6 +54,9 @@ import com.energizer.core.datafeed.EnergizerCSVFeedError;
 import com.energizer.core.datafeed.form.B2BBudgetForm;
 import com.energizer.core.datafeed.form.B2BCostCenterForm;
 import com.energizer.core.model.EnergizerB2BUnitModel;
+
+
+//import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
 
 
 /**
@@ -91,8 +95,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "b2bCommerceCostCenterFacade")
 	protected B2BCommerceCostCenterFacade b2bCommerceCostCenterFacade;
 
-	@Resource(name = "b2bCommercePermissionFacade")
-	protected B2BCommercePermissionFacade b2bCommercePermissionFacade;
+	@Resource(name = "b2bPermissionFacade")
+	protected B2BPermissionFacade b2bCommercePermissionFacade;
 
 	@Resource(name = "b2bCommerceCostCenterService")
 	private B2BCommerceCostCenterService b2bCommerceCostCenterService;

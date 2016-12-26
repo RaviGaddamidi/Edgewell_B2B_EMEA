@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -31,15 +31,6 @@ import de.hybris.platform.product.ProductService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.util.Config;
 import de.hybris.platform.variants.model.VariantProductModel;
-import com.energizer.storefront.breadcrumb.impl.ProductBreadcrumbBuilder;
-import com.energizer.storefront.constants.WebConstants;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.FutureStockForm;
-import com.energizer.storefront.forms.ReviewForm;
-import com.energizer.storefront.util.MetaSanitizerUtil;
-import com.energizer.storefront.util.XSSFilterUtil;
-import com.energizer.storefront.variants.VariantSortStrategy;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -75,6 +66,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.energizer.storefront.breadcrumb.impl.ProductBreadcrumbBuilder;
+import com.energizer.storefront.constants.WebConstants;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.FutureStockForm;
+import com.energizer.storefront.forms.ReviewForm;
+import com.energizer.storefront.util.MetaSanitizerUtil;
+import com.energizer.storefront.util.XSSFilterUtil;
+import com.energizer.storefront.variants.VariantSortStrategy;
 import com.google.common.collect.Maps;
 
 
@@ -133,7 +133,8 @@ public class ProductPageController extends AbstractPageController
 		}
 
 		updatePageTitle(productModel, model);
-        final List<ProductOption> extraOptions = Arrays.asList(ProductOption.VARIANT_MATRIX_BASE, ProductOption.VARIANT_MATRIX_URL, ProductOption.VARIANT_MATRIX_MEDIA);
+		final List<ProductOption> extraOptions = Arrays.asList(ProductOption.VARIANT_MATRIX_BASE, ProductOption.VARIANT_MATRIX_URL,
+				ProductOption.VARIANT_MATRIX_MEDIA);
 		populateProductDetailForDisplay(productModel, model, request, extraOptions);
 		model.addAttribute(new ReviewForm());
 		model.addAttribute("pageType", PageType.PRODUCT.name());
@@ -154,8 +155,9 @@ public class ProductPageController extends AbstractPageController
 		final ProductModel productModel = productService.getProductForCode(productCode);
 
 		updatePageTitle(productModel, model);
-        final List<ProductOption> extraOptions = Arrays.asList(ProductOption.VARIANT_MATRIX_BASE, ProductOption.VARIANT_MATRIX_PRICE, ProductOption.VARIANT_MATRIX_MEDIA, ProductOption.VARIANT_MATRIX_STOCK);
-        populateProductDetailForDisplay(productModel, model, request, extraOptions);
+		final List<ProductOption> extraOptions = Arrays.asList(ProductOption.VARIANT_MATRIX_BASE,
+				ProductOption.VARIANT_MATRIX_PRICE, ProductOption.VARIANT_MATRIX_MEDIA, ProductOption.VARIANT_MATRIX_STOCK);
+		populateProductDetailForDisplay(productModel, model, request, extraOptions);
 
 		if (!model.containsAttribute(WebConstants.MULTI_DIMENSIONAL_PRODUCT))
 		{
@@ -178,7 +180,7 @@ public class ProductPageController extends AbstractPageController
 		if (futureStockEnabled)
 		{
 			final ProductModel productModel = productService.getProductForCode(productCode);
-			final List<FutureStockData> futureStockList = b2bFutureStockFacade.getFutureAvailability(productModel);
+			final List<FutureStockData> futureStockList = b2bFutureStockFacade.getFutureAvailability(productModel.getCode());
 			if (futureStockList == null)
 			{
 				GlobalMessages.addErrorMessage(model, STOCK_SERVICE_UNAVAILABLE);
@@ -218,7 +220,7 @@ public class ProductPageController extends AbstractPageController
 			// retrieve the variants list
 			final Set<String> skusSet = new HashSet<String>(skus);
 			final ProductModel productModel = productService.getProductForCode(productCode);
-			List<ProductModel> variantsList = null;
+			List<String> variantsList = null;
 			if (CollectionUtils.isNotEmpty(productModel.getVariants()))
 			{
 				variantsList = getSelectedProductModels(skusSet, productModel.getVariants());
@@ -362,17 +364,17 @@ public class ProductPageController extends AbstractPageController
 	}
 
 	protected void populateProductDetailForDisplay(final ProductModel productModel, final Model model,
-			final HttpServletRequest request, List<ProductOption> extraOptions) throws CMSItemNotFoundException
+			final HttpServletRequest request, final List<ProductOption> extraOptions) throws CMSItemNotFoundException
 	{
 
 
-        final List<ProductOption> options = new ArrayList<>(Arrays.asList(ProductOption.BASIC,
-                ProductOption.PRICE, ProductOption.SUMMARY, ProductOption.DESCRIPTION, ProductOption.GALLERY,
-                ProductOption.CATEGORIES, ProductOption.REVIEW, ProductOption.PROMOTIONS, ProductOption.CLASSIFICATION,
-                ProductOption.VARIANT_FULL, ProductOption.STOCK, ProductOption.VOLUME_PRICES, ProductOption.PRICE_RANGE));
+		final List<ProductOption> options = new ArrayList<>(Arrays.asList(ProductOption.BASIC, ProductOption.PRICE,
+				ProductOption.SUMMARY, ProductOption.DESCRIPTION, ProductOption.GALLERY, ProductOption.CATEGORIES,
+				ProductOption.REVIEW, ProductOption.PROMOTIONS, ProductOption.CLASSIFICATION, ProductOption.VARIANT_FULL,
+				ProductOption.STOCK, ProductOption.VOLUME_PRICES, ProductOption.PRICE_RANGE));
 
-        options.addAll(extraOptions);
-        final ProductData productData = productFacade.getProductForOptions(productModel, options);
+		options.addAll(extraOptions);
+		final ProductData productData = productFacade.getProductForOptions(productModel, options);
 
 		getRequestContextData(request).setProduct(productModel);
 
@@ -463,15 +465,14 @@ public class ProductPageController extends AbstractPageController
 	}
 
 
-	protected List<ProductModel> getSelectedProductModels(final Set<String> skus,
-			final Collection<VariantProductModel> productModels)
+	protected List<String> getSelectedProductModels(final Set<String> skus, final Collection<VariantProductModel> productModels)
 	{
-		final List<ProductModel> selectedProductModels = new ArrayList<ProductModel>();
+		final List<String> selectedProductModels = new ArrayList<String>();
 		for (final ProductModel productModel : productModels)
 		{
 			if (skus.contains(productModel.getCode()))
 			{
-				selectedProductModels.add(productModel);
+				selectedProductModels.add(productModel.getCode());
 			}
 
 		}

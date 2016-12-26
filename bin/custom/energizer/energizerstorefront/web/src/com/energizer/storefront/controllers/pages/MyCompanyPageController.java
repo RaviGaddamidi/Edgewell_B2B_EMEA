@@ -9,30 +9,32 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.enums.B2BPeriodRange;
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceB2BUserGroupFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceBudgetFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceCostCenterFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceUnitFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceUserFacade;
 import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.data.B2BUnitNodeData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BBudgetData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
+import de.hybris.platform.b2bapprovalprocessfacades.company.B2BApproverFacade;
+import de.hybris.platform.b2bapprovalprocessfacades.company.B2BPermissionFacade;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
+import de.hybris.platform.b2bcommercefacades.company.B2BBudgetFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BCostCenterFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BUnitFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BUserFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BUserGroupFacade;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitNodeData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commercefacades.order.CheckoutFacade;
@@ -152,29 +154,39 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@Resource(name = "b2bCustomerFacade")
 	protected CustomerFacade customerFacade;
 
-	@Resource(name = "b2bCommerceFacade")
+	@Resource(name = "defaultCompanyB2BCommerceFacade")
 	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
 
 	@Resource(name = "energizerCompanyB2BCommerceFacade")
 	protected EnergizerCompanyB2BCommerceFacade energizerCompanyB2BCommerceFacade;
 
-	@Resource(name = "b2bCommerceUserFacade")
-	protected B2BCommerceUserFacade b2bCommerceUserFacade;
+	@Resource(name = "b2bUserFacade")
+	protected B2BUserFacade b2bCommerceUserFacade;
 
-	@Resource(name = "b2bCommerceUnitFacade")
-	protected B2BCommerceUnitFacade b2bCommerceUnitFacade;
+	@Resource(name = "b2bUnitFacade")
+	protected B2BUnitFacade b2bCommerceUnitFacade;
 
-	@Resource(name = "b2bCommercePermissionFacade")
-	protected B2BCommercePermissionFacade b2bCommercePermissionFacade;
+	@Resource(name = "costCenterFacade")
+	protected B2BCostCenterFacade b2bCommerceCostCenterFacade;
 
-	@Resource(name = "b2bCommerceCostCenterFacade")
-	protected B2BCommerceCostCenterFacade b2bCommerceCostCenterFacade;
+	@Resource(name = "budgetFacade")
+	protected B2BBudgetFacade b2bCommerceBudgetFacade;
 
-	@Resource(name = "b2bCommerceBudgetFacade")
-	protected B2BCommerceBudgetFacade b2bCommerceBudgetFacade;
+	@Resource(name = "b2bApproverFacade")
+	protected B2BApproverFacade b2bApproverFacade;
 
-	@Resource(name = "b2bCommerceB2BUserGroupFacade")
-	protected B2BCommerceB2BUserGroupFacade b2bCommerceB2BUserGroupFacade;
+
+	//	@Resource(name = "b2bCommerceB2BUserGroupFacade")
+	//	protected B2BCommerceB2BUserGroupFacade b2bCommerceB2BUserGroupFacade;
+	//@deprecated b2bCommerceB2BUserGroupFacade, Since 6.0. Use {@link DefaultB2BUserGroupFacade} instead.
+	@Resource(name = "b2bUserGroupFacade")
+	protected B2BUserGroupFacade b2bUserGroupFacade;
+
+	//@Resource(name = "b2bCommercePermissionFacade")
+	//protected B2BCommercePermissionFacade b2bCommercePermissionFacade;
+	//@deprecated B2BCommercePermissionFacade, Since 6.0. Use {@link b2bPermissionFacade} instead.
+	@Resource(name = "b2bPermissionFacade")
+	protected B2BPermissionFacade b2bPermissionFacade;
 
 	@Resource(name = "myCompanyBreadcrumbBuilder")
 	protected MyCompanyBreadcrumbBuilder myCompanyBreadcrumbBuilder;
@@ -196,6 +208,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	@SuppressWarnings("rawtypes")
 	@Resource(name = "defaultB2BUnitService")
 	private B2BUnitService defaultB2BUnitService;
+
 	@Resource(name = "defaultB2BCommerceUnitService")
 	private B2BCommerceUnitService defaultB2BCommerceUnitService;
 
@@ -228,7 +241,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	public List<SelectOption> getB2BPermissionTypes()
 	{
 		final List<SelectOption> b2bPermissionTypeList = new ArrayList<SelectOption>();
-		final List<B2BPermissionTypeData> permissionTypeDatalist = (List<B2BPermissionTypeData>) b2bCommercePermissionFacade
+		final List<B2BPermissionTypeData> permissionTypeDatalist = (List<B2BPermissionTypeData>) b2bPermissionFacade
 				.getB2BPermissionTypes();
 		for (final B2BPermissionTypeData b2bPermissionType : permissionTypeDatalist)
 		{
@@ -276,7 +289,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		storeCmsPageInModel(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		model.addAttribute("breadcrumbs", myCompanyBreadcrumbBuilder.getBreadcrumbs(null));
-		model.addAttribute("unitUid", companyB2BCommerceFacade.getParentUnit().getUid());
+		model.addAttribute("unitUid", b2bCommerceUnitFacade.getParentUnit().getUid());
 		model.addAttribute("userUid", customerFacade.getCurrentCustomer().getUid());
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		return getViewForPage(model);
@@ -303,7 +316,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		 */
 
 		final String packingData = Config.getParameter(DEFAULT_PACKING_OPTION);
-		B2BUnitData unitData = companyB2BCommerceFacade.getUnitForUid(unit);
+		B2BUnitData unitData = b2bCommerceUnitFacade.getUnitForUid(unit);
 		if (unitData == null)
 		{
 			unitData = new B2BUnitData();
@@ -326,7 +339,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		if (!model.containsAttribute("b2BCostCenterForm"))
 		{
 			final B2BCostCenterForm b2BCostCenterForm = new B2BCostCenterForm();
-			b2BCostCenterForm.setParentB2BUnit(companyB2BCommerceFacade.getParentUnit().getUid());
+			b2BCostCenterForm.setParentB2BUnit(b2bCommerceUnitFacade.getParentUnit().getUid());
 			model.addAttribute(b2BCostCenterForm);
 		}
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORGANIZATION_MANAGEMENT_CMS_PAGE));
@@ -420,7 +433,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 
 		try
 		{
-			b2bCommerceCostCenterFacade.updateCostCenterDetails(b2BCostCenterData);
+			b2bCommerceCostCenterFacade.updateCostCenter(b2BCostCenterData); // updateCostCenterDetails(b2BCostCenterData);
 		}
 		catch (final Exception e)
 		{
@@ -441,7 +454,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		if (!model.containsAttribute("b2BCustomerForm"))
 		{
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
-			b2bCustomerForm.setParentB2BUnit(companyB2BCommerceFacade.getParentUnit().getUid());
+			b2bCustomerForm.setParentB2BUnit(b2bCommerceUnitFacade.getParentUnit().getUid());
 			//			b2bCustomerForm.setParentB2BUnitID(companyB2BCommerceFacade.getParentUnit().getUid());
 			//			b2bCustomerForm.setParentB2BUnitName(companyB2BCommerceFacade.getParentUnit().getName());
 			// Add the b2bcustomergroup role by default
@@ -501,7 +514,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2bCustomerData.setLastName(XSSFilterUtil.filter(b2BCustomerForm.getLastName()));
 		b2bCustomerData.setEmail(XSSFilterUtil.filter(b2BCustomerForm.getEmail()));
 		b2bCustomerData.setDisplayUid(XSSFilterUtil.filter(b2BCustomerForm.getEmail()));
-		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
+		b2bCustomerData.setUnit(b2bCommerceUnitFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData.setRoles(b2BCustomerForm.getRoles());
 		b2bCustomerData.setContactNumber(XSSFilterUtil.filter(b2BCustomerForm.getContactNumber()));
 		model.addAttribute(b2BCustomerForm);
@@ -536,10 +549,11 @@ public class MyCompanyPageController extends AbstractSearchPageController
 							&& (goups.getUid().equalsIgnoreCase("b2bcustomergroup") || goups.getUid().equalsIgnoreCase(
 									"b2bapprovergroup")))
 					{
-						b2bCommerceUserFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(), companyB2BCommerceFacade
-								.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid() + "_defaultBudgetPerm");
-						b2bCommerceUserFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(), companyB2BCommerceFacade
-								.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid() + "_defaultOrdThresholdPerm");
+						b2bPermissionFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(),
+								b2bCommerceUnitFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid() + "_defaultBudgetPerm");
+						b2bPermissionFacade.addPermissionToCustomer(b2bCustomerModel.getEmail(),
+								b2bCommerceUnitFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()).getUid()
+										+ "_defaultOrdThresholdPerm");
 						permissionNotYetAssigned = false;
 					}
 				}
@@ -561,7 +575,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	{
 		if (!model.containsAttribute("b2BCustomerForm"))
 		{
-			final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
+			final CustomerData customerData = b2bCommerceUserFacade.getCustomerForUid(user);
 			//			customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
 			energizerCompanyB2BCommerceFacade.populateRolesByCustomer(user, customerData);
 			final B2BCustomerForm b2bCustomerForm = new B2BCustomerForm();
@@ -627,7 +641,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			else
 			{
 				// A session user can't modify their own parent unit.
-				final B2BUnitData parentUnit = companyB2BCommerceFacade.getParentUnit();
+				final B2BUnitData parentUnit = b2bCommerceUnitFacade.getParentUnit();
 				if (!parentUnit.getUid().equals(b2BCustomerForm.getParentB2BUnit()))
 				{
 					GlobalMessages.addErrorMessage(model, "form.b2bcustomer.parentunit.error");
@@ -646,7 +660,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2bCustomerData.setEmail(b2BCustomerForm.getEmail());
 		b2bCustomerData.setDisplayUid(b2BCustomerForm.getEmail());
 		b2bCustomerData.setContactNumber(b2BCustomerForm.getContactNumber());
-		b2bCustomerData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
+		b2bCustomerData.setUnit(b2bCommerceUnitFacade.getUnitForUid(b2BCustomerForm.getParentB2BUnit()));
 		b2bCustomerData
 				.setRoles(b2BCustomerForm.getRoles() != null ? b2BCustomerForm.getRoles() : Collections.<String> emptyList());
 
@@ -686,7 +700,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	protected String manageUserDetail(final String user, final Model model, final HttpServletRequest request)
 			throws CMSItemNotFoundException
 	{
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(user);
+		final CustomerData customerData = b2bCommerceUserFacade.getCustomerForUid(user);
 		//		customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(user, customerData));
 		final List<B2BPermissionData> permissions = customerData.getPermissions();
 		final List<B2BPermissionData> onlyOrderThresholdPermissions = new ArrayList<B2BPermissionData>();
@@ -750,7 +764,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(b2BCostCenterForm.getCurrency());
 		b2BCostCenterData.setCurrency(currencyData);
-		b2BCostCenterData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCostCenterForm.getParentB2BUnit()));
+		b2BCostCenterData.setUnit(b2bCommerceUnitFacade.getUnitForUid(b2BCostCenterForm.getParentB2BUnit()));
 
 		return b2BCostCenterData;
 	}
@@ -761,7 +775,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		b2BBudgetData.setOriginalCode(b2BBudgetForm.getOriginalCode());
 		b2BBudgetData.setCode(b2BBudgetForm.getCode());
 		b2BBudgetData.setName(b2BBudgetForm.getName());
-		b2BBudgetData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BBudgetForm.getParentB2BUnit()));
+		b2BBudgetData.setUnit(b2bCommerceUnitFacade.getUnitForUid(b2BBudgetForm.getParentB2BUnit()));
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(b2BBudgetForm.getCurrency());
 		b2BBudgetData.setCurrency(currencyData);
@@ -792,7 +806,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		currencyData.setIsocode(b2BPermissionForm.getCurrency());
 		b2BPermissionData.setCurrency(currencyData);
 
-		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BPermissionForm.getParentUnitName()));
+		b2BPermissionData.setUnit(b2bCommerceUnitFacade.getUnitForUid(b2BPermissionForm.getParentUnitName()));
 		final String permissionTimespan = b2BPermissionForm.getTimeSpan();
 		if (StringUtils.isNotEmpty(permissionTimespan))
 		{
@@ -841,7 +855,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 	{
 		if (!model.containsAttribute("b2BPermissionForm"))
 		{
-			final B2BPermissionData b2BPermissionData = b2bCommercePermissionFacade.getPermissionDetails(permissionCode);
+			final B2BPermissionData b2BPermissionData = b2bPermissionFacade.getPermissionDetails(permissionCode);
 			final B2BPermissionForm b2BPermissionForm = new B2BPermissionForm();
 			b2BPermissionForm.setCode(b2BPermissionData.getCode());
 			b2BPermissionForm.setOriginalCode(b2BPermissionData.getCode());
@@ -883,7 +897,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 		final B2BPermissionData b2BPermissionData = populateB2BPermissionDataFromForm(b2BPermissionForm);
 		try
 		{
-			b2bCommercePermissionFacade.updatePermissionDetails(b2BPermissionData);
+			b2bPermissionFacade.updatePermissionDetails(b2BPermissionData);
 		}
 		catch (final Exception e)
 		{

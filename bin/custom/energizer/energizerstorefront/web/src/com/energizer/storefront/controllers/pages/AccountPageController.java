@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
@@ -209,13 +209,13 @@ public class AccountPageController extends AbstractSearchPageController
 	@Resource(name = "orderEntryBusinessRulesService")
 	EnergizerOrderEntryBusinessRuleValidationService orderEntryBusinessRulesService;
 
-	@Resource(name = "cartFacade")
+	@Resource(name = "b2bCartFacade")
 	private CartFacade cartFacade;
 
 	@Resource(name = "energizerB2BCheckoutFlowFacade")
 	private EnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
 
-	@Resource(name = "b2bCommerceFacade")
+	@Resource(name = "defaultCompanyB2BCommerceFacade")
 	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
 
 	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
@@ -259,7 +259,7 @@ public class AccountPageController extends AbstractSearchPageController
 		validStates.remove(OrderStatus.PENDING_QUOTE);
 		validStates.remove(OrderStatus.APPROVED_QUOTE);
 		validStates.remove(OrderStatus.REJECTED_QUOTE);
-		// Handle paged search results 
+		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, PAGE_SIZE, sortCode, showMode);
 		final OrderStatus[] orderStatuses = validStates.toArray(new OrderStatus[validStates.size()]);
 		final EnergizerB2BUnitModel energizerB2BUnitModel = energizerCompanyB2BCommerceFacade
@@ -284,12 +284,13 @@ public class AccountPageController extends AbstractSearchPageController
 		{
 			final OrderData orderDetails = orderFacade.getOrderDetailsForCode(orderCode);
 			//	orderFacade.getOrderHistoryForStatuses(statuses);
-            final List<OrderEntryData> entries = orderDetails.getEntries();
+			final List<OrderEntryData> entries = orderDetails.getEntries();
 			boolean flag = true;
 			String cmir = " ";
 			for (final OrderEntryData entry : entries)
 			{
-				if (entry.getProduct().isIsActive() == false || !entry.getProduct().getCustomerMaterialId().contains(entry.getCustomerMaterialId()))
+				if (entry.getProduct().isIsActive() == false
+						|| !entry.getProduct().getCustomerMaterialId().contains(entry.getCustomerMaterialId()))
 				{
 					cmir += (entry.getCustomerMaterialId() + " ");
 
@@ -315,19 +316,17 @@ public class AccountPageController extends AbstractSearchPageController
 			model.addAttribute("breadcrumbs", breadcrumbs);
 
 		}
-	/**	catch (final UnknownIdentifierException e)
-		{
-			LOG.warn("Attempted to load a order that does not exist or is not visible", e);
-			return REDIRECT_MY_ACCOUNT;
-		}
-		**/
+		/**
+		 * catch (final UnknownIdentifierException e) {
+		 * LOG.warn("Attempted to load a order that does not exist or is not visible", e); return REDIRECT_MY_ACCOUNT; }
+		 **/
 		//the above catch is been overriden by the below one as that may lead to delegation of exception at platformfilter chain level
 		//Which might give unexpected error with improper console msg
 		catch (final Exception e)
 		{
 			LOG.info("*******caught in accountpagecontroller*******\t cause is\t" + e.getCause() + "\tmessage is\t" + e.getMessage());
 		}
-		
+
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORDER_DETAIL_CMS_PAGE));
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORDER_DETAIL_CMS_PAGE));
@@ -340,8 +339,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final List<TitleData> titles = userFacade.getTitles();
 
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
-				.getUid());
+		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		if (customerData.getTitleCode() != null)
 		{
@@ -373,8 +371,7 @@ public class AccountPageController extends AbstractSearchPageController
 	@RequireHardLogIn
 	public String editEmail(final Model model) throws CMSItemNotFoundException
 	{
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
-				.getUid());
+		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		final UpdateEmailForm updateEmailForm = new UpdateEmailForm();
 
 		updateEmailForm.setEmail(customerData.getDisplayUid());
@@ -455,8 +452,7 @@ public class AccountPageController extends AbstractSearchPageController
 		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 		model.addAttribute("titleData", userFacade.getTitles());
 
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
-				.getUid());
+		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		final UpdateProfileForm updateProfileForm = new UpdateProfileForm();
 		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		updateProfileForm.setTitleCode(customerData.getTitleCode());
@@ -481,7 +477,7 @@ public class AccountPageController extends AbstractSearchPageController
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
 	{
 		String returnAction = ControllerConstants.Views.Pages.Account.AccountProfileEditPage;
-		final CustomerData currentCustomerData = companyB2BCommerceFacade.getCustomerDataForUid(customerFacade.getCurrentCustomer()
+		final CustomerData currentCustomerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer()
 				.getUid());
 		final CustomerData customerData = new CustomerData();
 		customerData.setTitleCode(updateProfileForm.getTitleCode());
@@ -493,16 +489,17 @@ public class AccountPageController extends AbstractSearchPageController
 		LOG.info("Selected passwordQuestion: " + updateProfileForm.getPasswordQuestion());
 		LOG.info("Selected passwordAnswer: " + updateProfileForm.getPasswordAnswer());
 
-		if (updateProfileForm.getPasswordQuestion().equals("") || updateProfileForm.getPasswordQuestion().equals(null))
+		if (updateProfileForm.getPasswordQuestion() == null || updateProfileForm.getPasswordQuestion().trim().equals(""))
 		{
 			bindingResult.rejectValue("passwordQuestion", "profile.passwordQuestion.invalid", new Object[] {},
 					"profile.passwordQuestion.invalid");
 		}
-		if (updateProfileForm.getPasswordAnswer().equals("") || updateProfileForm.getPasswordAnswer().equals(null))
+		if (updateProfileForm.getPasswordAnswer() == null || updateProfileForm.getPasswordAnswer().trim().equals(""))
 		{
 			bindingResult.rejectValue("passwordAnswer", "profile.passwordAnswer.invalid", new Object[] {},
 					"profile.passwordAnswer.invalid");
 		}
+
 
 		customerData.setPasswordQuestion(updateProfileForm.getPasswordQuestion());
 		customerData.setPasswordAnswer(updateProfileForm.getPasswordAnswer());
@@ -554,23 +551,26 @@ public class AccountPageController extends AbstractSearchPageController
 		return ControllerConstants.Views.Pages.Account.AccountChangePasswordPage;
 	}
 
-	/* @RequestMapping(value = "/update-password", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/update-password", method = RequestMethod.POST)
 	@RequireHardLogIn
 	public String updatePassword(@Valid final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult,
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
 	{
 
-		if (!bindingResult.hasErrors())
+		try
 		{
-			if (updatePasswordForm.getNewPassword().equals(updatePasswordForm.getCheckNewPassword()))
+
+			final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade.validateCurrentPassword(updatePasswordForm
+					.getCurrentPassword());
+
+			if (validCurrentPwd)
 			{
-				try
+
+				if (!bindingResult.hasErrors())
 				{
 
-					final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade
-							.validateCurrentPassword(updatePasswordForm.getCurrentPassword());
-
-					if (validCurrentPwd)
+					if (updatePasswordForm.getNewPassword().equals(updatePasswordForm.getCheckNewPassword()))
 					{
 						final boolean flag = defaultEnergizerCompanyB2BCommerceFacade.changingPassword(
 								updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
@@ -584,94 +584,26 @@ public class AccountPageController extends AbstractSearchPageController
 					}
 					else
 					{
-						bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
-								"profile.currentPassword.invalid");
+						bindingResult.rejectValue("checkNewPassword", "validation.checkPwd.equals", new Object[] {},
+								"validation.checkPwd.equals");
 					}
-					//customerFacade.changePassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
-				}
-				catch (final Exception e)
-				{
-					LOG.debug("In AccountPage Controller: " + e.getMessage());
-				}
 
+				}
 			}
 			else
 			{
-				bindingResult.rejectValue("checkNewPassword", "validation.checkPwd.equals", new Object[] {},
-						"validation.checkPwd.equals");
+				System.out.println("Paassword not  ok");
+				bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
+						"profile.currentPassword.invalid");
 			}
-		}
 
-		if (bindingResult.hasErrors())
+
+		}
+		catch (final Exception e)
 		{
-			GlobalMessages.addErrorMessage(model, "form.global.error");
-			storeCmsPageInModel(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
-			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(PROFILE_CMS_PAGE));
-
-			model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.profile.updatePasswordForm"));
-			return ControllerConstants.Views.Pages.Account.AccountChangePasswordPage;
+			LOG.debug("In AccountPage Controller: " + e.getMessage());
 		}
-		else
-		{
-			GlobalMessages.addFlashMessage(redirectAttributes, GlobalMessages.CONF_MESSAGES_HOLDER,
-					"text.account.confirmation.password.updated");
-			return REDIRECT_TO_PROFILE_PAGE;
-		}
-	} */
-	
-	//Updated for current password validation order
-	@RequestMapping(value = "/update-password", method = RequestMethod.POST)
-	@RequireHardLogIn
-	public String updatePassword(@Valid final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult,
-			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
-	{
 
-			try
-			{
-
-				final boolean validCurrentPwd = defaultEnergizerCompanyB2BCommerceFacade
-						.validateCurrentPassword(updatePasswordForm.getCurrentPassword());
-				
-				if (validCurrentPwd)
-				{
-					
-					if (!bindingResult.hasErrors())
-						{
-					
-						if (updatePasswordForm.getNewPassword().equals(updatePasswordForm.getCheckNewPassword()))
-							{
-							final boolean flag = defaultEnergizerCompanyB2BCommerceFacade
-								.changingPassword(updatePasswordForm.getCurrentPassword(), updatePasswordForm.getNewPassword());
-
-							if (!flag)
-								{
-
-								bindingResult.rejectValue("newPassword", "profile.newPassword.match", new Object[] {},
-									"profile.newPassword.match");
-								}
-							}
-						else
-							{
-							bindingResult.rejectValue("checkNewPassword", "validation.checkPwd.equals", new Object[] {},
-								"validation.checkPwd.equals");
-							}
-					
-						}
-					}
-					else
-						{
-						System.out.println("Paassword not  ok");
-						bindingResult.rejectValue("currentPassword", "profile.currentPassword.invalid", new Object[] {},
-							"profile.currentPassword.invalid");
-						}
-				
-
-			}
-			catch (final Exception e)
-				{
-					LOG.debug("In AccountPage Controller: " + e.getMessage());
-				}
-			
 
 		if (bindingResult.hasErrors())
 		{
@@ -1422,7 +1354,8 @@ public class AccountPageController extends AbstractSearchPageController
 					Localization.getLocalizedString("quickorder.addtocart.nocmir"));
 		}
 		else
-		{   if (cmir.getIsActive() == false)
+		{
+			if (cmir.getIsActive() == false)
 			{
 				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
 						Localization.getLocalizedString("quickorder.cmirinactive"));
@@ -1430,51 +1363,52 @@ public class AccountPageController extends AbstractSearchPageController
 			}
 			else
 			{
-				
-			if (quickOrderFacade.productExistsInList(cmir.getErpMaterialId(), quickOrder))
-			{
-				quickOrderFacade.addItemToQuickOrder(quickOrder, cmir.getErpMaterialId(), cmir.getCustomerMaterialId());
-			}
-			else
-			{
-				final OrderEntryData orderEntry = quickOrderFacade.getProductData(energizerMaterialID, distributorMaterialID, cmir);
-				if (orderEntry != null)
-				{
-					quickOrderFacade.getOrderEntryShippingPoints(orderEntry, quickOrder);
-					orderEntryBusinessRulesService.validateBusinessRules(orderEntry);
-					//run the business rules on the product
-					if (orderEntryBusinessRulesService.hasErrors())
-					{
-						//model.addAttribute(BUSINESS_RULE_ERRORS, orderEntryBusinessRulesService.getErrors());
-						for (final BusinessRuleError error : orderEntryBusinessRulesService.getErrors())
-						{
-							LOG.info("The error message is " + error.getMessage());
-							//GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
-							GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER, error.getMessage());
 
+				if (quickOrderFacade.productExistsInList(cmir.getErpMaterialId(), quickOrder))
+				{
+					quickOrderFacade.addItemToQuickOrder(quickOrder, cmir.getErpMaterialId(), cmir.getCustomerMaterialId());
+				}
+				else
+				{
+					final OrderEntryData orderEntry = quickOrderFacade
+							.getProductData(energizerMaterialID, distributorMaterialID, cmir);
+					if (orderEntry != null)
+					{
+						quickOrderFacade.getOrderEntryShippingPoints(orderEntry, quickOrder);
+						orderEntryBusinessRulesService.validateBusinessRules(orderEntry);
+						//run the business rules on the product
+						if (orderEntryBusinessRulesService.hasErrors())
+						{
+							//model.addAttribute(BUSINESS_RULE_ERRORS, orderEntryBusinessRulesService.getErrors());
+							for (final BusinessRuleError error : orderEntryBusinessRulesService.getErrors())
+							{
+								LOG.info("The error message is " + error.getMessage());
+								//GlobalMessages.addBusinessRuleMessage(model, error.getMessage());
+								GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER, error.getMessage());
+
+							}
+						}
+						else
+						{
+							quickOrderFacade.addItemToQuickOrder(quickOrder, orderEntry.getProduct().getCode(), orderEntry.getProduct()
+									.getCustomerMaterialId());
 						}
 					}
 					else
 					{
-						quickOrderFacade.addItemToQuickOrder(quickOrder, orderEntry.getProduct().getCode(), orderEntry.getProduct()
-								.getCustomerMaterialId());
+						//GlobalMessages.addErrorMessage(model, "quickorder.addtocart.cmir.badData");
+						GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
+								"quickorder.addtocart.cmir.badData");
 					}
+
 				}
-				else
-				{
-					//GlobalMessages.addErrorMessage(model, "quickorder.addtocart.cmir.badData");
-					GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER,
-							"quickorder.addtocart.cmir.badData");
-				}
-			
-			}
 			}
 
 		}
 
 		//add it to the list if the product passes the business rules
 		//or show messages on screen about the error as a result of a business rule validation failure
-		   if (quickOrder.getLineItems().size() == 0)
+		if (quickOrder.getLineItems().size() == 0)
 		{
 			quickOrder.setCurrentShippingPointId(null);
 		}
@@ -1567,9 +1501,9 @@ public class AccountPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = QUICK_ORDER_AJAX_UPDATE_URL, method = RequestMethod.GET)
 	@RequireHardLogIn
-	public @ResponseBody
-	QuickOrderData quickOrderAjaxOrderUpdate(final Model model, @RequestParam("productCode") final String productCode,
-			@RequestParam("qty") final Long qty, final HttpSession session) throws CMSItemNotFoundException
+	public @ResponseBody QuickOrderData quickOrderAjaxOrderUpdate(final Model model,
+			@RequestParam("productCode") final String productCode, @RequestParam("qty") final Long qty, final HttpSession session)
+			throws CMSItemNotFoundException
 	{
 		final QuickOrderData quickOrder = quickOrderFacade.getQuickOrderFromSession((QuickOrderData) session
 				.getAttribute(EnergizerQuickOrderFacade.QUICK_ORDER_SESSION_ATTRIBUTE));

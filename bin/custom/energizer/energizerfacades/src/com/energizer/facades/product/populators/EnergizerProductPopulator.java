@@ -3,9 +3,9 @@
  */
 package com.energizer.facades.product.populators;
 
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BCustomerService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.converters.Populator;
@@ -32,7 +32,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- *
+ * 
  */
 public class EnergizerProductPopulator implements Populator<EnergizerProductModel, ProductData>
 {

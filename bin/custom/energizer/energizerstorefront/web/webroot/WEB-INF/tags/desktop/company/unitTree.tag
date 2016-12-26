@@ -4,7 +4,7 @@
 <%@ taglib prefix="company" tagdir="/WEB-INF/tags/desktop/company" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ attribute name="node" required="true"
-			  type="de.hybris.platform.b2bacceleratorfacades.company.data.B2BUnitNodeData" %>
+			  type="de.hybris.platform.b2bcommercefacades.company.data.B2BUnitNodeData" %>
 
 <spring:url value="/my-company/organization-management/manage-units/details"
 			var="unitDetailUrl">

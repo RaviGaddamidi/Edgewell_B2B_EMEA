@@ -1,16 +1,17 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.accounts.impl;
 
 import static de.hybris.platform.servicelayer.util.ServicesUtil.validateParameterNotNullStandardMessage;
 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.customer.impl.DefaultCustomerFacade;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -53,7 +53,7 @@ import com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopu
 
 /**
  * @author m9005673
- * 
+ *
  */
 public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFacade implements EnergizerCompanyB2BCommerceFacade
 {
@@ -111,7 +111,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/**
 	 * This method retrieves the EnergizerB2BUnitModel of the currently logged in user.
-	 * 
+	 *
 	 * @see EnergizerB2BUnitModel
 	 * @return EnergizerB2BUnitModel
 	 */
@@ -277,8 +277,8 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	}
 
 	/**
- * 
- * 
+ *
+ *
  */
 	@Override
 	public EnergizerB2BCustomerModel getExistingUserForUID(final String email)
@@ -297,9 +297,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 
 	/**
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	public boolean checkPreviousPasswordMatch(final EnergizerB2BCustomerModel customerModel, final String newPassword)
 	{
@@ -332,8 +332,8 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	@Override
 	public boolean validateCurrentPassword(final String currentPassword)
@@ -360,9 +360,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 
 	/**
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	@Override
 	public boolean changingPassword(final String currentPassword, final String newPassword)

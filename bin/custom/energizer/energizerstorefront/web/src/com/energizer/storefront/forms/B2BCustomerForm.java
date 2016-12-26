@@ -13,8 +13,8 @@
  */
 package com.energizer.storefront.forms;
 
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUserGroupData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUserGroupData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 
 import java.util.ArrayList;

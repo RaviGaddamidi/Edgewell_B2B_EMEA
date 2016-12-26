@@ -14,16 +14,11 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.model.B2BBudgetModel;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BBudgetData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.B2BBudgetForm;
 
 import java.text.ParseException;
 import java.util.List;
@@ -40,6 +35,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.breadcrumb.Breadcrumb;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.B2BBudgetForm;
 
 
 /**
@@ -143,7 +144,7 @@ public class BudgetManagementPageController extends MyCompanyPageController
 		final B2BBudgetData b2BBudgetData = populateB2BBudgetDataFromForm(b2BBudgetForm);
 		try
 		{
-			b2bCommerceBudgetFacade.updateBudgetDetails(b2BBudgetData);
+			b2bCommerceBudgetFacade.updateBudget(b2BBudgetData); //updateBudgetDetails(b2BBudgetData);
 
 		}
 		catch (final Exception e)

@@ -5,7 +5,8 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorservices.controllers.page.PageType;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
@@ -410,16 +411,11 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		//final boolean enableButton = b2bUnit.getEnableContainerOptimization();
-		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
-		if (b2bUnit.getEnableContainerOptimization() == false)
+		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
-		else if (session.getAttribute("enableButton") != null)
-		{
-			enableButton = (boolean) session.getAttribute("enableButton");
-		}
+
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);

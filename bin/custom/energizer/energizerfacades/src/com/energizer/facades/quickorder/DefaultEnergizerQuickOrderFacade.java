@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.quickorder;
 
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
@@ -34,7 +35,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author kaushik.ganguly
- * 
+ *
  */
 public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFacade
 {
@@ -71,7 +72,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.core.quickorder.EnergizerQuickOrderService#getOrderEntryDataFromProductCode(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -96,7 +97,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#getQuickOrderFromSession(javax.servlet.http.HttpSession
 	 * )
@@ -117,7 +118,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#addItemToQuickOrder(com.energizer.quickorder.QuickOrder
 	 * , java.lang.String, java.lang.String)
@@ -232,7 +233,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.quickorder.EnergizerQuickOrderFacade#removeItemFromQuickOrder(com.energizer.quickorder.
 	 * QuickOrder, java.lang.String)
 	 */
@@ -318,7 +319,7 @@ public class DefaultEnergizerQuickOrderFacade implements EnergizerQuickOrderFaca
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.quickorder.EnergizerQuickOrderFacade#updateQtyToExistingProduct(com.energizer.quickorder
 	 * .QuickOrderData, java.lang.String, java.lang.Integer)
