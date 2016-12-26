@@ -48,7 +48,7 @@ public class EnergizerCartPopulator extends CartPopulator
 	public void populate(final CartModel source, final CartData target)
 	{
 		Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
-		final Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
+		Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
 		super.populate(source, target);
 		if (source.getB2bUnit() != null)
 		{

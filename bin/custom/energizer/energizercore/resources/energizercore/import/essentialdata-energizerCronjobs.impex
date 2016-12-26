@@ -23,7 +23,7 @@ $technicalEmailAddress=$config-technical_EmailAddress
 $businessEmailAddress=$config-business_EmailAddress
 $emailAddress=$config-email_Address
 
-INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=false];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
+INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);type;displayName;emailAddress;technicalEmailAddress;businessEmailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
@@ -47,7 +47,7 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=false];ses
 
 
 
-INSERT_UPDATE CronJob;code[unique=true];job(code)[forceWrite=false];sessionLanguage(isoCode);emailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
+INSERT_UPDATE CronJob;code[unique=true];job(code)[forceWrite=true];sessionLanguage(isoCode);emailAddress;sendEmail[default=false];sessionCurrency(isoCode)[default=$defaultCurrency]
 ;energizerCustomerUsersListCronJob;energizerCustomerUsersListJob;en;$emailAddress;;
 
 #--------------------------------------------------------------------------------------------------------------
