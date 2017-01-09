@@ -82,9 +82,10 @@ public class UpdateProfileForm
 	static String reged = "^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$";
 
 	//@Pattern(regexp = "^[+]?[01]?[- .]?(\\([2-9]\\d{3}\\)|[2-9]\\d{2})[- .]?\\d{3}[- .]?\\d{4}$", message = "{profile.contactNumber.format.invalid}")
-		@NotNull(message = "{profile.contactNumber.invalid}")
+	@NotNull(message = "{profile.contactNumber.invalid}")
 	//	@Size(min = 1, max = 255, message = "{profile.contactNumber.invalid}")
-		@NotBlank(message = "{profile.contactNumber.invalid}")
+	@NotBlank(message = "{profile.contactNumber.invalid}")
+	@Pattern(regexp = "[0-9]{3}-?[0-9]{3}-?[0-9]{4}", message = "{profile.contactNumber.format.invalid}")
 	public String getContactNumber()
 	{
 		return contactNumber;
