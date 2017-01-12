@@ -640,7 +640,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		archiveID = StringUtils.isNotBlank(csvValuesMap.get(ARCHIVE_ID)) ? csvValuesMap.get(ARCHIVE_ID) : null;
 
-		erpMaterialID = StringUtils.isNotBlank(csvValuesMap.get(erpMaterialID)) ? csvValuesMap.get(erpMaterialID) : null;
+		erpMaterialID = StringUtils.isNotBlank(csvValuesMap.get(ERP_MATERIAL_ID)) ? csvValuesMap.get(ERP_MATERIAL_ID) : null;
 
 		uom = StringUtils.isNotBlank(csvValuesMap.get(UOM)) ? csvValuesMap.get(UOM) : null;
 

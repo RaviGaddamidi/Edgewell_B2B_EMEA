@@ -605,6 +605,11 @@ public class SingleStepCheckoutController extends AbstractCheckoutController
 	{
 		final CartData cartData = energizerB2BCheckoutFlowFacade.setDeliveryDate(deliveryDate, energizerB2BCheckoutFlowFacade
 				.getCheckoutCart().getCode());
+	   if (getDeliveryAddressesForB2Bunit().size() == 1)
+		{
+			final AddressData addressData = getDeliveryAddressesForB2Bunit().get(0);
+			cartData.setDeliveryAddress(addressData);
+		}
 		return cartData;
 	}
 
