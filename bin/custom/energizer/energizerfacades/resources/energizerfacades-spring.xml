@@ -16,7 +16,7 @@
 	<bean id="defaultB2BFlexibleSearchProductSearchFacade"
 		class="com.energizer.facades.search.impl.DefaultB2BFlexibleSearchProductSearchFacade"
 		parent="abstractB2BProductSearchFacade">
-		<property name="b2bFlexibleSearchProductSearchService" ref="b2bFlexibleSearchProductSearchService" />
+		<property name="b2bProductService" ref="defaultB2BProductService" />
 		<property name="flexibleSearchPopulator" ref="b2bFlexibleSearchPopulator" />
 	</bean>
 
@@ -630,11 +630,12 @@
 	<alias name="defaultEnergizerCustomerReversePopulator" alias="energizerCustomerReversePopulator" />
 	<bean id="defaultEnergizerCustomerReversePopulator" class="com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator">
 		<property name="customerNameStrategy" ref="customerNameStrategy"/>
-		<property name="companyB2BCommerceService" ref="companyB2BCommerceService"/>
+<!-- 		<property name="companyB2BCommerceService" ref="companyB2BCommerceService"/> -->
 		<property name="b2BCommerceB2BUserGroupService" ref="b2bCommerceB2BUserGroupService"/>
 		<property name="userService" ref="userService"/>
 		<property name="energizerGroupsLookUpStrategy" ref="energizerGroupsLookUpStrategy"/>
-		<property name="b2bUnitService" ref="b2bUnitService"/>		
+		<property name="b2bUnitService" ref="b2bUnitService"/>
+		<property name="b2bCommerceUnitService" ref="b2bCommerceUnitService"/>		
 	</bean>
 	 <bean id="defaultInvoiceFacade" class="com.energizer.facades.order.impl.DefaultEnergizerInvoiceFacade" autowire="byName"></bean>
 

@@ -3,13 +3,11 @@
  */
 package com.energizer.core.datafeed.processor.customer;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.impl.DefaultCompanyB2BCommerceService;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.core.model.user.UserGroupModel;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
@@ -54,8 +52,6 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	private ModelService modelService;
 
-	@Resource
-	private DefaultCompanyB2BCommerceService companyB2BCommerceService;
 	@Resource
 	private B2BCommerceUnitService b2bCommerceUnitService;
 	@Resource

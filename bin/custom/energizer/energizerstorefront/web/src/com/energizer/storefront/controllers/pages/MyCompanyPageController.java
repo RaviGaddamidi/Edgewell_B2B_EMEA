@@ -13,7 +13,6 @@
  */
 package com.energizer.storefront.controllers.pages;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.enums.B2BPeriodRange;

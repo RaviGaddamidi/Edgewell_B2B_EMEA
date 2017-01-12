@@ -15,11 +15,11 @@ package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.services.B2BUnitService;
 import de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.B2BOrderFacade;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderApprovalData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.B2BOrderHistoryEntryData;
 import de.hybris.platform.b2bacceleratorfacades.order.data.ScheduledCartData;
+import de.hybris.platform.b2bcommercefacades.company.B2BUserFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commercefacades.order.CheckoutFacade;
@@ -215,8 +215,8 @@ public class AccountPageController extends AbstractSearchPageController
 	@Resource(name = "energizerB2BCheckoutFlowFacade")
 	private EnergizerB2BCheckoutFlowFacade energizerB2BCheckoutFlowFacade;
 
-	@Resource(name = "defaultCompanyB2BCommerceFacade")
-	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+	@Resource(name = "defaultB2BUserFacade")
+	protected B2BUserFacade b2bUserFacade;
 
 	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
 	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
@@ -339,7 +339,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		final List<TitleData> titles = userFacade.getTitles();
 
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
+		final CustomerData customerData = b2bUserFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		if (customerData.getTitleCode() != null)
 		{
@@ -371,7 +371,7 @@ public class AccountPageController extends AbstractSearchPageController
 	@RequireHardLogIn
 	public String editEmail(final Model model) throws CMSItemNotFoundException
 	{
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
+		final CustomerData customerData = b2bUserFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		final UpdateEmailForm updateEmailForm = new UpdateEmailForm();
 
 		updateEmailForm.setEmail(customerData.getDisplayUid());
@@ -452,7 +452,7 @@ public class AccountPageController extends AbstractSearchPageController
 		model.addAttribute("passwordQuestionsList", passwordQuestionsFacade.getEnergizerPasswordQuestions());
 		model.addAttribute("titleData", userFacade.getTitles());
 
-		final CustomerData customerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
+		final CustomerData customerData = b2bUserFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		final UpdateProfileForm updateProfileForm = new UpdateProfileForm();
 		//				customerData.setContactNumber(energizerCompanyB2BCommerceFacade.getContactNumber(customerData.getUid(), customerData));
 		updateProfileForm.setTitleCode(customerData.getTitleCode());
@@ -477,8 +477,7 @@ public class AccountPageController extends AbstractSearchPageController
 			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
 	{
 		String returnAction = ControllerConstants.Views.Pages.Account.AccountProfileEditPage;
-		final CustomerData currentCustomerData = companyB2BCommerceFacade.getCustomerForUid(customerFacade.getCurrentCustomer()
-				.getUid());
+		final CustomerData currentCustomerData = b2bUserFacade.getCustomerForUid(customerFacade.getCurrentCustomer().getUid());
 		final CustomerData customerData = new CustomerData();
 		customerData.setTitleCode(updateProfileForm.getTitleCode());
 		customerData.setFirstName(updateProfileForm.getFirstName());

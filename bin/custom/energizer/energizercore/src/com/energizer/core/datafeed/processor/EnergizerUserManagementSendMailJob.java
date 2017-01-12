@@ -7,15 +7,12 @@ import de.hybris.platform.acceleratorservices.email.EmailService;
 import de.hybris.platform.acceleratorservices.model.email.EmailAddressModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailMessageModel;
 import de.hybris.platform.b2b.company.B2BCommerceUnitService;
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
 import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.b2bcommercefacades.company.B2BUnitFacade;
-//import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
@@ -44,9 +41,6 @@ import org.apache.log4j.Logger;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import com.energizer.core.model.EnergizerB2BCustomerModel;
-//import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceUnitFacade;
-//import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceUnitFacade;
-
 
 /**
  * @author Ravikiran Pise

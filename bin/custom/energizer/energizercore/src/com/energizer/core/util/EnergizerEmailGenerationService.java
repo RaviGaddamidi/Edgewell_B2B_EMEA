@@ -12,7 +12,6 @@ import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BPermissionResultModel;
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.orderprocessing.model.OrderProcessModel;
 import de.hybris.platform.processengine.model.BusinessProcessModel;
@@ -34,7 +33,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author m1023278
- * 
+ *
  */
 public class EnergizerEmailGenerationService extends DefaultEmailGenerationService
 {
@@ -61,9 +60,6 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	ModelService modelService;
 
 	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
-
-	@Resource
 	private B2BCommerceUnitService b2bCommerceUnitService;
 
 	@Resource
@@ -74,7 +70,7 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.acceleratorservices.email.impl.DefaultEmailGenerationService#generate(de.hybris.platform.
 	 * processengine.model.BusinessProcessModel, de.hybris.platform.acceleratorservices.model.cms2.pages.EmailPageModel)
 	 */

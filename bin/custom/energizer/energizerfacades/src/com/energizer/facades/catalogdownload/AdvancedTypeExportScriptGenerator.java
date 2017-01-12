@@ -3,7 +3,7 @@
  */
 package com.energizer.facades.catalogdownload;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.impex.jalo.ImpExManager;
 import de.hybris.platform.impex.jalo.exp.generator.ExportScriptGenerator;

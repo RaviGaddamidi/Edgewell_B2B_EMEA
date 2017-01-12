@@ -9,16 +9,21 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.MANAGE_COSTCENTERS_SELECTBUDGET_URL;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.MANAGE_COST_CENTER_BASE_URL;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.ORGANIZATION_MANAGEMENT_CMS_PAGE;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.REDIRECT_TO_COSTCENTER_DETAILS;
+
 import de.hybris.platform.b2b.model.B2BBudgetModel;
 import de.hybris.platform.b2b.model.B2BCostCenterModel;
-import de.hybris.platform.b2bacceleratorfacades.search.data.BudgetSearchStateData;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
+import de.hybris.platform.b2bcommercefacades.search.data.BudgetSearchStateData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.search.data.SearchStateData;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
@@ -168,7 +173,7 @@ public class CostCenterManagementPageController extends MyCompanyPageController
 		{
 			LOG.error(e.getMessage(), e);
 		}
-		final B2BBudgetData b2BudgetData = companyB2BCommerceFacade.getBudgetDataForCode(budgetCode);
+		final B2BBudgetData b2BudgetData = b2bCommerceBudgetFacade.getBudgetDataForCode(budgetCode);
 		final B2BSelectionData b2BSelectionData = new B2BSelectionData();
 		if (b2BudgetData != null)
 		{

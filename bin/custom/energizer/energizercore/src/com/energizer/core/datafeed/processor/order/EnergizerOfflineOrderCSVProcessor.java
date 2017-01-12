@@ -1,6 +1,6 @@
 package com.energizer.core.datafeed.processor.order;
 
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.basecommerce.model.site.BaseSiteModel;
 import de.hybris.platform.catalog.CatalogVersionService;
 import de.hybris.platform.cms2.model.site.CMSSiteModel;
@@ -67,7 +67,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 	@Resource
 	private ModelService modelService;
 	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
+	private B2BCommerceUnitService b2bCommerceUnitService;
 	@Resource
 	private UserService userService;
 	@Resource
@@ -280,7 +280,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 			final String emailBody = createdByUser + " Order is " + status + "\n";
 			List<String> listOfToAddress = null;
 
-			final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService
+			final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) b2bCommerceUnitService
 					.getUnitForUid(b2bAccount);
 			listOfToAddress = energizerOrderService.getAdminEmailIdsOfEnergizerB2BUnitModel(energizerB2BUnitModel);
 
@@ -640,7 +640,7 @@ public class EnergizerOfflineOrderCSVProcessor extends AbstractEnergizerCSVProce
 
 		archiveID = StringUtils.isNotBlank(csvValuesMap.get(ARCHIVE_ID)) ? csvValuesMap.get(ARCHIVE_ID) : null;
 
-		erpMaterialID = StringUtils.isNotBlank(csvValuesMap.get(erpMaterialID)) ? csvValuesMap.get(erpMaterialID) : null;
+		erpMaterialID = StringUtils.isNotBlank(csvValuesMap.get(ERP_MATERIAL_ID)) ? csvValuesMap.get(ERP_MATERIAL_ID) : null;
 
 		uom = StringUtils.isNotBlank(csvValuesMap.get(UOM)) ? csvValuesMap.get(UOM) : null;
 

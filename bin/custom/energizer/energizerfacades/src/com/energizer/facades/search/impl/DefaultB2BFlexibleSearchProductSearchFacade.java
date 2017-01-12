@@ -9,12 +9,11 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.search.impl;
 
-import de.hybris.platform.b2bacceleratorservices.search.B2BProductSearchService;
-import de.hybris.platform.commercefacades.converter.ConfigurablePopulator;
+import de.hybris.platform.b2bacceleratorservices.product.B2BProductService;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.CategoryData;
 import de.hybris.platform.commercefacades.product.data.ProductData;
@@ -24,12 +23,14 @@ import de.hybris.platform.commerceservices.search.facetdata.ProductCategorySearc
 import de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import com.energizer.facades.search.AbstractB2BProductSearchFacade;
+import de.hybris.platform.converters.ConfigurablePopulator;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Required;
+
+import com.energizer.facades.search.AbstractB2BProductSearchFacade;
 
 
 /**
@@ -39,7 +40,7 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 		AbstractB2BProductSearchFacade<ProductData>
 {
 
-	private B2BProductSearchService b2bFlexibleSearchProductSearchService;
+	private B2BProductService b2bProductService;
 	private ConfigurablePopulator<SearchPageData, ProductSearchPageData, ProductOption> flexibleSearchPopulator;
 
 	@Override
@@ -47,8 +48,7 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 			final PageableData pageableData, final Collection<ProductOption> options, final boolean populateMatrix)
 	{
 		final ProductSearchPageData productSearchPageData = new ProductSearchPageData();
-		flexibleSearchPopulator.populate(b2bFlexibleSearchProductSearchService.findProductsBySkus(skus, pageableData),
-				productSearchPageData, options);
+		flexibleSearchPopulator.populate(b2bProductService.getProductsForSkus(skus, pageableData), productSearchPageData, options);
 
 		if (populateMatrix)
 		{
@@ -66,17 +66,17 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	@Required
-	public void setB2bFlexibleSearchProductSearchService(final B2BProductSearchService b2bFlexibleSearchProductSearchService)
+	public void setB2bProductService(final B2BProductService b2bFlexibleSearchProductSearchService)
 	{
-		this.b2bFlexibleSearchProductSearchService = b2bFlexibleSearchProductSearchService;
+		this.b2bProductService = b2bFlexibleSearchProductSearchService;
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -87,11 +87,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -103,11 +103,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -118,11 +118,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -134,11 +134,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -149,11 +149,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */
@@ -164,11 +164,11 @@ public class DefaultB2BFlexibleSearchProductSearchFacade<ITEM extends ProductDat
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * This implementation always throws an {@code UnsupportedOperationException} because the operation is not supported
 	 * by FlexibleSearch search.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *            {@inheritDoc}
 	 */

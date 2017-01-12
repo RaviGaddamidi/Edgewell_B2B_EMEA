@@ -3,7 +3,6 @@
  */
 package com.energizer.facades.quickorder;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.order.CartFacade;
 import de.hybris.platform.commercefacades.order.data.CartData;

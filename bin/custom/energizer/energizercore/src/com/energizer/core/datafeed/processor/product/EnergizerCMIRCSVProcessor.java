@@ -3,7 +3,7 @@
  */
 package com.energizer.core.datafeed.processor.product;
 
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.europe1.model.PriceRowModel;
 import de.hybris.platform.product.ProductService;
@@ -53,7 +53,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	private ModelService modelService;
 	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
+	private B2BCommerceUnitService b2bCommerceUnitService;
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
 	@Resource
@@ -479,8 +479,7 @@ public class EnergizerCMIRCSVProcessor extends AbstractEnergizerCSVProcessor
 
 	public EnergizerB2BUnitModel getEnergizerB2BUnit(final String b2bUnitId)
 	{
-		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService
-				.getUnitForUid(b2bUnitId);
+		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) b2bCommerceUnitService.getUnitForUid(b2bUnitId);
 		return energizerB2BUnitModel;
 	}
 

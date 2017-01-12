@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.accounts.impl;
 
-import de.hybris.platform.b2bacceleratorservices.strategies.B2BUserGroupsLookUpStrategy;
+
+import de.hybris.platform.b2b.strategies.B2BUserGroupsLookUpStrategy;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author M1028720
- * 
+ *
  */
 public class DefaultEnergizerGroupsLookUpStrategy implements B2BUserGroupsLookUpStrategy
 {

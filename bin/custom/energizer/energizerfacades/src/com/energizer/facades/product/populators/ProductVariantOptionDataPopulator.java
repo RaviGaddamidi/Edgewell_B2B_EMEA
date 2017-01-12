@@ -13,11 +13,11 @@
  */
 package com.energizer.facades.product.populators;
 
-import de.hybris.platform.commercefacades.converter.ConfigurablePopulator;
 import de.hybris.platform.commercefacades.product.converters.populator.AbstractProductPopulator;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.product.data.VariantMatrixElementData;
 import de.hybris.platform.commercefacades.product.data.VariantOptionData;
+import de.hybris.platform.converters.ConfigurablePopulator;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.servicelayer.dto.converter.ConversionException;
 import de.hybris.platform.variants.model.GenericVariantProductModel;
@@ -113,7 +113,7 @@ public class ProductVariantOptionDataPopulator<SOURCE extends ProductModel, TARG
 
 	/**
 	 * Copies the data from the element with the same code or from the first one on the list.
-	 * 
+	 *
 	 * @param parent
 	 *           the element to copy the data into.
 	 */
@@ -123,7 +123,7 @@ public class ProductVariantOptionDataPopulator<SOURCE extends ProductModel, TARG
 		if (CollectionUtils.isNotEmpty(parent.getElements()) && parent.getVariantOption() != null)
 		{
 
-			VariantMatrixElementData elementToCopy = getRightElementToCopy(parent);
+			final VariantMatrixElementData elementToCopy = getRightElementToCopy(parent);
 
 			parent.getVariantOption().setCode(elementToCopy.getVariantOption().getCode());
 			parent.getVariantOption().setUrl(elementToCopy.getVariantOption().getUrl());
@@ -133,7 +133,7 @@ public class ProductVariantOptionDataPopulator<SOURCE extends ProductModel, TARG
 
 	/**
 	 * Gets the element with the same code from the children and if not found returns the first.
-	 * 
+	 *
 	 * @param parent
 	 *           the parent to look for the right child.
 	 */

@@ -5,7 +5,6 @@ package com.energizer.facades.search.populators;
 
 
 
-import de.hybris.platform.b2bacceleratorfacades.order.B2BCheckoutFacade;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
 import de.hybris.platform.b2bcommercefacades.company.impl.DefaultB2BCostCenterFacade;
 import de.hybris.platform.commercefacades.order.converters.populator.CartPopulator;
@@ -40,15 +39,11 @@ public class EnergizerCartPopulator extends CartPopulator
 	@Resource(name = "defaultB2BCostCenterFacade")
 	private DefaultB2BCostCenterFacade defaultB2BCostCenterFacade;
 
-	@Resource
-	private B2BCheckoutFacade b2bCheckoutFacade;
-
-
 	@Override
 	public void populate(final CartModel source, final CartData target)
 	{
 		Map<Integer, List<String>> palStackData = new TreeMap<Integer, List<String>>();
-		Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
+		final Map<Integer, List<String>> sortedPalStackData = new TreeMap<Integer, List<String>>();
 		super.populate(source, target);
 		if (source.getB2bUnit() != null)
 		{

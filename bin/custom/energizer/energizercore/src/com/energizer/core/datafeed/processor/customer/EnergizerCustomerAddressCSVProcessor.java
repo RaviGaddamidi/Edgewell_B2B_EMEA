@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package com.energizer.core.datafeed.processor.customer;
 
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.catalog.CatalogService;
 import de.hybris.platform.core.model.c2l.CountryModel;
 import de.hybris.platform.core.model.c2l.RegionModel;
@@ -28,14 +28,14 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 
 
 /**
- * 
+ *
  * This processors imports the customer address .
- * 
+ *
  * Sample file will look like
- * 
+ *
  * SPCustomerID,Status,SPNAME,SPCITY,SPPOSTALCODE,SPSTREET,SPCOUNTRYKEY,SPREGION,SPSalesPerson,CustomerID
  * 0002707368,1,SAMY,MONTEVIDEO,11300,GENERAL HOMOS 4834,UY,00,sales_pc@abc.com,0098900010
- * 
+ *
  * Total column count : 9
  */
 public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -43,7 +43,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.datafeed.EnergizerCSVProcessor#parse(de.hybris.platform.util.CSVReader)
 	 */
 
@@ -54,7 +54,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 	private CatalogService catalogService;
 
 	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
+	private B2BCommerceUnitService b2bCommerceUnitService;
 
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
@@ -77,7 +77,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 
 
 	/**
-    * 
+    *
     */
 	public EnergizerCustomerAddressCSVProcessor()
 	{
@@ -140,7 +140,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 						final boolean activeStatus = csvValuesMap.get(STATUS).trim().equalsIgnoreCase("1") ? true : false;
 						energizerAddress.setShippingAddress(activeStatus);
 						energizerAddress.setActive(Boolean.TRUE);
-						
+
 						try
 						{
 							final CountryModel countryModel = new CountryModel();
@@ -157,7 +157,7 @@ public class EnergizerCustomerAddressCSVProcessor extends AbstractEnergizerCSVPr
 						{
 							LOG.error("No Region or country Found", e);
 						}
-						final EnergizerB2BUnitModel b2bUnitmodel = (EnergizerB2BUnitModel) companyB2BCommerceService
+						final EnergizerB2BUnitModel b2bUnitmodel = (EnergizerB2BUnitModel) b2bCommerceUnitService
 								.getUnitForUid(csvValuesMap.get(CUSTOMER_ID).trim());
 						if (b2bUnitmodel != null)
 						{

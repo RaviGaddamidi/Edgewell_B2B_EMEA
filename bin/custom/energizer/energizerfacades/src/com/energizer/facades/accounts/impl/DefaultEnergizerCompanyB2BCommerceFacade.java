@@ -5,14 +5,12 @@ package com.energizer.facades.accounts.impl;
 
 import static de.hybris.platform.servicelayer.util.ServicesUtil.validateParameterNotNullStandardMessage;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.customer.impl.DefaultCustomerFacade;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commercefacades.user.exceptions.PasswordMismatchException;
@@ -26,6 +24,7 @@ import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
+import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.util.ArrayList;
@@ -75,8 +74,6 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	@Resource(name = "energizerCustomerReversePopulator")
 	private EnergizerB2BCustomerReversePopulator energizerCustomerReversePopulator;
 
-	@Resource(name = "companyB2BCommerceService")
-	private CompanyB2BCommerceService companyB2BCommerceService;
 
 	@Resource(name = "contactNumberPopulator")
 	private ContactNumberPopulator contactNumberPopulator;
@@ -90,6 +87,9 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 	@Resource
 	private SecureTokenService secureTokenService;
 
+	@Resource
+	private ModelService modelService;
+
 	@Value("${previousPasswordCount}")
 	int prevPasswordCount;
 
@@ -98,7 +98,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade#getContactNumber(java.lang.String)
 	 */
 	@Override
@@ -122,7 +122,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade#validateUserCount()
 	 */
 	@SuppressWarnings("unchecked")
@@ -145,7 +145,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#getEnergizerB2BUnitModelForLoggedInUser()
 	 */
 	@Override
@@ -156,7 +156,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#updateProfile(de.hybris.platform.commercefacades
 	 * .user.data.CustomerData)
@@ -187,7 +187,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#updatePassword(com.energizer.core.model.
 	 * EnergizerB2BCustomerModel)
 	 */
@@ -453,7 +453,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#findB2BAdministratorForCustomer(com.energizer
 	 * .core.model.EnergizerB2BUnitModel.EnergizerB2BUnitModel)
@@ -469,7 +469,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.accounts.EnergizerCompanyB2BCommerceFacade#updateCustomer(de.hybris.platform.commercefacades
 	 * .user.data.CustomerData)
@@ -492,7 +492,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 		if (null != customerData && null != energizerB2BCustomerModel)
 		{
 			energizerCustomerReversePopulator.populate(customerData, energizerB2BCustomerModel);
-			companyB2BCommerceService.saveModel(energizerB2BCustomerModel);
+			modelService.save(energizerB2BCustomerModel);
 		}
 	}
 

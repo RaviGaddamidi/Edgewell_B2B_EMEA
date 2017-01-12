@@ -3,21 +3,19 @@
  */
 package com.energizer.core.datafeed.processor.customer;
 
-
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceCostCenterService;
 import de.hybris.platform.b2b.company.B2BCommerceCostCenterService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.enums.B2BPeriodRange;
 import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.model.B2BBudgetModel;
 import de.hybris.platform.b2b.model.B2BCostCenterModel;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceBudgetFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.B2BCommerceCostCenterFacade;
-import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceBudgetService;
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2b.services.B2BBudgetService;
 import de.hybris.platform.b2bapprovalprocessfacades.company.B2BPermissionFacade;
 import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
 import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
+import de.hybris.platform.b2bcommercefacades.company.B2BBudgetFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BCostCenterFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BUnitFacade;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BBudgetData;
 import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
@@ -56,9 +54,6 @@ import com.energizer.core.datafeed.form.B2BCostCenterForm;
 import com.energizer.core.model.EnergizerB2BUnitModel;
 
 
-//import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
-
-
 /**
  *
  * This processors imports the customer address .
@@ -76,24 +71,24 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	private ModelService modelService;
 	@Resource
 	private FlexibleSearchService flexibleSearchService;
-	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
+	@Resource(name = "b2bCommerceUnitService")
+	private B2BCommerceUnitService b2bCommerceUnitService;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerCustomerCSVProcessor.class);
 	@Resource
 	private CommonI18NService commonI18NService;
 
-	@Resource(name = "b2bCommerceFacade")
-	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
+	@Resource(name = "b2bUnitFacade")
+	protected B2BUnitFacade b2BUnitFacade;
 
-	@Resource(name = "b2bCommerceBudgetFacade")
-	protected B2BCommerceBudgetFacade b2bCommerceBudgetFacade;
+	@Resource(name = "budgetFacade")
+	protected B2BBudgetFacade budgetFacade;
 
 	@Resource(name = "formatFactory")
 	protected FormatFactory formatFactory;
 
-	@Resource(name = "b2bCommerceCostCenterFacade")
-	protected B2BCommerceCostCenterFacade b2bCommerceCostCenterFacade;
+	@Resource(name = "costCenterFacade")
+	protected B2BCostCenterFacade costCenterFacade;
 
 	@Resource(name = "b2bPermissionFacade")
 	protected B2BPermissionFacade b2bCommercePermissionFacade;
@@ -101,8 +96,8 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource(name = "b2bCommerceCostCenterService")
 	private B2BCommerceCostCenterService b2bCommerceCostCenterService;
 
-	@Resource(name = "b2bCommerceBudgetService")
-	private B2BCommerceBudgetService b2bCommerceBudgetService;
+	@Resource(name = "b2BBudgetService")
+	private B2BBudgetService b2BBudgetService;
 
 	@Autowired
 	protected ConfigurationService configurationService;
@@ -192,7 +187,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 				}
 				try
 				{
-					b2bUnit = (EnergizerB2BUnitModel) companyB2BCommerceService.getUnitForUid(csvValuesMap.get(CUSTOMER_ID).trim());
+					b2bUnit = (EnergizerB2BUnitModel) b2bCommerceUnitService.getUnitForUid(csvValuesMap.get(CUSTOMER_ID).trim());
 				}
 				catch (final UnknownIdentifierException ep)
 				{
@@ -316,7 +311,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		b2BBudgetData.setActive(Boolean.TRUE);
 		b2BBudgetData.setCode(b2BBudgetForm.getCode());
 		b2BBudgetData.setName(b2BBudgetForm.getName());
-		b2BBudgetData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BBudgetForm.getParentB2BUnit()));
+		b2BBudgetData.setUnit(b2BUnitFacade.getUnitForUid(b2BBudgetForm.getParentB2BUnit()));
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(b2BBudgetForm.getCurrency());
 		b2BBudgetData.setCurrency(currencyData);
@@ -390,7 +385,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		final B2BBudgetData b2BBudgetData = populateB2BBudgetDataFromForm(b2BBudgetForm);
 		try
 		{
-			b2bCommerceBudgetFacade.addBudget(b2BBudgetData);
+			budgetFacade.addBudget(b2BBudgetData);
 			LOG.info("Saving the budget details");
 		}
 		catch (final Exception e)
@@ -409,7 +404,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(b2BCostCenterForm.getCurrency());
 		b2BCostCenterData.setCurrency(currencyData);
-		b2BCostCenterData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2BCostCenterForm.getParentB2BUnit()));
+		b2BCostCenterData.setUnit(b2BUnitFacade.getUnitForUid(b2BCostCenterForm.getParentB2BUnit()));
 		b2bCostCenterDatas.add(b2BCostCenterData);
 		return b2BCostCenterData;
 	}
@@ -420,14 +415,14 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		final B2BCostCenterData b2BCostCenterData = populateB2BCostCenterDataFromForm(b2BCostCenterForm);
 		try
 		{
-			b2bCommerceCostCenterFacade.addCostCenter(b2BCostCenterData);
+			costCenterFacade.addCostCenter(b2BCostCenterData);
 			final B2BCostCenterModel b2BCostCenterModel = getB2BCommerceCostCenterService().getCostCenterForCode(
 					b2BCostCenterData.getCode());
-			final B2BBudgetModel b2BBudgetModel = getB2BCommerceBudgetService().getBudgetModelForCode(b2bBudgetForm.getCode());
+			final B2BBudgetModel b2BBudgetModel = getB2BBudgetService().getB2BBudgetForCode(b2bBudgetForm.getCode());
 			final Set<B2BBudgetModel> budgetSet = new HashSet<B2BBudgetModel>();
 			budgetSet.add(b2BBudgetModel);
 			b2BCostCenterModel.setBudgets(budgetSet);
-			getCompanyB2BCommerceService().saveModel(b2BCostCenterModel);
+			modelService.save(b2BCostCenterModel);
 		}
 		catch (final Exception e)
 		{
@@ -496,7 +491,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(configurationService.getConfiguration().getProperty("b2BBudget.Isocode").toString());
 		b2BPermissionData.setCurrency(currencyData);
-		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2bUnit));
+		b2BPermissionData.setUnit(b2BUnitFacade.getUnitForUid(b2bUnit));
 		return b2BPermissionData;
 	}
 
@@ -514,7 +509,7 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 		final CurrencyData currencyData = new CurrencyData();
 		currencyData.setIsocode(configurationService.getConfiguration().getProperty("b2BBudget.Isocode").toString());
 		b2BPermissionData.setCurrency(currencyData);
-		b2BPermissionData.setUnit(companyB2BCommerceFacade.getUnitForUid(b2bUnit));
+		b2BPermissionData.setUnit(b2BUnitFacade.getUnitForUid(b2bUnit));
 		b2BPermissionData.setPeriodRange(B2BPeriodRange.valueOf("WEEK"));
 		b2BPermissionData.setValue(Double.valueOf(formatFactory.createNumberFormat().parse("100000000").doubleValue()));
 		return b2BPermissionData;
@@ -524,18 +519,18 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	/**
 	 * @return the companyB2BCommerceService
 	 */
-	public CompanyB2BCommerceService getCompanyB2BCommerceService()
+	public B2BCommerceUnitService geB2BCommerceUnitService()
 	{
-		return companyB2BCommerceService;
+		return b2bCommerceUnitService;
 	}
 
 	/**
 	 * @param companyB2BCommerceService
 	 *           the companyB2BCommerceService to set
 	 */
-	public void setCompanyB2BCommerceService(final CompanyB2BCommerceService companyB2BCommerceService)
+	public void setB2BCommerceUnitService(final B2BCommerceUnitService b2BCommerceUnitService)
 	{
-		this.companyB2BCommerceService = companyB2BCommerceService;
+		this.b2bCommerceUnitService = b2BCommerceUnitService;
 	}
 
 	/**
@@ -558,17 +553,17 @@ public class EnergizerCustomerCSVProcessor extends AbstractEnergizerCSVProcessor
 	/**
 	 * @return the b2BCommerceBudgetService
 	 */
-	public B2BCommerceBudgetService getB2BCommerceBudgetService()
+	public B2BBudgetService getB2BBudgetService()
 	{
-		return b2bCommerceBudgetService;
+		return b2BBudgetService;
 	}
 
 	/**
 	 * @param b2bCommerceBudgetService
 	 *           the b2BCommerceBudgetService to set
 	 */
-	public void setB2BCommerceBudgetService(final B2BCommerceBudgetService b2BCommerceBudgetService)
+	public void setB2BBudgetService(final B2BBudgetService b2BBudgetService)
 	{
-		b2bCommerceBudgetService = b2BCommerceBudgetService;
+		this.b2BBudgetService = b2BBudgetService;
 	}
 }

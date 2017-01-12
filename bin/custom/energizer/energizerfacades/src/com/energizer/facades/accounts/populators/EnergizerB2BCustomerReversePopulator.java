@@ -3,11 +3,10 @@
  */
 package com.energizer.facades.accounts.populators;
 
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceB2BUserGroupService;
 import de.hybris.platform.b2b.company.B2BCommerceB2BUserGroupService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.strategies.CustomerNameStrategy;
 import de.hybris.platform.converters.Populator;
@@ -35,7 +34,8 @@ import com.energizer.facades.accounts.impl.DefaultEnergizerGroupsLookUpStrategy;
  */
 public class EnergizerB2BCustomerReversePopulator implements Populator<CustomerData, EnergizerB2BCustomerModel>
 {
-	private CompanyB2BCommerceService companyB2BCommerceService;
+
+	private B2BCommerceUnitService b2bCommerceUnitService;
 	private B2BCommerceB2BUserGroupService b2BCommerceB2BUserGroupService;
 	private CustomerNameStrategy customerNameStrategy;
 	private DefaultEnergizerGroupsLookUpStrategy energizerGroupsLookUpStrategy;
@@ -76,15 +76,15 @@ public class EnergizerB2BCustomerReversePopulator implements Populator<CustomerD
 		this.userService = userService;
 	}
 
-	protected <T extends CompanyB2BCommerceService> T getCompanyB2BCommerceService()
+	protected <T extends B2BCommerceUnitService> T getB2bCommerceUnitService()
 	{
-		return (T) companyB2BCommerceService;
+		return (T) b2bCommerceUnitService;
 	}
 
 	@Required
-	public void setCompanyB2BCommerceService(final CompanyB2BCommerceService companyB2BCommerceService)
+	public void setB2bCommerceUnitService(final B2BCommerceUnitService companyB2BCommerceService)
 	{
-		this.companyB2BCommerceService = companyB2BCommerceService;
+		this.b2bCommerceUnitService = companyB2BCommerceService;
 	}
 
 	protected CustomerNameStrategy getCustomerNameStrategy()
@@ -128,7 +128,7 @@ public class EnergizerB2BCustomerReversePopulator implements Populator<CustomerD
 			target.setEmail(source.getEmail());
 			target.setName(getCustomerNameStrategy().getName(source.getFirstName(), source.getLastName()));
 			target.setContactNumber(source.getContactNumber());
-			final B2BUnitModel defaultUnit = getCompanyB2BCommerceService().getUnitForUid(source.getUnit().getUid());
+			final B2BUnitModel defaultUnit = getB2bCommerceUnitService().getUnitForUid(source.getUnit().getUid());
 			final B2BUnitModel oldDefaultUnit = getB2bUnitService().getParent(target);
 			target.setDefaultB2BUnit(defaultUnit);
 
