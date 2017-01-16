@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.energizer.core.search.solrfacetsearch.provider.entity.SolrPriceRange;
 import com.energizer.core.search.solrfacetsearch.provider.entity.SolrPriceRangeEntry;
-import com.energizer.core.search.solrfacetsearch.provider.impl.SolrFirstVariantCategoryManager;
+import de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.SolrFirstVariantCategoryManager;
 
 
 /**

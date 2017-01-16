@@ -27,7 +27,7 @@
 	<security:http pattern="/_ui/**" security="none"/>
 	
 	
-	<security:http disable-url-rewriting="true" pattern="/checkout/**">
+	<security:http disable-url-rewriting="true" use-expressions="false" pattern="/checkout/**">
 
 		<security:session-management session-authentication-strategy-ref="fixation" />
 		
@@ -42,7 +42,9 @@
 				login-processing-url="/checkout/j_spring_security_check"
 				login-page="/login/checkout"
 				authentication-failure-handler-ref="loginCheckoutAuthenticationFailureHandler"
-				authentication-success-handler-ref="loginCheckoutGuidAuthenticationSuccessHandler"/>
+				authentication-success-handler-ref="loginCheckoutGuidAuthenticationSuccessHandler"
+				username-parameter="j_username" 
+				password-parameter="j_password"/>
 
 		<security:logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"/>
 
@@ -76,7 +78,7 @@
 	<bean id="antPathMatcher" class="org.springframework.util.AntPathMatcher"/>
 
 	<!-- Default security config -->
-	<security:http disable-url-rewriting="true" request-matcher-ref="excludeUrlRequestMatcher">
+	<security:http disable-url-rewriting="true" use-expressions="false" request-matcher-ref="excludeUrlRequestMatcher">
 
 		<security:anonymous username="anonymous" granted-authority="ROLE_ANONYMOUS"/>
 
@@ -140,7 +142,9 @@
 		<security:form-login
 				login-page="/login"
 				authentication-failure-handler-ref="loginAuthenticationFailureHandler"
-				authentication-success-handler-ref="loginGuidAuthenticationSuccessHandler"/>
+				authentication-success-handler-ref="loginGuidAuthenticationSuccessHandler"
+				username-parameter="j_username"
+				password-parameter="j_password" login-processing-url="/j_spring_security_check"/>
 
 
 		<security:logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"/>
@@ -323,8 +327,8 @@
 
 	<bean id="rememberMeProcessingFilter"
 		  class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
-		<property name="rememberMeServices" ref="rememberMeServices"/>
-		<property name="authenticationManager" ref="authenticationManager"/>
+		<constructor-arg name="rememberMeServices" ref="rememberMeServices"/>
+		<constructor-arg name="authenticationManager" ref="authenticationManager"/>
 	</bean>
 
 	<bean id="rememberMeServices"
@@ -345,7 +349,7 @@
 
 	<bean id="rememberMeAuthenticationProvider"
 		  class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-		<property name="key" value="energizerstorefront"/>
+		<constructor-arg name="key" value="energizerstorefront"/>
 		<aop:scoped-proxy/>
 	</bean>
 

@@ -610,7 +610,7 @@
 		parent="abstractMultidimensionalProductFieldValueProvider">
 		<property name="variantValueCategoryModelPriorityComparator" ref="variantValueCategoryModelPriorityComparator" />
 		<property name="variantValueCategoryModelSequenceComparator" ref="variantValueCategoryModelSequenceComparator" />
-		<property name="categoryManager" ref="solrFirstVariantCategoryManager" />
+		<property name="categoryManager" ref="customSolrFirstVariantCategoryManager" />
 	</bean>
 
 	<bean id="genericVariantProductModelComparator" class="com.energizer.core.search.solrfacetsearch.provider.entity.GenericVariantProductModelComparator">
@@ -623,7 +623,7 @@
 
 	<bean id="variantValueCategoryModelSequenceComparator" class="com.energizer.core.search.solrfacetsearch.provider.entity.VariantValueCategoryModelSequenceComparator" />
 
-	<bean id="solrFirstVariantCategoryManager" class="com.energizer.core.search.solrfacetsearch.provider.impl.SolrFirstVariantCategoryManager">
+	<bean id="customSolrFirstVariantCategoryManager" class="com.energizer.core.search.solrfacetsearch.provider.impl.SolrFirstVariantCategoryManager">
 		<property name="l10NService" ref="l10nService" />
 	</bean>
 

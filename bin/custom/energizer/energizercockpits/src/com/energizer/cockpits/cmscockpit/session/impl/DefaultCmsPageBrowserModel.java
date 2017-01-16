@@ -242,7 +242,7 @@ public class DefaultCmsPageBrowserModel extends CmsPageBrowserModel
 	}
 
 
-	private void createProperViewModel()
+	protected void createProperViewModel()
 	{
 		if (getViewMode() != null && getViewMode().equals(CmsPageMainAreaEditComponentFactory.VIEW_MODE_ID))
 		{

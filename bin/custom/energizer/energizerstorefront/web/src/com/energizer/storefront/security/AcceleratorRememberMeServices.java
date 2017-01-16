@@ -34,6 +34,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 public class AcceleratorRememberMeServices extends TokenBasedRememberMeServices
@@ -44,6 +45,11 @@ public class AcceleratorRememberMeServices extends TokenBasedRememberMeServices
 	private CommonI18NService commonI18NService;
 	private UrlEncoderService urlEncoderService;
 	private SecureTokenService secureTokenService;
+	
+	public AcceleratorRememberMeServices(final String key, final UserDetailsService userDetailsService)
+	{
+		super(key, userDetailsService);
+	}
 
 	@Override
 	protected void setCookie(final String[] tokens, final int maxAge, final HttpServletRequest request,

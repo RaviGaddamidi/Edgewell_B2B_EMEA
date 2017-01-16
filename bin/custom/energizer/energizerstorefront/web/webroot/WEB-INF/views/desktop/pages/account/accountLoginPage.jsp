@@ -33,7 +33,7 @@
 	
 
 		<div class="span-20 last">
-			<c:url value="en/USD/j_spring_security_check" var="loginActionUrl" />
+			<c:url value="/j_spring_security_check" var="loginActionUrl" />
 			<user:login actionNameKey="login.login" action="${loginActionUrl}"/>
 		</div>
 
