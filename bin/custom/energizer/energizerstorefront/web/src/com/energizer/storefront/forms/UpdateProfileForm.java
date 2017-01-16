@@ -85,6 +85,7 @@ public class UpdateProfileForm
 		@NotNull(message = "{profile.contactNumber.invalid}")
 	//	@Size(min = 1, max = 255, message = "{profile.contactNumber.invalid}")
 		@NotBlank(message = "{profile.contactNumber.invalid}")
+		@Pattern(regexp = "[0-9]{3}-?[0-9]{3}-?[0-9]{4}", message = "{profile.contactNumber.format.invalid}")
 	public String getContactNumber()
 	{
 		return contactNumber;

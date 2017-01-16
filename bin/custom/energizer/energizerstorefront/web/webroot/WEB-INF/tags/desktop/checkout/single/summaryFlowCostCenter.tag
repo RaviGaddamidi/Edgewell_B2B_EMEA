@@ -1,5 +1,5 @@
 <%@ tag body-content="empty" trimDirectiveWhitespaces="true" %>
-<%@ attribute name="costCenter" required="true" type="de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData" %>
+<%@ attribute name="costCenter" required="true" type="de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>

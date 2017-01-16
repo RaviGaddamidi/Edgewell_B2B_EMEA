@@ -9,29 +9,25 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages;
 
-import de.hybris.platform.b2bacceleratorfacades.company.data.B2BUnitNodeData;
-import de.hybris.platform.b2bacceleratorfacades.company.data.UserData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.MANAGE_UNITS_BASE_URL;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.MANAGE_UNITS_CMS_PAGE;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.MY_COMPANY_CMS_PAGE;
+import static com.energizer.storefront.controllers.pages.MyCompanyPageController.REDIRECT_TO_UNIT_DETAILS;
+
+import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitNodeData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.user.data.AddressData;
 import de.hybris.platform.commercefacades.user.data.CountryData;
-import de.hybris.platform.commerceservices.customer.DuplicateUidException;
+import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.user.UserModel;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.AddressForm;
-import com.energizer.storefront.forms.B2BCostCenterForm;
-import com.energizer.storefront.forms.B2BCustomerForm;
-import com.energizer.storefront.forms.B2BUnitForm;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +46,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.breadcrumb.Breadcrumb;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.AddressForm;
+import com.energizer.storefront.forms.B2BCostCenterForm;
+import com.energizer.storefront.forms.B2BCustomerForm;
+import com.energizer.storefront.forms.B2BUnitForm;
 
 
 /**
@@ -364,7 +369,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		{
 			b2bCommerceUnitFacade.updateOrCreateBusinessUnit(unit, unitData);
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e) //DuplicateUidException
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2bunit.notunique");
@@ -456,7 +461,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		{
 			b2bCommerceUnitFacade.updateOrCreateBusinessUnit(unitData.getUid(), unitData);
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e)//DuplicateUidException
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2bunit.notunique");
@@ -498,9 +503,10 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		b2bCustomerForm.setRoles(Collections.singleton(role));
 
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUnitsDetailsBreadcrumbs(unit);
-		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-units/createuser/?unit=%s&role=%s",
-				urlEncode(unit), urlEncode(role)), getMessageSource().getMessage("text.company.organizationManagement", null,
-				getI18nService().getCurrentLocale()), null));
+		breadcrumbs
+				.add(new Breadcrumb(String.format("/my-company/organization-management/manage-units/createuser/?unit=%s&role=%s",
+						urlEncode(unit), urlEncode(role)), getMessageSource().getMessage("text.company.organizationManagement", null,
+						getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
 		model.addAttribute("action", "manage.units");
 		model.addAttribute("saveUrl", String.format(request.getContextPath()
@@ -525,8 +531,9 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		final String url = createUser(b2bCustomerForm, bindingResult, model, redirectModel);
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUnitsDetailsBreadcrumbs(unit);
 		breadcrumbs.add(new Breadcrumb(String.format("/my-company/organization-management/manage-units/createuser?unit=%s&role=%s",
-				urlEncode(unit), urlEncode(role)), getMessageSource().getMessage("text.company.manage.units.createuser.breadcrumb", new Object[]
-		{ b2bCustomerForm.getUid() }, "Create Customer {0} ", getI18nService().getCurrentLocale()), null));
+				urlEncode(unit), urlEncode(role)), getMessageSource().getMessage("text.company.manage.units.createuser.breadcrumb",
+				new Object[]
+				{ b2bCustomerForm.getUid() }, "Create Customer {0} ", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
 		model.addAttribute("action", "manage.units");
 		if (bindingResult.hasErrors())
@@ -608,7 +615,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceUnitFacade.getPagedApproversForUnit(pageableData, unit);
+		final SearchPageData<CustomerData> searchPageData = b2bCommerceUnitFacade.getPagedManagersForUnit(pageableData, unit);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "approvers");
 		model.addAttribute("baseUrl", MANAGE_UNITS_BASE_URL);
@@ -638,7 +645,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceUnitFacade.getPagedCustomersForUnit(pageableData, unit);
+		final SearchPageData<CustomerData> searchPageData = b2bCommerceUnitFacade.getPagedCustomersForUnit(pageableData, unit);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "customers");
 		model.addAttribute("baseUrl", MANAGE_UNITS_BASE_URL);
@@ -669,7 +676,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceUnitFacade.getPagedAdministratorsForUnit(pageableData, unit);
+		final SearchPageData<CustomerData> searchPageData = b2bCommerceUnitFacade.getPagedAdministratorsForUnit(pageableData, unit);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "administrators");
 		model.addAttribute("baseUrl", MANAGE_UNITS_BASE_URL);
@@ -699,7 +706,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceUnitFacade.getPagedManagersForUnit(pageableData, unit);
+		final SearchPageData<CustomerData> searchPageData = b2bCommerceUnitFacade.getPagedManagersForUnit(pageableData, unit);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "managers");
 		model.addAttribute("baseUrl", MANAGE_UNITS_BASE_URL);
@@ -714,7 +721,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 	public B2BSelectionData selectApprover(@RequestParam("unit") final String unit, @RequestParam("user") final String user,
 			final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceUnitFacade.addApproverToUnit(unit, user));
+		return populateDisplayNamesForRoles(b2bApproverFacade.addApproverToUnit(unit, user));
 	}
 
 	@ResponseBody
@@ -724,7 +731,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 	public B2BSelectionData deselectApprover(@RequestParam("unit") final String unit, @RequestParam("user") final String user,
 			final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceUnitFacade.removeApproverFromUnit(unit, user));
+		return populateDisplayNamesForRoles(b2bApproverFacade.removeApproverFromUnit(unit, user));
 	}
 
 	@RequestMapping(value = "/approvers/remove", method =
@@ -733,7 +740,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 	public String removeApproverFromUnit(@RequestParam("unit") final String unit, @RequestParam("user") final String user,
 			final Model model, final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
-		b2bCommerceUnitFacade.removeApproverFromUnit(unit, user);
+		b2bApproverFacade.removeApproverFromUnit(unit, user);
 		GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "success.remove.user.from.unit",
 				new Object[]
 				{ user, unit });

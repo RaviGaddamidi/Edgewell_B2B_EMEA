@@ -3,7 +3,8 @@
  */
 package com.energizer.facades.catalogdownload;
 
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.impex.jalo.ImpExManager;
 import de.hybris.platform.impex.jalo.exp.generator.ExportScriptGenerator;
 import de.hybris.platform.jalo.JaloSession;
@@ -46,7 +47,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getParentUnitForCustomer(java.lang.String)
 	 */
 
@@ -77,7 +78,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 		 * CollectionUtils.isNotEmpty(catalogVersions)) { query += " WHERE {" +
 		 * getCatalogVersionAttribute(type).getQualifier() + "} IN ("; for (final CatalogVersion catalogVersion :
 		 * catalogVersions) { query += catalogVersion.getPK().toString() + ","; }
-		 *
+		 * 
 		 * query = StringUtils.removeEnd(query, ","); query += ")"; }
 		 */
 		//b2bUnitID = b2bUnitID;
@@ -169,7 +170,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 				for (final AttributeDescriptor ad : attribs)
 				{
 					LOG.info(" In Script Header loop, Attribute: " + ad);
-					
+
 
 					if (ad.getQualifier().equals("erpMaterialId"))
 					{
@@ -205,10 +206,10 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 
 				}
 			}
-			
+
 			final Map line = new HashMap();
 			int index = 0;
-			
+
 
 			final String firstColumn = generateFirstHeaderColumn(type, hasUnique);
 			line.put(Integer.valueOf(index), firstColumn);
@@ -235,7 +236,7 @@ public class AdvancedTypeExportScriptGenerator extends ExportScriptGenerator
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.hybris.platform.impex.jalo.exp.generator.AbstractScriptGenerator#generateScript()
 	 */
 	@Override

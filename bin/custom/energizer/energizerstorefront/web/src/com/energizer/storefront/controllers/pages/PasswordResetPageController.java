@@ -14,7 +14,6 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
@@ -73,9 +72,6 @@ public class PasswordResetPageController extends AbstractPageController
 
 	@Resource(name = "configurationService")
 	private ConfigurationService configurationService;
-
-	@Resource(name = "b2bCommerceFacade")
-	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
 
 	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
 	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
@@ -229,6 +225,7 @@ public class PasswordResetPageController extends AbstractPageController
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
+			model.addAttribute("hasError", true);
 			LOG.info("Error on same page");
 			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 		}
@@ -260,15 +257,14 @@ public class PasswordResetPageController extends AbstractPageController
 
 					if (customerPasswordQuestion == null && customerPasswordAnswer == null)
 					{
-						GlobalMessages.addErrorMessage(model,
-								"password.question.noSet");
+						GlobalMessages.addErrorMessage(model, "password.question.noSet");
 
 
 					}
 					else if (customerPasswordQuestion.equalsIgnoreCase(formPasswordQuestion)
 							&& customerPasswordAnswer.equalsIgnoreCase(formPasswordAnswer))
 					{
-					    getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
+						getCustomerFacade().forgottenPassword(forgottenPwdForm.getEmail());
 						GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
 								"account.confirmation.forgotten.password.link.sent", new Object[]
 								{ forgottenPassExpValue });
@@ -276,8 +272,7 @@ public class PasswordResetPageController extends AbstractPageController
 					}
 					else
 					{
-						GlobalMessages.addErrorMessage(model,
-								"password.questionOranswer.donotMatch");
+						GlobalMessages.addErrorMessage(model, "password.questionOranswer.donotMatch");
 
 
 					}

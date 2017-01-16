@@ -1,4 +1,3 @@
-
 /**
  *
  */
@@ -9,11 +8,10 @@ import de.hybris.platform.acceleratorservices.model.cms2.pages.EmailPageModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailAddressModel;
 import de.hybris.platform.acceleratorservices.model.email.EmailMessageModel;
 import de.hybris.platform.acceleratorservices.process.email.context.AbstractEmailContext;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BPermissionResultModel;
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.orderprocessing.model.OrderProcessModel;
 import de.hybris.platform.processengine.model.BusinessProcessModel;
@@ -60,9 +58,6 @@ public class EnergizerEmailGenerationService extends DefaultEmailGenerationServi
 	private List<String> emailCCList;
 	@Resource
 	ModelService modelService;
-
-	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
 
 	@Resource
 	private B2BCommerceUnitService b2bCommerceUnitService;

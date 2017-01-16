@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.facades.product.populators;
 
@@ -24,12 +24,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import de.hybris.bootstrap.annotations.UnitTest;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.product.data.VariantMatrixElementData;
 import de.hybris.platform.commercefacades.product.data.VariantOptionData;
 import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.jalo.order.price.PriceInformation;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.Comparator;
 import java.util.HashSet;

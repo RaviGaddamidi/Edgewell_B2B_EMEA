@@ -9,15 +9,16 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.checkout.pci.impl;
 
 import de.hybris.platform.acceleratorservices.config.SiteConfigService;
 import de.hybris.platform.acceleratorservices.payment.constants.PaymentConstants;
-import com.energizer.core.enums.B2BCheckoutPciOptionEnum;
 
 import org.springframework.beans.factory.annotation.Required;
+
+import com.energizer.core.enums.B2BCheckoutPciOptionEnum;
 
 
 /**

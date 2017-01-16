@@ -18,13 +18,22 @@ $indexCurrencies=USD
 # Setup the Solr server, indexer, and search configs
 #
 
+#REMOVE SolrServerConfig;name[unique=true]
+#;$serverConfigName  
+
+
 # Create the solr server configuration
-INSERT_UPDATE SolrServerConfig;name[unique=true];mode(code);embeddedMaster
-;$serverConfigName;embedded;true
+INSERT_UPDATE SolrServerConfig;name[unique=true];mode(code);embeddedMaster;useMasterNodeExclusivelyForIndexing
+;$serverConfigName;standalone;false;true
+
+INSERT_UPDATE SolrEndpointUrl;solrServerConfig(name)[unique=true];url[unique=true];master[unique=true,default=false]
+;$serverConfigName;http://localhost:8983/solr;true
+
 
 # Create the solr indexer configuration
 INSERT_UPDATE SolrIndexConfig;name[unique=true];batchSize;numberOfThreads;indexMode(code);
-;$indexConfigName;100;1;TWO_PHASE;
+;$indexConfigName;100;1;DIRECT; 
+
 
 # Create the faceted search configuration
 INSERT_UPDATE SolrSearchConfig;description[unique=true];pageSize

@@ -13,7 +13,7 @@
  */
 package com.energizer.storefront.forms.validation;
 
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
 
 import java.text.ParseException;

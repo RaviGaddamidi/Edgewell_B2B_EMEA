@@ -44,16 +44,27 @@
 								     <formElement:formSelectBox skipBlank="false" skipBlankMessageKey="form.select.empty" idKey="profile.passwordQuestion" labelKey="profile.passwordQuestion" path="passwordQuestion" mandatory="true" items="${passwordQuestionsList}"/>
 			  		   
 			  						 <formElement:formInputBox idKey="profile.passwordAnswer" labelKey="profile.passwordAnswer" path="passwordAnswer" inputCSS="text" mandatory="true"/>
-			
-								
-							<button class="positive" type="submit">
-								<spring:theme code="forgottenPwd.submit" />
-							</button>
+			  						 <c:if test="${hasError == true}">
+			  						 	
+			  						 </c:if>
+			  						 <c:choose>
+			  						 	<c:when test="${hasError == true}">
+			  						 		<div style="padding-top: 10px;">
+			  						 	</c:when>
+			  						 	<c:otherwise>
+			  						 		<div style="padding-top: 45px;">
+			  						 	</c:otherwise>
+			  						 </c:choose>
+			  						 
+											<button class="positive" type="submit">
+												<spring:theme code="forgottenPwd.submit" />
+											</button>
+										<ycommerce:testId code="User_Cancel_button">
+											<a href="${cancelUrl}" class="button forgotpasswordcancel"><spring:theme
+													code="b2bcustomer.cancel" text="Cancel" /></a>
+										</ycommerce:testId>
+								</div>
 						</div>
-						<ycommerce:testId code="User_Cancel_button">
-							<a href="${cancelUrl}" class="button forgotpasswordcancel"><spring:theme
-									code="b2bcustomer.cancel" text="Cancel" /></a>
-						</ycommerce:testId>
 					</div>
 				</form:form>
 			</div>

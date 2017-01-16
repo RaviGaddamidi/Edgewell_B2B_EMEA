@@ -9,14 +9,14 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.core.search.solrfacetsearch.provider.impl;
 
-import de.hybris.platform.b2b.model.GenericVariantProductModel;
-import de.hybris.platform.b2b.model.VariantValueCategoryModel;
-import com.energizer.core.product.data.SolrFirstVariantCategoryEntryData;
+import de.hybris.platform.commerceservices.product.data.SolrFirstVariantCategoryEntryData;
 import de.hybris.platform.servicelayer.i18n.L10NService;
+import de.hybris.platform.variants.model.GenericVariantProductModel;
+import de.hybris.platform.variants.model.VariantValueCategoryModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class SolrFirstVariantCategoryManager
 
 	/**
 	 * Builds a String to be used in first category name list Solr property.
-	 * 
+	 *
 	 * @param categoryVariantPairs
 	 *           Sorted pairs of {@link VariantValueCategoryModel} and {@link GenericVariantProductModel}.code.
 	 * @return String to be used in Solr property.
@@ -63,7 +63,7 @@ public class SolrFirstVariantCategoryManager
 	/**
 	 * Generate a list of {@link SolrFirstVariantCategoryEntryData} based on a Solr property String that holds the first
 	 * category name list.
-	 * 
+	 *
 	 * @param solrProperty
 	 *           The first category name list.
 	 * @return List of {@link SolrFirstVariantCategoryEntryData};

@@ -1,10 +1,10 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.search.populators;
 
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commerceservices.search.resultdata.SearchResultValueData;
@@ -34,7 +34,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author Bivash Pandit
- * 
+ *
  */
 public class EnergizerProductSearchResultListPopulator extends EnergizerSearchResultProductPopulator
 {
@@ -64,13 +64,13 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 	{
 		super.populate(source, productData);
 		int baseUOM = 1;
-		
+
 		int numberOfEachInCase = 0;
 		int numberOfEachInLayer = 0;
 		int numberOfEachInPallet = 0;
 		int numberOfCasesPerPallet = 0;
 		int numberOfCasesPerLayer = 0;
-		
+
 		setLoggedInUserB2bUnit();
 		final String productCode = source.getValues().get("code").toString();
 		final EnergizerProductModel energizerProductModel = (EnergizerProductModel) productService.getProductForCode(productCode);
@@ -176,7 +176,7 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 						.getCurrency().getSymbol());
 			}
 		}
-		
+
 		final List<EnergizerProductConversionFactorModel> conversionFactor = energizerProductModel.getProductConversionFactors();
 		for (final EnergizerProductConversionFactorModel factor : conversionFactor)
 		{

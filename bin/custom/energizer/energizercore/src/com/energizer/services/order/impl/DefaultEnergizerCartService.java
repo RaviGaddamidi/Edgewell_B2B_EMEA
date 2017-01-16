@@ -3,7 +3,7 @@
  */
 package com.energizer.services.order.impl;
 
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.order.CartModel;
@@ -465,11 +465,11 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			/*
 			 * if (nonPalletProductsList.size() > 0 && !packingOption.equalsIgnoreCase("2 WOODEN BASE")) {
-			 * 
+			 *
 			 * LOG.info("Select packing Option : 2 Wooden Base "); message .add(
 			 * "Dear Customer, Your order contains some products whose quantity is less than a full pallet (partial pallet). Partial pallets can be shipped only with 2 wooden base packing material. Please change your packing material or remove the partial pallet products."
 			 * ); cartData.setErrorMessage(true); }
-			 * 
+			 *
 			 * else
 			 */if (nonPalletProductsList.size() > 0 && palletCount < totalPalletsCount)
 			{

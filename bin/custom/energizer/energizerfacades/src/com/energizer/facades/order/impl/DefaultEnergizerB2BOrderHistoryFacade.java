@@ -1,10 +1,10 @@
 /**
- * 
+ *
  */
 package com.energizer.facades.order.impl;
 
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.order.data.OrderHistoryData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
@@ -29,7 +29,7 @@ import com.energizer.services.product.EnergizerProductService;
 
 /**
  * @author M1028886
- * 
+ *
  */
 public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderHistoryFacade
 {
@@ -63,7 +63,7 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getOrdersForB2BUnit(de.hybris.platform.b2b.jalo.B2BUnit
 	 * )
@@ -87,7 +87,7 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getEnergizerCMIR(java.lang.String,
 	 * java.lang.String)
 	 */
@@ -100,7 +100,7 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getParentUnitForCustomer(java.lang.String)
 	 */
 	@Override
@@ -112,7 +112,7 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getParentUnitForCustomer(java.lang.String)
 	 */
 	@Override
@@ -124,7 +124,7 @@ public class DefaultEnergizerB2BOrderHistoryFacade implements EnergizerB2BOrderH
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.energizer.facades.order.EnergizerB2BOrderHistoryFacade#getCurrentUser()
 	 */
 	@Override

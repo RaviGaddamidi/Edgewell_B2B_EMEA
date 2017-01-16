@@ -338,7 +338,7 @@ width: 300px;
 #b2BCustomerForm .control-group label,#b2BCustomerForm .control-group select,#b2BCustomerForm .control-group input{font-size:0.9em;width:99%;}
 #b2BCustomerForm .control-group select,#b2BCustomerForm .control-group input{height:18px;}
 #b2BCustomerForm  legend{font-size:1em;font-weight:bold; width:125%;}
-#b2BCustomerForm fieldset div{clear:both;float:left;height:25px;width:80%;}
+#b2BCustomerForm fieldset div{clear:both;float:left;height:50px;width:80%;}
 #b2BCustomerForm .control-group fieldset label{float:left;width:50%;margin:0;padding:0;width:220px;}
 #b2BCustomerForm .control-group fieldset input{float:right;width:10%;}
 

@@ -1,14 +1,13 @@
 /**
- * 
+ *
  */
 package com.energizer.core.datafeed.processor.customer;
 
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.b2b.constants.B2BConstants;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BUnitModel;
 import de.hybris.platform.b2b.services.B2BUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
-import de.hybris.platform.b2bacceleratorservices.company.impl.DefaultCompanyB2BCommerceService;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.core.model.user.UserGroupModel;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
@@ -36,14 +35,14 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 
 
 /**
- * 
+ *
  * This processors imports the b2b users.
- * 
+ *
  * Sample file will look like
- * 
+ *
  * userID, userName, contactNumber, active, email, defaultB2BUnit, groups, approvers omkar, omkar, 123, Y, a@a.com,
  * 1000, b2bcustomergroup, abc@m.com
- * 
+ *
  * Total column count : 8
  */
 public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
@@ -53,8 +52,6 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	@Resource
 	private ModelService modelService;
 
-	@Resource
-	private DefaultCompanyB2BCommerceService companyB2BCommerceService;
 	@Resource
 	private B2BCommerceUnitService b2bCommerceUnitService;
 	@Resource
@@ -74,7 +71,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	private static final String USERID = "userID";
 
 	/**
-	 * 
+	 *
 	 */
 	public EnergizerB2BUserCSVProcessor()
 	{
@@ -84,7 +81,7 @@ public class EnergizerB2BUserCSVProcessor extends AbstractEnergizerCSVProcessor
 	/**
 	 * This process will create only admin group users. if there was any other group users specified in the datafeed,
 	 * those data will be ignored.
-	 * 
+	 *
 	 **/
 	@Override
 	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)

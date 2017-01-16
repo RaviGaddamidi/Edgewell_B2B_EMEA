@@ -3,14 +3,14 @@
  */
 package com.energizer.services.order;
 
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.enums.PermissionStatus;
 import de.hybris.platform.b2b.model.B2BCustomerModel;
 import de.hybris.platform.b2b.model.B2BOrderThresholdPermissionModel;
 import de.hybris.platform.b2b.model.B2BPermissionModel;
 import de.hybris.platform.b2b.model.B2BPermissionResultModel;
 import de.hybris.platform.b2b.services.impl.DefaultB2BPermissionService;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.core.model.order.AbstractOrderModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.model.ModelService;
@@ -27,10 +27,6 @@ import org.fest.util.Collections;
 
 import com.energizer.core.model.EnergizerB2BCustomerModel;
 import com.energizer.core.model.EnergizerB2BUnitModel;
-
-
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
-//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 
 
 /**

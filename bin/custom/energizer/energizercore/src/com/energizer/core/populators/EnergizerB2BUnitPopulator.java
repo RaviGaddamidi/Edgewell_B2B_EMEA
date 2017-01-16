@@ -1,10 +1,10 @@
 /**
- * 
+ *
  */
 package com.energizer.core.populators;
 
 import de.hybris.platform.b2b.model.B2BUnitModel;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
 import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.converters.Populator;
 import de.hybris.platform.core.model.c2l.CurrencyModel;
@@ -21,7 +21,7 @@ import com.energizer.core.model.EnergizerB2BUnitModel;
 
 /**
  * @author M1023097
- * 
+ *
  */
 public class EnergizerB2BUnitPopulator implements Populator<EnergizerB2BUnitModel, EnergizerB2BUnitData>
 {
@@ -34,7 +34,7 @@ public class EnergizerB2BUnitPopulator implements Populator<EnergizerB2BUnitMode
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.hybris.platform.converters.Populator#populate(java.lang.Object, java.lang.Object)
 	 */
 	@Override

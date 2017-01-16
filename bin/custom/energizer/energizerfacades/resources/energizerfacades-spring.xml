@@ -16,7 +16,7 @@
 	<bean id="defaultB2BFlexibleSearchProductSearchFacade"
 		class="com.energizer.facades.search.impl.DefaultB2BFlexibleSearchProductSearchFacade"
 		parent="abstractB2BProductSearchFacade">
-		<property name="b2bFlexibleSearchProductSearchService" ref="b2bFlexibleSearchProductSearchService" />
+		<property name="b2bProductService" ref="defaultB2BProductService" />
 		<property name="flexibleSearchPopulator" ref="b2bFlexibleSearchPopulator" />
 	</bean>
 
@@ -552,6 +552,7 @@
 		<property name="entryOrderChecker" ref="commerceOrderEntryModifiableChecker" />
 		<property name="deliveryModeConverter" ref="deliveryModeConverter" />
 		<property name="pointOfServiceConverter" ref="pointOfServiceConverter" />
+		 <property name="productConfigurationConverter" ref="orderEntryProductInfoConverter"/>
 	</bean>
 	<alias name="energizerOrderEntryConverter" alias="energizerOrderEntryConverter"/>
 	<bean id="energizerOrderEntryConverter" parent="abstractPopulatingConverter">
@@ -629,11 +630,33 @@
 	<alias name="defaultEnergizerCustomerReversePopulator" alias="energizerCustomerReversePopulator" />
 	<bean id="defaultEnergizerCustomerReversePopulator" class="com.energizer.facades.accounts.populators.EnergizerB2BCustomerReversePopulator">
 		<property name="customerNameStrategy" ref="customerNameStrategy"/>
-		<property name="companyB2BCommerceService" ref="companyB2BCommerceService"/>
+<!-- 		<property name="companyB2BCommerceService" ref="companyB2BCommerceService"/> -->
 		<property name="b2BCommerceB2BUserGroupService" ref="b2bCommerceB2BUserGroupService"/>
 		<property name="userService" ref="userService"/>
 		<property name="energizerGroupsLookUpStrategy" ref="energizerGroupsLookUpStrategy"/>
-		<property name="b2bUnitService" ref="b2bUnitService"/>		
+		<property name="b2bUnitService" ref="b2bUnitService"/>
+		<property name="b2bCommerceUnitService" ref="b2bCommerceUnitService"/>		
 	</bean>
 	 <bean id="defaultInvoiceFacade" class="com.energizer.facades.order.impl.DefaultEnergizerInvoiceFacade" autowire="byName"></bean>
+
+     <alias name="defaultB2BCommerceBudgetFacade" alias="b2bCommerceBudgetFacade" />
+	  <bean id="defaultB2BCommerceBudgetFacade"
+		class="de.hybris.platform.b2bacceleratorfacades.company.impl.DefaultB2BCommerceBudgetFacade"
+		 parent="b2bCommerceFacade">
+	  </bean>
+	  
+	  <alias name="defaultB2BCommerceCostCenterFacade" alias="b2bCommerceCostCenterFacade" />
+	<bean id="defaultB2BCommerceCostCenterFacade"
+		class="de.hybris.platform.b2bacceleratorfacades.company.impl.DefaultB2BCommerceCostCenterFacade"
+		 parent="b2bCommerceFacade">
+	</bean>
+	
+	<!-- *******Added in migration to 5.7 -->
+	
+		<alias alias="b2bFlexibleSearchConverter" name="defaultB2BFlexibleSearchConverter"/>
+	<bean id="defaultB2BFlexibleSearchConverter" class="de.hybris.platform.b2bacceleratorfacades.search.converters.impl.DefaultB2BFlexibleSearchConverter">
+		<property name="productConfiguredPopulator" ref="b2bProductConfiguredPopulator"/>
+        <property name="productBasicSearchOptions" ref="productBasicSearchOptions"/>
+	</bean>
+
 </beans>

@@ -9,7 +9,7 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.util;
 
@@ -26,20 +26,20 @@ import org.springframework.web.servlet.support.RequestDataValueProcessor;
  * implements the {@link #getExtraHiddenFields(HttpServletRequest)} method to push the CSRF token obtained from
  * {@link CSRFTokenManager}. To register this processor to automatically process all Spring based forms register it as a
  * Spring bean named 'requestDataValueProcessor' as shown below:
- * 
+ *
  * <pre>
  *  &lt;bean name="requestDataValueProcessor" class="com.eyallupu.blog.springmvc.controller.csrf.CSRFRequestDataValueProcessor"/&gt;
  * </pre>
- * 
+ *
  * @author Eyal Lupu
- * 
+ *
  */
 public class CSRFRequestDataValueProcessor implements RequestDataValueProcessor
 {
 
 
 	@Override
-	public String processAction(final HttpServletRequest request, final String action)
+	public String processAction(final HttpServletRequest request, final String action, final String httpMethod)
 	{
 		return action;
 	}

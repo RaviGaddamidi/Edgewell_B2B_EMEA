@@ -3,8 +3,8 @@
  */
 package com.energizer.order.strategies.calculation.impl;
 
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.b2b.model.B2BUnitModel;
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
 import de.hybris.platform.core.model.order.AbstractOrderEntryModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.jalo.order.AbstractOrderEntry;

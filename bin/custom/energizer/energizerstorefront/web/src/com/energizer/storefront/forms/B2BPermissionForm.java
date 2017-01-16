@@ -13,7 +13,7 @@
  */
 package com.energizer.storefront.forms;
 
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
 
 import javax.validation.constraints.NotNull;
 

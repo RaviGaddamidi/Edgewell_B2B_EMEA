@@ -106,14 +106,7 @@
 												 mandatory="false" items="${roles}" disabled="${not empty param.unit and not empty param.role}" typeIdentifier="String"/>
 						</div>
 						
-						<!--checkbox replaced by radio button as part of implementation-->
-						<!--<h4><spring:theme code="text.company.user.roles" text="Roles"/></h4>
-						<c:forEach items="${roles}" var="roleName">
-						<formElement:formRadioBoxLeft idKey="text.company.user.roles" labelKey="b2busergroup.${roleName}.name"
-												 path="roles" value="${roleName}"
-												 mandatory="false" />
-						</c:forEach>
-						-->
+						
 					</div>
 
 					<ycommerce:testId code="User_Cancel_button">

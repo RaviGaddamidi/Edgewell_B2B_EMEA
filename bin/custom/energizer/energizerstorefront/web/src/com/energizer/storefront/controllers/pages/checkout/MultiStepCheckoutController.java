@@ -9,23 +9,16 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package com.energizer.storefront.controllers.pages.checkout;
 
-import de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade;
-import de.hybris.platform.b2bacceleratorfacades.order.B2BCartFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.data.CartData;
 import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.security.B2BUserGroupProvider;
-import com.energizer.storefront.variants.VariantSortStrategy;
 
 import java.util.Arrays;
 
@@ -37,6 +30,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.security.B2BUserGroupProvider;
 
 
 /**
@@ -62,7 +60,7 @@ public class MultiStepCheckoutController extends AbstractCheckoutController
 	/**
 	 * This is the entry point (first page) for the the multi-step checkout process. The page returned by this call acts
 	 * as a template landing page and an example for actual implementation.
-	 * 
+	 *
 	 * @param model
 	 *           - the model for the view.
 	 * @return - the multi-step checkout page if the basket contains any items or the cart page otherwise.

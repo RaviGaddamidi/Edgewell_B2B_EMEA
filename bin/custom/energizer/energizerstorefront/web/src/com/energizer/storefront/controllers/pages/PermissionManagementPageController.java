@@ -13,10 +13,10 @@
  */
 package com.energizer.storefront.controllers.pages;
 
+import de.hybris.platform.b2b.enums.B2BPermissionTypeEnum;
 import de.hybris.platform.b2b.model.B2BPermissionModel;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionTypeData;
-import de.hybris.platform.b2bacceleratorservices.enums.B2BPermissionTypeEnum;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
@@ -70,7 +70,7 @@ public class PermissionManagementPageController extends MyCompanyPageController
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BPermissionData> searchPageData = b2bCommercePermissionFacade.getPagedPermissions(pageableData);
+		final SearchPageData<B2BPermissionData> searchPageData = b2bPermissionFacade.getPagedPermissions(pageableData);
 		final List<B2BPermissionData> filteredPermissions = new ArrayList<B2BPermissionData>();
 		for (final B2BPermissionData permissionData : searchPageData.getResults())
 		{
@@ -93,7 +93,7 @@ public class PermissionManagementPageController extends MyCompanyPageController
 	public String viewPermissionDetails(@RequestParam("permissionCode") final String permissionCode, final Model model)
 			throws CMSItemNotFoundException
 	{
-		model.addAttribute("permissionData", b2bCommercePermissionFacade.getPermissionDetails(permissionCode));
+		model.addAttribute("permissionData", b2bPermissionFacade.getPermissionDetails(permissionCode));
 		storeCmsPageInModel(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(MY_COMPANY_CMS_PAGE));
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManagePermissionsBreadcrumb();
@@ -159,9 +159,9 @@ public class PermissionManagementPageController extends MyCompanyPageController
 			final B2BPermissionForm b2BPermissionForm = new B2BPermissionForm();
 			final B2BPermissionTypeEnum permissionTypeEnum = B2BPermissionTypeEnum.valueOf(b2BPermissionTypeSelectionForm
 					.getB2BPermissionType());
-			final B2BPermissionTypeData b2BPermissionTypeData = b2bCommercePermissionFacade
+			final B2BPermissionTypeData b2BPermissionTypeData = b2bPermissionFacade
 					.getB2BPermissionTypeDataForPermission(permissionTypeEnum);
-			b2BPermissionForm.setB2BPermissionTypeData(b2BPermissionTypeData);
+			b2BPermissionForm.setB2BPermissionTypeData(b2BPermissionTypeData); //  setB2BPermissionTypeData(b2BPermissionTypeData);
 			b2BPermissionForm.setParentUnitName(companyB2BCommerceFacade.getParentUnit().getUid());
 			b2BPermissionForm.setPermissionType(b2BPermissionTypeData.getName());
 			model.addAttribute(b2BPermissionForm);
@@ -201,7 +201,7 @@ public class PermissionManagementPageController extends MyCompanyPageController
 		final B2BPermissionData b2BPermissionData = populateB2BPermissionDataFromForm(b2BPermissionForm);
 		try
 		{
-			b2bCommercePermissionFacade.addPermission(b2BPermissionData);
+			b2bPermissionFacade.addPermission(b2BPermissionData);
 		}
 		catch (final Exception e)
 		{
@@ -230,7 +230,7 @@ public class PermissionManagementPageController extends MyCompanyPageController
 	{
 		try
 		{
-			b2bCommercePermissionFacade.enableDisablePermission(permissionCode, true);
+			b2bPermissionFacade.enableDisablePermission(permissionCode, true);
 		}
 		catch (final Exception e)
 		{
@@ -266,7 +266,7 @@ public class PermissionManagementPageController extends MyCompanyPageController
 	{
 		try
 		{
-			b2bCommercePermissionFacade.enableDisablePermission(permissionCode, false);
+			b2bPermissionFacade.enableDisablePermission(permissionCode, false);
 		}
 		catch (final Exception e)
 		{

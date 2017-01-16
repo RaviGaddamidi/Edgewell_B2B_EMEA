@@ -34,13 +34,13 @@
 		</enumtype>
 		<enumtype generate="true" code="B2BCheckoutFlowEnum"
 			autocreate="true" dynamic="true">
-			<!-- <model package="com.energizer.core.enums"/> -->
+			<model package="com.energizer.core.enums"/>
 			<value code="SINGLE" />
 			<value code="MULTISTEP" />
 		</enumtype>
 		<enumtype generate="true" code="B2BCheckoutPciOptionEnum"
 			autocreate="true" dynamic="true">
-			<!-- <model package="com.energizer.core.enums"/> -->
+			<model package="com.energizer.core.enums"/>
 			<value code="Default" />
 			<value code="HOP" />
 		</enumtype>
@@ -96,7 +96,7 @@
 			</attributes>
 		</itemtype>
 
-		<typegroup name="btg">
+	<!--	<typegroup name="btg">
 			<itemtype code="OrganizationOrderStatistics" autocreate="true"
 				generate="true" jaloclass="com.energizer.core.jalo.btg.OrganizationOrderStatistics">
 				<description>Used to collect order total information within an organization</description>
@@ -134,7 +134,7 @@
 						<key attribute="date" />
 					</index>
 				</indexes>
-			</itemtype>
+			</itemtype> 
 
 
 			<itemtype code="OrganizationOrdersReportingCronJob"
@@ -180,7 +180,7 @@
 				</attributes>
 			</itemtype>
 
-		</typegroup>
+		</typegroup>  -->
 
 
 

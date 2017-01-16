@@ -12,13 +12,14 @@
 -->
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
 
-    <bean class="com.energizer.core.product.data.SolrFirstVariantCategoryEntryData">
+    <!-- <bean class="com.energizer.core.product.data.SolrFirstVariantCategoryEntryData">
         <property name="categoryName" type="String"/>
         <property name="variantCode" type="String"/>
-    </bean>
+    </bean> -->
 
     <bean class="de.hybris.platform.commercefacades.product.data.ProductData">
-        <property name="firstCategoryNameList" type="java.util.List&lt;com.energizer.core.product.data.SolrFirstVariantCategoryEntryData&gt;"/>
+       <!--  <property name="firstCategoryNameList" type="java.util.List&lt;com.energizer.core.product.data.SolrFirstVariantCategoryEntryData&gt;"/> -->
+       <property name="firstVariantUrl" type="String"/>   
     </bean>
     
     <bean class="com.energizer.core.data.EnergizerPasswordQuestionsData">

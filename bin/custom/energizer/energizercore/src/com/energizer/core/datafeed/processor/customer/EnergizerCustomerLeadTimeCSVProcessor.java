@@ -3,7 +3,7 @@
  */
 package com.energizer.core.datafeed.processor.customer;
 
-import de.hybris.platform.b2bacceleratorservices.company.CompanyB2BCommerceService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
 import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
@@ -49,7 +49,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	private ModelService modelService;
 
 	@Resource
-	private CompanyB2BCommerceService companyB2BCommerceService;
+	private B2BCommerceUnitService  b2bCommerceUnitService;
 
 	@Resource
 	protected FlexibleSearchService flexibleSearchService;
@@ -178,7 +178,7 @@ public class EnergizerCustomerLeadTimeCSVProcessor extends AbstractEnergizerCSVP
 	//Check Energizer Account is exist or not if exist return correspond EnergizerB2BUnitModel object otherwise return null
 	public EnergizerB2BUnitModel isEnergizerAccountExist(final String accountId)
 	{
-		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) companyB2BCommerceService
+		final EnergizerB2BUnitModel energizerB2BUnitModel = (EnergizerB2BUnitModel) b2bCommerceUnitService
 				.getUnitForUid(accountId);
 		return energizerB2BUnitModel;
 	}

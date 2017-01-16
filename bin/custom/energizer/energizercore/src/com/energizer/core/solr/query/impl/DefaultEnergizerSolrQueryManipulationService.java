@@ -3,7 +3,7 @@
  */
 package com.energizer.core.solr.query.impl;
 
-import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import javax.annotation.Resource;

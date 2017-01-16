@@ -28,7 +28,7 @@
 			<div class="headline"><spring:theme code="text.company.${page}.remove.confirmation.title.${role}" text="Confirm Disable"/></div>
 			<div class="description">
 				
-					<spring:theme code="text.company.${page}.remove.confirmation.${role}" arguments="${arguments}"/>
+					<spring:theme code="text.company.users.remove.confirmation.${role}" arguments="${arguments}"/>
 
 					<form:form action="${disableUrl}">
 						<a href="${cancelUrl}" class="button no-confirm"><spring:theme code="b2buser.no.button" text="No"/></a>

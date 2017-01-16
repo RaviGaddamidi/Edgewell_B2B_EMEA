@@ -14,21 +14,15 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.model.B2BUserGroupModel;
-import de.hybris.platform.b2bacceleratorfacades.company.data.UserData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BPermissionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BSelectionData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUnitData;
-import de.hybris.platform.b2bacceleratorfacades.order.data.B2BUserGroupData;
+import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BSelectionData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BUserGroupData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
-import de.hybris.platform.commerceservices.customer.DuplicateUidException;
+import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.user.UserModel;
-import com.energizer.storefront.annotations.RequireHardLogIn;
-import com.energizer.storefront.breadcrumb.Breadcrumb;
-import com.energizer.storefront.controllers.ControllerConstants;
-import com.energizer.storefront.controllers.util.GlobalMessages;
-import com.energizer.storefront.forms.B2BUserGroupForm;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,6 +42,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.energizer.storefront.annotations.RequireHardLogIn;
+import com.energizer.storefront.breadcrumb.Breadcrumb;
+import com.energizer.storefront.controllers.ControllerConstants;
+import com.energizer.storefront.controllers.util.GlobalMessages;
+import com.energizer.storefront.forms.B2BUserGroupForm;
 
 
 /**
@@ -72,7 +72,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BUserGroupData> searchPageData = b2bCommerceB2BUserGroupFacade.getPagedB2BUserGroups(pageableData);
+		final SearchPageData<B2BUserGroupData> searchPageData = b2bUserGroupFacade.getPagedB2BUserGroups(pageableData);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "manageB2BUserGroup");
 		model.addAttribute("unit", companyB2BCommerceFacade.getParentUnit());
@@ -92,7 +92,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 				urlEncode(usergroup)), getMessageSource().getMessage("text.company.manageUsergroups.disable.breadcrumb", new Object[]
 		{ usergroup }, "Disable {0} Usergroup ", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
-		final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+		final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
 		model.addAttribute("usergroup", userGroupData);
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		return ControllerConstants.Views.Pages.MyCompany.MyCompanyManageUsergroupDisableConfirmationPage;
@@ -103,7 +103,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 	public String disableUserGroup(@RequestParam("usergroup") final String usergroup, final Model model)
 			throws CMSItemNotFoundException
 	{
-		b2bCommerceB2BUserGroupFacade.disableUserGroup(usergroup);
+		b2bUserGroupFacade.disableUserGroup(usergroup);
 		return String.format(REDIRECT_TO_USERGROUP_DETAILS, urlEncode(usergroup));
 	}
 
@@ -119,7 +119,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 				urlEncode(usergroup)), getMessageSource().getMessage("text.company.manageUsergroups.remove.breadcrumb", new Object[]
 		{ usergroup }, "Remove {0} Usergroup ", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
-		final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+		final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
 		model.addAttribute("usergroup", userGroupData);
 		model.addAttribute("metaRobots", "no-index,no-follow");
 		return ControllerConstants.Views.Pages.MyCompany.MyCompanyManageUsergroupRemoveConfirmationPage;
@@ -130,7 +130,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 	public String removeUserGroup(@RequestParam("usergroup") final String usergroup, final Model model,
 			final RedirectAttributes redirectModel) throws CMSItemNotFoundException
 	{
-		b2bCommerceB2BUserGroupFacade.removeUserGroup(usergroup);
+		b2bUserGroupFacade.removeUserGroup(usergroup);
 		GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER,
 				"text.company.manageUsergroups.remove.success");
 		return REDIRECT_TO_USER_GROUPS_PAGE;
@@ -155,8 +155,8 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<B2BPermissionData> searchPageData = b2bCommerceB2BUserGroupFacade.getPagedPermissionsForUserGroup(
-				pageableData, usergroup);
+		final SearchPageData<B2BPermissionData> searchPageData = b2bPermissionFacade.getPagedPermissionsForUserGroup(pageableData,
+				usergroup);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "permissions");
 		model.addAttribute("baseUrl", MANAGE_USERGROUPS_BASE_URL);
@@ -171,7 +171,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 	public B2BSelectionData selectPermissonForUserGroup(@RequestParam("usergroup") final String usergroup,
 			@RequestParam("permission") final String permission, final Model model) throws CMSItemNotFoundException
 	{
-		return b2bCommerceB2BUserGroupFacade.addPermissionToUserGroup(usergroup, permission);
+		return b2bPermissionFacade.addPermissionToUserGroup(usergroup, permission);
 	}
 
 	@ResponseBody
@@ -181,7 +181,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 	public B2BSelectionData deselectPermissonForUserGroup(@RequestParam("usergroup") final String usergroup,
 			@RequestParam("permission") final String permission, final Model model) throws CMSItemNotFoundException
 	{
-		return b2bCommerceB2BUserGroupFacade.removePermissionFromUserGroup(usergroup, permission);
+		return b2bPermissionFacade.removePermissionFromUserGroup(usergroup, permission);
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.GET)
@@ -194,7 +194,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 		final List<Breadcrumb> breadcrumbs = myCompanyBreadcrumbBuilder.createManageUserGroupDetailsBreadCrumbs(usergroup);
 		model.addAttribute("breadcrumbs", breadcrumbs);
 
-		final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+		final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
 		if (userGroupData == null)
 		{
 			GlobalMessages.addErrorMessage(model, "usergroup.notfound");
@@ -224,12 +224,12 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 				urlEncode(usergroup)), getMessageSource().getMessage("text.company.usergroups.members.breadcrumb", new Object[]
 		{ usergroup }, "Usergroup {0} members", getI18nService().getCurrentLocale()), null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
-		final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+		final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
 		model.addAttribute("usergroup", userGroupData);
 
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<UserData> searchPageData = b2bCommerceB2BUserGroupFacade.getPagedCustomersForUserGroup(pageableData,
+		final SearchPageData<CustomerData> searchPageData = b2bUserGroupFacade.getPagedCustomersForUserGroup(pageableData,
 				usergroup);
 		populateModel(model, searchPageData, showMode);
 		model.addAttribute("action", "members");
@@ -242,23 +242,23 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 	@RequestMapping(value = "/members/select", method =
 	{ RequestMethod.GET, RequestMethod.POST })
 	@RequireHardLogIn
-	public UserData selectMemberOfUnitGroup(@RequestParam("usergroup") final String usergroup,
+	public CustomerData selectMemberOfUnitGroup(@RequestParam("usergroup") final String usergroup,
 			@RequestParam("user") final String user, final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceB2BUserGroupFacade.addMemberToUserGroup(usergroup, user));
+		return populateDisplayNamesForRoles(b2bUserGroupFacade.addMemberToUserGroup(usergroup, user));
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/members/deselect", method =
 	{ RequestMethod.GET, RequestMethod.POST })
 	@RequireHardLogIn
-	public UserData deselectMemberOfUnitGroup(@RequestParam("usergroup") final String usergroup,
+	public CustomerData deselectMemberOfUnitGroup(@RequestParam("usergroup") final String usergroup,
 			@RequestParam("user") final String user, final Model model) throws CMSItemNotFoundException
 	{
-		return populateDisplayNamesForRoles(b2bCommerceB2BUserGroupFacade.removeMemberFromUserGroup(usergroup, user));
+		return populateDisplayNamesForRoles(b2bUserGroupFacade.removeMemberFromUserGroup(usergroup, user));
 	}
 
-	protected UserData populateDisplayNamesForRoles(final UserData userData)
+	protected CustomerData populateDisplayNamesForRoles(final CustomerData userData)
 	{
 		final Collection<String> roles = userData.getRoles();
 		final List<String> displayRoles = new ArrayList<String>(roles.size());
@@ -288,7 +288,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 		if (!model.containsAttribute("b2BUserGroupForm"))
 		{
 			final B2BUserGroupForm b2BUserGroupForm = new B2BUserGroupForm();
-			final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+			final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
 			if (userGroupData == null)
 			{
 				GlobalMessages.addErrorMessage(model, "usergroup.notfound");
@@ -333,8 +333,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 			return editUserGroup(usergroup, model);
 
 		}
-		if (!userGroupForm.getUid().equals(usergroup)
-				&& b2bCommerceB2BUserGroupFacade.getB2BUserGroup(userGroupForm.getUid()) != null)
+		if (!userGroupForm.getUid().equals(usergroup) && b2bUserGroupFacade.getB2BUserGroup(userGroupForm.getUid()) != null)
 		{
 			// a unit uid is not unique
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -343,7 +342,8 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 			return editUserGroup(usergroup, model);
 		}
 
-		final B2BUserGroupData userGroupData = b2bCommerceB2BUserGroupFacade.getB2BUserGroup(usergroup);
+		final B2BUserGroupData userGroupData = b2bUserGroupFacade.getB2BUserGroup(usergroup);
+
 		if (userGroupData != null)
 		{
 			boolean userGroupUpdated = false;
@@ -363,9 +363,10 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 
 			try
 			{
-				b2bCommerceB2BUserGroupFacade.updateUserGroup(userGroupForm.getOriginalUid(), userGroupData);
+				b2bUserGroupFacade.updateUserGroup(userGroupForm.getOriginalUid(), userGroupData);
+				//	b2bCommerceB2BUserGroupFacade.updateUserGroup(userGroupForm.getOriginalUid(), userGroupData);
 			}
-			catch (final DuplicateUidException e)
+			catch (final Exception e) //DuplicateUidException
 			{
 				GlobalMessages.addErrorMessage(model, "form.global.error");
 				bindingResult.rejectValue("uid", "form.b2busergroup.notunique");
@@ -374,7 +375,8 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 
 			if (userGroupUpdated)
 			{
-				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.INFO_MESSAGES_HOLDER, "form.b2busergroup.parentunit.updated");
+				GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.INFO_MESSAGES_HOLDER,
+						"form.b2busergroup.parentunit.updated");
 			}
 			else
 			{
@@ -440,7 +442,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 			return createUserGroup(model);
 
 		}
-		if (b2bCommerceB2BUserGroupFacade.getUserGroupDataForUid(userGroupForm.getUid()) != null)
+		if (b2bUserGroupFacade.getUserGroupDataForUid(userGroupForm.getUid()) != null)
 		{
 			// a unit uid is not unique
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -459,9 +461,9 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 
 		try
 		{
-			b2bCommerceB2BUserGroupFacade.updateUserGroup(userGroupForm.getUid(), userGroupData);
+			b2bUserGroupFacade.updateUserGroup(userGroupForm.getUid(), userGroupData);
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e) //DuplicateUidException
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2busergroup.notunique");
