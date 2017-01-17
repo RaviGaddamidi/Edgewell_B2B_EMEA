@@ -1,0 +1,287 @@
+
+Server issue in 6.1
+============================================================================================================================
+
+================================================= Build and server issues ===================================================
+=============================================================================================================================
+1)In EnergizerFindPricingFactoryStrategy replace
+
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService; 
+
+2) in energizercore-spring.xml
+
+<alias name="defaultCommerceAddToCartStrategy" alias="commerceAddToCartStrategy"/>
+	<bean id="defaultCommerceAddToCartStrategy"
+			class="de.hybris.platform.commerceservices.order.impl.DefaultCommerceAddToCartStrategy"
+			parent="abstractCommerceAddToCartStrategy">
+		<property name="commerceAddToCartMethodHooks" ref="commerceAddToCartMethodHooks"/>
+		<property name="configurationService" ref="configurationService"/>
+		 <property name="forceInStockMaxQuantity" value="99999" /> 
+		  <property name="configuratorSettingsService" ref="configuratorSettingsService"/>
+	</bean>
+
+3) in EnergizerProductPopulator replace
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService; 
+
+4) in Energizerfacade-spring.xml
+
+<alias name="energizerOrderEntryPopulator" alias="orderEntryPopulator"/>
+	<bean id="energizerOrderEntryPopulator"
+		class="com.energizer.facades.search.populators.EnergizerOrderEntryPopulator">
+		<property name="productConverter" ref="productConverter" />
+		<property name="priceDataFactory" ref="priceDataFactory" />
+		<property name="entryOrderChecker" ref="commerceOrderEntryModifiableChecker" />
+		<property name="deliveryModeConverter" ref="deliveryModeConverter" />
+		<property name="pointOfServiceConverter" ref="pointOfServiceConverter" />
+		 <property name="productConfigurationConverter" ref="orderEntryProductInfoConverter"/>
+	</bean>
+
+5) In energizercartpopulator replace 
+//import de.hybris.platform.b2bacceleratorfacades.company.refactoring.impl.DefaultB2BCostCenterFacade;
+import de.hybris.platform.b2bcommercefacades.company.impl.DefaultB2BCostCenterFacade;
+//import de.hybris.platform.b2bacceleratorfacades.order.B2BCheckoutFacade;
+import de.hybris.platform.b2bcommercefacades.company.B2BCostCenterFacade;
+//import de.hybris.platform.b2bacceleratorfacades.order.data.B2BCostCenterData;
+import de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData;
+
+
+6) in energizercartpopulator 
+
+replace with @Resource(name = "defaultB2BCostCenterFacade")
+
+7) same as 5 and 6 in singlestepcheckoutcontroller
+
+8)energizerb2bpermissionservice
+
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.impl.B2BCommerceUserService;
+
+9)In EnergizerEmailGenerationService
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
+
+10) In DefaultEnergizerSolrQueryManipulationService
+
+Replace 
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+11) In DefaultEnergizerSolrQueryManipulationService change type from B2BCommerceUserService to DefaultB2BCommerceUserService
+
+12) In EnergizerProductCSVProcessor replace
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+13) In energizer customercsvprocessor
+
+//import de.hybris.platform.b2bacceleratorfacades.company.B2BCommercePermissionFacade;
+import de.hybris.platform.b2bapprovalprocessfacades.company.B2BPermissionFacade;
+
+change type B2BCommercePermissionFacade to B2BPermissionFacade
+
+b2bPermissionFacade
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceCostCenterService;
+import de.hybris.platform.b2b.company.B2BCommerceCostCenterService;
+
+
+14) Energizerb2busercsvprocessor
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
+
+15) EnergizerUserManagementSendMailJob
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
+
+//import de.hybris.platform.b2bacceleratorfacades.company.;
+import de.hybris.platform.b2bapprovalprocessfacades.company.B2BApproverFacade;
+
+@Resource(name = "b2bUnitFacade")
+	B2BUnitFacade b2bCommerceUnitFacade;
+
+16) In Energizercartservice
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+17) In EnergizerProductSearchResultListPopulator
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+18) In AdvancedTypeExportScriptGenerator
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+19) In DefaultEnergizerCompanyB2BCommerceFacade
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+20) In EnergizerB2BCustomerReversePopulator
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceB2BUserGroupService;
+import de.hybris.platform.b2b.company.B2BCommerceB2BUserGroupService
+
+
+21) In DefaultEnergizerB2BOrderHistoryFacade
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+22) In DefaultEnergizerQuickOrderFacade
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+==================================================================================================================================================================================
+
+https://experts.hybris.com/questions/63688/during-migrating-from-61-to-62-getting-one-spring.html
+
+https://help.hybris.com/6.0.0/hcd/c2280345cd234645ba3d50a1260afbca.html
+
+
+=======================================================================================================
+23) In addto cart controller
+
+
+Replace with 
+
+@Resource(name = "b2bCartFacade")
+	private CartFacade cartFacade;
+
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+24) In minicartcontroller
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+
+25) In MyPageController
+
+
+@Resource(name = "b2bCartFacade")
+	private CartFacade cartFacade;
+
+
+26) In B2BUserGroupManagementPageController
+
+Replace b2bCostCenterFacade with CostCenterFacade
+
+@Resource(name = "costCenterFacade")
+	protected B2BCostCenterFacade b2bCommerceCostCenterFacade;
+
+
+@Resource(name = "budgetFacade")
+	protected B2BBudgetFacade b2bCommerceBudgetFacade;
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUnitService;
+import de.hybris.platform.b2b.company.B2BCommerceUnitService;
+
+27) In cartpagecontroller
+
+@Resource(name = "b2bCartFacade")
+	private de.hybris.platform.b2bacceleratorfacades.api.cart.CartFacade b2bCartFacade;
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+28) In singlestepcheckoutcontroller
+
+replce capital D with d
+
+@Resource(name = "defaultB2BCostCenterFacade")
+	private DefaultB2BCostCenterFacade defaultB2BCostCenterFacade;
+
+29) In exceluploadpagecontroller
+
+
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+
+30) In usermanagementpagecontroller
+
+//import de.hybris.platform.b2bacceleratorservices.company.B2BCommerceUserService;
+import de.hybris.platform.b2b.company.B2BCommerceUserService;
+
+==========================================================================================================================================================================
+UI / HAC update issue
+=========================================================================================================================================================================
+
+31) In MyCompanyRemoveDisableConfirmationPage
+
+replace
+<spring:theme code="text.company.${page}.remove.confirmation.${role}" arguments="${arguments}"/>
+
+
+with
+<spring:theme code="text.company.users.remove.confirmation.${role}" arguments="${arguments}"/>
+
+
+32) mycompany/unit name not visible
+
+unittree.tag
+
+replace with de.hybris.platform.b2bcommercefacades.company.data.B2BUnitNodeData"
+
+33) In local.properties
+
+change desktop with DESKTOP
+
+uiexperience.level.supported.houseHold=DESKTOP
+
+uiexperience.level.supported.personalCare=DESKTOP
+
+
+34) Add mediaconversion extension in local.extensions
+
+35) In summaryFlowCostCenterTag
+
+Relace with de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData
+
+36) In summaryFlowDeliveryAddress
+
+Relace with de.hybris.platform.b2bcommercefacades.company.data.B2BCostCenterData
+
+37) if getting issues while updating/impoting cmscontent-user.csv file, 
+
+ set impex: relaxed or impex.legacy.mode=true;
+
+REason of issue: Encoded password
+
+
+[impex.legacy.mode=true]
+
+cmscontent-user.csv
+
+
+
+
+
+
+
+
+
