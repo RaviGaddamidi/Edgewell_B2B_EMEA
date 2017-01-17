@@ -1,0 +1,87 @@
+
+                                                        Migration to hybris 5.7
+=================================================================================================================================================================================
+============================================================================ Build Issue =======================================================================================
+=================================================================================================================================================================================
+
+1) Remove b2ccheckoutaddon from local.extension file.
+
+2) undo all changes related to B2BCheckoutFlowEnum  and B2BCheckoutPciOptionEnum(that were made while migrating to 5.5.1)
+
+B2BCheckoutFlowStrategy
+FixedB2BCheckoutFlowStrategy
+B2BCheckoutPciStrategy
+ConfiguredB2bCheckoutPciStrategy
+FixedB2BCheckoutPciStrategy
+
+B2BCheckoutFlowFacade
+DefaultB2BCheckoutFlowFacade
+SessionOverrideB2BCheckoutFlowFacade
+
+CheckoutController
+CheckoutLoginController
+
+3) remove import statement 
+
+AbstractMultidimensionalProductFieldValueProvider
+GenericVariantProductModelComparator
+VariantValueCategoryModelPriorityComparator
+VariantValueCategoryModelSequenceComparator
+FirstGenericVariantProductUrlValueProvider
+FirstVariantCategoryNameListValueProvider
+SolrFirstVariantCategoryManager
+FirstGenericVariantProductUrlValueProviderTest
+FirstVariantCategoryNameListValueProviderTest
+ProductPriceRangeValueProviderTest
+SolrFirstVariantCategoryManagerTest
+VariantCategorySourceTest
+
+ProductVariantMatrixPopulator
+ProductVariantOptionDataPopulator
+VariantMatrixElementPopulator
+AbstractB2BProductSearchFacade
+VariantSearchResultProductPopulator
+ProductVariantMatrixPopulatorTest
+VariantMatrixFactoryUtil
+VariantOptionDataMediaPopulatorTest
+
+VariantOptionDataPricePopulatorTest
+VariantOptionDataStockPopulatorTest
+VariantOptionDataUrlPopulatorTest
+
+
+
+=============================================================================================================================================================================
+================================================================  hybrisserver start  ======================================================================================
+===========================================================================================================================================================================
+
+1) b2bFlexibleSearchConverter - need to be added in energizerfacades-spring.xml
+
+
+=============================================================================================================================================================================
+================================================================  Standalone Solr Server Start ==============================================================================
+=============================================================================================================================================================================
+
+1. Mention the below properties in local.properties file:
+legacyMode = false
+solrserver.forceRestart=true
+solrserver.instances.default.autostart=false
+solrserver.instances.default.port=8983
+solrserver.instances.default.memory=512m
+
+solrserver.failOnError=true
+solrserver.maxStatusRetries=10
+
+2. Navigate to Platform folder in hybris server and run the ant command to start and stop solrserver.
+ant startSolrServer
+Response: Started Solr server on port 8983. Happy searching!
+ant stopSolrServer
+3. hac Update need to be done.
+
+
+References: (For Solr change)
+https://wiki.hybris.com/display/sawt/Separating+Solr+onto+its+own+instance
+https://wiki.hybris.com/pages/viewpage.action?spaceKey=release5&title=SolrFacetSearch++-+Changes+from+5.6+to+5.7
+https://wiki.hybris.com/display/release5/solrserver+Extension
+https://wiki.hybris.com/display/hybrisALF/Solr+Tuning
+https://wiki.hybris.com/pages/viewpage.action?spaceKey=release5&title=SolrFacetSearch++-+Changes+from+5.6+to+5.7#SolrFacetSearch-Changesfrom5.6to5.7-IndexerConfig
