@@ -1,0 +1,95 @@
+
+                                                         Migration to Hybris 5.5.1
+=================================================================================================================================================================================
+During Build
+=================================================================================================================================================================================
+
+1)  D:\Edgewell_migration\hybris\bin\platform\resources\ant\antmacros.xml:767: java.lang.IllegalArgumentException: cannot merge namespace ((energizercore)) into ((<merged>)) du
+e to duplicate type code 'b2bcheckoutflowenum' : B2BCheckoutFlowEnum::((energizercore))::YEnumType[energizercore-items.xml:37(EnumTypeTagListener)]<>B2BCheckoutFlowEnum::((
+b2bacceleratorservices))::YEnumType[b2bacceleratorservices-items.xml:32(EnumTypeTagListener)]
+
+a)  duplicate Enum code in energizercore  : <!-- <enumtype generate="true" code="B2BCheckoutFlowEnum"
+			autocreate="true" dynamic="true">
+			<model package="com.energizer.core.enums"/>
+			<value code="SINGLE" />
+			<value code="MULTISTEP" />
+		</enumtype>
+		<enumtype generate="true" code="B2BCheckoutPciOptionEnum"
+			autocreate="true" dynamic="true">
+			<model package="com.energizer.core.enums"/>
+			<value code="Default" />
+			<value code="HOP" />
+		</enumtype> -->
+
+
+
+2) D:\Edgewell_migration\hybris\bin\platform\resources\ant\antmacros.xml:767: de.hybris.bootstrap.beangenerator.BeanGenerationException: Duplicate definition of attribute (de.
+hybris.platform.commercefacades.product.data.ProductData#firstCategoryNameList) in  <energizercore> it has been already defined in <commercefacades>
+
+a) duplicate attribute in energizercore 
+
+Change in SolrFirstVariantCategoryManager also required
+
+3) Two methods : getFutureAvailability method in b2bFutureStockFacade  takes string parameter/s instead of productmodel 
+
+4)  Errors in Energizercockpit, so created one using modulegen and replacing same in custom folder 
+
+================================================================================================================================================================================
+server start
+================================================================================================================================================================================
+
+
+1) b2bCommerceBudgetFacade  and B2BCommerceCostCenterFacade beans commented in b2bacceleratorfacade-spring.xml, define them in energizercore-spring.xml
+
+2) org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#0
+': Cannot create inner bean 'org.springframework.http.converter.json.MappingJacksonHttpMessageConverter#0' of type [org.springframework.http.converter.json.MappingJacksonHt
+Issue: [org.springframework.http.converter.json.MappingJacksonHt not used in spring version-4.3
+sol: replace with org.springframework.http.converter.json.MappingJackson2HttpMessageConverter in config file under energizerstorefront
+
+3) repalce spring-mvc jar
+https://experts.hybris.com/questions/28524/javalangnoclassdeffounderror-orgspringframeworkweb.html
+
+4) issue in CSRFRequestDataValueProcessor.java and DefaultRequestDataProcessor.java  (issue arise becauseof spring 4.1 jar)
+
+5) replace  ignoreDefaultModelOnRedirect with ignore-default-model-on-redirect in sring-mvc config for migration from spring 3.* to spring version-4.*.
+
+===================================================================================================================================================================================
+HAC Update
+===================================================================================================================================================================================
+1) For validation issue : check B2BCustomerValidEmail  constraint add case_insensitive under  Regexp pattern flags and add .* under Regular expression. Then update thesystem
+
+2) for any synchronization issue ( for product catalog ) due to  duplicate price Rows : https://experts.hybris.com/questions/51685/catalog-synchronization-issue-since-it-owns-1-dupl.html
+====================================================================================================================================================================================
+
+
+ in Singlestepcheckoutcontroller 
+and Energizercartpopulator 
+
+
+Add @Resource(name = "DefaultB2BCostCenterFacade")
+	private DefaultB2BCostCenterFacade defaultB2BCostCenterFacade;
+
+and replace getcheckoutflowfacade.getActiveVisibleCostCenters()  with defaultB2BCostCenterFacade.getActiveCostCenters();
+
+======================================================================================================================
+
+For addres on checkout page addedd
+
+1)  private ModelService modelService;
+
+2)  public boolean setPurchaseOrderNumberInCart(final String purchaseOrderNumber)
+	{
+		final CartModel cartModel = cartService.getSessionCart();
+		if (cartModel != null)
+		{
+			cartModel.setPurchaseOrderNumber(purchaseOrderNumber);
+			modelService.save(cartModel);
+			modelService.refresh(cartModel);
+			return true;
+		}
+		return false;
+	}
+
+3)replace getCheckoutFlowFacade().setPurchaseOrderNumber(purchaseOrderNumber); with setPurchaseOrderNumberInCart;
+
+
