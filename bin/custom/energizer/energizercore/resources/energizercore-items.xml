@@ -977,8 +977,8 @@
 				</attributes>
 			</itemtype>
 			<itemtype code="EnergizerCronJob" extends="CronJob"
-				autocreate="true" generate="true"
-				jaloclass="com.energizer.core.jalo.EnergizerCronJob">
+				autocreate="true" generate="true">
+				
 				<deployment table="EnergizerCronJob" typecode="10210" />
 				<attributes>
 					<attribute qualifier="type" type="java.lang.String">
