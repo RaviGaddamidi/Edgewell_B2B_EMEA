@@ -14,6 +14,7 @@
 package com.energizer.storefront.controllers.pages;
 
 import de.hybris.platform.b2b.services.B2BUnitService;
+import de.hybris.platform.b2bacceleratorfacades.company.CompanyB2BCommerceFacade;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.customer.CustomerFacade;
 import de.hybris.platform.commerceservices.customer.TokenInvalidatedException;
@@ -72,6 +73,9 @@ public class PasswordResetPageController extends AbstractPageController
 
 	@Resource(name = "configurationService")
 	private ConfigurationService configurationService;
+
+	@Resource(name = "b2bCommerceFacade")
+	protected CompanyB2BCommerceFacade companyB2BCommerceFacade;
 
 	@Resource(name = "defaultEnergizerCompanyB2BCommerceFacade")
 	protected DefaultEnergizerCompanyB2BCommerceFacade defaultEnergizerCompanyB2BCommerceFacade;
@@ -161,21 +165,26 @@ public class PasswordResetPageController extends AbstractPageController
 		}
 		else
 		{
-			/*
-			 * try { getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
-			 * GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
-			 * "account.confirmation.forgotten.password.link.sent", new Object[] { forgottenPassExpValue });
-			 * model.addAttribute(new ForgottenPwdForm());
-			 *
-			 * }
-			 */
-
 			try
 			{
-				final EnergizerB2BCustomerModel customer = defaultEnergizerPasswordGenerateFacade.getCustomerByUID(resetPwdForm
-						.getEmail());
+				final EnergizerB2BCustomerModel existCustomerModel = defaultEnergizerPasswordGenerateFacade
+						.getCustomerByUID(resetPwdForm.getEmail().toLowerCase());
+				if (existCustomerModel != null)
+				{
+					getCustomerFacade().forgottenPassword(resetPwdForm.getEmail());
+					GlobalMessages.addForgotPwdConfMessage(model, GlobalMessages.FORGOT_PWD_CONF_MESSAGES,
+							"account.confirmation.forgotten.password.link.sent", new Object[]
+							{ forgottenPassExpValue });
+					model.addAttribute(new ForgottenPwdForm());
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, "password.reset.invalidEmailId");
+
+				}
 
 			}
+
 			catch (final Exception e)
 			{
 
@@ -225,7 +234,6 @@ public class PasswordResetPageController extends AbstractPageController
 		if (bindingResult.hasErrors())
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
-			model.addAttribute("hasError", true);
 			LOG.info("Error on same page");
 			return ControllerConstants.Views.Fragments.Password.PasswordResetRequestPage;
 		}
