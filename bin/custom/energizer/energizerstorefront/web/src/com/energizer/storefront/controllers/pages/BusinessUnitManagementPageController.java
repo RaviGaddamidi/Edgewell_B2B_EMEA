@@ -369,7 +369,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		{
 			b2bCommerceUnitFacade.updateOrCreateBusinessUnit(unit, unitData);
 		}
-		catch (final Exception e) //DuplicateUidException
+		catch (final Exception e)
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2bunit.notunique");
@@ -461,7 +461,7 @@ public class BusinessUnitManagementPageController extends MyCompanyPageControlle
 		{
 			b2bCommerceUnitFacade.updateOrCreateBusinessUnit(unitData.getUid(), unitData);
 		}
-		catch (final Exception e)//DuplicateUidException
+		catch (final Exception e)
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2bunit.notunique");

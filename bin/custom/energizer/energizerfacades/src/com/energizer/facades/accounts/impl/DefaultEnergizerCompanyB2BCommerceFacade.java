@@ -178,7 +178,7 @@ public class DefaultEnergizerCompanyB2BCommerceFacade extends DefaultCustomerFac
 			customerAccountService.updateProfile(customer, customerData.getTitleCode(), name, customerData.getUid());
 			getModelService().save(customer);
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 		}

@@ -34,7 +34,6 @@ import de.hybris.platform.commercefacades.user.data.CountryData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commercefacades.user.data.TitleData;
 import de.hybris.platform.commercefacades.user.exceptions.PasswordMismatchException;
-import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.enums.OrderStatus;
@@ -417,16 +416,17 @@ public class AccountPageController extends AbstractSearchPageController
 				newAuthentication.setDetails(oldAuthentication.getDetails());
 				SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 			}
-			catch (final DuplicateUidException e)
-			{
-				bindingResult.rejectValue("email", "profile.email.unique");
-				returnAction = errorUpdatingEmail(model);
-			}
 			catch (final PasswordMismatchException passwordMismatchException)
 			{
 				bindingResult.rejectValue("email", "profile.currentPassword.invalid");
 				returnAction = errorUpdatingEmail(model);
 			}
+			catch (final Exception e)
+			{
+				bindingResult.rejectValue("email", "profile.email.unique");
+				returnAction = errorUpdatingEmail(model);
+			}
+			
 		}
 
 		return returnAction;
@@ -521,7 +521,7 @@ public class AccountPageController extends AbstractSearchPageController
 						"text.account.profile.confirmationUpdated");
 				returnAction = REDIRECT_TO_PROFILE_PAGE;
 			}
-			catch (final DuplicateUidException e)
+			catch (final Exception e)
 			{
 				bindingResult.rejectValue("email", "registration.error.account.exists.title");
 				GlobalMessages.addErrorMessage(model, "form.global.error");

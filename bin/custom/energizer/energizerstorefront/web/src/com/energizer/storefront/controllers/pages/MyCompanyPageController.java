@@ -40,7 +40,6 @@ import de.hybris.platform.commercefacades.order.CheckoutFacade;
 import de.hybris.platform.commercefacades.storesession.data.CurrencyData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.commerceservices.customer.CustomerAccountService;
-import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.core.model.security.PrincipalGroupModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.i18n.FormatFactory;
@@ -560,7 +559,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			}
 			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.user.added");
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e)
 		{
 			bindingResult.rejectValue("email", "text.manageuser.error.email.exists.title");
 			GlobalMessages.addErrorMessage(model, "form.global.error");
@@ -686,7 +685,7 @@ public class MyCompanyPageController extends AbstractSearchPageController
 			}
 			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.CONF_MESSAGES_HOLDER, "text.confirmation.user.edited");
 		}
-		catch (final DuplicateUidException e)
+		catch (final Exception e)
 		{
 			bindingResult.rejectValue("email", "text.manageuser.error.email.exists.title");
 			GlobalMessages.addErrorMessage(model, "form.global.error");

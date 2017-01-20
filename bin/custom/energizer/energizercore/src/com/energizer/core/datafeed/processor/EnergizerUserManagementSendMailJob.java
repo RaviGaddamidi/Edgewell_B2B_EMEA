@@ -119,7 +119,7 @@ public class EnergizerUserManagementSendMailJob extends AbstractJobPerformable<C
 			 */
 			result = new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
 		}
-		catch (UnknownIdentifierException | IllegalArgumentException | DuplicateUidException execption)
+		catch (final Exception execption)
 		{
 			result = new PerformResult(CronJobResult.ERROR, CronJobStatus.UNKNOWN);
 			LOG.error("Error : " + execption.getCause());

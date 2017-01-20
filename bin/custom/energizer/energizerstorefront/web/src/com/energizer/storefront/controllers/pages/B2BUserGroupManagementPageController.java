@@ -366,7 +366,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 				b2bUserGroupFacade.updateUserGroup(userGroupForm.getOriginalUid(), userGroupData);
 				//	b2bCommerceB2BUserGroupFacade.updateUserGroup(userGroupForm.getOriginalUid(), userGroupData);
 			}
-			catch (final Exception e) //DuplicateUidException
+			catch (final Exception e)
 			{
 				GlobalMessages.addErrorMessage(model, "form.global.error");
 				bindingResult.rejectValue("uid", "form.b2busergroup.notunique");
@@ -463,7 +463,7 @@ public class B2BUserGroupManagementPageController extends MyCompanyPageControlle
 		{
 			b2bUserGroupFacade.updateUserGroup(userGroupForm.getUid(), userGroupData);
 		}
-		catch (final Exception e) //DuplicateUidException
+		catch (final Exception e)
 		{
 			GlobalMessages.addErrorMessage(model, "form.global.error");
 			bindingResult.rejectValue("uid", "form.b2busergroup.notunique");
