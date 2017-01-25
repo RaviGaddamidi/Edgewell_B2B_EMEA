@@ -36,6 +36,7 @@ UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$
 ;;Sun_Care_Link;Sun Care
 ;;Banana_Boat_Link;Banana Boat
 ;;Hawaiian_Tropic_Link;Hawaiian Tropic
+;;CatalogDownloadPageLink;Descarga del catálogo
 #;;UserLoginLink;Login
 #;;MyAccountLink;My Account
 #;;MyCompanyLink;My Company
