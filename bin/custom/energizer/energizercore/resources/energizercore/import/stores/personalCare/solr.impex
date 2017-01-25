@@ -26,6 +26,9 @@ $indexCurrencies=USD
 INSERT_UPDATE SolrServerConfig;name[unique=true];mode(code);embeddedMaster;useMasterNodeExclusivelyForIndexing
 ;$serverConfigName;standalone;false;true
 
+UPDATE SolrSearchConfig[batchmode=true];legacyMode[unique=true];legacyMode
+;;true
+
 INSERT_UPDATE SolrEndpointUrl;solrServerConfig(name)[unique=true];url[unique=true];master[unique=true,default=false]
 ;$serverConfigName;http://localhost:8983/solr;true
 

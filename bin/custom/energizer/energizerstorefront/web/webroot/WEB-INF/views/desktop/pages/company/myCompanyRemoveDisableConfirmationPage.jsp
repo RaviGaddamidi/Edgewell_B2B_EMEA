@@ -25,7 +25,7 @@
 		<cms:pageSlot position="TopContent" var="feature" element="div" class="span-20 wide-content-slot cms_disp-img_slot">
 			<cms:component component="${feature}"/>
 		</cms:pageSlot>			
-			<div class="headline"><spring:theme code="text.company.users.remove.confirmation.title.${role}" text="Confirm Disable"/></div>
+			<div class="headline"><spring:theme code="text.company.units.remove.confirmation.title.${role}" text="Confirm Disable"/></div>
 			<div class="description">
 				
 					<spring:theme code="text.company.users.remove.confirmation.${role}" arguments="${arguments}"/>
