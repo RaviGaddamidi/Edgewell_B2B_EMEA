@@ -54,7 +54,7 @@
 							 <input type="text" name="distributorMaterialID" size="20" placeholder="Distributor Product Code"/>
 						</td>
 						<td headers="header3">
-							<input type="submit" class="button" value="Add Product">
+							<input type="submit" class="button" value="<spring:theme code="quickorder.add.product"/>">
 						</td>
 						<td headers="header4">
 							

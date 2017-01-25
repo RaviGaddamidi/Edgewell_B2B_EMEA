@@ -561,6 +561,14 @@ ACC.cartremoveitem = {
             var errorsDiv = $('#businesRuleErrors').show(); 
             var errorMsg = "";
             
+            if(isOrderBlocked=='true'){
+            	
+            	$("#checkoutButton_top").attr("disabled", true);
+                $("#checkoutButton_bottom").attr("disabled",true);
+                errorMsg =errorMsg + " Dear Customer, You order has been blocked. Please contact Customer Care <br>"
+
+          }
+            
             if(isContainerFull == 'true')
             {
                   
@@ -600,10 +608,7 @@ ACC.cartremoveitem = {
                   errorMsg = "Dear Customer, your order will not fit in one container. Please, adjust the cart and/or place multiple orders. <br>";
             }     
             
-            if(isOrderBlocked=='true'){
-                  errorMsg =errorMsg + " Dear Customer, You order has been blocked. Please contact Customer Care <br>"
-
-            }
+            
 
             
         if(errorMsg==""){

@@ -215,6 +215,9 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		String matrix[][] = null;
 
+		final String userId = userService.getCurrentUser().getUid();
+		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+
 		message = new ArrayList<String>();
 		products = new ArrayList<EnergizerProductPalletHeight>();
 		productsListA = new ArrayList<EnergizerProductPalletHeight>();
@@ -703,6 +706,16 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		cartData.setVirtualPalletCount(virtualPallet);
 		cartData.setPartialPalletCount(partialPallet);
 		LOG.info("Available volume: " + cartData.getAvailableVolume() + " Available Weight: " + cartData.getAvailableWeight());
+
+		//  ************ setting the OrderBlock  flag  ****************
+		if (b2bUnit.getOrderBlock())
+		{
+			cartData.setIsOrderBlocked(true);
+		}
+		else
+		{
+			cartData.setIsOrderBlocked(false);
+		}
 
 		LOG.info("*********************** End *******************************************8");
 		return cartData;

@@ -511,6 +511,11 @@ public class CartPageController extends AbstractPageController
 			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
 		}
 
+		if (cartData.isIsOrderBlocked())
+		{
+			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
+		}
+
 		final List<String> message = energizerCartService.getMessages();
 		if (message != null && message.size() > 0)
 		{
