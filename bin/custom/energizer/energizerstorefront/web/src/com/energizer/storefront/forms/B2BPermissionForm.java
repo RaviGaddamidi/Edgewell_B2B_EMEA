@@ -64,6 +64,7 @@ public class B2BPermissionForm
 		this.timeSpan = timeSpan;
 	}
 
+	@Size(min = 1, max = 10, message = "{profile.permission.invalid}")
 	public String getValue()
 	{
 		return value;
