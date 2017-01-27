@@ -77,8 +77,8 @@
 				<sec:authorize ifAnyGranted="ROLE_B2BCUSTOMERGROUP,ROLE_B2BADMINGROUP">
 					<order:reorderButton order="${orderData}"/>
 				</sec:authorize>	
-				<fmt:parseDate var="invoiceCutOffDate" value="Aug 30 2016" pattern="MMM dd yyyy" />				
-				<c:if test="${not empty orderData.status && orderData.status == 'INVOICED' && orderData.created gt invoiceCutOffDate}"> 
+				<%-- <fmt:parseDate var="invoiceCutOffDate" value="Aug 30 2016" pattern="MMM dd yyyy" />  --%>		
+				<c:if test="${not empty orderData.status && orderData.status == 'INVOICED'}"> 
 					<order:viewInvoiceButton orderData="${orderData}"/>					
 				</c:if> 
 			</div>
