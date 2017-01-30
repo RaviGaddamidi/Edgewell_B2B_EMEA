@@ -206,7 +206,8 @@ public class PermissionManagementPageController extends MyCompanyPageController
 		catch (final Exception e)
 		{
 			LOG.warn("Exception while saving the permission details " + e);
-			if (e instanceof DuplicateUidException)
+			if (e.getCause() instanceof InterceptorException
+					&& ((InterceptorException) e.getCause()).getInterceptor().getClass().equals(UniqueAttributesInterceptor.class))
 			{
 				model.addAttribute(b2BPermissionForm);
 				bindingResult.rejectValue("code", "text.company.managePermissions.code.exists.error.title");
