@@ -18,9 +18,10 @@ import de.hybris.platform.b2b.model.B2BPermissionModel;
 import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionData;
 import de.hybris.platform.b2bapprovalprocessfacades.company.data.B2BPermissionTypeData;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
-import de.hybris.platform.commerceservices.customer.DuplicateUidException;
 import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
+import de.hybris.platform.servicelayer.interceptor.InterceptorException;
+import de.hybris.platform.servicelayer.interceptor.impl.UniqueAttributesInterceptor;
 
 import java.text.ParseException;
 import java.util.ArrayList;
