@@ -406,6 +406,29 @@ public class EnergizerProductConversionCSVProcessor extends AbstractEnergizerCSV
 
 
 			}
+
+			else if (map.get(EnergizerCoreConstants.ALTERNATE_UOM).trim().isEmpty())
+			{
+
+				final List<String> columnNames = new ArrayList<String>();
+				final List<Integer> columnNumbers = new ArrayList<Integer>();
+				error = new EnergizerCSVFeedError();
+				error.setLineNumber(record.getRecordNumber());
+				columnNames.add(columnHeader);
+				error.setUserType(TECHNICAL_USER);
+				error.setColumnName(columnNames);
+				columnNumbers.add(columnNumber);
+				error.setMessage(columnHeader + " column should not be empty");
+				error.setColumnNumber(columnNumbers);
+				getTechnicalFeedErrors().add(error);
+				setTechRecordError(getTechnicalFeedErrors().size());
+				recordFailed++;
+				setRecordFailed(recordFailed);
+
+
+			}
+
+
 		}
 	}
 }

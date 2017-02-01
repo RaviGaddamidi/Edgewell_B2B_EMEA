@@ -104,7 +104,7 @@
 							<c:url value="/my-account/quickorder/removeItem" var="quickOrderRemoveItemURL"></c:url>
 							<form action="${quickOrderRemoveItemURL}" method="post">
 							<input type="hidden" name="energizerMaterialID" value="${entry.product.code}"/>
-							<input type="submit" class="button_neg_cls" value="remove"/>
+							<input type="submit" class="button_neg_cls" value="<spring:theme code="quickorder.remove.product"/>"/>
 							</form>
 							</td>
 							
