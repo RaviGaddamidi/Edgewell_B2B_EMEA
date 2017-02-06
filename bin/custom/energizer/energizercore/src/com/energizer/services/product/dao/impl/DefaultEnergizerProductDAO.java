@@ -203,7 +203,7 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 				+ "{cmir.b2bUnit}={myb2bunit.pk} JOIN EnergizerProduct AS prod ON "
 				+ "{cmir.erpMaterialId}={prod.code} JOIN EnergizerPriceRow AS enrprice ON "
 				+ " {enrprice.b2bUnit}={myb2bunit.pk} and {enrprice.product}={prod.pk} " + "} " + " WHERE "
-				+ "{myb2bunit.uid}=?b2bUnitId and " + "{cmir.erpMaterialId}=?erpMaterialId";
+				+ "{myb2bunit.uid}=?b2bUnitId and " + "{cmir.erpMaterialId}=?erpMaterialId and" + "{enrprice.isActive}=1";
 
 		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
 		query.addQueryParameter("erpMaterialId", erpMaterialId);
