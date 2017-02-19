@@ -88,7 +88,7 @@ public class StoreSessionController extends AbstractController
         final String referer = StringUtils.remove(request.getRequestURL().toString(), request.getServletPath());
         if (referer != null && !referer.isEmpty())
         {
-            return REDIRECT_PREFIX + referer;
+            return REDIRECT_PREFIX + referer + '/';
         }
         return REDIRECT_PREFIX + '/';
     }
