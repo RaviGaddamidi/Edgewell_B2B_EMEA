@@ -74,6 +74,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 	private static final Logger LOG = Logger.getLogger(DefaultEnergizerCartService.class.getName());
 
+	private static final String PRCTWENTY_FEET_CONTAINER = "prctwenty.feet.container";
+	private static final String PRCFORTY_FEET_CONTAINER = "prcforty.feet.container";
 	private static final String TWENTY_FEET_CONTAINER = "twenty.feet.container";
 	private static final String FORTY_FEET_CONTAINER = "forty.feet.container";
 	private static final String TWENTY_FEET_CONTAINER_VOLUME_KEY = "twenty.feet.container.volume";
@@ -115,19 +117,19 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 	{
 		CartData cartDataTemp = null;
 		final String packingOptionWithNoAlgorithm = Config.getParameter("energizer.disable.packingOption");
-		twentyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
-				TWENTY_FEET_CONTAINER_VOLUME_KEY, null));
-		twentyFeetContainerWeight = new BigDecimal(configurationService.getConfiguration().getDouble(
-				TWENTY_FEET_CONTAINER_WEIGHT_KEY, null));
-		fourtyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
-				FORTY_FEET_CONTAINER_VOLUME_KEY, null));
-		fourtyFeetContainerWeight = new BigDecimal(configurationService.getConfiguration().getDouble(
-				FORTY_FEET_CONTAINER_WEIGHT_KEY, null));
+		twentyFeetContainerVolume = new BigDecimal(
+				configurationService.getConfiguration().getDouble(TWENTY_FEET_CONTAINER_VOLUME_KEY, null));
+		twentyFeetContainerWeight = new BigDecimal(
+				configurationService.getConfiguration().getDouble(TWENTY_FEET_CONTAINER_WEIGHT_KEY, null));
+		fourtyFeetContainerVolume = new BigDecimal(
+				configurationService.getConfiguration().getDouble(FORTY_FEET_CONTAINER_VOLUME_KEY, null));
+		fourtyFeetContainerWeight = new BigDecimal(
+				configurationService.getConfiguration().getDouble(FORTY_FEET_CONTAINER_WEIGHT_KEY, null));
 
-		disableTwentyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
-				DISABLE_TWENTY_FEET_CONTAINER_VOLUME_KEY, null));
-		disableFourtyFeetContainerVolume = new BigDecimal(configurationService.getConfiguration().getDouble(
-				DISABLE_FORTY_FEET_CONTAINER_VOLUME_KEY, null));
+		disableTwentyFeetContainerVolume = new BigDecimal(
+				configurationService.getConfiguration().getDouble(DISABLE_TWENTY_FEET_CONTAINER_VOLUME_KEY, null));
+		disableFourtyFeetContainerVolume = new BigDecimal(
+				configurationService.getConfiguration().getDouble(DISABLE_FORTY_FEET_CONTAINER_VOLUME_KEY, null));
 
 		twentyFeetContainerVolume = twentyFeetContainerVolume.setScale(6, BigDecimal.ROUND_UP);
 		twentyFeetContainerWeight = twentyFeetContainerWeight.setScale(2, BigDecimal.ROUND_UP);
@@ -232,6 +234,18 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			percentVolumePerSlot = availableVolume * 0.05;
 			slotPercentageForNonPallet = configurationService.getConfiguration().getDouble(SLOT_PERCENTAGE_20FT, null);
 		}
+		else if (containerHeight.equals(Config.getParameter(PRCTWENTY_FEET_CONTAINER)))
+		{
+			totalPalletsCount = 20;
+			percentVolumePerSlot = availableVolume * 0.05;
+			slotPercentageForNonPallet = configurationService.getConfiguration().getDouble(SLOT_PERCENTAGE_20FT, null);
+		}
+		else if (containerHeight.equals(Config.getParameter(PRCFORTY_FEET_CONTAINER)))
+		{
+			totalPalletsCount = 40;
+			percentVolumePerSlot = availableVolume * 0.025;
+			slotPercentageForNonPallet = configurationService.getConfiguration().getDouble(SLOT_PERCENTAGE_40FT, null);
+		}
 		else if (containerHeight.equals(Config.getParameter(FORTY_FEET_CONTAINER)))
 		{
 			totalPalletsCount = 40;
@@ -282,10 +296,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			//cartData.setTotalProductVolumeInPercent(100.00);
 			if ((weight > 100 || volume > 100) && palletCount > totalPalletsCount)
 			{
-				message
-						.add("Dear Customer, your order will not fit in one container. You can order maximum "
-								+ totalPalletsCount
-								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+				message.add("Dear Customer, your order will not fit in one container. You can order maximum " + totalPalletsCount
+						+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
 				availableVolume = -1;
 				availableWeight = -1;
@@ -303,10 +315,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			else if (palletCount > totalPalletsCount)
 			{
-				message
-						.add("Dear Customer, your order will not fit in one container. You can order maximum "
-								+ totalPalletsCount
-								+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
+				message.add("Dear Customer, your order will not fit in one container. You can order maximum " + totalPalletsCount
+						+ " PAL in one order with selected container packing material. Please, adjust the cart and/or place multiple orders.");
 
 				availableVolume = -1;
 				availableWeight = -1;
@@ -392,6 +402,15 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 								{
 									availableVolume = availableVolume - 5;
 								}
+								if (containerHeight.equals(Config.getParameter(PRCTWENTY_FEET_CONTAINER)))
+								{
+									availableVolume = availableVolume - 10;
+								}
+								if (containerHeight.equals(Config.getParameter(PRCFORTY_FEET_CONTAINER)))
+								{
+									availableVolume = availableVolume - 5;
+								}
+
 							}
 							else
 							{
@@ -429,6 +448,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							final double percentageVolumeOfHighestPallet = getPercentage(new BigDecimal(0),
 									new BigDecimal(volumeOfHighestPallet), containerHeight).getPercentVolumeUses();
 							LOG.info("volume of single product:" + volumeOfHighestPallet);
+
 
 							if (!doubleStackMap.containsKey(tempProduct.getErpMaterialId()) && tempProduct.getOrderedUOM().equals("PAL"))
 							{
@@ -493,12 +513,14 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 					if (enrProductPalTemp.getCalculatedUOM().equalsIgnoreCase("LAY"))
 					{
-						volumeOfNonPalletProduct = EnergizerWeightOrVolumeConverter.getConversionValue(
-								getLayerVolumeUnit(enrProductPalTemp.getErpMaterialId()),
-								new BigDecimal(getLayerVolume(enrProductPalTemp.getErpMaterialId()))).doubleValue();
-						weightOfNonPalletProduct = EnergizerWeightOrVolumeConverter.getConversionValue(
-								getLayerWeightUnit(enrProductPalTemp.getErpMaterialId()),
-								new BigDecimal(getLayerWeight(enrProductPalTemp.getErpMaterialId()))).doubleValue();
+						volumeOfNonPalletProduct = EnergizerWeightOrVolumeConverter
+								.getConversionValue(getLayerVolumeUnit(enrProductPalTemp.getErpMaterialId()),
+										new BigDecimal(getLayerVolume(enrProductPalTemp.getErpMaterialId())))
+								.doubleValue();
+						weightOfNonPalletProduct = EnergizerWeightOrVolumeConverter
+								.getConversionValue(getLayerWeightUnit(enrProductPalTemp.getErpMaterialId()),
+										new BigDecimal(getLayerWeight(enrProductPalTemp.getErpMaterialId())))
+								.doubleValue();
 					}
 					else
 					{
@@ -554,10 +576,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							else
 							{
 								availableVolume = availableVolume - nonPalletVolumePercent;
-								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, nonPalletVolumePercent
-										/ percentVolumePerSlotForNonPallet);
-								partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent
-										/ percentVolumePerSlotForNonPallet));
+								nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount,
+										nonPalletVolumePercent / percentVolumePerSlotForNonPallet);
+								partialPallet = (int) (partialPallet
+										+ Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 								matrix[1][nonPalletFloorSpaceCount] = "Mixed-Pallet";
 								nonPalletVolumePercent = 0;
 
@@ -578,8 +600,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < 2 * percentVolumePerSlotForNonPallet
 								&& nonPalletVolumePercent > percentVolumePerSlotForNonPallet)
 						{
-							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, nonPalletVolumePercent
-									/ percentVolumePerSlotForNonPallet);
+							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount,
+									nonPalletVolumePercent / percentVolumePerSlotForNonPallet);
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - percentVolumePerSlot;
 							availableVolume = availableVolume - (nonPalletVolumePercent - percentVolumePerSlotForNonPallet);
@@ -589,8 +611,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						}
 						else if (nonPalletVolumePercent > 0 && nonPalletVolumePercent < percentVolumePerSlotForNonPallet)
 						{
-							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount, nonPalletVolumePercent
-									/ percentVolumePerSlotForNonPallet);
+							nonPalletFloorSpaceProductMap.put(nonPalletFloorSpaceCount,
+									nonPalletVolumePercent / percentVolumePerSlotForNonPallet);
 							partialPallet = (int) (partialPallet + Math.ceil(nonPalletVolumePercent / percentVolumePerSlotForNonPallet));
 							availableVolume = availableVolume - nonPalletVolumePercent;
 							nonPalletVolumePercent = 0;
@@ -601,7 +623,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			}
 			if ((nonPalletProductsExists && palletCount > totalPalletsCount) || nonPalletVolumePercent > 0)
 			{
-				LOG.info("******************Some nonpallet products cannot fit inside container.Please remove nonpallets products from the cart***************************");
+				LOG.info(
+						"******************Some nonpallet products cannot fit inside container.Please remove nonpallets products from the cart***************************");
 				//message.add("Please remove nonpallets products from the cart");
 				cartData.setIsContainerFull(true);
 			}
@@ -756,7 +779,6 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		{
 			availableHeight = (twentyFeetContainerHeightInInches - (5 * 2)) * 2.54;
 		}
-
 		return availableHeight;
 	}
 
@@ -1115,8 +1137,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 				if (cmirUom.equals("PAL") && cmirUom.equals(alternateUOM))
 				{
-
+					//					if (!(null == energizerProductConversionFactorModel.getPackageHeight().getMeasurement()))
+					//					{
 					final double palletHeight = energizerProductConversionFactorModel.getPackageHeight().getMeasurement();
+
 
 					if (palletHeight <= availableHeight)
 					{
@@ -1126,6 +1150,7 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							doubleStackMap.put(cartERPMaterialID, possibleDoubleStackList);
 						}
 					}
+					//					}
 				}
 			}
 		}
@@ -1234,8 +1259,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					if (unitVolume.compareTo(ZERO) != 0 && coversionFactor.getAlternateUOM().equals("PAL"))
 					{
 
-						LOG.info("% volume of product if placed inside 20FT container :" + (unitVolume.doubleValue() * 100)
-								/ (twentyFeetContainerVolumInCCM.doubleValue()));
+						LOG.info("% volume of product if placed inside 20FT container :"
+								+ (unitVolume.doubleValue() * 100) / (twentyFeetContainerVolumInCCM.doubleValue()));
 						if ((unitVolume.doubleValue() * 100) / (twentyFeetContainerVolumInCCM.doubleValue()) < 5)
 						{
 							unitVolumeDisable20FT = twentyFeetContainerVolumInCCM.multiply(new BigDecimal(0.05));
@@ -1252,8 +1277,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 							LOG.info("Volume in 20 FT :  " + unitVolumeDisable20FT);
 						}
 
-						LOG.info("% volume of product if placed inside 40FT container :" + (unitVolume.doubleValue() * 100)
-								/ (fourtyFeetContainerVolumeInCCM.doubleValue()));
+						LOG.info("% volume of product if placed inside 40FT container :"
+								+ (unitVolume.doubleValue() * 100) / (fourtyFeetContainerVolumeInCCM.doubleValue()));
 						if ((unitVolume.doubleValue() * 100) / (fourtyFeetContainerVolumeInCCM.doubleValue()) < 2.5)
 						{
 							unitVolumeDisable40FT = fourtyFeetContainerVolumeInCCM.multiply(new BigDecimal(0.025));
@@ -1279,10 +1304,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 						lineItemToVolume_20FT = unitVolume.multiply(itemQuantity);
 						lineItemToVolume_40FT = unitVolume.multiply(itemQuantity);
 					}
-					totalVolumeDisable20FT = totalVolumeDisable20FT.add(EnergizerWeightOrVolumeConverter.getConversionValue(
-							volumeUnit, lineItemToVolume_20FT));
-					totalVolumeDisable40FT = totalVolumeDisable40FT.add(EnergizerWeightOrVolumeConverter.getConversionValue(
-							volumeUnit, lineItemToVolume_40FT));
+					totalVolumeDisable20FT = totalVolumeDisable20FT
+							.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, lineItemToVolume_20FT));
+					totalVolumeDisable40FT = totalVolumeDisable40FT
+							.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, lineItemToVolume_40FT));
 				}
 				if (null != coversionFactor)
 				{
@@ -1343,6 +1368,16 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			{
 				cartData.setIsContainerFull(true);
 			}
+			else if (((cartData.getTotalProductVolumeInPercent() > 100) || (cartData.getTotalProductWeightInPercent() > 100))
+					&& cartData.getContainerHeight().equalsIgnoreCase(Config.getParameter(PRCTWENTY_FEET_CONTAINER)))
+			{
+				cartData.setIsContainerFull(false);
+			}
+			else if (((cartData.getTotalProductVolumeInPercent() > 100) || (cartData.getTotalProductWeightInPercent() > 100))
+					&& cartData.getContainerHeight().equalsIgnoreCase(Config.getParameter(PRCFORTY_FEET_CONTAINER)))
+			{
+				cartData.setIsContainerFull(true);
+			}
 			else
 			{
 				cartData.setIsContainerFull(false);
@@ -1365,8 +1400,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		{
 			final CartModel cartModel = cartService.getSessionCart();
 			final List<AbstractOrderEntryModel> cartEntries = cartModel.getEntries();
-			final int totalPalletCountForSlipSheet = configurationService.getConfiguration().getInt(
-					TOTAL_PALLET_COUNT_FOR_2SLIPSHEET);
+			final int totalPalletCountForSlipSheet = configurationService.getConfiguration()
+					.getInt(TOTAL_PALLET_COUNT_FOR_2SLIPSHEET);
 			productsListA = new ArrayList<EnergizerProductPalletHeight>();
 			//int palletCount = 0;
 			long numberOfEachInCases = 0;
@@ -1469,8 +1504,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 
 					final String volumeUnit = casesVolumeUnit;
-					totalCartVolume = totalCartVolume.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit,
-							calculatedUnitVolume));
+					totalCartVolume = totalCartVolume
+							.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, calculatedUnitVolume));
 				}
 				if (null != coversionFactor && null != casesWeight)
 				{
@@ -1480,8 +1515,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 					LOG.info("Product Weight on basis of cases Weight: " + calculatedUnitWeight);
 
 					final String weightUnit = casesWeightUnit;
-					totalCartWt = totalCartWt.add(EnergizerWeightOrVolumeConverter
-							.getConversionValue(weightUnit, calculatedUnitWeight));
+					totalCartWt = totalCartWt
+							.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, calculatedUnitWeight));
 				}
 				LOG.info("-----------------------------------------------------------------");
 
@@ -1500,8 +1535,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			if (nonPalletProductsList.size() > 0)
 			{
 				LOG.info("select 2 wooden base as packing option");
-				message
-						.add("Dear Customer, Your order contains some products whose quantity is less than a full pallet (partial pallet). Partial pallets can be shipped only with 2 wooden base packing material. Please change your packing material or remove the partial pallet products.");
+				message.add(
+						"Dear Customer, Your order contains some products whose quantity is less than a full pallet (partial pallet). Partial pallets can be shipped only with 2 wooden base packing material. Please change your packing material or remove the partial pallet products.");
 				cartData.setErrorMessage(true);
 			}
 			else if ((cartData.getTotalProductVolumeInPercent() > 100) || (cartData.getTotalProductWeightInPercent() > 100))
@@ -1546,14 +1581,40 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 		final ContainerData containerData = new ContainerData();
 		if (totalCartWt.compareTo(twentyFeetContainerWeight) == -1
-				&& (totalCartVolume.compareTo(disableTwentyFeetContainerVolume) == -1 || totalCartVolume
-						.compareTo(disableTwentyFeetContainerVolume) == 0))
+				&& (totalCartVolume.compareTo(disableTwentyFeetContainerVolume) == -1
+						|| totalCartVolume.compareTo(disableTwentyFeetContainerVolume) == 0))
 		{
 			containerData.setContainerType("20FT");
-			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(disableTwentyFeetContainerVolume, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
-			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(twentyFeetContainerWeight, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(disableTwentyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(twentyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
+			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
+		}
+		else if (totalCartWt.compareTo(twentyFeetContainerWeight) == -1
+				&& (totalCartVolume.compareTo(disableTwentyFeetContainerVolume) == -1
+						|| totalCartVolume.compareTo(disableTwentyFeetContainerVolume) == 0))
+		{
+			containerData.setContainerType("PRC_20FT");
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(disableTwentyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(twentyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
+			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
+		}
+		else if (totalCartWt.compareTo(fourtyFeetContainerWeight) == -1
+				&& (totalCartVolume.compareTo(disableFourtyFeetContainerVolume) == -1
+						|| totalCartVolume.compareTo(disableFourtyFeetContainerVolume) == 0))
+		{
+			containerData.setContainerType("PRC_40FT");
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(disableFourtyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(fourtyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
 			containerData.setPercentVolumeUses(volumePercentage);
 			containerData.setPercentWeightUses(weightPercentage);
@@ -1561,10 +1622,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		else
 		{
 			containerData.setContainerType("40FT");
-			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(disableFourtyFeetContainerVolume, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
-			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(fourtyFeetContainerWeight, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(disableFourtyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(fourtyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
 			containerData.setPercentVolumeUses(volumePercentage);
 			containerData.setPercentWeightUses(weightPercentage);
@@ -1583,10 +1644,33 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		if (containerHeight.equals("20FT"))
 		{
 			containerData.setContainerType("20FT");
-			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(twentyFeetContainerVolume, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
-			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(twentyFeetContainerWeight, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(twentyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(twentyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
+			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
+		}
+		//		For Checking
+		else if (containerHeight.equals("PRC_20FT"))
+		{
+			containerData.setContainerType("PRC_20FT");
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(twentyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(twentyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
+			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
+			containerData.setPercentVolumeUses(volumePercentage);
+			containerData.setPercentWeightUses(weightPercentage);
+		}
+		else if (containerHeight.equals("PRC_40FT"))
+		{
+			containerData.setContainerType("PRC_40FT");
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(fourtyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(fourtyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
 			containerData.setPercentVolumeUses(volumePercentage);
 			containerData.setPercentWeightUses(weightPercentage);
@@ -1594,10 +1678,10 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		else
 		{
 			containerData.setContainerType("40FT");
-			final double volumePercentage = (totalCartVolume.multiply(hundred)).divide(fourtyFeetContainerVolume, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
-			final double weightPercentage = (totalCartWt.multiply(hundred)).divide(fourtyFeetContainerWeight, 2,
-					RoundingMode.HALF_EVEN).doubleValue();
+			final double volumePercentage = (totalCartVolume.multiply(hundred))
+					.divide(fourtyFeetContainerVolume, 2, RoundingMode.HALF_EVEN).doubleValue();
+			final double weightPercentage = (totalCartWt.multiply(hundred))
+					.divide(fourtyFeetContainerWeight, 2, RoundingMode.HALF_EVEN).doubleValue();
 			LOG.info("|| volumePercentage => " + volumePercentage + " || weightPercentage => " + weightPercentage);
 			containerData.setPercentVolumeUses(volumePercentage);
 			containerData.setPercentWeightUses(weightPercentage);
@@ -1658,13 +1742,13 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			}
 			if (str.equals("VOLUMEOFALLPRODUCTS"))
 			{
-				totalCartVolume = totalCartVolume.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit,
-						lineItemTotvolume));
+				totalCartVolume = totalCartVolume
+						.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, lineItemTotvolume));
 			}
 			if (str.equals("VOLUMEOFNONPALLETPRODUCTS") && !(coversionFactor.getAlternateUOM().equals("PAL")))
 			{
-				VolumeOfNonPalletProduct = VolumeOfNonPalletProduct.add(EnergizerWeightOrVolumeConverter.getConversionValue(
-						volumeUnit, lineItemTotvolume));
+				VolumeOfNonPalletProduct = VolumeOfNonPalletProduct
+						.add(EnergizerWeightOrVolumeConverter.getConversionValue(volumeUnit, lineItemTotvolume));
 			}
 		}
 		if (str.equals("VOLUMEOFALLPRODUCTS"))
@@ -1735,13 +1819,13 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 
 			if (str.equals("WEIGHTOFALLPRODUCTS"))
 			{
-				totalCartWeight = totalCartWeight.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit,
-						lineItemTotWeight));
+				totalCartWeight = totalCartWeight
+						.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, lineItemTotWeight));
 			}
 			if (str.equals("WEIGHTOFNONPALLETPRODUCTS") && !(coversionFactor.getAlternateUOM().equals("PAL")))
 			{
-				weightOfNonPalletProduct = weightOfNonPalletProduct.add(EnergizerWeightOrVolumeConverter.getConversionValue(
-						weightUnit, lineItemTotWeight));
+				weightOfNonPalletProduct = weightOfNonPalletProduct
+						.add(EnergizerWeightOrVolumeConverter.getConversionValue(weightUnit, lineItemTotWeight));
 			}
 		}
 		if (str.equals("WEIGHTOFALLPRODUCTS"))
@@ -1836,8 +1920,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 		{
 			final EnergizerProductPalletHeight tempEnergizerProductPalletHeight = (EnergizerProductPalletHeight) productsWithCalculatedUOM
 					.next();
-			if (tempEnergizerProductPalletHeight.getOrderedUOM().equalsIgnoreCase(
-					tempEnergizerProductPalletHeight.getCalculatedUOM()))
+			if (tempEnergizerProductPalletHeight.getOrderedUOM()
+					.equalsIgnoreCase(tempEnergizerProductPalletHeight.getCalculatedUOM()))
 			{
 				productsWithOrderedUOM.add(tempEnergizerProductPalletHeight);
 			}
@@ -1845,8 +1929,8 @@ public class DefaultEnergizerCartService implements EnergizerCartService
 			{
 				final String orderedUOM = tempEnergizerProductPalletHeight.getOrderedUOM();
 				final String calculatedUOM = tempEnergizerProductPalletHeight.getCalculatedUOM();
-				enrProductConversionList = energizerProductService.getAllEnergizerProductConversion(tempEnergizerProductPalletHeight
-						.getErpMaterialId());
+				enrProductConversionList = energizerProductService
+						.getAllEnergizerProductConversion(tempEnergizerProductPalletHeight.getErpMaterialId());
 				if (!enrProductConversionList.isEmpty())
 				{
 					for (final Iterator iterator = enrProductConversionList.iterator(); iterator.hasNext();)

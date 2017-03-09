@@ -20,7 +20,7 @@ body, table {font:10pt verdana;}
 
 .divider_40{top:0px;left:0px;width:100%;position:absolute;display:inline-block;border-top:dashed 1px red;z-index:1;width:105%; text-align:right;}
 
-.span_cls{position:relative;top:-9px;left:32px;font-weight: bold;font-size: 1.2em;}
+.span_cls{position:relative;top:-9px;left:55px;font-weight: bold;font-size: 1.2em;}
 .cnt_utl_cls{position:relative; width:175px;top:0px;float:left;font-weight: bold;font-size: 1.2em;}
 .cnt_utllbl_cls{position:relative;top:300px;text-align:center;}
 .cnt_utlvolfill_cls{position:relative;top:50px;z-index:101;text-align:center;}
