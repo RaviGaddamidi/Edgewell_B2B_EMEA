@@ -187,14 +187,44 @@ public class CartPageController extends AbstractPageController
 	@RequestMapping(method = RequestMethod.GET)
 	public String showCart(final Model model, final HttpSession session) throws CMSItemNotFoundException
 	{
+
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		//Changes Started here *Getting the Shipping point Id* [CR-PRC]
+		final CartData cartData = cartFacade.getSessionCart();
+		final List<String> businessRuleErrors = new ArrayList<String>();
+		String ShippingPointNo = null;
+		reverseCartProductsOrder(cartData.getEntries());
+		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
+		{
+			boolean flag = false;
+			String productWithCmirInActive = "";
+			for (final OrderEntryData entry : cartData.getEntries())
+			{
+				final UpdateQuantityForm uqf = new UpdateQuantityForm();
+				uqf.setQuantity(entry.getQuantity());
+				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
+				if (entry.getProduct().isIsActive() == false)
+				{
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					flag = true;
+				}
+				ShippingPointNo = entry.getProduct().getShippingPoint();
+
+			}
+		}
 		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
-		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
+		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
+		//*Checking Whether the product is from #867 Shipping Point* [CR-PRC]
+		if (!(ShippingPointNo.equals("867")))
+		{
+			enableButton = true;
+			enableForB2BUnit = true;
+		}
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
@@ -208,7 +238,30 @@ public class CartPageController extends AbstractPageController
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		final boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
+		//Changes Started here *Getting the Shipping point Id*  [CR-PRC]
+		final CartData cartData = cartFacade.getSessionCart();
+		final List<String> businessRuleErrors = new ArrayList<String>();
+		String ShippingPointNo = null;
+		reverseCartProductsOrder(cartData.getEntries());
+		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
+		{
+			boolean flag = false;
+			String productWithCmirInActive = "";
+			for (final OrderEntryData entry : cartData.getEntries())
+			{
+				final UpdateQuantityForm uqf = new UpdateQuantityForm();
+				uqf.setQuantity(entry.getQuantity());
+				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
+				if (entry.getProduct().isIsActive() == false)
+				{
+					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
+					flag = true;
+				}
+				ShippingPointNo = entry.getProduct().getShippingPoint();
+
+			}
+		}
+		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 
 
 		if (bindingErrors.hasErrors())
@@ -219,9 +272,14 @@ public class CartPageController extends AbstractPageController
 		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
+
 		}
-
-
+		//*Checking Whether the product is from #867 Shipping Point* [CR-PRC]
+		if (!(ShippingPointNo.equals("867")))
+		{
+			enableButton = true;
+			enableForB2BUnit = true;
+		}
 		cartEntryBusinessRulesService.clearErrors();
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
 		contUtilForm.setPackingType(containerUtilizationForm.getPackingType());
@@ -466,7 +524,6 @@ public class CartPageController extends AbstractPageController
 	{
 		CartData cartData = cartFacade.getSessionCart();
 		final List<String> businessRuleErrors = new ArrayList<String>();
-		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
@@ -482,7 +539,6 @@ public class CartPageController extends AbstractPageController
 					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
 					flag = true;
 				}
-				ShippingPointNo = entry.getProduct().getShippingPoint();
 			}
 			if (flag == true)
 			{
@@ -493,199 +549,87 @@ public class CartPageController extends AbstractPageController
 		}
 
 		/** Energizer Container Utilization service */
-		if ((null != ShippingPointNo) && ShippingPointNo.equals("867"))
+
+		if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
 		{
-
-			if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
-			{
-				containerHeight = contUtilForm.getContainerHeight();
-				packingOption = contUtilForm.getPackingType();
-			}
-			else
-			{
-				containerHeight = Config.getParameter("energizer.default.containerHeight");
-				packingOption = Config.getParameter("energizer.default.packingOption");
-			}
-
-			cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
-
-			if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS")
-					&& enableButton)
-			{
-				GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
-			}
-
-			if (cartData.isIsOrderBlocked())
-			{
-				businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
-			}
-
-			final List<String> message = energizerCartService.getMessages();
-			if (message != null && message.size() > 0)
-			{
-				for (final String messages : message)
-				{
-
-					if (messages.contains("20"))
-					{
-						GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-						{ "20" });
-					}
-					else if (messages.contains("40"))
-					{
-						GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-						{ "40" });
-					}
-					else if (message.contains("2 wooden base packing material"))
-					{
-						GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
-					}
-					else
-					{
-						GlobalMessages.addErrorMessage(model, messages);
-					}
-					businessRuleErrors.add(messages);
-				}
-
-			}
-			cartData.setBusinesRuleErrors(businessRuleErrors);
-
-			final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
-
-			final List<String> containerHeightList = Arrays
-					.asList(Config.getParameter("possiblePRCContainerHeights").split(new Character(',').toString()));
-
-			final List<String> packingOptionsList;
-
-
-			if (containerHeight.equals("PRC_20FT") || containerHeight.equals("PRC_40FT"))
-			{
-				packingOptionsList = Arrays
-						.asList(Config.getParameter("possiblePRCPackingOptions.20FT").split(new Character(',').toString()));
-			}
-			else
-			{
-				packingOptionsList = Arrays
-						.asList(Config.getParameter("possiblePRCPackingOptions.40FT").split(new Character(',').toString()));
-			}
-
-			cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
-			cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
-			cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
-			cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
-
-			energizerB2BCheckoutFlowFacade.setContainerAttributes(cartData);
-
-			model.addAttribute("containerHeightList", containerHeightList);
-			model.addAttribute("packingOptionList", packingOptionsList);
-			model.addAttribute("containerUtilizationForm", contUtilForm);
-			model.addAttribute("cartData", cartData);
-			storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
-			model.addAttribute("pageType", PageType.CART.name());
+			containerHeight = contUtilForm.getContainerHeight();
+			packingOption = contUtilForm.getPackingType();
 		}
 		else
 		{
-			if (contUtilForm.getContainerHeight() != null || contUtilForm.getPackingType() != null)
-			{
-				containerHeight = contUtilForm.getContainerHeight();
-				packingOption = contUtilForm.getPackingType();
-			}
-			else
-			{
-				containerHeight = Config.getParameter("energizer.default.containerHeight");
-				packingOption = Config.getParameter("energizer.default.packingOption");
-			}
-
-			cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
-
-			if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS")
-					&& enableButton)
-			{
-				GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
-			}
-
-			if (cartData.isIsOrderBlocked())
-			{
-				businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
-			}
-
-			final List<String> message = energizerCartService.getMessages();
-			if (message != null && message.size() > 0)
-			{
-				for (final String messages : message)
-				{
-
-					if (messages.contains("20"))
-					{
-						GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-						{ "20" });
-					}
-					else if (messages.contains("40"))
-					{
-						GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
-						{ "40" });
-					}
-					else if (message.contains("2 wooden base packing material"))
-					{
-						GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
-					}
-					else
-					{
-						GlobalMessages.addErrorMessage(model, messages);
-					}
-					businessRuleErrors.add(messages);
-				}
-
-			}
-			cartData.setBusinesRuleErrors(businessRuleErrors);
-
-			final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
-
-			final List<String> containerHeightList = Arrays
-					.asList(Config.getParameter("possibleContainerHeights").split(new Character(',').toString()));
-
-			final List<String> packingOptionsList;
-
-
-			if (containerHeight.equals("20FT"))
-			{
-				packingOptionsList = Arrays
-						.asList(Config.getParameter("possiblePackingOptions.20FT").split(new Character(',').toString()));
-			}
-
-			else
-			{
-				packingOptionsList = Arrays
-						.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
-			}
-
-			cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
-			cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
-			cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
-			cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
-
-			energizerB2BCheckoutFlowFacade.setContainerAttributes(cartData);
-
-			model.addAttribute("containerHeightList", containerHeightList);
-			model.addAttribute("packingOptionList", packingOptionsList);
-			model.addAttribute("containerUtilizationForm", contUtilForm);
-			model.addAttribute("cartData", cartData);
-			storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
-
+			containerHeight = Config.getParameter("energizer.default.containerHeight");
+			packingOption = Config.getParameter("energizer.default.packingOption");
 		}
 
-		//		else
-		//		{
-		//			model.addAttribute("cartData", cartData);
-		//			storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-		//			setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
-		//			model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
-		//			model.addAttribute("pageType", PageType.CART.name());
-		//		}
+		cartData = energizerCartService.calCartContainerUtilization(cartData, containerHeight, packingOption, enableButton);
+
+		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
+		{
+			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+
+		final List<String> message = energizerCartService.getMessages();
+		if (message != null && message.size() > 0)
+		{
+			for (final String messages : message)
+			{
+
+				if (messages.contains("20"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ "20" });
+				}
+				else if (messages.contains("40"))
+				{
+					GlobalMessages.addMessage(model, "accErrorMsgs", "errormessage.greaterthan.totalpalletcount", new Object[]
+					{ "40" });
+				}
+				else if (message.contains("2 wooden base packing material"))
+				{
+					GlobalMessages.addErrorMessage(model, "errormessage.partialpallet");
+				}
+				else
+				{
+					GlobalMessages.addErrorMessage(model, messages);
+				}
+				businessRuleErrors.add(messages);
+			}
+
+		}
+		cartData.setBusinesRuleErrors(businessRuleErrors);
+
+		final HashMap productsNotDoubleStacked = energizerCartService.getProductsNotDoublestacked();
+
+		final List<String> containerHeightList = Arrays
+				.asList(Config.getParameter("possibleContainerHeights").split(new Character(',').toString()));
+
+		final List<String> packingOptionsList;
+		if (containerHeight.equals("20FT"))
+		{
+			packingOptionsList = Arrays
+					.asList(Config.getParameter("possiblePackingOptions.20FT").split(new Character(',').toString()));
+		}
+		else
+		{
+			packingOptionsList = Arrays.asList(Config.getParameter("possiblePackingOptions").split(new Character(',').toString()));
+		}
+
+		cartData.setFloorSpaceProductsMap(energizerCartService.getFloorSpaceProductsMap());
+		cartData.setNonPalletFloorSpaceProductsMap(energizerCartService.getNonPalletFloorSpaceProductsMap());
+		cartData.setProductsNotAddedToCart(energizerCartService.getProductNotAddedToCart());
+		cartData.setProductsNotDoubleStacked(energizerCartService.getProductsNotDoublestacked());
+
+		energizerB2BCheckoutFlowFacade.setContainerAttributes(cartData);
+
+		model.addAttribute("containerHeightList", containerHeightList);
+		model.addAttribute("packingOptionList", packingOptionsList);
+		model.addAttribute("containerUtilizationForm", contUtilForm);
+		model.addAttribute("cartData", cartData);
+		storeCmsPageInModel(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(CART_CMS_PAGE));
+		model.addAttribute(WebConstants.BREADCRUMBS_KEY, resourceBreadcrumbBuilder.getBreadcrumbs("breadcrumb.cart"));
+		model.addAttribute("pageType", PageType.CART.name());
+
 
 	}
 
