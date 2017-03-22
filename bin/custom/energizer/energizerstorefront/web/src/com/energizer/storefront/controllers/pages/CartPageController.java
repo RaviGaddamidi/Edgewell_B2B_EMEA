@@ -192,25 +192,17 @@ public class CartPageController extends AbstractPageController
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		//Changes Started here *Getting the Shipping point Id* [CR-PRC]
 		final CartData cartData = cartFacade.getSessionCart();
-		final List<String> businessRuleErrors = new ArrayList<String>();
 		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-			boolean flag = false;
-			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
-				final UpdateQuantityForm uqf = new UpdateQuantityForm();
-				uqf.setQuantity(entry.getQuantity());
-				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
-				if (entry.getProduct().isIsActive() == false)
-				{
-					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
-					flag = true;
-				}
 				ShippingPointNo = entry.getProduct().getShippingPoint();
-
+				if (!(ShippingPointNo != null))
+				{
+					break;
+				}
 			}
 		}
 		if (b2bUnit.getEnableContainerOptimization() != null)
@@ -240,25 +232,17 @@ public class CartPageController extends AbstractPageController
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
 		//Changes Started here *Getting the Shipping point Id*  [CR-PRC]
 		final CartData cartData = cartFacade.getSessionCart();
-		final List<String> businessRuleErrors = new ArrayList<String>();
 		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
 		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
 		{
-			boolean flag = false;
-			String productWithCmirInActive = "";
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
-				final UpdateQuantityForm uqf = new UpdateQuantityForm();
-				uqf.setQuantity(entry.getQuantity());
-				model.addAttribute("updateQuantityForm" + entry.getEntryNumber(), uqf);
-				if (entry.getProduct().isIsActive() == false)
-				{
-					productWithCmirInActive += entry.getProduct().getErpMaterialID() + "  ";
-					flag = true;
-				}
 				ShippingPointNo = entry.getProduct().getShippingPoint();
-
+				if (!(ShippingPointNo != null))
+				{
+					break;
+				}
 			}
 		}
 		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
