@@ -190,7 +190,6 @@ public class CartPageController extends AbstractPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		//Changes Started here *Getting the Shipping point Id* [CR-PRC]
 		final CartData cartData = cartFacade.getSessionCart();
 		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
@@ -211,7 +210,6 @@ public class CartPageController extends AbstractPageController
 		}
 		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
-		//*Checking Whether the product is from #867 Shipping Point* [CR-PRC]
 		if (!(ShippingPointNo.equals("867")))
 		{
 			enableButton = true;
@@ -230,7 +228,6 @@ public class CartPageController extends AbstractPageController
 	{
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
-		//Changes Started here *Getting the Shipping point Id*  [CR-PRC]
 		final CartData cartData = cartFacade.getSessionCart();
 		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
@@ -258,7 +255,6 @@ public class CartPageController extends AbstractPageController
 			enableButton = b2bUnit.getEnableContainerOptimization();
 
 		}
-		//*Checking Whether the product is from #867 Shipping Point* [CR-PRC]
 		if (!(ShippingPointNo.equals("867")))
 		{
 			enableButton = true;
