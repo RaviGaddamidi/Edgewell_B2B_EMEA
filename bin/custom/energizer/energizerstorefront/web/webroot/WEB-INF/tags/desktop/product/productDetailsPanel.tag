@@ -61,6 +61,8 @@
 			: ${fn:escapeXml(product.uom)}<br>
 			<spring:theme code="basket.page.baseuom.convertion" />
 			: ${fn:escapeXml(product.baseUOM)}<br>
+			<spring:theme code="basket.page.layersPerPallet"/>
+			: ${fn:escapeXml(product.numberOfLayersPerPallet)}<br>
 			<spring:theme code="basket.page.casesPerPallet" />
 			: ${fn:escapeXml(product.numberOfCasesPerPallet)}<br>
 			<spring:theme code="basket.page.casesPerLayer" />

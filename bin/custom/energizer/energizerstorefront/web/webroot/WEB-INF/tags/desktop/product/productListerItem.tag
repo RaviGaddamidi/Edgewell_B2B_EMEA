@@ -64,6 +64,7 @@
 			<spring:theme code="basket.page.shipFrom"/> : ${fn:escapeXml( product.shippingPointName)}  <br>
 			<spring:theme code="basket.page.moq"/> : ${fn:escapeXml(product.moq)}<br>
 			<spring:theme code="basket.page.uom"/> : ${fn:escapeXml(product.uom)}<br>
+			<spring:theme code="basket.page.layersPerPallet"/> : ${fn:escapeXml(product.numberOfLayersPerPallet)}<br>
             <spring:theme code="basket.page.casesPerPallet"/> : ${fn:escapeXml(product.numberOfCasesPerPallet)}<br> 
 			<spring:theme code="basket.page.casesPerLayer"/> : ${fn:escapeXml(product.numberOfCasesPerLayer)}<br>			
 			<%-- obsolete : ${product.obsolete}<br> --%>

@@ -42,6 +42,7 @@
 		<property name="familyName" type="java.lang.String" />
 		<property name="groupName" type="java.lang.String" />
 		<property name="isActive" type="boolean" />
+		<property name="numberOfLayersPerPallet" type="java.lang.Integer"/>
 		<property name="numberOfCasesPerPallet" type="java.lang.Integer" />
 		<property name="numberOfCasesPerLayer" type="java.lang.Integer" />
 	</bean>

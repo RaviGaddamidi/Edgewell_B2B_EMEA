@@ -68,6 +68,7 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 		int numberOfEachInCase = 0;
 		int numberOfEachInLayer = 0;
 		int numberOfEachInPallet = 0;
+		int numberOfLayersPerPallet = 0;
 		int numberOfCasesPerPallet = 0;
 		int numberOfCasesPerLayer = 0;
 
@@ -196,9 +197,11 @@ public class EnergizerProductSearchResultListPopulator extends EnergizerSearchRe
 
 		if (numberOfEachInCase > 0)
 		{
+			numberOfLayersPerPallet = numberOfEachInPallet / numberOfEachInLayer;
 			numberOfCasesPerPallet = numberOfEachInPallet / numberOfEachInCase;
 			numberOfCasesPerLayer = numberOfEachInLayer / numberOfEachInCase;
 		}
+		productData.setNumberOfLayersPerPallet(numberOfLayersPerPallet);
 		productData.setNumberOfCasesPerPallet(numberOfCasesPerPallet);
 		productData.setNumberOfCasesPerLayer(numberOfCasesPerLayer);
 	}
