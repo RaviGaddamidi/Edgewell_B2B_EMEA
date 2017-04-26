@@ -48,4 +48,8 @@ public interface EnergizerProductService
 	public List<EnergizerProductModel> getEnergizerERPMaterialID();
 
 	public EnergizerProductModel getProductWithCode(final String code);
+
+	public List<EnergizerCMIRModel> getERPMaterialIdForImageReferenceId(final String imageId);
+
+
 }

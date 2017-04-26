@@ -83,6 +83,10 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 
 				LOG.info("|| Start add or updating  EnergizerProductModel for product :  "
 						+ (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+
+				LOG.info("|| Start add or updating  ImageRefId for product :  "
+						+ (csvValuesMap).get(EnergizerCoreConstants.IMAGEREFERENCE_ID));
+
 				EnergizerProductModel existEnergizerProd = null;
 				try
 				{
@@ -134,6 +138,7 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			final Map csvValuesMap)
 	{
 		final String productMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).toString();
+		final String imageReferenceId = csvValuesMap.get(EnergizerCoreConstants.IMAGEREFERENCE_ID).toString();
 		final String productGroup = csvValuesMap.get(EnergizerCoreConstants.PRODUCT_GROUP).toString();
 		final String listPrice = csvValuesMap.get(EnergizerCoreConstants.LIST_PRICE).toString();
 		final String listPriceCurrency = csvValuesMap.get(EnergizerCoreConstants.LIST_PRICE_CURRENCY).toString();
@@ -142,6 +147,7 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerProd.setCatalogVersion(catalogVersion);
 		energizerProd.setApprovalStatus(ArticleApprovalStatus.APPROVED);
 		energizerProd.setCode(productMaterialId);
+		energizerProd.setImageReferenceId(imageReferenceId);
 
 		// Assigning The Category
 		try
@@ -216,6 +222,8 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 
 		modelService.saveAll();
 		LOG.info(" EnergizerProductModel : " + productMaterialId + " saved successfully ******************** ");
+		LOG.info(" EnergizerProductModel Image Reference: " + imageReferenceId + " saved successfully ******************** ");
+
 	}
 
 	/**
@@ -237,6 +245,7 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			setTotalRecords(record.getRecordNumber());
 			final String value = map.get(columnHeader).trim();
 			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID)
+					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.IMAGEREFERENCE_ID)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.PRODUCT_GROUP)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.LIST_PRICE_CURRENCY)
 					|| columnHeader.equalsIgnoreCase(EnergizerCoreConstants.ERPMATERIAL_ID))

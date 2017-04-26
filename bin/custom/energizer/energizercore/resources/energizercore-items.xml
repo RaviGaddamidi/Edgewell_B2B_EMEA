@@ -352,6 +352,11 @@
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="imageReferenceId" type="java.lang.String">
+						<description>Image Reference ID</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 

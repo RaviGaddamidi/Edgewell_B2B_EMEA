@@ -271,6 +271,14 @@ public class DefaultEnergizerProductService implements EnergizerProductService
 	}
 
 	@Override
+	public List<EnergizerCMIRModel> getERPMaterialIdForImageReferenceId(final String imageId)
+	{
+		final List<EnergizerCMIRModel> result = energizerProductDAO.getERPMaterialIdForImageReferenceId(imageId);
+		return result;
+	}
+
+
+	@Override
 	public List<EnergizerCMIRModel> getAllEnergizerCMIRList()
 	{
 		final List<EnergizerCMIRModel> result = energizerProductDAO.getAllEnergizerCMIRList();

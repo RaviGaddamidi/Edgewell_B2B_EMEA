@@ -27,7 +27,7 @@ INSERT_UPDATE EnergizerCronJob;code[unique=true];job(code)[forceWrite=true];sess
 ;energizerCustomerCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeEnergizerCustomer;Customer Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerSalesUOMCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeSalesArea;Sales UOM Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerB2BUserCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeB2BUser;B2B User Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
-;energizerProductMediaCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProductMedia;Product Media Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
+;energizerProductMediaJob;energizerProductMediaCSVProcessor;en;energizerProductMediaCSVProcessor;Product Media Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerCustomerAddressCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeCustomerAddress;Customer Address Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProductCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeProduct;Product Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
 ;energizerProductConversionCSVProcessor;energizerCSVFeedCronJob;en;$interfaceTypeConversion;Product Conversion Job;$emailAddress;$technicalEmailAddress;$businessEmailAddress;;
@@ -72,7 +72,7 @@ INSERT_UPDATE Trigger;cronjob(code)[unique=true];cronExpression
 ;energizerProductNameCSVProcessor;0 0 2 ? * *
 ;energizerCMIRMonitorCronJob;0 15 2 ? * *
 ;energizerCMIRCSVProcessor;0 45 2 ? * *
-;energizerProductMediaCSVProcessor;0 0 3 ? * *
+;energizerProductMediaJob;0 0 3 ? * *
 ;energizerProductHierarchyCSVProcessor;0 15 3 ? * *
 ;energizerCategory2CategoryCSVProcessor;0 30 3 ? * *
 ;energizerProduct2CategoryCSVProcessor;0 45 3 ? * *

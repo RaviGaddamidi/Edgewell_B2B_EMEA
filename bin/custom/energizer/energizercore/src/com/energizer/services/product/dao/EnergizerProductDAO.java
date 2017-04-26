@@ -49,6 +49,8 @@ public interface EnergizerProductDAO
 
 	List<EnergizerProductModel> getEnergizerERPMaterialIDList();
 
+	List<EnergizerCMIRModel> getERPMaterialIdForImageReferenceId(final String imageId);
+
 	public EnergizerProductModel getProductWithCode(final String code);
 
 

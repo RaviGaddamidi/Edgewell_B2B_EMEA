@@ -145,6 +145,24 @@ public class DefaultEnergizerProductDAO implements EnergizerProductDAO
 	}
 
 	@Override
+	public List<EnergizerCMIRModel> getERPMaterialIdForImageReferenceId(final String imageId)
+	{
+
+		final String queryString = "SELECT {c:" + EnergizerCMIRModel.PK + "}"//
+				+ "FROM {" + EnergizerCMIRModel._TYPECODE + " AS c  JOIN EnergizerProduct as p ON {c.ERPMATERIALID}={p.CODE}} "//
+				+ "WHERE " + "{p:" + EnergizerProductModel.IMAGEREFERENCEID + "}=?ImageRefId";
+
+		final FlexibleSearchQuery query = new FlexibleSearchQuery(queryString);
+
+		query.addQueryParameter("ImageRefId", imageId);
+
+		return flexibleSearchService.<EnergizerCMIRModel> search(query).getResult();
+
+
+	}
+
+
+	@Override
 	public List<EnergizerCMIRModel> getEnergizerCMIRListForMatIdAndCustId(final String erpMaterialId,
 			final String customerMaterialID, final String b2bUnitId)
 	{

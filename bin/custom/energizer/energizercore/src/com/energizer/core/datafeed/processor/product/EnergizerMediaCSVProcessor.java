@@ -1,58 +1,61 @@
 package com.energizer.core.datafeed.processor.product;
 
+import de.hybris.platform.catalog.CatalogVersionService;
 import de.hybris.platform.catalog.enums.ArticleApprovalStatus;
 import de.hybris.platform.catalog.model.CatalogVersionModel;
 import de.hybris.platform.core.model.media.MediaContainerModel;
 import de.hybris.platform.core.model.media.MediaFormatModel;
 import de.hybris.platform.core.model.media.MediaModel;
+import de.hybris.platform.cronjob.enums.CronJobResult;
+import de.hybris.platform.cronjob.enums.CronJobStatus;
 import de.hybris.platform.product.ProductService;
 import de.hybris.platform.product.UnitService;
+import de.hybris.platform.servicelayer.config.ConfigurationService;
+import de.hybris.platform.servicelayer.cronjob.AbstractJobPerformable;
+import de.hybris.platform.servicelayer.cronjob.PerformResult;
 import de.hybris.platform.servicelayer.i18n.CommonI18NService;
 import de.hybris.platform.servicelayer.media.MediaContainerService;
 import de.hybris.platform.servicelayer.media.MediaService;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.session.SessionService;
+import de.hybris.platform.util.Config;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.energizer.core.constants.EnergizerCoreConstants;
-import com.energizer.core.datafeed.AbstractEnergizerCSVProcessor;
-import com.energizer.core.datafeed.EnergizerCSVFeedError;
+import com.energizer.core.model.EnergizerCMIRModel;
+import com.energizer.core.model.EnergizerCronJobModel;
 import com.energizer.core.model.EnergizerProductModel;
+import com.energizer.services.product.EnergizerProductService;
 
 
 /**
- * 
- * 
+ *
+ *
  * This processors imports the media.
- * 
- * Sample file will look like
- * 
- * ERPMaterialID,ThumnailPath, DisplayImagePath PRD001, /medias/Produc101-thumb.jpeg, /medias/Produc201-thumb.jpeg
- * 
- * Total column count : 3
  */
-public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
+public class EnergizerMediaCSVProcessor extends AbstractJobPerformable<EnergizerCronJobModel>
 {
+	@Resource
+	private EnergizerProductService energizerProductService;
 	@Resource
 	private ModelService modelService;
 	@Resource
 	private SessionService sessionService;
-	@Resource
-	private FlexibleSearchService flexibleSearchService;
 	@Resource
 	private ProductService productService;
 	@Resource
@@ -63,6 +66,13 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 	MediaService mediaService;
 	@Resource
 	MediaContainerService mediaContainerService;
+	@Resource
+	private ConfigurationService configurationService;
+	@Resource
+	CatalogVersionService catalogVersionService;
+
+	@Resource
+	protected FlexibleSearchService flexibleSearchService;
 
 	private static final Logger LOG = Logger.getLogger(EnergizerMediaCSVProcessor.class);
 	private final String PRD_IMG_QUALIFIER = "300Wx300H";
@@ -73,99 +83,89 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 	private static final String JPG = "jpg";
 
 	@Override
-	public List<EnergizerCSVFeedError> process(final Iterable<CSVRecord> records)
+	public PerformResult perform(final EnergizerCronJobModel arg0)
 	{
 		EnergizerProductModel existEnergizerProd = null;
+
 		try
 		{
+
 			final CatalogVersionModel catalogVersion = getCatalogVersion();
-			long succeedRecord = getRecordSucceeded();
-			for (final CSVRecord record : records)
+
+			final String thumbnailPath = Config.getParameter("energizer.thumbnailPath");
+
+			final String displayImagePath = Config.getParameter("energizer.displayImagePath");
+
+			final File[] files = new File(thumbnailPath).listFiles();
+
+			Map<String, String> csvValuesMap = null;
+
+			if (files != null)
 			{
-				final Map<String, String> csvValuesMap = record.toMap();
-				validate(record);
-				if (!getBusinessFeedErrors().isEmpty())
-				{
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
-					getBusinessFeedErrors().clear();
-					continue;
-				}
-				LOG.info("Processing product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
-				try
-				{
-					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
-							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
-				}
-				catch (final Exception e)
-				{
-					long recordFailed = getRecordFailed();
-					EnergizerCSVFeedError error = null;
-					LOG.info("Product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " DOES NOT EXIST");
-					final List<String> columnNames = new ArrayList<String>();
-					error = new EnergizerCSVFeedError();
-					error.setUserType(BUSINESS_USER);
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(EnergizerCoreConstants.ERPMATERIAL_ID);
-					error.setColumnName(columnNames);
-					error.setMessage("Product " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " does not exist.");
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
+				csvValuesMap = new HashMap<>();
 
-					csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-					getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
-					getBusinessFeedErrors().clear();
-
-					continue;
-				}
-				if (null != existEnergizerProd)
+				for (int i = 1; i < files.length; i++)
 				{
-					try
+					if (files[i].isFile())
 					{
-						addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
-					}
-					catch (final Exception e)
-					{
-						long recordFailed = getRecordFailed();
-						EnergizerCSVFeedError error = null;
-						LOG.info("Image File does not exist for product " + existEnergizerProd.getCode());
-						final List<String> columnNames = new ArrayList<String>();
-						error = new EnergizerCSVFeedError();
-						error.setUserType(BUSINESS_USER);
-						error.setLineNumber(record.getRecordNumber());
-						columnNames.add(EnergizerCoreConstants.DISPLAY_IMAGE_PATH);
-						error.setColumnName(columnNames);
-						error.setMessage("Display image path not found for product " + existEnergizerProd.getCode());
-						getBusinessFeedErrors().add(error);
-						setBusRecordError(getBusinessFeedErrors().size());
-						recordFailed++;
-						setRecordFailed(recordFailed);
 
-						csvFeedErrorRecords.addAll(getBusinessFeedErrors());
-						getTechnicalFeedErrors().addAll(getBusinessFeedErrors());
-						getBusinessFeedErrors().clear();
+						final String ext = FilenameUtils.getExtension(files[i].getName());
+						final String imgRefId = files[i].getName().toString().substring(0, files[i].getName().indexOf("_"));
+						final List<EnergizerCMIRModel> erpId = energizerProductService.getERPMaterialIdForImageReferenceId(imgRefId);
+						final int size = erpId.size();
+						for (int j = 0; j < size; j++)
+						{
+							System.out.println("ERP ID" + erpId.get(j).getErpMaterialId());
+							csvValuesMap.put(EnergizerCoreConstants.ERPMATERIAL_ID, erpId.get(j).getErpMaterialId());
+							csvValuesMap.put(EnergizerCoreConstants.THUMBNAIIL_PATH, thumbnailPath + "\\"
+									+ files[i].getName().substring(0, files[i].getName().indexOf("_")) + "_2" + "." + ext);
+							csvValuesMap.put(EnergizerCoreConstants.DISPLAY_IMAGE_PATH, displayImagePath + "\\"
+									+ files[i].getName().substring(0, files[i].getName().indexOf("_")) + "_1" + "." + ext);
 
-						continue;
+							LOG.info("Processing product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+
+
+							try
+							{
+								existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
+										(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+							}
+							catch (final Exception e)
+							{
+								LOG.info("Product : " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " DOES NOT EXIST");
+								continue;
+							}
+							if (null != existEnergizerProd)
+							{
+								try
+								{
+									addUpdateProductMediaDetails(existEnergizerProd, catalogVersion, csvValuesMap);
+								}
+								catch (final Exception e)
+								{
+									LOG.info("Image File does not exist for product " + existEnergizerProd.getCode());
+									continue;
+								}
+							}
+						}
+						LOG.info("****************** ProductMediaModel updated successfully ****************** ");
+
 					}
 				}
-				succeedRecord++;
-				setRecordSucceeded(succeedRecord);
-				LOG.info("****************** ProductMediaModel updated successfully ****************** ");
 			}
 		}
+
+
 		catch (final Exception e)
 		{
 			LOG.error("Error in adding or updating  ProductMediaModel" + e.getMessage());
 		}
-		getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
-		getTechnicalFeedErrors().clear();
-		return getCsvFeedErrorRecords();
+		return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
+
 	}
 
 	/**
-	 * 
+	 *
 	 * @param energizerProd
 	 * @param catalogVersion
 	 * @param csvValuesMap
@@ -174,16 +174,15 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 	private void addUpdateProductMediaDetails(final EnergizerProductModel energizerProd, final CatalogVersionModel catalogVersion,
 			final Map<String, String> csvValuesMap) throws FileNotFoundException
 	{
-
 		final String productMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).toString().trim();
-		final String thumnailPath = csvValuesMap.get(EnergizerCoreConstants.THUMBNAIIL_PATH).toString().trim();
+		final String thumbnailPath = csvValuesMap.get(EnergizerCoreConstants.THUMBNAIIL_PATH).toString().trim();
 		final String displayImagePath = csvValuesMap.get(EnergizerCoreConstants.DISPLAY_IMAGE_PATH).toString().trim();
 
 		energizerProd.setCode(productMaterialId);
 		energizerProd.setCatalogVersion(catalogVersion);
 		energizerProd.setApprovalStatus(ArticleApprovalStatus.APPROVED);
 
-		final MediaModel mediaThumbnail = createUploadProductMedia(thumnailPath, productMaterialId.concat(aTHUMB),
+		final MediaModel mediaThumbnail = createUploadProductMedia(thumbnailPath, productMaterialId.concat(aTHUMB),
 				PRD_THUMB_QUALIFIER, catalogVersion, productMaterialId);
 		final MediaModel mediaPicture = createUploadProductMedia(displayImagePath, productMaterialId.concat(aPICS),
 				PRD_IMG_QUALIFIER, catalogVersion, productMaterialId);
@@ -192,14 +191,12 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 		energizerProd.setPicture(mediaPicture);
 		LOG.info("Flag Value" + modelService.isModified(energizerProd));
 		LOG.info("Is New" + modelService.isNew(energizerProd));
-
 		modelService.saveAll();
 	}
 
 
-
 	/**
-	 * 
+	 *
 	 * @param fileLoc
 	 * @param mediaModelCode
 	 * @param mediaQualifier
@@ -262,74 +259,21 @@ public class EnergizerMediaCSVProcessor extends AbstractEnergizerCSVProcessor
 
 	}
 
-	/**
-	 * 
-	 * @param record
-	 * @return
-	 */
-	private void validate(final CSVRecord record)
+
+	public CatalogVersionModel getCatalogVersion() throws Exception
 	{
-		EnergizerCSVFeedError error = null;
-		Integer columnNumber = 0;
-		long recordFailed = getRecordFailed();
-		for (final String columnHeader : record.toMap().keySet())
+		final String catalogName = configurationService.getConfiguration().getString("catalogName", null);
+		final String version = configurationService.getConfiguration().getString("version", null);
+		CatalogVersionModel catalogVersion = null;
+		if (StringUtils.isNotEmpty(catalogName) && StringUtils.isNotEmpty(version))
 		{
-			columnNumber++;
-			setTotalRecords(record.getRecordNumber());
-			final String value = record.toMap().get(columnHeader);
-			final String extension = value.substring(value.lastIndexOf(".") + 1, value.length()).toLowerCase();
-			final boolean isJPEG = extension.equalsIgnoreCase(JPEG);
-			final boolean isJPG = extension.equalsIgnoreCase(JPG);
-			if (value.isEmpty())
-			{
-				final List<String> columnNames = new ArrayList<String>();
-				error = new EnergizerCSVFeedError();
-				error.setUserType(BUSINESS_USER);
-				error.setLineNumber(record.getRecordNumber());
-				columnNames.add(columnHeader);
-				error.setColumnName(columnNames);
-				error.setMessage(columnHeader + " column should not be empty");
-				getBusinessFeedErrors().add(error);
-				setBusRecordError(getBusinessFeedErrors().size());
-				recordFailed++;
-				setRecordFailed(recordFailed);
-			}
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.DISPLAY_IMAGE_PATH))
-			{
-
-				if (!isJPG)
-				{
-					final List<String> columnNames = new ArrayList<String>();
-					error = new EnergizerCSVFeedError();
-					error.setUserType(BUSINESS_USER);
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(columnHeader);
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be jpeg/jpg");
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
-				}
-			}
-
-			if (columnHeader.equalsIgnoreCase(EnergizerCoreConstants.THUMBNAIIL_PATH))
-			{
-				if (!isJPG)
-				{
-					final List<String> columnNames = new ArrayList<String>();
-					error = new EnergizerCSVFeedError();
-					error.setUserType(BUSINESS_USER);
-					error.setLineNumber(record.getRecordNumber());
-					columnNames.add(columnHeader);
-					error.setColumnName(columnNames);
-					error.setMessage(columnHeader + " column should be jpeg/jpg.");
-					getBusinessFeedErrors().add(error);
-					setBusRecordError(getBusinessFeedErrors().size());
-					recordFailed++;
-					setRecordFailed(recordFailed);
-				}
-			}
+			catalogVersion = catalogVersionService.getCatalogVersion(catalogName, version);
 		}
+		else
+		{
+			throw new Exception("Invalid Catalog Version ");
+		}
+		return catalogVersion;
 	}
+
 }

@@ -23,6 +23,7 @@ public class EnergizerCoreConstants extends GeneratedEnergizerCoreConstants
 
 	// Constants for ProductCSVProcessor
 	public static final String ERPMATERIAL_ID = "ERPMaterialID";
+	public static final String IMAGEREFERENCE_ID = "ImageReferenceID";
 	public static final String PRODUCT_GROUP = "Product Group";
 	public static final String LIST_PRICE = "ListPrice";
 	public static final String LIST_PRICE_CURRENCY = "ListPriceCurrency";
