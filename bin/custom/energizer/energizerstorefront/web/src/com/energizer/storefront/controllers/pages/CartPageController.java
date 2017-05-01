@@ -190,6 +190,11 @@ public class CartPageController extends AbstractPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		if (b2bUnit.getEnableContainerOptimization() != null)
+		{
+			enableButton = b2bUnit.getEnableContainerOptimization();
+		}
+		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		final CartData cartData = cartFacade.getSessionCart();
 		String ShippingPointNo = null;
 		reverseCartProductsOrder(cartData.getEntries());
@@ -198,23 +203,19 @@ public class CartPageController extends AbstractPageController
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				ShippingPointNo = entry.getProduct().getShippingPoint();
-				if (!(ShippingPointNo != null))
+				if (ShippingPointNo != null)
 				{
 					break;
 				}
 			}
 		}
-		if (b2bUnit.getEnableContainerOptimization() != null)
+
+		if (ShippingPointNo != null && ShippingPointNo.equals("867"))
 		{
-			enableButton = b2bUnit.getEnableContainerOptimization();
+			enableButton = false;
+			enableForB2BUnit = false;
 		}
-		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		prepareDataForPage(model);
-		if (!(ShippingPointNo.equals("867")))
-		{
-			enableButton = true;
-			enableForB2BUnit = true;
-		}
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
 		return Views.Pages.Cart.CartPage;
@@ -236,7 +237,7 @@ public class CartPageController extends AbstractPageController
 			for (final OrderEntryData entry : cartData.getEntries())
 			{
 				ShippingPointNo = entry.getProduct().getShippingPoint();
-				if (!(ShippingPointNo != null))
+				if (ShippingPointNo != null)
 				{
 					break;
 				}
@@ -255,10 +256,10 @@ public class CartPageController extends AbstractPageController
 			enableButton = b2bUnit.getEnableContainerOptimization();
 
 		}
-		if (!(ShippingPointNo.equals("867")))
+		if (ShippingPointNo.equals("867"))
 		{
-			enableButton = true;
-			enableForB2BUnit = true;
+			enableButton = false;
+			enableForB2BUnit = false;
 		}
 		cartEntryBusinessRulesService.clearErrors();
 		contUtilForm.setContainerHeight(containerUtilizationForm.getContainerHeight());
@@ -350,9 +351,9 @@ public class CartPageController extends AbstractPageController
 	{
 		final ProductModel productModel = productService.getProductForCode(productCode);
 
-		final ProductData productData = productFacade.getProductForOptions(productModel, Arrays.asList(ProductOption.BASIC,
-				ProductOption.CATEGORIES, ProductOption.VARIANT_MATRIX_BASE, ProductOption.VARIANT_MATRIX_PRICE,
-				ProductOption.VARIANT_MATRIX_MEDIA, ProductOption.VARIANT_MATRIX_STOCK));
+		final ProductData productData = productFacade.getProductForOptions(productModel,
+				Arrays.asList(ProductOption.BASIC, ProductOption.CATEGORIES, ProductOption.VARIANT_MATRIX_BASE,
+						ProductOption.VARIANT_MATRIX_PRICE, ProductOption.VARIANT_MATRIX_MEDIA, ProductOption.VARIANT_MATRIX_STOCK));
 
 		model.addAttribute("product", productData);
 
@@ -411,8 +412,8 @@ public class CartPageController extends AbstractPageController
 		}
 		else
 		{
-			final CartModificationData cartModification = b2bCartFacade.updateOrderEntry(getOrderEntryData(form.getQuantity(),
-					productCode, entryNumber));
+			final CartModificationData cartModification = b2bCartFacade
+					.updateOrderEntry(getOrderEntryData(form.getQuantity(), productCode, entryNumber));
 
 			if (cartModification.getStatusCode().equals(SUCCESSFUL_MODIFICATION_CODE))
 			{
@@ -546,6 +547,11 @@ public class CartPageController extends AbstractPageController
 		if (cartData.isIsFloorSpaceFull() && cartData.getContainerPackingType().equalsIgnoreCase("2 SLIP SHEETS") && enableButton)
 		{
 			GlobalMessages.addErrorMessage(model, "errorMessages.enable.2slipsheet");
+		}
+
+		if (cartData.isIsOrderBlocked())
+		{
+			businessRuleErrors.add(Localization.getLocalizedString(ORDER_BLOCKED));
 		}
 
 		final List<String> message = energizerCartService.getMessages();
