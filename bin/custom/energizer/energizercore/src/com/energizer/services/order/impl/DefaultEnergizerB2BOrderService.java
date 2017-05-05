@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -423,7 +424,15 @@ public class DefaultEnergizerB2BOrderService implements EnergizerB2BOrderService
 			final JAXBElement<String> currency = objectFactory.createZSD_ISOHEAD_D31E8CCURRENCY(order.getCurrency().getIsocode());
 			final GregorianCalendar c = new GregorianCalendar();
 
-			c.setTime(order.getRequestedDeliveryDate());
+			final Calendar ca = Calendar.getInstance();
+			ca.setTime(new Date());
+			ca.add(Calendar.DATE, order.getLeadTime());
+			Date reqDate = order.getRequestedDeliveryDate();
+			if (reqDate.compareTo(ca.getTime()) < 0)
+			{
+				reqDate = ca.getTime();
+			}
+			c.setTime(reqDate);
 			XMLGregorianCalendar date2 = null;
 			try
 			{
