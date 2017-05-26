@@ -410,11 +410,29 @@ public class ExcelUploadPageController extends AbstractSearchPageController
 
 		final String userId = userService.getCurrentUser().getUid();
 		final EnergizerB2BUnitModel b2bUnit = b2bCommerceUserService.getParentUnitForCustomer(userId);
+		final CartData cartData = cartFacade.getSessionCart();
+		String ShippingPointNo = null;
+		reverseCartProductsOrder(cartData.getEntries());
+		if (cartData.getEntries() != null && !cartData.getEntries().isEmpty())
+		{
+			for (final OrderEntryData entry : cartData.getEntries())
+			{
+				ShippingPointNo = entry.getProduct().getShippingPoint();
+				if (ShippingPointNo != null)
+				{
+					break;
+				}
+			}
+		}
 		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
 		}
-
+		if (ShippingPointNo.equals("867"))
+		{
+			enableButton = false;
+			enableForB2BUnit = false;
+		}
 		prepareDataForPage(model);
 		model.addAttribute("enableButton", enableButton);
 		model.addAttribute("enableForB2BUnit", enableForB2BUnit);
