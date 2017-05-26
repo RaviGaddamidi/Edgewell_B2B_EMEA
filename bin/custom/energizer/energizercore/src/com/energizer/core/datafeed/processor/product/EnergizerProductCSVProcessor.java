@@ -35,8 +35,8 @@ import com.energizer.core.model.EnergizerProductModel;
 
 /**
  * @author Bivash Pandit
- * 
- *         CSV File : XXXPRODUCTDATAXXXX SAMPLE HEADERS and DATA: ERPMaterialID,Product
+ *
+ *         CSV File : XXXPRODUCTDATAXXXX SAMPLE HEADERS and DATA: ERPMaterialID,Img Ref Mat,Product
  *         Group,ListPrice,ListPriceCurrency,ObsoleteStatus 000000000000000003,LITM, 10.00,USD,0
  * 
  */
