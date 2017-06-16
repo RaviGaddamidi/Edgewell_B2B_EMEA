@@ -256,7 +256,7 @@ public class CartPageController extends AbstractPageController
 			enableButton = b2bUnit.getEnableContainerOptimization();
 
 		}
-		if (ShippingPointNo.equals("867"))
+		if (ShippingPointNo != null && ShippingPointNo.equals("867"))
 		{
 			enableButton = false;
 			enableForB2BUnit = false;
