@@ -10,9 +10,9 @@
 <template:page pageTitle="${pageTitle}">
 
 
-	<div id="breadcrumb" class="breadcrumb">
+	<%-- <div id="breadcrumb" class="breadcrumb">
 		<breadcrumb:breadcrumb breadcrumbs="${breadcrumbs}"/>
-	</div>
+	</div> --%>
 
 	<div id="globalMessages">
 		<common:globalMessages/>

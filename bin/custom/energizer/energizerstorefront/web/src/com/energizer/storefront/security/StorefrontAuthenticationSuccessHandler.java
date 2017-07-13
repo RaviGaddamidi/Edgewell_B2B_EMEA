@@ -132,12 +132,14 @@ public class StorefrontAuthenticationSuccessHandler extends SavedRequestAwareAut
 
 		final EnergizerB2BCustomerModel energizerB2BCustomerModel = defaultEnergizerPasswordExpiryFacade.getCustomerByUID(userName);
 
-		if (!energizerB2BCustomerModel.getIsPasswordQuestionSet())
+		if (energizerB2BCustomerModel != null && !energizerB2BCustomerModel.getIsPasswordQuestionSet())
 		{
 			sessionService.setAttribute("quesAnsAlert", "account.password.isQuestionAnsSet");
 		}
 
 	}
+	
+	
 
 	protected CartFacade getCartFacade()
 	{

@@ -1,0 +1,18 @@
+#$childProductCatalog=latamProductCatalog
+
+#$masterProductCatalog=edgewellMasterProductCatalog
+#$sourceProductCV=sourceVersion(catalog(id[default=$masterProductCatalog]),version[default='Online'])[unique=true,default='$masterProductCatalog:Online']
+#$targetProductCV=targetVersion(catalog(id[default=$childProductCatalog]),version[default='Online'])[unique=true,default='$childProductCatalog:Online']
+
+#INSERT_UPDATE CatalogVersionSyncJob;code[unique=true];sessionUser(uid);$sourceProductCV;$targetProductCV
+#;syncEdgewellMasterToLatam;syncuser;;;;
+
+$masterProductCatalog=edgewellMasterProductCatalog
+$childProductCatalog2=emeaProductCatalog
+
+$sourceProductCV=sourceVersion(catalog(id[default=$masterProductCatalog]),version[default='Online'])[unique=true,default='$masterProductCatalog:Online']
+$targetProductCV2=targetVersion(catalog(id[default=$childProductCatalog2]),version[default='Online'])[unique=true,default='$childProductCatalog2:Online']
+
+INSERT_UPDATE CatalogVersionSyncJob;code[unique=true];sessionUser(uid);$sourceProductCV;$targetProductCV2
+;syncEdgewellMasterToEmea;syncuser;;;;
+

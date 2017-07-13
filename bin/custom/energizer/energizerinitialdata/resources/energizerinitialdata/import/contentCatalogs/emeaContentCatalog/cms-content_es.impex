@@ -1,0 +1,120 @@
+# ImpEx for Importing CMS Content
+# Spanish Localisation
+
+# Macros / Replacement Parameter definitions
+$contentCatalog=emeaContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$picture=media(code, $contentCV);
+$siteResource=jar:com.energizer.initialdata.constants.EnergizerInitialDataConstants&/energizerinitialdata/import/contentCatalogs/$contentCatalog
+
+
+# Language
+$lang=es
+
+
+# CMS Image Components
+UPDATE CMSImageComponent;$contentCV[unique=true];uid[unique=true];$picture[lang=$lang]
+
+# CMS Link Components
+UPDATE CMSLinkComponent;$contentCV[unique=true];uid[unique=true];linkName[lang=$lang]
+;;HomepageNavLink;Energizer
+;;Feminine_Care_Link;Feminine Care
+;;Playtex_Link;Playtex
+;;Carefree_Link;Carefree
+;;Stayfree_Link;Stayfree
+;;Ob_Link;OB
+;;Infant_Care_Link;Infant Care
+;;Infant_Playtex_Link;Playtex
+;;Shaving_Link;Shaving
+;;Schick_Link;Schick
+;;Edge_Link;Edge
+;;Skintimate_Link;Skintimate
+;;Skin_Care_Link;Skin Care
+;;Personal_Cleansing_Clothes_Link;Personal Cleansing Clothes
+;;Wet_Ones_Link;Wet Ones
+;;SkinCare_Playtex_Link;Playtex
+;;Sun_Care_Link;Sun Care
+;;Banana_Boat_Link;Banana Boat
+;;Hawaiian_Tropic_Link;Hawaiian Tropic
+;;CatalogDownloadPageLink;Descarga del catálogo
+#;;UserLoginLink;Login
+#;;MyAccountLink;My Account
+#;;MyCompanyLink;My Company
+#;;LogoutLink;Logout
+#;;StoreFinderLink;Store Locator
+#;;QuickOrderPageLink;Quick Order
+#;;ExcelOrderPageLink;Excel Order
+#;;AboutUSLink;About US
+#;;CopyRightLink;©2015 Energizer
+#;;TrademarkLink;Trademark
+#;;TermsAndConditionsLink;Terms And Conditions
+#;;PrivacyPolicyLink;Privacy Policy
+#;;ContactUSLink;Contact US
+#;;LegalLink;Legal
+#;;FAQLink;FAQS
+
+# Lightbox Banner for Mini Cart
+UPDATE Media;$contentCV[unique=true];code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;&imageRef
+
+
+
+# CMS Mini Cart Component
+UPDATE MiniCartComponent;$contentCV[unique=true];uid[unique=true];name;title[lang=$lang]
+
+# CMS Tab Paragraph Components
+UPDATE CMSTabParagraphComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang];content[lang=$lang]
+
+# CMS Footer Component
+UPDATE FooterComponent;$contentCV[unique=true];uid[unique=true];notice[lang=$lang]
+
+# CMS Paragraph Components
+UPDATE CMSParagraphComponent;$contentCV[unique=true];uid[unique=true];content[lang=$lang]
+
+# CMS Product References Components
+UPDATE ProductReferencesComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+
+# CMS PurchasedCategorySuggestion Components
+UPDATE PurchasedCategorySuggestionComponent;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+
+# Category Pages
+UPDATE CategoryPage;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+
+# CMS Navigation Nodes
+UPDATE CMSNavigationNode;$contentCV[unique=true];uid[unique=true];title[lang=$lang]
+#;;Playtex_Nav_Node;Playtex
+#;;Carefree_Nav_Node;Carefree
+#;;Stayfree_Nav_Node;Stayfree
+
+
+# CMS Banner Components
+
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText
+;;/images/banners/homepage/playtex 950px x 600px.jpg;playtex 950px x 600px.jpg;$siteResource/images/banners/homepage/playtex 950px x 600px.jpg;image/jpg;Playtex
+;;/images/banners/homepage/banners 950px x600px carefree.jpg;banners 950px x600px carefree.jpg;$siteResource/images/banners/homepage/banners 950px x600px carefree.jpg;image/jpg;Carefree
+;;/images/banners/homepage/banners 950px x600px stayfree.jpg;banners 950px x600px stayfree.jpg;$siteResource/images/banners/homepage/banners 950px x600px stayfree.jpg;image/jpg;Stayfree
+;;/images/banners/homepage/BB  950px x 600px BB.jpg;BB  950px x 600px BB.jpg;$siteResource/images/banners/homepage/BB  950px x 600px BB.jpg;image/jpg;Banana Boat
+;;/images/banners/homepage/banners 950px x600px HT.jpg;banners 950px x600px HT.jpg;$siteResource/images/banners/homepage/banners 950px x600px HT.jpg;image/jpg;Hawaiian Tropic
+;;/images/banners/homepage/banners 950px x600px X3.jpg;banners 950px x600px X3.jpg;$siteResource/images/banners/homepage/banners 950px x600px X3.jpg;image/jpg;Schick 3
+;;/images/banners/homepage/banners 950px x600px Q4.jpg;banners 950px x600px Q4.jpg;$siteResource/images/banners/homepage/banners 950px x600px Q4.jpg;image/jpg;Schick Quattro
+
+
+# Site Logo Component
+UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;urlLink;$picture[lang=$lang];external
+;;HomePageBannerComponent11;Homepage banner component11;HomePageBannerComponent11;http://www.schicklatinoamerica.com/;/images/banners/homepage/banners 950px x600px X3.jpg;true
+;;HomePageBannerComponent22;Homepage banner component22;HomePageBannerComponent22;http://www.hawaiiantropiclatinoamerica.com/;/images/banners/homepage/banners 950px x600px HT.jpg;true
+;;HomePageBannerComponent33;Homepage banner component33;HomePageBannerComponent33;http://www.schicklatinoamerica.com/;/images/banners/homepage/banners 950px x600px Q4.jpg;true
+;;HomePageBannerComponent44;Homepage banner component44;HomePageBannerComponent44;http://www.bananaboatlatinoamerica.com/;/images/banners/homepage/BB  950px x 600px BB ENG.jpg;true
+;;HomePageBannerComponent55;Homepage banner component55;HomePageBannerComponent55;http://www.playtexlatinoamerica.com/;/images/banners/homepage/playtex 950px x 600px.jpg;true
+;;HomePageBannerComponent66;Homepage banner component66;HomePageBannerComponent66;http://www.carefreeliners.com;/images/banners/homepage/banners 950px x600px carefree.jpg;true
+;;HomePageBannerComponent77;Homepage banner component77;HomePageBannerComponent77;http://www.stayfree.com/;/images/banners/homepage/banners 950px x600px stayfree.jpg;true
+
+
+
+
+
+
+
+
+
+
+

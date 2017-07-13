@@ -1,0 +1,5 @@
+INSERT_UPDATE JobSearchRestriction;code[unique=true];job(code);query;type(code)
+;ProductRestrictionMasterCatalog;"syncEdgewellMasterToLatam";{pk} IN ({{ SELECT {p:PK}  FROM {Product as p} where {p:name[en]} IS NOT NULL }});Product
+
+INSERT_UPDATE JobSearchRestriction;code[unique=true];job(code);query;type(code)
+;ProductRestrictionMasterCatalog2;"syncEdgewellMasterToEmea";{pk} IN ({{ SELECT {p:PK}  FROM {Product as p} where {p:name[es]} IS NOT NULL }});Product

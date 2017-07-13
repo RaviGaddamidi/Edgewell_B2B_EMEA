@@ -71,49 +71,60 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			long succeedRecord = getRecordSucceeded();
 			for (final CSVRecord record : records)
 			{
-				final Map<String, String> csvValuesMap = record.toMap();
-				validate(record);
-				if (!getTechnicalFeedErrors().isEmpty())
-				{
-					csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
-					getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
-					getTechnicalFeedErrors().clear();
-					continue;
-				}
-
-				LOG.info("|| Start add or updating  EnergizerProductModel for product :  "
-						+ (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
-
-				LOG.info("|| Start add or updating  ImageRefId for product :  "
-						+ (csvValuesMap).get(EnergizerCoreConstants.IMAGEREFERENCE_ID));
-
-				EnergizerProductModel existEnergizerProd = null;
 				try
 				{
-					existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
-							(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID).trim());
+					final Map<String, String> csvValuesMap = record.toMap();
+					validate(record);
+					if (!getTechnicalFeedErrors().isEmpty())
+					{
+						csvFeedErrorRecords.addAll(getTechnicalFeedErrors());
+						getBusinessFeedErrors().addAll(getTechnicalFeedErrors());
+						getTechnicalFeedErrors().clear();
+						continue;
+					}
+
+					LOG.info("|| Start add or updating  EnergizerProductModel for product :  "
+							+ (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID));
+
+					LOG.info("|| Start add or updating  ImageRefId for product :  "
+							+ (csvValuesMap).get(EnergizerCoreConstants.IMAGEREFERENCE_ID));
+
+					EnergizerProductModel existEnergizerProd = null;
+					try
+					{
+						existEnergizerProd = (EnergizerProductModel) productService.getProductForCode(catalogVersion,
+								(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID).trim());
+					}
+					catch (final Exception e)
+					{
+						LOG.error(
+								(csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " EnergizerProduct does  not exist  " + e);
+					}
+
+					if (null == existEnergizerProd)
+					{
+						final EnergizerProductModel energizerNewProd = modelService.create(EnergizerProductModel.class);
+
+						addUpdateProductDetails(energizerNewProd, catalogVersion, csvValuesMap);
+						LOG.info("|| EnergizerProductModel  " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
+								+ " saved successfully.");
+
+					}
+					else
+					{
+						addUpdateProductDetails(existEnergizerProd, catalogVersion, csvValuesMap);
+						modelService.saveAll();
+						LOG.info(" || EnergizerProductModel " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
+								+ " updated successfully.");
+					}
+					succeedRecord++;
+					setRecordSucceeded(succeedRecord);
 				}
 				catch (final Exception e)
 				{
-					LOG.error((csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID) + " EnergizerProduct does  not exist  " + e);
+					LOG.error(" Error to addUpdateProductDetails for EnergizerProductModel   ||  " + e);
+					LOG.info("Processing the next record.....");
 				}
-
-				if (null == existEnergizerProd)
-				{
-					final EnergizerProductModel energizerNewProd = modelService.create(EnergizerProductModel.class);
-					addUpdateProductDetails(energizerNewProd, catalogVersion, csvValuesMap);
-					LOG.info("|| EnergizerProductModel  " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
-							+ " saved successfully.");
-				}
-				else
-				{
-					addUpdateProductDetails(existEnergizerProd, catalogVersion, csvValuesMap);
-					modelService.saveAll();
-					LOG.info(" || EnergizerProductModel " + (csvValuesMap).get(EnergizerCoreConstants.ERPMATERIAL_ID)
-							+ " updated successfully.");
-				}
-				succeedRecord++;
-				setRecordSucceeded(succeedRecord);
 			}
 		}
 		catch (final Exception e)
@@ -138,7 +149,9 @@ public class EnergizerProductCSVProcessor extends AbstractEnergizerCSVProcessor
 			final Map csvValuesMap)
 	{
 		final String productMaterialId = csvValuesMap.get(EnergizerCoreConstants.ERPMATERIAL_ID).toString();
-		final String imageReferenceId = csvValuesMap.get(EnergizerCoreConstants.IMAGEREFERENCE_ID).toString();
+		//TODO : Need to remove this code.
+		final String imageReferenceId = csvValuesMap.get(EnergizerCoreConstants.IMAGEREFERENCE_ID) == null ? "NULL"
+				: csvValuesMap.get(EnergizerCoreConstants.IMAGEREFERENCE_ID).toString();
 		final String productGroup = csvValuesMap.get(EnergizerCoreConstants.PRODUCT_GROUP).toString();
 		final String listPrice = csvValuesMap.get(EnergizerCoreConstants.LIST_PRICE).toString();
 		final String listPriceCurrency = csvValuesMap.get(EnergizerCoreConstants.LIST_PRICE_CURRENCY).toString();

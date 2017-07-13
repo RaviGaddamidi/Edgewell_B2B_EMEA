@@ -58,8 +58,10 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 
 	private static final String IMPORT_SAMPLE_DATA = "importSampleData";
 	private static final String SAMPLE_DATA_IMPORT_FOLDER = "energizerinitialdata";
+	
 	//	public static final String ENERGIZER = "energizer";
 	public static final String PERSONAL_CARE = "personalCare";
+	public static final String EMEA = "emea";
 	public static final String HOUSEHOLD = "houseHold";
 
 	@Resource
@@ -94,6 +96,8 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 	public void createEssentialData(final SystemSetupContext context)
 	{
 		// Add Essential Data here as you require
+		importImpexFile(context, "/energizerinitialdata/import/productCatalogs/personalCareProductCatalog/catalog-sync.impex");
+		importImpexFile(context, "/energizerinitialdata/import/productCatalogs/personalCareProductCatalog/jobSearchRestriction.impex");
 	}
 
 	/**
@@ -110,6 +114,8 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 		// importCommonData(context, "energizerinitialdata");
 		// This would import a standard store: (one basestore, one cmssite, one product catalog, one content catalog)
 		// importStoreInitialData(context, "energizerinitialdata", "yb2baccelerator", "yb2baccelerator", Collections.singletonList("yb2baccelerator"));
+		importImpexFile(context, "/energizerinitialdata/import/productCatalogs/personalCareProductCatalog/catalog-sync.impex");
+		importImpexFile(context, "/energizerinitialdata/import/productCatalogs/personalCareProductCatalog/jobSearchRestriction.impex");
 
 		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
 				&& configurationService.getConfiguration().getBoolean("isEPCEnabled"))
@@ -123,6 +129,22 @@ public class InitialDataSystemSetup extends AbstractSystemSetup
 			powertoolsImportData.setProductCatalogName(PERSONAL_CARE);
 			powertoolsImportData.setContentCatalogNames(Arrays.asList(PERSONAL_CARE));
 			powertoolsImportData.setStoreNames(Arrays.asList(PERSONAL_CARE));
+			// Send an event to notify any AddOns that the initial data import is complete
+			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
+		}
+		
+		if (getBooleanSystemSetupParameter(context, IMPORT_SAMPLE_DATA)
+				&& configurationService.getConfiguration().getBoolean("isEmeaEnabled"))
+		{
+			importCommonData(context, SAMPLE_DATA_IMPORT_FOLDER);
+
+			importStoreInitialData(context, SAMPLE_DATA_IMPORT_FOLDER, EMEA, EMEA,
+					Collections.singletonList(EMEA));
+
+			final ImportData powertoolsImportData = new ImportData();
+			powertoolsImportData.setProductCatalogName(EMEA);
+			powertoolsImportData.setContentCatalogNames(Arrays.asList(EMEA));
+			powertoolsImportData.setStoreNames(Arrays.asList(EMEA));
 			// Send an event to notify any AddOns that the initial data import is complete
 			getEventService().publishEvent(new SampleDataImportedEvent(context, Arrays.asList(powertoolsImportData)));
 		}

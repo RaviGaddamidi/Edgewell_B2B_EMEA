@@ -119,6 +119,8 @@
 		<extension name="energizerinitialdata" />
 		<extension name="energizertest" />
 		<extension name="energizercockpits" />
+		<extension name="emeastorefront" />
+		<extension name="emeainitialdata" />
 		
 		
 				
