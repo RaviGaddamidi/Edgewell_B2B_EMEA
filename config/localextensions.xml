@@ -121,7 +121,8 @@
 		<extension name="energizercockpits" />
 		<extension name="emeastorefront" />
 		<extension name="emeainitialdata" />
-		
+		<!-- <extension dir="D:\Projects\Edgewell\hybris62\hybris\bin\custom\emeainitialdata" />
+		<extension dir="D:\Projects\Edgewell\hybris62\hybris\bin\custom\emeastorefront" /> -
 		
 				
 	</extensions>

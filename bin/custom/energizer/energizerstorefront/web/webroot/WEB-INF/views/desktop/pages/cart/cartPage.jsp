@@ -80,12 +80,12 @@
 			<form:form  name="containerform" action="cart" id="containeroptimization" method="post" commandName ="containerUtilizationForm" >
 		 
 			  <label ><spring:theme code="container.height"/></label> 
-			   <form:select id="containerHght" name="containerHght" path="containerHeight" onChange="getPackingOptionChange(this);">
+			   <form:select id="containerHght" disabled="${isEmeaUser}" name="containerHght" path="containerHeight" onChange="getPackingOptionChange(this);">
                       <form:options items="${containerHeightList}" selected='' />
                 </form:select>
 					
 				 &nbsp;&nbsp;<label ><spring:theme code="packing.type" /></label>
-				 <form:select id="packingTypeForm"  path="packingType">
+				 <form:select id="packingTypeForm"  path="packingType" disabled="${isEmeaUser}">
 				        <form:options id="packingOptionsId" items="${packingOptionList}" />
    			     </form:select>
 				

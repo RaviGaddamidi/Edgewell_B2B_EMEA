@@ -105,6 +105,7 @@ public class CartPageController extends AbstractPageController
 
 	private static final String CONTINUE_URL = "continueUrl";
 	public static final String SUCCESSFUL_MODIFICATION_CODE = "success";
+	private static final String REGION_EMEA = "EMEA";
 
 	@Deprecated
 	@Resource(name = "cartFacade")
@@ -193,6 +194,10 @@ public class CartPageController extends AbstractPageController
 		if (b2bUnit.getEnableContainerOptimization() != null)
 		{
 			enableButton = b2bUnit.getEnableContainerOptimization();
+			if (REGION_EMEA.equals(b2bUnit.getRegion()))
+			{
+				model.addAttribute("isEmeaUser", true);
+			}
 		}
 		boolean enableForB2BUnit = b2bUnit.getEnableContainerOptimization();
 		final CartData cartData = cartFacade.getSessionCart();

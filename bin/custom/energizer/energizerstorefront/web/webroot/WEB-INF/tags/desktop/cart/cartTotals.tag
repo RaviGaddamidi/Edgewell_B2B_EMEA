@@ -112,3 +112,8 @@
 		</ycommerce:testId>
 	</div>
 </c:if>
+
+<div id="tax-msg">
+	<spring:theme code="order.order.totals.taxes.info"/>
+</div>
+

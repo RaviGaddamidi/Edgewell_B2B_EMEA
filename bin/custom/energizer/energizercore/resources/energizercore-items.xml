@@ -205,9 +205,9 @@
 						<persistence type="property" />
 					</attribute>
 					<attribute  qualifier="enableContainerOptimization" type="java.lang.Boolean">
-					<modifiers />
-					<persistence type="property" />
-					<defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
+						<modifiers />
+						<persistence type="property" />
+						<defaultvalue>java.lang.Boolean.FALSE</defaultvalue>
 					</attribute>
 					<attribute qualifier="distributionChannel" type="java.lang.String">
 						<description>Distribution Channel</description>
@@ -216,6 +216,11 @@
 					</attribute>
 					<attribute qualifier="division" type="java.lang.String">
 						<description>Division</description>
+						<modifiers />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="region" type="java.lang.String">
+						<description>Region</description>
 						<modifiers />
 						<persistence type="property" />
 					</attribute>
