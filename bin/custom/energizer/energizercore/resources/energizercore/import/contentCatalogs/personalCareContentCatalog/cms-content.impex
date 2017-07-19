@@ -349,10 +349,10 @@ INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=
 # Login Page Template
 INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='LoginPageTemplate'];validComponentTypes(code);compTypeGroup(code)
 ;SiteLogo;;;logo
-;HeaderLinks;;;headerlinks
+#;HeaderLinks;;;headerlinks
 ;SearchBox;;;searchbox
 ;MiniCart;;;minicart
-;NavigationBar;;;navigation
+#;NavigationBar;;;navigation
 ;TopContent;;;wide
 ;SideContent;;;narrow
 ;MerchantContact;;CMSParagraphComponent
@@ -665,9 +665,9 @@ INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];po
 INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='LoginPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
 ;;SiteLogo-LoginPage;SiteLogo;;SiteLogoSlot;true
 ;;HomepageLink-LoginPage;HomepageNavLink;;HomepageNavLinkSlot;true
-;;HeaderLinks-LoginPage;HeaderLinks;;HeaderLinksSlot;true
+#;;HeaderLinks-LoginPage;HeaderLinks;;HeaderLinksSlot;true
 ;;SearchBox-LoginPage;SearchBox;;SearchBoxSlot;true
-;;NavigationBar-LoginPage;NavigationBar;;NavigationBarSlot;true
+#;;NavigationBar-LoginPage;NavigationBar;;NavigationBarSlot;true
 ;;MiniCart-LoginPage;MiniCart;;MiniCartSlot;true
 ;;Footer-LoginPage;Footer;;FooterSlot;true
 ;;MerchantContactContent-LoginPage;MerchantContactContent;;MerchantContactSlot;true
